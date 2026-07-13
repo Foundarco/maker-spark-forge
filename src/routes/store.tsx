@@ -34,7 +34,7 @@ function StorePage() {
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((p) => (
             <Card key={p.slug} as="article" className="p-0 overflow-hidden">
-              <div aria-hidden className="aspect-[4/3] bg-gradient-to-br from-primary-soft to-accent">
+              <div aria-hidden className="aspect-[4/3] overflow-hidden bg-warm">
                 <div className="grid h-full place-items-center text-primary/60 text-sm">
                   <Placeholder>[PLACEHOLDER: {p.name}]</Placeholder>
                 </div>
