@@ -1,15 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "light";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-primary text-primary-foreground hover:opacity-90",
-  secondary: "border border-border bg-card text-foreground hover:border-primary/50",
+  primary: "bg-primary text-primary-foreground hover:brightness-110 hover:-translate-y-0.5 shadow-lg shadow-primary/20",
+  secondary: "border border-border bg-card text-foreground hover:border-foreground/40",
   ghost: "text-foreground hover:bg-muted",
+  light: "bg-white text-ink hover:bg-white/90",
 };
 
 export function CTAButton({

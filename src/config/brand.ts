@@ -2,7 +2,7 @@
 // Swap these values (and optionally add a logo file) to rebrand everything.
 
 export const brand = {
-  name: "[Brand Name]",
+  name: "Loomprint",
   tagline: "Community-first 3D printers, built to teach.",
   shortMission:
     "We build approachable, repairable 3D printers so more people — especially young people — can learn how things are made.",

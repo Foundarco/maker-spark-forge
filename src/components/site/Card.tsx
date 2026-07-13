@@ -11,7 +11,7 @@ export function Card({
 }) {
   return (
     <As
-      className={`transparency-card group relative flex flex-col rounded-2xl p-6 shadow-[0_1px_0_0_rgba(0,0,0,0.02)] transition hover:border-primary/40 ${className}`}
+      className={`group relative flex flex-col rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl hover:shadow-black/5 ${className}`}
     >
       {children}
     </As>
