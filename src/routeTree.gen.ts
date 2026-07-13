@@ -9,22 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UpgradesRouteImport } from './routes/upgrades'
 import { Route as SupportUsRouteImport } from './routes/support-us'
 import { Route as StoreRouteImport } from './routes/store'
+import { Route as SoftwareRouteImport } from './routes/software'
+import { Route as PressRouteImport } from './routes/press'
+import { Route as PartsRouteImport } from './routes/parts'
 import { Route as MissionRouteImport } from './routes/mission'
+import { Route as MaterialsRouteImport } from './routes/materials'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as HowItsBuiltRouteImport } from './routes/how-its-built'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as GetInvolvedRouteImport } from './routes/get-involved'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
+import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AccessoriesRouteImport } from './routes/accessories'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
+import { Route as SoftwareSlicerRouteImport } from './routes/software.slicer'
+import { Route as SoftwareFirmwareRouteImport } from './routes/software.firmware'
+import { Route as SoftwareDownloadsRouteImport } from './routes/software.downloads'
+import { Route as SoftwareAppRouteImport } from './routes/software.app'
+import { Route as MaterialsRecyclingRouteImport } from './routes/materials.recycling'
+import { Route as MaterialsPelletsRouteImport } from './routes/materials.pellets'
+import { Route as MaterialsFilamentRouteImport } from './routes/materials.filament'
 import { Route as LegalWarrantyRouteImport } from './routes/legal.warranty'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalShippingReturnsRouteImport } from './routes/legal.shipping-returns'
@@ -34,6 +49,11 @@ import { Route as LearnTrackRouteImport } from './routes/learn.$track'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
+const UpgradesRoute = UpgradesRouteImport.update({
+  id: '/upgrades',
+  path: '/upgrades',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SupportUsRoute = SupportUsRouteImport.update({
   id: '/support-us',
   path: '/support-us',
@@ -44,9 +64,29 @@ const StoreRoute = StoreRouteImport.update({
   path: '/store',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SoftwareRoute = SoftwareRouteImport.update({
+  id: '/software',
+  path: '/software',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PressRoute = PressRouteImport.update({
+  id: '/press',
+  path: '/press',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartsRoute = PartsRouteImport.update({
+  id: '/parts',
+  path: '/parts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MissionRoute = MissionRouteImport.update({
   id: '/mission',
   path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaterialsRoute = MaterialsRouteImport.update({
+  id: '/materials',
+  path: '/materials',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnRoute = LearnRouteImport.update({
@@ -79,6 +119,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CommunityRoute = CommunityRouteImport.update({
   id: '/community',
   path: '/community',
@@ -94,9 +139,19 @@ const CartRoute = CartRouteImport.update({
   path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccessoriesRoute = AccessoriesRouteImport.update({
+  id: '/accessories',
+  path: '/accessories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -113,6 +168,41 @@ const StoreSlugRoute = StoreSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => StoreRoute,
+} as any)
+const SoftwareSlicerRoute = SoftwareSlicerRouteImport.update({
+  id: '/slicer',
+  path: '/slicer',
+  getParentRoute: () => SoftwareRoute,
+} as any)
+const SoftwareFirmwareRoute = SoftwareFirmwareRouteImport.update({
+  id: '/firmware',
+  path: '/firmware',
+  getParentRoute: () => SoftwareRoute,
+} as any)
+const SoftwareDownloadsRoute = SoftwareDownloadsRouteImport.update({
+  id: '/downloads',
+  path: '/downloads',
+  getParentRoute: () => SoftwareRoute,
+} as any)
+const SoftwareAppRoute = SoftwareAppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => SoftwareRoute,
+} as any)
+const MaterialsRecyclingRoute = MaterialsRecyclingRouteImport.update({
+  id: '/recycling',
+  path: '/recycling',
+  getParentRoute: () => MaterialsRoute,
+} as any)
+const MaterialsPelletsRoute = MaterialsPelletsRouteImport.update({
+  id: '/pellets',
+  path: '/pellets',
+  getParentRoute: () => MaterialsRoute,
+} as any)
+const MaterialsFilamentRoute = MaterialsFilamentRouteImport.update({
+  id: '/filament',
+  path: '/filament',
+  getParentRoute: () => MaterialsRoute,
 } as any)
 const LegalWarrantyRoute = LegalWarrantyRouteImport.update({
   id: '/legal/warranty',
@@ -158,19 +248,27 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
+  '/careers': typeof CareersRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/community': typeof CommunityRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
   '/how-its-built': typeof HowItsBuiltRoute
   '/learn': typeof LearnRouteWithChildren
+  '/materials': typeof MaterialsRouteWithChildren
   '/mission': typeof MissionRoute
+  '/parts': typeof PartsRoute
+  '/press': typeof PressRoute
+  '/software': typeof SoftwareRouteWithChildren
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
+  '/upgrades': typeof UpgradesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -179,24 +277,39 @@ export interface FileRoutesByFullPath {
   '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/legal/warranty': typeof LegalWarrantyRoute
+  '/materials/filament': typeof MaterialsFilamentRoute
+  '/materials/pellets': typeof MaterialsPelletsRoute
+  '/materials/recycling': typeof MaterialsRecyclingRoute
+  '/software/app': typeof SoftwareAppRoute
+  '/software/downloads': typeof SoftwareDownloadsRoute
+  '/software/firmware': typeof SoftwareFirmwareRoute
+  '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
+  '/careers': typeof CareersRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/community': typeof CommunityRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
   '/how-its-built': typeof HowItsBuiltRoute
   '/learn': typeof LearnRouteWithChildren
+  '/materials': typeof MaterialsRouteWithChildren
   '/mission': typeof MissionRoute
+  '/parts': typeof PartsRoute
+  '/press': typeof PressRoute
+  '/software': typeof SoftwareRouteWithChildren
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
+  '/upgrades': typeof UpgradesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -205,25 +318,40 @@ export interface FileRoutesByTo {
   '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/legal/warranty': typeof LegalWarrantyRoute
+  '/materials/filament': typeof MaterialsFilamentRoute
+  '/materials/pellets': typeof MaterialsPelletsRoute
+  '/materials/recycling': typeof MaterialsRecyclingRoute
+  '/software/app': typeof SoftwareAppRoute
+  '/software/downloads': typeof SoftwareDownloadsRoute
+  '/software/firmware': typeof SoftwareFirmwareRoute
+  '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
+  '/careers': typeof CareersRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/community': typeof CommunityRoute
+  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
   '/how-its-built': typeof HowItsBuiltRoute
   '/learn': typeof LearnRouteWithChildren
+  '/materials': typeof MaterialsRouteWithChildren
   '/mission': typeof MissionRoute
+  '/parts': typeof PartsRoute
+  '/press': typeof PressRoute
+  '/software': typeof SoftwareRouteWithChildren
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
+  '/upgrades': typeof UpgradesRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -232,6 +360,13 @@ export interface FileRoutesById {
   '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
   '/legal/warranty': typeof LegalWarrantyRoute
+  '/materials/filament': typeof MaterialsFilamentRoute
+  '/materials/pellets': typeof MaterialsPelletsRoute
+  '/materials/recycling': typeof MaterialsRecyclingRoute
+  '/software/app': typeof SoftwareAppRoute
+  '/software/downloads': typeof SoftwareDownloadsRoute
+  '/software/firmware': typeof SoftwareFirmwareRoute
+  '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRouteTypes {
@@ -239,19 +374,27 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/accessories'
     | '/blog'
+    | '/careers'
     | '/cart'
     | '/checkout'
     | '/community'
+    | '/compare'
     | '/contact'
     | '/faq'
     | '/get-involved'
     | '/help'
     | '/how-its-built'
     | '/learn'
+    | '/materials'
     | '/mission'
+    | '/parts'
+    | '/press'
+    | '/software'
     | '/store'
     | '/support-us'
+    | '/upgrades'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -260,24 +403,39 @@ export interface FileRouteTypes {
     | '/legal/shipping-returns'
     | '/legal/terms'
     | '/legal/warranty'
+    | '/materials/filament'
+    | '/materials/pellets'
+    | '/materials/recycling'
+    | '/software/app'
+    | '/software/downloads'
+    | '/software/firmware'
+    | '/software/slicer'
     | '/store/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/accessories'
     | '/blog'
+    | '/careers'
     | '/cart'
     | '/checkout'
     | '/community'
+    | '/compare'
     | '/contact'
     | '/faq'
     | '/get-involved'
     | '/help'
     | '/how-its-built'
     | '/learn'
+    | '/materials'
     | '/mission'
+    | '/parts'
+    | '/press'
+    | '/software'
     | '/store'
     | '/support-us'
+    | '/upgrades'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -286,24 +444,39 @@ export interface FileRouteTypes {
     | '/legal/shipping-returns'
     | '/legal/terms'
     | '/legal/warranty'
+    | '/materials/filament'
+    | '/materials/pellets'
+    | '/materials/recycling'
+    | '/software/app'
+    | '/software/downloads'
+    | '/software/firmware'
+    | '/software/slicer'
     | '/store/$slug'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/accessories'
     | '/blog'
+    | '/careers'
     | '/cart'
     | '/checkout'
     | '/community'
+    | '/compare'
     | '/contact'
     | '/faq'
     | '/get-involved'
     | '/help'
     | '/how-its-built'
     | '/learn'
+    | '/materials'
     | '/mission'
+    | '/parts'
+    | '/press'
+    | '/software'
     | '/store'
     | '/support-us'
+    | '/upgrades'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -312,25 +485,40 @@ export interface FileRouteTypes {
     | '/legal/shipping-returns'
     | '/legal/terms'
     | '/legal/warranty'
+    | '/materials/filament'
+    | '/materials/pellets'
+    | '/materials/recycling'
+    | '/software/app'
+    | '/software/downloads'
+    | '/software/firmware'
+    | '/software/slicer'
     | '/store/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AccessoriesRoute: typeof AccessoriesRoute
   BlogRoute: typeof BlogRouteWithChildren
+  CareersRoute: typeof CareersRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   CommunityRoute: typeof CommunityRoute
+  CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   GetInvolvedRoute: typeof GetInvolvedRoute
   HelpRoute: typeof HelpRouteWithChildren
   HowItsBuiltRoute: typeof HowItsBuiltRoute
   LearnRoute: typeof LearnRouteWithChildren
+  MaterialsRoute: typeof MaterialsRouteWithChildren
   MissionRoute: typeof MissionRoute
+  PartsRoute: typeof PartsRoute
+  PressRoute: typeof PressRoute
+  SoftwareRoute: typeof SoftwareRouteWithChildren
   StoreRoute: typeof StoreRouteWithChildren
   SupportUsRoute: typeof SupportUsRoute
+  UpgradesRoute: typeof UpgradesRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
@@ -340,6 +528,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/upgrades': {
+      id: '/upgrades'
+      path: '/upgrades'
+      fullPath: '/upgrades'
+      preLoaderRoute: typeof UpgradesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/support-us': {
       id: '/support-us'
       path: '/support-us'
@@ -354,11 +549,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/software': {
+      id: '/software'
+      path: '/software'
+      fullPath: '/software'
+      preLoaderRoute: typeof SoftwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/press': {
+      id: '/press'
+      path: '/press'
+      fullPath: '/press'
+      preLoaderRoute: typeof PressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parts': {
+      id: '/parts'
+      path: '/parts'
+      fullPath: '/parts'
+      preLoaderRoute: typeof PartsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mission': {
       id: '/mission'
       path: '/mission'
       fullPath: '/mission'
       preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materials': {
+      id: '/materials'
+      path: '/materials'
+      fullPath: '/materials'
+      preLoaderRoute: typeof MaterialsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn': {
@@ -403,6 +626,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/community': {
       id: '/community'
       path: '/community'
@@ -424,11 +654,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog': {
       id: '/blog'
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/accessories': {
+      id: '/accessories'
+      path: '/accessories'
+      fullPath: '/accessories'
+      preLoaderRoute: typeof AccessoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -451,6 +695,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/store/$slug'
       preLoaderRoute: typeof StoreSlugRouteImport
       parentRoute: typeof StoreRoute
+    }
+    '/software/slicer': {
+      id: '/software/slicer'
+      path: '/slicer'
+      fullPath: '/software/slicer'
+      preLoaderRoute: typeof SoftwareSlicerRouteImport
+      parentRoute: typeof SoftwareRoute
+    }
+    '/software/firmware': {
+      id: '/software/firmware'
+      path: '/firmware'
+      fullPath: '/software/firmware'
+      preLoaderRoute: typeof SoftwareFirmwareRouteImport
+      parentRoute: typeof SoftwareRoute
+    }
+    '/software/downloads': {
+      id: '/software/downloads'
+      path: '/downloads'
+      fullPath: '/software/downloads'
+      preLoaderRoute: typeof SoftwareDownloadsRouteImport
+      parentRoute: typeof SoftwareRoute
+    }
+    '/software/app': {
+      id: '/software/app'
+      path: '/app'
+      fullPath: '/software/app'
+      preLoaderRoute: typeof SoftwareAppRouteImport
+      parentRoute: typeof SoftwareRoute
+    }
+    '/materials/recycling': {
+      id: '/materials/recycling'
+      path: '/recycling'
+      fullPath: '/materials/recycling'
+      preLoaderRoute: typeof MaterialsRecyclingRouteImport
+      parentRoute: typeof MaterialsRoute
+    }
+    '/materials/pellets': {
+      id: '/materials/pellets'
+      path: '/pellets'
+      fullPath: '/materials/pellets'
+      preLoaderRoute: typeof MaterialsPelletsRouteImport
+      parentRoute: typeof MaterialsRoute
+    }
+    '/materials/filament': {
+      id: '/materials/filament'
+      path: '/filament'
+      fullPath: '/materials/filament'
+      preLoaderRoute: typeof MaterialsFilamentRouteImport
+      parentRoute: typeof MaterialsRoute
     }
     '/legal/warranty': {
       id: '/legal/warranty'
@@ -541,6 +834,40 @@ const LearnRouteChildren: LearnRouteChildren = {
 
 const LearnRouteWithChildren = LearnRoute._addFileChildren(LearnRouteChildren)
 
+interface MaterialsRouteChildren {
+  MaterialsFilamentRoute: typeof MaterialsFilamentRoute
+  MaterialsPelletsRoute: typeof MaterialsPelletsRoute
+  MaterialsRecyclingRoute: typeof MaterialsRecyclingRoute
+}
+
+const MaterialsRouteChildren: MaterialsRouteChildren = {
+  MaterialsFilamentRoute: MaterialsFilamentRoute,
+  MaterialsPelletsRoute: MaterialsPelletsRoute,
+  MaterialsRecyclingRoute: MaterialsRecyclingRoute,
+}
+
+const MaterialsRouteWithChildren = MaterialsRoute._addFileChildren(
+  MaterialsRouteChildren,
+)
+
+interface SoftwareRouteChildren {
+  SoftwareAppRoute: typeof SoftwareAppRoute
+  SoftwareDownloadsRoute: typeof SoftwareDownloadsRoute
+  SoftwareFirmwareRoute: typeof SoftwareFirmwareRoute
+  SoftwareSlicerRoute: typeof SoftwareSlicerRoute
+}
+
+const SoftwareRouteChildren: SoftwareRouteChildren = {
+  SoftwareAppRoute: SoftwareAppRoute,
+  SoftwareDownloadsRoute: SoftwareDownloadsRoute,
+  SoftwareFirmwareRoute: SoftwareFirmwareRoute,
+  SoftwareSlicerRoute: SoftwareSlicerRoute,
+}
+
+const SoftwareRouteWithChildren = SoftwareRoute._addFileChildren(
+  SoftwareRouteChildren,
+)
+
 interface StoreRouteChildren {
   StoreSlugRoute: typeof StoreSlugRoute
 }
@@ -554,19 +881,27 @@ const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AccessoriesRoute: AccessoriesRoute,
   BlogRoute: BlogRouteWithChildren,
+  CareersRoute: CareersRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   CommunityRoute: CommunityRoute,
+  CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   GetInvolvedRoute: GetInvolvedRoute,
   HelpRoute: HelpRouteWithChildren,
   HowItsBuiltRoute: HowItsBuiltRoute,
   LearnRoute: LearnRouteWithChildren,
+  MaterialsRoute: MaterialsRouteWithChildren,
   MissionRoute: MissionRoute,
+  PartsRoute: PartsRoute,
+  PressRoute: PressRoute,
+  SoftwareRoute: SoftwareRouteWithChildren,
   StoreRoute: StoreRouteWithChildren,
   SupportUsRoute: SupportUsRoute,
+  UpgradesRoute: UpgradesRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalShippingReturnsRoute: LegalShippingReturnsRoute,
