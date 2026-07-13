@@ -14,7 +14,255 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      blog_posts: {
+        Row: {
+          author: string | null
+          body: string | null
+          category: string | null
+          cover_image: string | null
+          excerpt: string | null
+          id: string
+          published: boolean
+          published_at: string
+          slug: string
+          title: string
+        }
+        Insert: {
+          author?: string | null
+          body?: string | null
+          category?: string | null
+          cover_image?: string | null
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string
+          slug: string
+          title: string
+        }
+        Update: {
+          author?: string | null
+          body?: string | null
+          category?: string | null
+          cover_image?: string | null
+          excerpt?: string | null
+          id?: string
+          published?: boolean
+          published_at?: string
+          slug?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      contact_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          path: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message: string
+          name: string
+          path: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string
+          name?: string
+          path?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      guides: {
+        Row: {
+          body: string | null
+          category: string | null
+          created_at: string
+          difficulty: string | null
+          id: string
+          published: boolean
+          slug: string
+          steps: Json
+          symptom: string | null
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          difficulty?: string | null
+          id?: string
+          published?: boolean
+          slug: string
+          steps?: Json
+          symptom?: string | null
+          title: string
+        }
+        Update: {
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          difficulty?: string | null
+          id?: string
+          published?: boolean
+          slug?: string
+          steps?: Json
+          symptom?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      interest_submissions: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          interest_type: string
+          location: string | null
+          message: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          interest_type: string
+          location?: string | null
+          message?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          interest_type?: string
+          location?: string | null
+          message?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
+      newsletter_signups: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
+      orders: {
+        Row: {
+          cart: Json
+          created_at: string
+          email: string
+          id: string
+          name: string
+          notes: string | null
+          shipping_address: Json | null
+          status: string
+          subtotal_cents: number
+        }
+        Insert: {
+          cart: Json
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          notes?: string | null
+          shipping_address?: Json | null
+          status?: string
+          subtotal_cents?: number
+        }
+        Update: {
+          cart?: Json
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          shipping_address?: Json | null
+          status?: string
+          subtotal_cents?: number
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string | null
+          id: string
+          images: string[]
+          in_the_box: string[]
+          name: string
+          price_cents: number | null
+          price_display: string | null
+          published: boolean
+          related_slugs: string[]
+          slug: string
+          sort_order: number
+          specs: Json
+          tagline: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[]
+          in_the_box?: string[]
+          name: string
+          price_cents?: number | null
+          price_display?: string | null
+          published?: boolean
+          related_slugs?: string[]
+          slug: string
+          sort_order?: number
+          specs?: Json
+          tagline?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          images?: string[]
+          in_the_box?: string[]
+          name?: string
+          price_cents?: number | null
+          price_display?: string | null
+          published?: boolean
+          related_slugs?: string[]
+          slug?: string
+          sort_order?: number
+          specs?: Json
+          tagline?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
