@@ -25,6 +25,11 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
+import { Route as LegalWarrantyRouteImport } from './routes/legal.warranty'
+import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as LegalShippingReturnsRouteImport } from './routes/legal.shipping-returns'
+import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
+import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LearnTrackRouteImport } from './routes/learn.$track'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -109,6 +114,31 @@ const StoreSlugRoute = StoreSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => StoreRoute,
 } as any)
+const LegalWarrantyRoute = LegalWarrantyRouteImport.update({
+  id: '/legal/warranty',
+  path: '/legal/warranty',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/legal/terms',
+  path: '/legal/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalShippingReturnsRoute = LegalShippingReturnsRouteImport.update({
+  id: '/legal/shipping-returns',
+  path: '/legal/shipping-returns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalCookiesRoute = LegalCookiesRouteImport.update({
+  id: '/legal/cookies',
+  path: '/legal/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LearnTrackRoute = LearnTrackRouteImport.update({
   id: '/$track',
   path: '/$track',
@@ -144,6 +174,11 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/warranty': typeof LegalWarrantyRoute
   '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRoutesByTo {
@@ -165,6 +200,11 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/warranty': typeof LegalWarrantyRoute
   '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRoutesById {
@@ -187,6 +227,11 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/warranty': typeof LegalWarrantyRoute
   '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRouteTypes {
@@ -210,6 +255,11 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/shipping-returns'
+    | '/legal/terms'
+    | '/legal/warranty'
     | '/store/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -231,6 +281,11 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/shipping-returns'
+    | '/legal/terms'
+    | '/legal/warranty'
     | '/store/$slug'
   id:
     | '__root__'
@@ -252,6 +307,11 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/shipping-returns'
+    | '/legal/terms'
+    | '/legal/warranty'
     | '/store/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -271,6 +331,11 @@ export interface RootRouteChildren {
   MissionRoute: typeof MissionRoute
   StoreRoute: typeof StoreRouteWithChildren
   SupportUsRoute: typeof SupportUsRoute
+  LegalCookiesRoute: typeof LegalCookiesRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
+  LegalTermsRoute: typeof LegalTermsRoute
+  LegalWarrantyRoute: typeof LegalWarrantyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -387,6 +452,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreSlugRouteImport
       parentRoute: typeof StoreRoute
     }
+    '/legal/warranty': {
+      id: '/legal/warranty'
+      path: '/legal/warranty'
+      fullPath: '/legal/warranty'
+      preLoaderRoute: typeof LegalWarrantyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/legal/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/shipping-returns': {
+      id: '/legal/shipping-returns'
+      path: '/legal/shipping-returns'
+      fullPath: '/legal/shipping-returns'
+      preLoaderRoute: typeof LegalShippingReturnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/cookies': {
+      id: '/legal/cookies'
+      path: '/legal/cookies'
+      fullPath: '/legal/cookies'
+      preLoaderRoute: typeof LegalCookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/learn/$track': {
       id: '/learn/$track'
       path: '/$track'
@@ -467,6 +567,11 @@ const rootRouteChildren: RootRouteChildren = {
   MissionRoute: MissionRoute,
   StoreRoute: StoreRouteWithChildren,
   SupportUsRoute: SupportUsRoute,
+  LegalCookiesRoute: LegalCookiesRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalShippingReturnsRoute: LegalShippingReturnsRoute,
+  LegalTermsRoute: LegalTermsRoute,
+  LegalWarrantyRoute: LegalWarrantyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
