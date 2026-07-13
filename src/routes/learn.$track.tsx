@@ -77,8 +77,9 @@ export const Route = createFileRoute("/learn/$track")({
 function TrackPage() {
   const { track } = Route.useLoaderData();
   const t = TRACKS[track as TrackKey];
-
+  return (
     <>
+
       <Section>
         <PageHeader eyebrow={`Learning Center · ${t.weeks} weeks`} title={t.title} lede={t.lede} />
       </Section>
