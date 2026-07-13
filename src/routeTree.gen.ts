@@ -9,38 +9,435 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SupportUsRouteImport } from './routes/support-us'
+import { Route as StoreRouteImport } from './routes/store'
+import { Route as MissionRouteImport } from './routes/mission'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as HowItsBuiltRouteImport } from './routes/how-its-built'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as GetInvolvedRouteImport } from './routes/get-involved'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CommunityRouteImport } from './routes/community'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoreSlugRouteImport } from './routes/store.$slug'
+import { Route as LegalWarrantyRouteImport } from './routes/legal.warranty'
+import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as LegalShippingReturnsRouteImport } from './routes/legal.shipping-returns'
+import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
+import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
+import { Route as LearnTrackRouteImport } from './routes/learn.$track'
+import { Route as HelpSlugRouteImport } from './routes/help.$slug'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
+const SupportUsRoute = SupportUsRouteImport.update({
+  id: '/support-us',
+  path: '/support-us',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreRoute = StoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MissionRoute = MissionRouteImport.update({
+  id: '/mission',
+  path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItsBuiltRoute = HowItsBuiltRouteImport.update({
+  id: '/how-its-built',
+  path: '/how-its-built',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetInvolvedRoute = GetInvolvedRouteImport.update({
+  id: '/get-involved',
+  path: '/get-involved',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoreSlugRoute = StoreSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => StoreRoute,
+} as any)
+const LegalWarrantyRoute = LegalWarrantyRouteImport.update({
+  id: '/legal/warranty',
+  path: '/legal/warranty',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/legal/terms',
+  path: '/legal/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalShippingReturnsRoute = LegalShippingReturnsRouteImport.update({
+  id: '/legal/shipping-returns',
+  path: '/legal/shipping-returns',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/legal/privacy',
+  path: '/legal/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalCookiesRoute = LegalCookiesRouteImport.update({
+  id: '/legal/cookies',
+  path: '/legal/cookies',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnTrackRoute = LearnTrackRouteImport.update({
+  id: '/$track',
+  path: '/$track',
+  getParentRoute: () => LearnRoute,
+} as any)
+const HelpSlugRoute = HelpSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => HelpRoute,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/get-involved': typeof GetInvolvedRoute
+  '/help': typeof HelpRouteWithChildren
+  '/how-its-built': typeof HowItsBuiltRoute
+  '/learn': typeof LearnRouteWithChildren
+  '/mission': typeof MissionRoute
+  '/store': typeof StoreRouteWithChildren
+  '/support-us': typeof SupportUsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/help/$slug': typeof HelpSlugRoute
+  '/learn/$track': typeof LearnTrackRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/warranty': typeof LegalWarrantyRoute
+  '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/get-involved': typeof GetInvolvedRoute
+  '/help': typeof HelpRouteWithChildren
+  '/how-its-built': typeof HowItsBuiltRoute
+  '/learn': typeof LearnRouteWithChildren
+  '/mission': typeof MissionRoute
+  '/store': typeof StoreRouteWithChildren
+  '/support-us': typeof SupportUsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/help/$slug': typeof HelpSlugRoute
+  '/learn/$track': typeof LearnTrackRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/warranty': typeof LegalWarrantyRoute
+  '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/blog': typeof BlogRouteWithChildren
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/community': typeof CommunityRoute
+  '/contact': typeof ContactRoute
+  '/faq': typeof FaqRoute
+  '/get-involved': typeof GetInvolvedRoute
+  '/help': typeof HelpRouteWithChildren
+  '/how-its-built': typeof HowItsBuiltRoute
+  '/learn': typeof LearnRouteWithChildren
+  '/mission': typeof MissionRoute
+  '/store': typeof StoreRouteWithChildren
+  '/support-us': typeof SupportUsRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/help/$slug': typeof HelpSlugRoute
+  '/learn/$track': typeof LearnTrackRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/warranty': typeof LegalWarrantyRoute
+  '/store/$slug': typeof StoreSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/blog'
+    | '/cart'
+    | '/checkout'
+    | '/community'
+    | '/contact'
+    | '/faq'
+    | '/get-involved'
+    | '/help'
+    | '/how-its-built'
+    | '/learn'
+    | '/mission'
+    | '/store'
+    | '/support-us'
+    | '/blog/$slug'
+    | '/help/$slug'
+    | '/learn/$track'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/shipping-returns'
+    | '/legal/terms'
+    | '/legal/warranty'
+    | '/store/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/blog'
+    | '/cart'
+    | '/checkout'
+    | '/community'
+    | '/contact'
+    | '/faq'
+    | '/get-involved'
+    | '/help'
+    | '/how-its-built'
+    | '/learn'
+    | '/mission'
+    | '/store'
+    | '/support-us'
+    | '/blog/$slug'
+    | '/help/$slug'
+    | '/learn/$track'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/shipping-returns'
+    | '/legal/terms'
+    | '/legal/warranty'
+    | '/store/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/blog'
+    | '/cart'
+    | '/checkout'
+    | '/community'
+    | '/contact'
+    | '/faq'
+    | '/get-involved'
+    | '/help'
+    | '/how-its-built'
+    | '/learn'
+    | '/mission'
+    | '/store'
+    | '/support-us'
+    | '/blog/$slug'
+    | '/help/$slug'
+    | '/learn/$track'
+    | '/legal/cookies'
+    | '/legal/privacy'
+    | '/legal/shipping-returns'
+    | '/legal/terms'
+    | '/legal/warranty'
+    | '/store/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  BlogRoute: typeof BlogRouteWithChildren
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  CommunityRoute: typeof CommunityRoute
+  ContactRoute: typeof ContactRoute
+  FaqRoute: typeof FaqRoute
+  GetInvolvedRoute: typeof GetInvolvedRoute
+  HelpRoute: typeof HelpRouteWithChildren
+  HowItsBuiltRoute: typeof HowItsBuiltRoute
+  LearnRoute: typeof LearnRouteWithChildren
+  MissionRoute: typeof MissionRoute
+  StoreRoute: typeof StoreRouteWithChildren
+  SupportUsRoute: typeof SupportUsRoute
+  LegalCookiesRoute: typeof LegalCookiesRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
+  LegalTermsRoute: typeof LegalTermsRoute
+  LegalWarrantyRoute: typeof LegalWarrantyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/support-us': {
+      id: '/support-us'
+      path: '/support-us'
+      fullPath: '/support-us'
+      preLoaderRoute: typeof SupportUsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/store': {
+      id: '/store'
+      path: '/store'
+      fullPath: '/store'
+      preLoaderRoute: typeof StoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mission': {
+      id: '/mission'
+      path: '/mission'
+      fullPath: '/mission'
+      preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-its-built': {
+      id: '/how-its-built'
+      path: '/how-its-built'
+      fullPath: '/how-its-built'
+      preLoaderRoute: typeof HowItsBuiltRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-involved': {
+      id: '/get-involved'
+      path: '/get-involved'
+      fullPath: '/get-involved'
+      preLoaderRoute: typeof GetInvolvedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +445,133 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/store/$slug': {
+      id: '/store/$slug'
+      path: '/$slug'
+      fullPath: '/store/$slug'
+      preLoaderRoute: typeof StoreSlugRouteImport
+      parentRoute: typeof StoreRoute
+    }
+    '/legal/warranty': {
+      id: '/legal/warranty'
+      path: '/legal/warranty'
+      fullPath: '/legal/warranty'
+      preLoaderRoute: typeof LegalWarrantyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/legal/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/shipping-returns': {
+      id: '/legal/shipping-returns'
+      path: '/legal/shipping-returns'
+      fullPath: '/legal/shipping-returns'
+      preLoaderRoute: typeof LegalShippingReturnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/legal/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal/cookies': {
+      id: '/legal/cookies'
+      path: '/legal/cookies'
+      fullPath: '/legal/cookies'
+      preLoaderRoute: typeof LegalCookiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn/$track': {
+      id: '/learn/$track'
+      path: '/$track'
+      fullPath: '/learn/$track'
+      preLoaderRoute: typeof LearnTrackRouteImport
+      parentRoute: typeof LearnRoute
+    }
+    '/help/$slug': {
+      id: '/help/$slug'
+      path: '/$slug'
+      fullPath: '/help/$slug'
+      preLoaderRoute: typeof HelpSlugRouteImport
+      parentRoute: typeof HelpRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
+    }
   }
 }
 
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
+interface HelpRouteChildren {
+  HelpSlugRoute: typeof HelpSlugRoute
+}
+
+const HelpRouteChildren: HelpRouteChildren = {
+  HelpSlugRoute: HelpSlugRoute,
+}
+
+const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
+
+interface LearnRouteChildren {
+  LearnTrackRoute: typeof LearnTrackRoute
+}
+
+const LearnRouteChildren: LearnRouteChildren = {
+  LearnTrackRoute: LearnTrackRoute,
+}
+
+const LearnRouteWithChildren = LearnRoute._addFileChildren(LearnRouteChildren)
+
+interface StoreRouteChildren {
+  StoreSlugRoute: typeof StoreSlugRoute
+}
+
+const StoreRouteChildren: StoreRouteChildren = {
+  StoreSlugRoute: StoreSlugRoute,
+}
+
+const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  BlogRoute: BlogRouteWithChildren,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  CommunityRoute: CommunityRoute,
+  ContactRoute: ContactRoute,
+  FaqRoute: FaqRoute,
+  GetInvolvedRoute: GetInvolvedRoute,
+  HelpRoute: HelpRouteWithChildren,
+  HowItsBuiltRoute: HowItsBuiltRoute,
+  LearnRoute: LearnRouteWithChildren,
+  MissionRoute: MissionRoute,
+  StoreRoute: StoreRouteWithChildren,
+  SupportUsRoute: SupportUsRoute,
+  LegalCookiesRoute: LegalCookiesRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalShippingReturnsRoute: LegalShippingReturnsRoute,
+  LegalTermsRoute: LegalTermsRoute,
+  LegalWarrantyRoute: LegalWarrantyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
