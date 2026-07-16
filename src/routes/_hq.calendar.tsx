@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar as CalIcon, ChevronLeft, ChevronRight, Plus, X, MapPin, Clock, Trash2, Users, User as UserIcon, StickyNote, Video } from "lucide-react";
+import { UserMention } from "@/components/hq/UserMention";
 
 export const Route = createFileRoute("/_hq/calendar")({
   head: () => ({ meta: [{ title: "Calendar — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
