@@ -182,6 +182,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ideas: {
+        Row: {
+          author_id: string
+          category: string | null
+          created_at: string
+          description: string | null
+          effort: number
+          id: string
+          impact: number
+          status: string
+          title: string
+          updated_at: string
+          upvotes: number
+        }
+        Insert: {
+          author_id: string
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          effort?: number
+          id?: string
+          impact?: number
+          status?: string
+          title: string
+          updated_at?: string
+          upvotes?: number
+        }
+        Update: {
+          author_id?: string
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          effort?: number
+          id?: string
+          impact?: number
+          status?: string
+          title?: string
+          updated_at?: string
+          upvotes?: number
+        }
+        Relationships: []
+      }
       interest_submissions: {
         Row: {
           created_at: string
