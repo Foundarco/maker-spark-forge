@@ -15,7 +15,7 @@ import {
   Store, DoorOpen, FileQuestion, Quote, ArchiveRestore, Clock3, CheckCircle2, MapPin,
   Lightbulb, LineChart as ChartLine,
   Package as ProdIcon, Sparkles, Layers,
-  Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Webhook, Code2,
+  Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Code2,
   Cog, ShieldPlus, Building, Palette as BrandIcon, Globe2, KeyRound as PolicyIcon,
   Sparkle, Cpu as TwinIcon, Radio, Waypoints, FileClock,
 } from "lucide-react";
