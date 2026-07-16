@@ -276,6 +276,31 @@ function MeetingsPage() {
                       <span className="flex items-center gap-1"><Users className="h-3 w-3" />{attendees.length} teammate{attendees.length === 1 ? "" : "s"}</span>
                       {externals.length > 0 && <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{externals.length} guest{externals.length === 1 ? "" : "s"}</span>}
                     </div>
+                    {(attendees.length > 0 || externals.length > 0) && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {attendees.slice(0, 8).map((p) => {
+                          const prof = profiles[p.user_id];
+                          const name = prof?.full_name || prof?.email || "Unknown";
+                          const initial = name.charAt(0).toUpperCase();
+                          const tone = p.rsvp === "yes" ? "border-green-500/40 bg-green-500/10 text-green-600 dark:text-green-400"
+                            : p.rsvp === "no" ? "border-destructive/40 bg-destructive/10 text-destructive"
+                            : p.rsvp === "maybe" ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
+                            : "border-border bg-muted/50 text-muted-foreground";
+                          return (
+                            <span key={p.user_id} className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${tone}`} title={`${name} · ${p.rsvp}`}>
+                              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-background text-[9px] font-semibold">{initial}</span>
+                              {name}
+                            </span>
+                          );
+                        })}
+                        {attendees.length > 8 && <span className="text-[11px] text-muted-foreground">+{attendees.length - 8} more</span>}
+                        {externals.slice(0, 4).map((x) => (
+                          <span key={x.id} className="inline-flex items-center gap-1 rounded-full border border-dashed border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground" title={`Guest · ${x.email}`}>
+                            <Mail className="h-2.5 w-2.5" />{x.name || x.email}{x.joined_at ? " ✓" : ""}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </button>
                   <div className="flex flex-col items-end gap-2">
                     {!isPast && (
