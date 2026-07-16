@@ -137,7 +137,7 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Human Resources",
+    label: "HR & Administration",
     items: [
       { label: "Employees", to: "/employees", icon: IdCard },
       { label: "Recruiting", to: "/hiring", icon: UserSearch },
@@ -145,6 +145,13 @@ export const navGroups: NavGroup[] = [
       { label: "Time & Attendance", to: "/time-tracking", icon: Clock },
       { label: "Performance & Benefits", to: "/reviews", icon: Star },
       { label: "Org Chart", to: "/org-chart", icon: Network },
+      { label: "Users", to: "/admin/users", icon: Users, badge: "Admin" },
+      { label: "Roles", to: "/admin/roles", icon: Shield, badge: "Admin" },
+      { label: "Departments", to: "/admin/departments", icon: Building, badge: "Admin" },
+      { label: "Company", to: "/admin/company", icon: Building2, badge: "Admin" },
+      { label: "Branding", to: "/admin/branding", icon: BrandIcon, badge: "Admin" },
+      { label: "Domains", to: "/admin/domains", icon: Globe2, badge: "Admin" },
+      { label: "Security Policies", to: "/admin/security", icon: PolicyIcon, badge: "Admin" },
     ],
   },
   {
@@ -204,18 +211,6 @@ export const navGroups: NavGroup[] = [
       { label: "Workflows", to: "/workflows", icon: Workflow },
       { label: "Approvals", to: "/approvals", icon: ApprovalIcon },
       { label: "Scheduled Jobs & Webhooks", to: "/scheduled-jobs", icon: ScheduleIcon },
-    ],
-  },
-  {
-    label: "Administration",
-    items: [
-      { label: "Users", to: "/admin/users", icon: Users, badge: "Admin" },
-      { label: "Roles", to: "/admin/roles", icon: Shield, badge: "Admin" },
-      { label: "Departments", to: "/admin/departments", icon: Building, badge: "Admin" },
-      { label: "Company", to: "/admin/company", icon: Building2, badge: "Admin" },
-      { label: "Branding", to: "/admin/branding", icon: BrandIcon, badge: "Admin" },
-      { label: "Domains", to: "/admin/domains", icon: Globe2, badge: "Admin" },
-      { label: "Security Policies", to: "/admin/security", icon: PolicyIcon, badge: "Admin" },
     ],
   },
 ];
