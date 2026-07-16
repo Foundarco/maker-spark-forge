@@ -130,7 +130,6 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Goals & OKRs", to: "/goals", icon: Target },
       { label: "Roadmap", to: "/roadmap", icon: Map },
-      { label: "Meeting Notes", to: "/meeting-notes", icon: StickyNote },
       { label: "Partnerships & Investors", to: "/partnerships", icon: Handshake },
       { label: "Legal & Policies", to: "/legal-docs", icon: Gavel },
       { label: "Strategy & Decision Log", to: "/strategy", icon: Compass },
