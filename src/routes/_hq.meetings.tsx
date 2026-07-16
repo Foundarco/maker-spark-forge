@@ -45,6 +45,8 @@ function MeetingsPage() {
       color: "orange" as string,
       teammates: [] as string[],
       externals: [] as { email: string; name: string }[],
+      recurrence: "none" as "none" | "daily" | "weekly" | "biweekly" | "monthly",
+      occurrences: 4,
     };
   });
   const [teamSearch, setTeamSearch] = useState("");
