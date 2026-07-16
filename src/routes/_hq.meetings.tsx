@@ -45,6 +45,8 @@ function MeetingsPage() {
       color: "orange" as string,
       teammates: [] as string[],
       externals: [] as { email: string; name: string }[],
+      recurrence: "none" as "none" | "daily" | "weekly" | "biweekly" | "monthly",
+      occurrences: 4,
     };
   });
   const [teamSearch, setTeamSearch] = useState("");
@@ -102,46 +104,68 @@ function MeetingsPage() {
     const startsIso = new Date(form.starts_at).toISOString();
     const endsIso = new Date(form.ends_at).toISOString();
 
-    // 1. Create meeting
-    const { data: mData, error } = await supabase.from("meetings").insert({
-      title: form.title.trim(),
-      description: form.description.trim() || null,
-      host_id: me,
-      starts_at: startsIso,
-      ends_at: endsIso,
-      location: form.location.trim() || null,
-    }).select().single();
-    if (error || !mData) { alert(error?.message ?? "Failed"); return; }
-
-    // 2. Add host + invited teammates as participants
-    const inviteeIds = Array.from(new Set([me, ...form.teammates]));
-    if (inviteeIds.length) {
-      await supabase.from("meeting_participants").upsert(
-        inviteeIds.map((uid) => ({ meeting_id: mData.id, user_id: uid, rsvp: uid === me ? "yes" : "invited" })),
-        { onConflict: "meeting_id,user_id" },
-      );
+    // Build occurrence list based on recurrence
+    const stepDays = form.recurrence === "daily" ? 1
+      : form.recurrence === "weekly" ? 7
+      : form.recurrence === "biweekly" ? 14
+      : form.recurrence === "monthly" ? 0 // month step handled below
+      : null;
+    const total = form.recurrence === "none" ? 1 : Math.max(1, Math.min(24, form.occurrences));
+    const occurrences: { starts: string; ends: string }[] = [];
+    for (let i = 0; i < total; i++) {
+      let s = new Date(startsIso);
+      let en = new Date(endsIso);
+      if (stepDays !== null && i > 0) {
+        if (form.recurrence === "monthly") {
+          s.setMonth(s.getMonth() + i);
+          en.setMonth(en.getMonth() + i);
+        } else {
+          s.setDate(s.getDate() + stepDays * i);
+          en.setDate(en.getDate() + stepDays * i);
+        }
+      }
+      occurrences.push({ starts: s.toISOString(), ends: en.toISOString() });
     }
 
-    // 3. Add calendar events (host + each teammate). visibility=private per user, meeting_id links them.
-    const evPayload = inviteeIds.map((uid) => ({
-      owner_id: uid,
-      title: form.title.trim(),
-      description: form.description.trim() || null,
-      starts_at: startsIso,
-      ends_at: endsIso,
-      all_day: false,
-      location: form.location.trim() || null,
-      color: form.color,
-      visibility: "private",
-      meeting_id: mData.id,
-    }));
-    if (evPayload.length) await supabase.from("calendar_events").insert(evPayload);
+    const inviteeIds = Array.from(new Set([me, ...form.teammates]));
 
-    // 4. External invites
-    if (form.externals.length) {
-      await supabase.from("meeting_external_invites").insert(
-        form.externals.map((x) => ({ meeting_id: mData.id, email: x.email, name: x.name || null, invited_by: me })),
-      );
+    for (const occ of occurrences) {
+      const { data: mData, error } = await supabase.from("meetings").insert({
+        title: form.title.trim(),
+        description: form.description.trim() || null,
+        host_id: me,
+        starts_at: occ.starts,
+        ends_at: occ.ends,
+        location: form.location.trim() || null,
+      }).select().single();
+      if (error || !mData) { alert(error?.message ?? "Failed"); return; }
+
+      if (inviteeIds.length) {
+        await supabase.from("meeting_participants").upsert(
+          inviteeIds.map((uid) => ({ meeting_id: mData.id, user_id: uid, rsvp: uid === me ? "yes" : "invited" })),
+          { onConflict: "meeting_id,user_id" },
+        );
+      }
+
+      const evPayload = inviteeIds.map((uid) => ({
+        owner_id: uid,
+        title: form.title.trim(),
+        description: form.description.trim() || null,
+        starts_at: occ.starts,
+        ends_at: occ.ends,
+        all_day: false,
+        location: form.location.trim() || null,
+        color: form.color,
+        visibility: "private",
+        meeting_id: mData.id,
+      }));
+      if (evPayload.length) await supabase.from("calendar_events").insert(evPayload);
+
+      if (form.externals.length) {
+        await supabase.from("meeting_external_invites").insert(
+          form.externals.map((x) => ({ meeting_id: mData.id, email: x.email, name: x.name || null, invited_by: me })),
+        );
+      }
     }
 
     setShowNew(false);
@@ -150,6 +174,7 @@ function MeetingsPage() {
       starts_at: toLocalInput(new Date().toISOString()),
       ends_at: toLocalInput(new Date(Date.now() + 3600000).toISOString()),
       location: "", color: "orange", teammates: [], externals: [],
+      recurrence: "none", occurrences: 4,
     });
     load();
   };
@@ -251,6 +276,31 @@ function MeetingsPage() {
                       <span className="flex items-center gap-1"><Users className="h-3 w-3" />{attendees.length} teammate{attendees.length === 1 ? "" : "s"}</span>
                       {externals.length > 0 && <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{externals.length} guest{externals.length === 1 ? "" : "s"}</span>}
                     </div>
+                    {(attendees.length > 0 || externals.length > 0) && (
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {attendees.slice(0, 8).map((p) => {
+                          const prof = profiles[p.user_id];
+                          const name = prof?.full_name || prof?.email || "Unknown";
+                          const initial = name.charAt(0).toUpperCase();
+                          const tone = p.rsvp === "yes" ? "border-green-500/40 bg-green-500/10 text-green-600 dark:text-green-400"
+                            : p.rsvp === "no" ? "border-destructive/40 bg-destructive/10 text-destructive"
+                            : p.rsvp === "maybe" ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
+                            : "border-border bg-muted/50 text-muted-foreground";
+                          return (
+                            <span key={p.user_id} className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${tone}`} title={`${name} · ${p.rsvp}`}>
+                              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-background text-[9px] font-semibold">{initial}</span>
+                              {name}
+                            </span>
+                          );
+                        })}
+                        {attendees.length > 8 && <span className="text-[11px] text-muted-foreground">+{attendees.length - 8} more</span>}
+                        {externals.slice(0, 4).map((x) => (
+                          <span key={x.id} className="inline-flex items-center gap-1 rounded-full border border-dashed border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground" title={`Guest · ${x.email}`}>
+                            <Mail className="h-2.5 w-2.5" />{x.name || x.email}{x.joined_at ? " ✓" : ""}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </button>
                   <div className="flex flex-col items-end gap-2">
                     {!isPast && (
@@ -361,6 +411,26 @@ function MeetingsPage() {
                 </div>
               </div>
               <input placeholder="Location (optional)" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+
+              {/* Recurrence */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Repeats</label>
+                  <select value={form.recurrence} onChange={(e) => setForm({ ...form, recurrence: e.target.value as typeof form.recurrence })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+                    <option value="none">Does not repeat</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+                {form.recurrence !== "none" && (
+                  <div>
+                    <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Occurrences (max 24)</label>
+                    <input type="number" min={1} max={24} value={form.occurrences} onChange={(e) => setForm({ ...form, occurrences: Math.max(1, Math.min(24, Number(e.target.value) || 1)) })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                  </div>
+                )}
+              </div>
 
               {/* Teammates */}
               <div>

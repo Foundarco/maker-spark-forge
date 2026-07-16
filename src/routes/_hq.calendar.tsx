@@ -27,6 +27,7 @@ type MeetingMeta = {
   host_id: string;
   host_name: string | null;
   attendee_count: number;
+  attendee_names: string[];
   note_preview: string | null;
 };
 
@@ -83,14 +84,22 @@ function CalendarPage() {
         supabase.from("meeting_participants").select("meeting_id, user_id").in("meeting_id", mIds),
         supabase.from("meeting_notes").select("meeting_id, body, content_md").in("meeting_id", mIds),
       ]);
-      const hostIds = Array.from(new Set(((mts ?? []) as any[]).map((m) => m.host_id)));
-      const { data: hosts } = hostIds.length
-        ? await supabase.from("profiles").select("id, full_name, email").in("id", hostIds)
+      const hostIds = ((mts ?? []) as any[]).map((m) => m.host_id);
+      const partUserIds = ((parts ?? []) as any[]).map((p) => p.user_id);
+      const profileIds = Array.from(new Set([...hostIds, ...partUserIds]));
+      const { data: profs } = profileIds.length
+        ? await supabase.from("profiles").select("id, full_name, email").in("id", profileIds)
         : { data: [] as any[] };
-      const hostMap = new Map<string, string>();
-      (hosts ?? []).forEach((h: any) => hostMap.set(h.id, h.full_name || h.email || "Someone"));
+      const nameMap = new Map<string, string>();
+      (profs ?? []).forEach((h: any) => nameMap.set(h.id, h.full_name || h.email || "Someone"));
       const counts = new Map<string, number>();
-      ((parts ?? []) as any[]).forEach((p) => counts.set(p.meeting_id, (counts.get(p.meeting_id) ?? 0) + 1));
+      const names = new Map<string, string[]>();
+      ((parts ?? []) as any[]).forEach((p) => {
+        counts.set(p.meeting_id, (counts.get(p.meeting_id) ?? 0) + 1);
+        const arr = names.get(p.meeting_id) ?? [];
+        arr.push(nameMap.get(p.user_id) ?? "Someone");
+        names.set(p.meeting_id, arr);
+      });
       const noteMap = new Map<string, string>();
       ((notes ?? []) as any[]).forEach((n) => {
         const src = (n.content_md || n.body || "") as string;
@@ -102,8 +111,9 @@ function CalendarPage() {
         meta[m.id] = {
           id: m.id,
           host_id: m.host_id,
-          host_name: hostMap.get(m.host_id) ?? null,
+          host_name: nameMap.get(m.host_id) ?? null,
           attendee_count: counts.get(m.id) ?? 0,
+          attendee_names: names.get(m.id) ?? [],
           note_preview: noteMap.get(m.id) ?? null,
         };
       });
@@ -241,7 +251,15 @@ function CalendarPage() {
                   <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><UserIcon className="h-3 w-3" /> Host: {meta.host_name}</p>
                 )}
                 {meta && meta.attendee_count > 0 && (
-                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
+                  <>
+                    <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {meta.attendee_names.slice(0, 6).map((n, idx) => (
+                        <span key={idx} className="rounded-full border border-current/30 bg-background/50 px-1.5 py-0.5 text-[10px]">{n}</span>
+                      ))}
+                      {meta.attendee_names.length > 6 && <span className="text-[10px] opacity-70">+{meta.attendee_names.length - 6}</span>}
+                    </div>
+                  </>
                 )}
                 {e.location && <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><MapPin className="h-3 w-3" /> {e.location}</p>}
                 {e.description && !meta?.note_preview && (
