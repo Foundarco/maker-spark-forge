@@ -6,7 +6,7 @@ import {
   PhoneOff, Users, FileText, Copy, Check,
 } from "lucide-react";
 
-export const Route = createFileRoute("/_hq/meeting/$id")({
+export const Route = createFileRoute("/meeting/$id")({
   head: () => ({ meta: [{ title: "Meeting Room — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
   component: MeetingRoom,
 });

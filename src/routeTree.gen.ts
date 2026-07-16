@@ -39,6 +39,7 @@ import { Route as SoftwareSlicerRouteImport } from './routes/software.slicer'
 import { Route as SoftwareFirmwareRouteImport } from './routes/software.firmware'
 import { Route as SoftwareDownloadsRouteImport } from './routes/software.downloads'
 import { Route as SoftwareAppRouteImport } from './routes/software.app'
+import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
 import { Route as MaterialsRecyclingRouteImport } from './routes/materials.recycling'
 import { Route as MaterialsPelletsRouteImport } from './routes/materials.pellets'
 import { Route as MaterialsFilamentRouteImport } from './routes/materials.filament'
@@ -225,7 +226,6 @@ import { Route as HqAiInsightsRouteImport } from './routes/_hq.ai-insights'
 import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
-import { Route as HqMeetingIdRouteImport } from './routes/_hq.meeting.$id'
 import { Route as HqAdminUsersRouteImport } from './routes/_hq.admin.users'
 import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
 import { Route as HqAdminRolesRouteImport } from './routes/_hq.admin.roles'
@@ -383,6 +383,11 @@ const SoftwareAppRoute = SoftwareAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => SoftwareRoute,
+} as any)
+const MeetingIdRoute = MeetingIdRouteImport.update({
+  id: '/meeting/$id',
+  path: '/meeting/$id',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const MaterialsRecyclingRoute = MaterialsRecyclingRouteImport.update({
   id: '/recycling',
@@ -1314,11 +1319,6 @@ const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   path: '/api/hq/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HqMeetingIdRoute = HqMeetingIdRouteImport.update({
-  id: '/meeting/$id',
-  path: '/meeting/$id',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqAdminUsersRoute = HqAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -1570,6 +1570,7 @@ export interface FileRoutesByFullPath {
   '/materials/filament': typeof MaterialsFilamentRoute
   '/materials/pellets': typeof MaterialsPelletsRoute
   '/materials/recycling': typeof MaterialsRecyclingRoute
+  '/meeting/$id': typeof MeetingIdRoute
   '/software/app': typeof SoftwareAppRoute
   '/software/downloads': typeof SoftwareDownloadsRoute
   '/software/firmware': typeof SoftwareFirmwareRoute
@@ -1583,7 +1584,6 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/admin/users': typeof HqAdminUsersRoute
-  '/meeting/$id': typeof HqMeetingIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesByTo {
@@ -1796,6 +1796,7 @@ export interface FileRoutesByTo {
   '/materials/filament': typeof MaterialsFilamentRoute
   '/materials/pellets': typeof MaterialsPelletsRoute
   '/materials/recycling': typeof MaterialsRecyclingRoute
+  '/meeting/$id': typeof MeetingIdRoute
   '/software/app': typeof SoftwareAppRoute
   '/software/downloads': typeof SoftwareDownloadsRoute
   '/software/firmware': typeof SoftwareFirmwareRoute
@@ -1809,7 +1810,6 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/admin/users': typeof HqAdminUsersRoute
-  '/meeting/$id': typeof HqMeetingIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesById {
@@ -2024,6 +2024,7 @@ export interface FileRoutesById {
   '/materials/filament': typeof MaterialsFilamentRoute
   '/materials/pellets': typeof MaterialsPelletsRoute
   '/materials/recycling': typeof MaterialsRecyclingRoute
+  '/meeting/$id': typeof MeetingIdRoute
   '/software/app': typeof SoftwareAppRoute
   '/software/downloads': typeof SoftwareDownloadsRoute
   '/software/firmware': typeof SoftwareFirmwareRoute
@@ -2037,7 +2038,6 @@ export interface FileRoutesById {
   '/_hq/admin/roles': typeof HqAdminRolesRoute
   '/_hq/admin/security': typeof HqAdminSecurityRoute
   '/_hq/admin/users': typeof HqAdminUsersRoute
-  '/_hq/meeting/$id': typeof HqMeetingIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRouteTypes {
@@ -2252,6 +2252,7 @@ export interface FileRouteTypes {
     | '/materials/filament'
     | '/materials/pellets'
     | '/materials/recycling'
+    | '/meeting/$id'
     | '/software/app'
     | '/software/downloads'
     | '/software/firmware'
@@ -2265,7 +2266,6 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/security'
     | '/admin/users'
-    | '/meeting/$id'
     | '/api/hq/assistant'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -2478,6 +2478,7 @@ export interface FileRouteTypes {
     | '/materials/filament'
     | '/materials/pellets'
     | '/materials/recycling'
+    | '/meeting/$id'
     | '/software/app'
     | '/software/downloads'
     | '/software/firmware'
@@ -2491,7 +2492,6 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/security'
     | '/admin/users'
-    | '/meeting/$id'
     | '/api/hq/assistant'
   id:
     | '__root__'
@@ -2705,6 +2705,7 @@ export interface FileRouteTypes {
     | '/materials/filament'
     | '/materials/pellets'
     | '/materials/recycling'
+    | '/meeting/$id'
     | '/software/app'
     | '/software/downloads'
     | '/software/firmware'
@@ -2718,7 +2719,6 @@ export interface FileRouteTypes {
     | '/_hq/admin/roles'
     | '/_hq/admin/security'
     | '/_hq/admin/users'
-    | '/_hq/meeting/$id'
     | '/api/hq/assistant'
   fileRoutesById: FileRoutesById
 }
@@ -2753,6 +2753,7 @@ export interface RootRouteChildren {
   LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
   LegalTermsRoute: typeof LegalTermsRoute
   LegalWarrantyRoute: typeof LegalWarrantyRoute
+  MeetingIdRoute: typeof MeetingIdRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
 }
 
@@ -2967,6 +2968,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/software/app'
       preLoaderRoute: typeof SoftwareAppRouteImport
       parentRoute: typeof SoftwareRoute
+    }
+    '/meeting/$id': {
+      id: '/meeting/$id'
+      path: '/meeting/$id'
+      fullPath: '/meeting/$id'
+      preLoaderRoute: typeof MeetingIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/materials/recycling': {
       id: '/materials/recycling'
@@ -4270,13 +4278,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHqAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_hq/meeting/$id': {
-      id: '/_hq/meeting/$id'
-      path: '/meeting/$id'
-      fullPath: '/meeting/$id'
-      preLoaderRoute: typeof HqMeetingIdRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/admin/users': {
       id: '/_hq/admin/users'
       path: '/admin/users'
@@ -4519,7 +4520,6 @@ interface HqRouteChildren {
   HqAdminRolesRoute: typeof HqAdminRolesRoute
   HqAdminSecurityRoute: typeof HqAdminSecurityRoute
   HqAdminUsersRoute: typeof HqAdminUsersRoute
-  HqMeetingIdRoute: typeof HqMeetingIdRoute
 }
 
 const HqRouteChildren: HqRouteChildren = {
@@ -4705,7 +4705,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqAdminRolesRoute: HqAdminRolesRoute,
   HqAdminSecurityRoute: HqAdminSecurityRoute,
   HqAdminUsersRoute: HqAdminUsersRoute,
-  HqMeetingIdRoute: HqMeetingIdRoute,
 }
 
 const HqRouteWithChildren = HqRoute._addFileChildren(HqRouteChildren)
@@ -4815,6 +4814,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalShippingReturnsRoute: LegalShippingReturnsRoute,
   LegalTermsRoute: LegalTermsRoute,
   LegalWarrantyRoute: LegalWarrantyRoute,
+  MeetingIdRoute: MeetingIdRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
 }
 export const routeTree = rootRouteImport
