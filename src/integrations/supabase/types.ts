@@ -342,8 +342,45 @@ export type Database = {
         }
         Relationships: []
       }
+      idea_comments: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          idea_id: string
+          is_anonymous: boolean
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          id?: string
+          idea_id: string
+          is_anonymous?: boolean
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          idea_id?: string
+          is_anonymous?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idea_comments_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ideas: {
         Row: {
+          approval_status: string
+          assigned_to: string | null
           author_id: string
           category: string | null
           created_at: string
@@ -351,12 +388,18 @@ export type Database = {
           effort: number
           id: string
           impact: number
+          is_anonymous: boolean
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
           status: string
           title: string
           updated_at: string
           upvotes: number
         }
         Insert: {
+          approval_status?: string
+          assigned_to?: string | null
           author_id: string
           category?: string | null
           created_at?: string
@@ -364,12 +407,18 @@ export type Database = {
           effort?: number
           id?: string
           impact?: number
+          is_anonymous?: boolean
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           status?: string
           title: string
           updated_at?: string
           upvotes?: number
         }
         Update: {
+          approval_status?: string
+          assigned_to?: string | null
           author_id?: string
           category?: string | null
           created_at?: string
@@ -377,6 +426,10 @@ export type Database = {
           effort?: number
           id?: string
           impact?: number
+          is_anonymous?: boolean
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           status?: string
           title?: string
           updated_at?: string
