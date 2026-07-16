@@ -181,26 +181,11 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Supply Chain",
-    items: [
-      { label: "Suppliers", to: "/suppliers", icon: Store },
-      { label: "Vendor Portal", to: "/vendor-portal", icon: DoorOpen },
-      { label: "RFQs", to: "/rfqs", icon: FileQuestion },
-      { label: "Vendor Quotes", to: "/vendor-quotes", icon: Quote },
-      { label: "Purchase History", to: "/purchase-history", icon: ArchiveRestore },
-      { label: "Lead Times", to: "/lead-times", icon: Clock3 },
-      { label: "Approved Vendors", to: "/approved-vendors", icon: CheckCircle2 },
-      { label: "Shipping Tracking", to: "/shipping-tracking", icon: MapPin },
-    ],
-  },
-  {
     label: "R&D",
     items: [
       { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
-      { label: "Experiments", to: "/rd-experiments", icon: FlaskConical },
       { label: "Research Papers", to: "/rd-papers", icon: BookMarked },
       { label: "Material Database", to: "/rd-materials", icon: Database },
-      { label: "Test Data", to: "/rd-test-data", icon: ChartLine },
       { label: "Simulations", to: "/rd-simulations", icon: CircuitBoard },
       { label: "Patent Tracking", to: "/rd-patents", icon: Award },
     ],
