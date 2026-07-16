@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Hash, Lock, Plus, Send, Users, X, Trash2, Search } from "lucide-react";
+import { Hash, Lock, Plus, Send, Users, X, Trash2, Search, Pencil } from "lucide-react";
+import { MessageReactions } from "@/components/hq/MessageReactions";
 
 export const Route = createFileRoute("/_hq/channels")({
   head: () => ({ meta: [{ title: "Channels — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
