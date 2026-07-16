@@ -38,6 +38,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Assistant", to: "/assistant", icon: Bot },
+      { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
       { label: "Settings", to: "/settings", icon: Settings },
     ],
   },
