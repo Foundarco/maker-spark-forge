@@ -37,9 +37,7 @@ export const navGroups: NavGroup[] = [
     label: "Core",
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-      { label: "Notifications", to: "/notifications", icon: Bell },
-      { label: "Universal Search", to: "/search", icon: Search },
-      { label: "AI Assistant", to: "/assistant", icon: Bot },
+      { label: "Assistant", to: "/assistant", icon: Bot },
       { label: "Settings", to: "/settings", icon: Settings },
     ],
   },
@@ -47,15 +45,10 @@ export const navGroups: NavGroup[] = [
   {
     label: "Communication",
     items: [
-      { label: "Team Chat", to: "/chat", icon: MessageSquare },
-      { label: "Direct Messages", to: "/dm", icon: MessagesSquare },
+      { label: "Messages", to: "/dm", icon: MessagesSquare },
       { label: "Channels", to: "/channels", icon: Hash },
-      { label: "Voice Calls", to: "/calls", icon: Phone },
-      { label: "Video Meetings", to: "/meetings", icon: Video },
-      { label: "Announcements", to: "/announcements", icon: Megaphone },
-      { label: "Company Feed", to: "/feed", icon: Rss },
+      { label: "Calls & Meetings", to: "/meetings", icon: Video },
       { label: "Calendar", to: "/calendar", icon: Calendar },
-      { label: "Contacts", to: "/contacts", icon: Contact },
     ],
   },
   {
