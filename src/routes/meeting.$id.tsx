@@ -596,7 +596,7 @@ function Tile({
   showAvatar: boolean;
   avatarLetter: string;
   onEnlarge?: () => void;
-  videoRef?: React.RefObject<HTMLVideoElement>;
+  videoRef?: React.RefObject<HTMLVideoElement | null>;
 }) {
   const localRef = useRef<HTMLVideoElement>(null);
   const ref = videoRef ?? localRef;
