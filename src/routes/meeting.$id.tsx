@@ -503,9 +503,9 @@ function MeetingRoom() {
     else void doLeave(false);
   };
 
-  const doLeave = async (endForAll: boolean) => {
+  const doLeave = async (endForAll: boolean, overrideMd?: string) => {
     setEnding(true);
-    await saveMeetingNote({ hostEnded: endForAll });
+    await saveMeetingNote({ hostEnded: endForAll, overrideMd });
     if (endForAll && isHost) {
       // Notify remote peers to leave, then mark meeting ended + delete it.
       channelRef.current?.send({ type: "broadcast", event: "end-meeting", payload: { from: meRef.current?.id } });
@@ -516,6 +516,12 @@ function MeetingRoom() {
     cleanupAll();
     if (meRef.current?.external) navigate({ to: "/" });
     else navigate({ to: "/meetings" });
+  };
+
+  const openEndWithNotesEditor = () => {
+    const { md } = buildAutoNotes({ hostEnded: true });
+    setNotesDraft(md);
+    setShowLeaveConfirm(false);
   };
 
   const copyLink = async () => {
@@ -743,11 +749,11 @@ function MeetingRoom() {
           <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-semibold">Leaving as host</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              You're the host of this meeting. End it for everyone (this generates polished meeting notes and removes it from schedules), or just leave and let the meeting continue.
+              You're the host of this meeting. End it for everyone (you'll review and edit the meeting notes before saving), or just leave and let the meeting continue.
             </p>
             <div className="mt-5 flex flex-col gap-2">
-              <button disabled={ending} onClick={() => doLeave(true)} className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50">
-                End meeting for everyone
+              <button disabled={ending} onClick={openEndWithNotesEditor} className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50">
+                Review notes & end for everyone
               </button>
               <button disabled={ending} onClick={() => doLeave(false)} className="rounded-lg border border-border bg-background px-4 py-2 text-sm">
                 Just leave (others stay)
@@ -755,6 +761,41 @@ function MeetingRoom() {
               <button disabled={ending} onClick={() => setShowLeaveConfirm(false)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-muted">
                 Cancel
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {notesDraft !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setNotesDraft(null)}>
+          <div className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
+            <div className="flex items-start justify-between border-b border-border p-5">
+              <div>
+                <h3 className="text-lg font-semibold">Meeting notes</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Edit before saving. These notes will be visible to everyone with access to the meeting.</p>
+              </div>
+              <button disabled={ending} onClick={() => setNotesDraft(null)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
+            </div>
+            <textarea
+              value={notesDraft}
+              onChange={(e) => setNotesDraft(e.target.value)}
+              rows={20}
+              className="flex-1 resize-none border-0 bg-background px-5 py-4 font-mono text-xs leading-relaxed outline-none"
+            />
+            <div className="flex items-center justify-between gap-2 border-t border-border p-4">
+              <button
+                disabled={ending}
+                onClick={() => setNotesDraft(buildAutoNotes({ hostEnded: true }).md)}
+                className="rounded-lg border border-border px-3 py-2 text-xs hover:bg-muted"
+              >
+                Reset to auto
+              </button>
+              <div className="flex gap-2">
+                <button disabled={ending} onClick={() => setNotesDraft(null)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
+                <button disabled={ending} onClick={() => doLeave(true, notesDraft)} className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
+                  {ending ? "Ending…" : "Save notes & end meeting"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
