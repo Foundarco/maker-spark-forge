@@ -33,7 +33,7 @@ export function EmojiPickerButton({ onPick }: { onPick: (emoji: string) => void 
             {/* @ts-ignore — types differ across versions */}
             <EmojiPicker
               onEmojiClick={(e: any) => { onPick(e.emoji); setOpen(false); }}
-              theme={document.documentElement.classList.contains("dark") ? "dark" : "light"}
+              theme={(document.documentElement.classList.contains("dark") ? "dark" : "light") as any}
               width={320}
               height={380}
               searchDisabled={false}
