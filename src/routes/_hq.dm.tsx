@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X } from "lucide-react";
+import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
@@ -37,7 +37,9 @@ function DMPage() {
   const [search, setSearch] = useState("");
   const [editingMsg, setEditingMsg] = useState<{ id: string; body: string } | null>(null);
   const [openProfile, setOpenProfile] = useState<{ userId: string; x: number; y: number } | null>(null);
+  const [replyingTo, setReplyingTo] = useState<DM | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const msgRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     (async () => {
@@ -129,11 +131,21 @@ function DMPage() {
   const send = async (body: string, attachments: Attachment[]) => {
     if ((!body && attachments.length === 0) || !me || !active) return;
     const tempId = `tmp-${crypto.randomUUID()}`;
-    const optimistic: DM = { id: tempId, sender_id: me, recipient_id: active, body, read_at: null, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: null };
+    const replyId = replyingTo?.id && !replyingTo.id.startsWith("tmp-") ? replyingTo.id : null;
+    const optimistic: DM = { id: tempId, sender_id: me, recipient_id: active, body, read_at: null, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: replyId };
     setMessages((prev) => [...prev, optimistic]);
-    const { data, error } = await supabase.from("direct_messages").insert({ sender_id: me, recipient_id: active, body, attachments: attachments as any } as any).select().single();
+    setReplyingTo(null);
+    const { data, error } = await supabase.from("direct_messages").insert({ sender_id: me, recipient_id: active, body, attachments: attachments as any, reply_to_id: replyId } as any).select().single();
     if (error) { setMessages((prev) => prev.filter((m) => m.id !== tempId)); alert(error.message); return; }
     if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as DM) : m));
+  };
+
+  const scrollToMessage = (mid: string) => {
+    const el = msgRefs.current[mid];
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("ring-2", "ring-primary");
+    setTimeout(() => el.classList.remove("ring-2", "ring-primary"), 1200);
   };
 
   const softDelete = async (id: string) => {
