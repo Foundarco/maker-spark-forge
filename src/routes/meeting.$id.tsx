@@ -612,18 +612,26 @@ function MeetingRoom() {
       <div className="flex min-h-0 flex-1">
         <div className="flex min-h-0 flex-1 flex-col p-3">
           <div className={`grid flex-1 gap-3 ${gridCols}`}>
-            {tiles.map((tile) => (
-              <Tile
-                key={tile.key}
-                label={tile.label}
-                stream={tile.stream}
-                muted={tile.muted}
-                showAvatar={tile.isMe && !camOn && !tile.isScreen}
-                avatarLetter={me?.name?.[0]?.toUpperCase() ?? "?"}
-                onEnlarge={tile.stream ? () => setEnlarged({ stream: tile.stream!, label: tile.label }) : undefined}
-                videoRef={tile.key === "me-cam" ? localVideoRef : undefined}
-              />
-            ))}
+            {tiles
+              .slice()
+              .sort((a, b) => {
+                const as = speakingKeys[a.key] ? 1 : 0;
+                const bs = speakingKeys[b.key] ? 1 : 0;
+                return bs - as; // speakers first
+              })
+              .map((tile) => (
+                <Tile
+                  key={tile.key}
+                  label={tile.label}
+                  stream={tile.stream}
+                  muted={tile.muted}
+                  showAvatar={tile.isMe && !camOn && !tile.isScreen}
+                  avatarLetter={me?.name?.[0]?.toUpperCase() ?? "?"}
+                  speaking={!!speakingKeys[tile.key]}
+                  onEnlarge={tile.stream ? () => setEnlarged({ stream: tile.stream!, label: tile.label }) : undefined}
+                  videoRef={tile.key === "me-cam" ? localVideoRef : undefined}
+                />
+              ))}
           </div>
 
           <div className="mt-3 flex items-center justify-center gap-2">
