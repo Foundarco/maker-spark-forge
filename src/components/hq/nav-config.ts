@@ -3,7 +3,7 @@ import {
   MessageSquare, MessagesSquare, Hash, Phone, Video, Megaphone, Rss, Calendar, Contact,
   FolderKanban, CheckSquare, Columns3, GanttChart, Flag, FileBox, Cpu, Terminal, GitBranch, BookText, ListTree, GitPullRequest, Eye, History, TestTube2, NotebookPen, FileBarChart, Bug,
   Factory, ClipboardList, Wrench, Boxes, Warehouse, ShoppingCart, PackageOpen, ShieldCheck, Activity, HardHat, Ruler, Barcode, Package, Truck,
-  LifeBuoy, MessageCircle, Mail, PhoneCall, ShieldAlert, Undo2, BookOpen, HelpCircle, Timer, Smile, Stethoscope, Hammer,
+  LifeBuoy, MessageCircle, Mail, PhoneCall, ShieldAlert, Undo2, BookOpen, HelpCircle, Timer, Stethoscope, Hammer,
   Receipt, Users2, Filter, ScrollText, Building2, Tag, LineChart,
   Landmark, Wallet, FileSpreadsheet, PiggyBank, ShoppingBag, Banknote, Calculator, TrendingUp, Divide, Scale,
   Globe, PenSquare, Send, Share2, CalendarDays, Palette, BarChart3, Newspaper, Rocket, Image,
@@ -14,10 +14,10 @@ import {
   Server, Cable, KeyRound, Plug, ShieldOff, Save, ScrollText as LogsIcon, MonitorCheck, Fingerprint, FileSearch,
   Store, DoorOpen, FileQuestion, Quote, ArchiveRestore, Clock3, CheckCircle2, MapPin,
   Lightbulb, LineChart as ChartLine,
-  Package as ProdIcon, Sparkles, Rocket as LaunchIcon, RefreshCw, Layers,
-  Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Webhook, Code2,
+  Package as ProdIcon, Sparkles, Layers,
+  Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Code2,
   Cog, ShieldPlus, Building, Palette as BrandIcon, Globe2, KeyRound as PolicyIcon,
-  Sparkle, Cpu as TwinIcon, Radio, Waypoints, FileClock,
+  Sparkle,
 } from "lucide-react";
 
 export type NavItem = {
@@ -185,9 +185,7 @@ export const navGroups: NavGroup[] = [
     label: "Product",
     items: [
       { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
-      { label: "Features", to: "/product-features", icon: Sparkles },
-      { label: "Release Planning", to: "/product-releases", icon: LaunchIcon },
-      { label: "Lifecycle", to: "/product-lifecycle", icon: RefreshCw },
+      { label: "Features & Releases", to: "/product-features", icon: Sparkles },
       { label: "Compatibility", to: "/product-compatibility", icon: Layers },
       { label: "Docs", to: "/product-docs", icon: BookText },
     ],
@@ -197,11 +195,6 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboards", to: "/analytics", icon: BarChart3 },
       { label: "KPIs", to: "/kpis", icon: Target },
-      { label: "Manufacturing", to: "/analytics-mfg", icon: Factory },
-      { label: "Sales", to: "/analytics-sales", icon: LineChart },
-      { label: "Finance", to: "/analytics-finance", icon: Landmark },
-      { label: "Customer", to: "/analytics-customer", icon: Smile },
-      { label: "Employee", to: "/analytics-employee", icon: Users },
       { label: "AI Insights", to: "/ai-insights", icon: Sparkle },
     ],
   },
@@ -210,9 +203,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Workflows", to: "/workflows", icon: Workflow },
       { label: "Approvals", to: "/approvals", icon: ApprovalIcon },
-      { label: "Scheduled Jobs", to: "/scheduled-jobs", icon: ScheduleIcon },
-      { label: "Webhooks", to: "/webhooks", icon: Webhook },
-      { label: "API Builder", to: "/api-builder", icon: Code2 },
+      { label: "Scheduled Jobs & Webhooks", to: "/scheduled-jobs", icon: ScheduleIcon },
     ],
   },
   {
@@ -225,15 +216,6 @@ export const navGroups: NavGroup[] = [
       { label: "Branding", to: "/admin/branding", icon: BrandIcon, badge: "Admin" },
       { label: "Domains", to: "/admin/domains", icon: Globe2, badge: "Admin" },
       { label: "Security Policies", to: "/admin/security", icon: PolicyIcon, badge: "Admin" },
-    ],
-  },
-  {
-    label: "Future",
-    items: [
-      { label: "Factory Live", to: "/factory-live", icon: Radio },
-      { label: "Digital Twin", to: "/digital-twin", icon: TwinIcon },
-      { label: "Unified Timeline", to: "/timeline", icon: FileClock },
-      { label: "Meeting Summaries", to: "/meeting-summaries", icon: Waypoints },
     ],
   },
 ];
