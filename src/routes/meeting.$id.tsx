@@ -605,8 +605,10 @@ function Tile({
   const localRef = useRef<HTMLVideoElement>(null);
   const ref = videoRef ?? localRef;
   useEffect(() => {
-    if (ref.current && stream && !videoRef) ref.current.srcObject = stream;
-  }, [stream, ref, videoRef]);
+    if (ref.current && stream && ref.current.srcObject !== stream) {
+      ref.current.srcObject = stream;
+    }
+  }, [stream, ref]);
   return (
     <div
       className={`group relative overflow-hidden rounded-xl bg-black ${onEnlarge ? "cursor-zoom-in" : ""}`}
