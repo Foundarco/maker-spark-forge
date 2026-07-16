@@ -81,7 +81,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
               <p className="truncate text-sm font-medium">{profile?.full_name ?? "Staff"}</p>
               <p className="truncate text-xs text-muted-foreground">{profile?.email}</p>
             </div>
-            <Link to="/profile" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted">
+            <Link to="/settings" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted">
               <UserIcon className="h-4 w-4" /> Profile
             </Link>
             <button
