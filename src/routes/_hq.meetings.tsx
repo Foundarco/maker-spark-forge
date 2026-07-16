@@ -412,6 +412,26 @@ function MeetingsPage() {
               </div>
               <input placeholder="Location (optional)" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
 
+              {/* Recurrence */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Repeats</label>
+                  <select value={form.recurrence} onChange={(e) => setForm({ ...form, recurrence: e.target.value as typeof form.recurrence })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+                    <option value="none">Does not repeat</option>
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="biweekly">Every 2 weeks</option>
+                    <option value="monthly">Monthly</option>
+                  </select>
+                </div>
+                {form.recurrence !== "none" && (
+                  <div>
+                    <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Occurrences (max 24)</label>
+                    <input type="number" min={1} max={24} value={form.occurrences} onChange={(e) => setForm({ ...form, occurrences: Math.max(1, Math.min(24, Number(e.target.value) || 1)) })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                  </div>
+                )}
+              </div>
+
               {/* Teammates */}
               <div>
                 <label className="mb-1 flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground">
