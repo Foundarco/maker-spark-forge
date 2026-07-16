@@ -3,7 +3,7 @@ import {
   MessageSquare, MessagesSquare, Hash, Phone, Video, Megaphone, Rss, Calendar, Contact,
   FolderKanban, CheckSquare, Columns3, GanttChart, Flag, FileBox, Cpu, Terminal, GitBranch, BookText, ListTree, GitPullRequest, Eye, History, TestTube2, NotebookPen, FileBarChart, Bug,
   Factory, ClipboardList, Wrench, Boxes, Warehouse, ShoppingCart, PackageOpen, ShieldCheck, Activity, HardHat, Ruler, Barcode, Package, Truck,
-  LifeBuoy, MessageCircle, Mail, PhoneCall, ShieldAlert, Undo2, BookOpen, HelpCircle, Timer, Smile, Stethoscope, Hammer,
+  LifeBuoy, MessageCircle, Mail, PhoneCall, ShieldAlert, Undo2, BookOpen, HelpCircle, Timer, Stethoscope, Hammer,
   Receipt, Users2, Filter, ScrollText, Building2, Tag, LineChart,
   Landmark, Wallet, FileSpreadsheet, PiggyBank, ShoppingBag, Banknote, Calculator, TrendingUp, Divide, Scale,
   Globe, PenSquare, Send, Share2, CalendarDays, Palette, BarChart3, Newspaper, Rocket, Image,
