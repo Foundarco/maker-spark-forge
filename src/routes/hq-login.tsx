@@ -35,7 +35,7 @@ function HQLogin() {
         if (error) throw error;
         navigate({ to: "/dashboard" });
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -44,7 +44,11 @@ function HQLogin() {
           },
         });
         if (error) throw error;
-        setError("Check your email to confirm the account. Note: signup requires an active invite from an admin.");
+        if (data.session) {
+          navigate({ to: "/dashboard" });
+        } else {
+          setError("Check your email to confirm the account. Note: signup requires an active invite from an admin.");
+        }
       }
     } catch (err: any) {
       setError(err?.message ?? "Something went wrong");
