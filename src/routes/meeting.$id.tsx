@@ -69,6 +69,9 @@ function MeetingRoom() {
   const [sidePanel, setSidePanel] = useState<"chat" | "transcript" | null>("chat");
   const [enlarged, setEnlarged] = useState<{ stream: MediaStream; label: string } | null>(null);
   const [, forceTick] = useState(0);
+  const [speakingKeys, setSpeakingKeys] = useState<Record<string, boolean>>({});
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+  const [ending, setEnding] = useState(false);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -79,6 +82,9 @@ function MeetingRoom() {
   const meRef = useRef<{ id: string; name: string; external: boolean } | null>(null);
   const noteSavedRef = useRef(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const analysersRef = useRef<Map<string, { analyser: AnalyserNode; source: MediaStreamAudioSourceNode }>>(new Map());
+  const startedAtRef = useRef<number>(Date.now());
 
   const updatePeer = (uid: string, updater: (p: Peer | undefined) => Peer | undefined) => {
     const next = updater(peersRef.current[uid]);
@@ -150,7 +156,7 @@ function MeetingRoom() {
     channelRef.current = null;
   }, []);
 
-  const saveMeetingNote = useCallback(async () => {
+  const saveMeetingNote = useCallback(async (options?: { hostEnded?: boolean }) => {
     if (noteSavedRef.current) return;
     if (!meRef.current || meRef.current.external) return;
     const { data: existing } = await supabase.from("meeting_notes").select("id").eq("meeting_id", id).limit(1);
@@ -159,20 +165,58 @@ function MeetingRoom() {
       meRef.current.name,
       ...Object.values(peersRef.current).map((p) => p.name),
     ]));
-    const body = transcript.length
-      ? transcript.map((t) => `[${new Date(t.t).toLocaleTimeString()}] ${t.speaker}: ${t.text}`).join("\n")
-      : `Meeting ended ${new Date().toLocaleString()}.\n\nAttendees: ${attendeeNames.join(", ")}\n\n_No live transcript was captured. Add notes here._`;
+    const durationMs = Date.now() - startedAtRef.current;
+    const mins = Math.floor(durationMs / 60000);
+    const secs = Math.floor((durationMs % 60000) / 1000);
+    const durationStr = mins >= 1 ? `${mins} min ${secs}s` : `${secs}s`;
+    // Extract shared links from chat
+    const chatMsgs = chat.filter((m) => m.text.trim());
+    const links: string[] = [];
+    for (const m of chatMsgs) {
+      const found = m.text.match(/https?:\/\/[^\s]+/g);
+      if (found) links.push(...found);
+    }
+    const uniqueLinks = Array.from(new Set(links));
+    const md = [
+      `# ${meeting?.title ?? "Meeting"} — Notes`,
+      "",
+      `**Date:** ${new Date().toLocaleString([], { dateStyle: "full", timeStyle: "short" })}`,
+      `**Duration:** ${durationStr}`,
+      `**Ended by:** ${meRef.current.name}${options?.hostEnded ? " (host ended for everyone)" : ""}`,
+      "",
+      "## Attendees",
+      ...attendeeNames.map((n) => `- ${n}`),
+      "",
+      "## Summary",
+      transcript.length
+        ? "Auto-generated from live transcript. Review and edit as needed."
+        : "_No live transcript was captured. Add a summary here._",
+      "",
+      transcript.length ? "## Transcript" : "",
+      ...(transcript.length ? transcript.map((t) => `- **${t.speaker}** _(${new Date(t.t).toLocaleTimeString()})_: ${t.text}`) : []),
+      "",
+      chatMsgs.length ? "## Chat Highlights" : "",
+      ...(chatMsgs.length ? chatMsgs.slice(-20).map((m) => `- **${m.fromName}:** ${m.text}`) : []),
+      "",
+      uniqueLinks.length ? "## Links Shared" : "",
+      ...uniqueLinks.map((l) => `- ${l}`),
+      "",
+      "## Action Items",
+      "- _Add action items and owners here._",
+    ].filter((line, i, arr) => !(line === "" && arr[i - 1] === "")).join("\n");
+    const plain = md.replace(/[#*_]/g, "");
     await supabase.from("meeting_notes").insert({
       meeting_id: id,
       author_id: meRef.current.id,
       title: `${meeting?.title ?? "Meeting"} — Notes`,
-      body,
+      body: plain,
+      content_md: md,
       meeting_date: new Date().toISOString(),
       tags: transcript.length ? ["transcript", "auto"] : ["auto"],
       attendees: attendeeNames,
-    });
+    } as any);
     noteSavedRef.current = true;
-  }, [id, transcript, meeting?.title]);
+  }, [id, transcript, meeting?.title, chat]);
 
   useEffect(() => {
     let mounted = true;
@@ -261,6 +305,12 @@ function MeetingRoom() {
         if (payload.from === meRef.current?.id) return;
         setChat((prev) => [...prev, payload as ChatMsg]);
       });
+      ch.on("broadcast", { event: "end-meeting" }, () => {
+        // Host ended the meeting — guest/attendee auto-leaves.
+        cleanupAll();
+        if (meRef.current?.external) navigate({ to: "/" });
+        else navigate({ to: "/meetings" });
+      });
       ch.on("presence", { event: "sync" }, () => {
         const state = ch.presenceState() as Record<string, Array<{ name?: string }>>;
         Object.keys(state).forEach((uid) => {
@@ -289,6 +339,63 @@ function MeetingRoom() {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat.length]);
+
+  // Active-speaker detection: hook an AnalyserNode into each stream (local + remote)
+  // and poll RMS every ~150ms; keys of streams above threshold are "speaking".
+  useEffect(() => {
+    const AC: typeof AudioContext | undefined = (window as any).AudioContext || (window as any).webkitAudioContext;
+    if (!AC) return;
+    if (!audioCtxRef.current) audioCtxRef.current = new AC();
+    const ctx = audioCtxRef.current;
+
+    type Entry = { key: string; stream: MediaStream };
+    const entries: Entry[] = [];
+    if (localStreamRef.current && localStreamRef.current.getAudioTracks().length) {
+      entries.push({ key: "me-cam", stream: localStreamRef.current });
+    }
+    Object.entries(peersRef.current).forEach(([uid, p]) => {
+      Object.values(p.streams).forEach((s, i) => {
+        if (s.getAudioTracks().length) entries.push({ key: i === 0 ? uid : `${uid}-${s.id}`, stream: s });
+      });
+    });
+
+    // Refresh analysers: remove stale, add new
+    const live = new Set(entries.map((e) => e.key));
+    for (const [key, node] of analysersRef.current) {
+      if (!live.has(key)) { try { node.source.disconnect(); node.analyser.disconnect(); } catch {} analysersRef.current.delete(key); }
+    }
+    for (const { key, stream } of entries) {
+      if (analysersRef.current.has(key)) continue;
+      try {
+        const source = ctx.createMediaStreamSource(stream);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 512;
+        source.connect(analyser);
+        analysersRef.current.set(key, { analyser, source });
+      } catch {}
+    }
+
+    const buf = new Uint8Array(512);
+    let raf = 0;
+    const tick = () => {
+      const next: Record<string, boolean> = {};
+      analysersRef.current.forEach(({ analyser }, key) => {
+        analyser.getByteTimeDomainData(buf);
+        let sum = 0;
+        for (let i = 0; i < buf.length; i++) { const v = buf[i] - 128; sum += v * v; }
+        const rms = Math.sqrt(sum / buf.length);
+        if (rms > 8) next[key] = true;
+      });
+      setSpeakingKeys((prev) => {
+        const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+        for (const k of keys) if (!!prev[k] !== !!next[k]) return next;
+        return prev;
+      });
+      raf = window.setTimeout(tick, 150) as unknown as number;
+    };
+    tick();
+    return () => { window.clearTimeout(raf); };
+  }, [peers, camOn, micOn]);
 
   const toggleMic = () => {
     const track = localStreamRef.current?.getAudioTracks()[0];
@@ -382,8 +489,22 @@ function MeetingRoom() {
     setChatDraft("");
   };
 
-  const leave = async () => {
-    await saveMeetingNote();
+  const isHost = !!meeting && !!me && !me.external && meeting.host_id === me.id;
+
+  const handleLeaveClick = () => {
+    if (isHost) setShowLeaveConfirm(true);
+    else void doLeave(false);
+  };
+
+  const doLeave = async (endForAll: boolean) => {
+    setEnding(true);
+    await saveMeetingNote({ hostEnded: endForAll });
+    if (endForAll && isHost) {
+      // Notify remote peers to leave, then mark meeting ended + delete it.
+      channelRef.current?.send({ type: "broadcast", event: "end-meeting", payload: { from: meRef.current?.id } });
+      await supabase.from("calendar_events").delete().eq("meeting_id", id);
+      await supabase.from("meetings").delete().eq("id", id);
+    }
     channelRef.current?.send({ type: "broadcast", event: "leave", payload: { from: meRef.current?.id } });
     cleanupAll();
     if (meRef.current?.external) navigate({ to: "/" });
@@ -491,18 +612,26 @@ function MeetingRoom() {
       <div className="flex min-h-0 flex-1">
         <div className="flex min-h-0 flex-1 flex-col p-3">
           <div className={`grid flex-1 gap-3 ${gridCols}`}>
-            {tiles.map((tile) => (
-              <Tile
-                key={tile.key}
-                label={tile.label}
-                stream={tile.stream}
-                muted={tile.muted}
-                showAvatar={tile.isMe && !camOn && !tile.isScreen}
-                avatarLetter={me?.name?.[0]?.toUpperCase() ?? "?"}
-                onEnlarge={tile.stream ? () => setEnlarged({ stream: tile.stream!, label: tile.label }) : undefined}
-                videoRef={tile.key === "me-cam" ? localVideoRef : undefined}
-              />
-            ))}
+            {tiles
+              .slice()
+              .sort((a, b) => {
+                const as = speakingKeys[a.key] ? 1 : 0;
+                const bs = speakingKeys[b.key] ? 1 : 0;
+                return bs - as; // speakers first
+              })
+              .map((tile) => (
+                <Tile
+                  key={tile.key}
+                  label={tile.label}
+                  stream={tile.stream}
+                  muted={tile.muted}
+                  showAvatar={tile.isMe && !camOn && !tile.isScreen}
+                  avatarLetter={me?.name?.[0]?.toUpperCase() ?? "?"}
+                  speaking={!!speakingKeys[tile.key]}
+                  onEnlarge={tile.stream ? () => setEnlarged({ stream: tile.stream!, label: tile.label }) : undefined}
+                  videoRef={tile.key === "me-cam" ? localVideoRef : undefined}
+                />
+              ))}
           </div>
 
           <div className="mt-3 flex items-center justify-center gap-2">
@@ -511,7 +640,7 @@ function MeetingRoom() {
             <ControlBtn active={sharing} onClick={toggleShare} label={sharing ? "Stop share" : "Share screen"} icon={sharing ? ScreenShareOff : ScreenShare} />
             <ControlBtn active={transcribing} onClick={toggleTranscribe} label={transcribing ? "Stop transcribing" : "Live transcribe"} icon={FileText} />
             <ControlBtn active={sidePanel === "chat"} onClick={() => setSidePanel(sidePanel === "chat" ? null : "chat")} label="Chat" icon={MessageSquare} />
-            <button onClick={leave} className="ml-2 flex items-center gap-2 rounded-full bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">
+            <button onClick={handleLeaveClick} className="ml-2 flex items-center gap-2 rounded-full bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">
               <PhoneOff className="h-4 w-4" /> Leave
             </button>
           </div>
@@ -601,12 +730,34 @@ function MeetingRoom() {
           <EnlargedVideo stream={enlarged.stream} />
         </div>
       )}
+
+      {showLeaveConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setShowLeaveConfirm(false)}>
+          <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold">Leaving as host</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              You're the host of this meeting. End it for everyone (this generates polished meeting notes and removes it from schedules), or just leave and let the meeting continue.
+            </p>
+            <div className="mt-5 flex flex-col gap-2">
+              <button disabled={ending} onClick={() => doLeave(true)} className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50">
+                End meeting for everyone
+              </button>
+              <button disabled={ending} onClick={() => doLeave(false)} className="rounded-lg border border-border bg-background px-4 py-2 text-sm">
+                Just leave (others stay)
+              </button>
+              <button disabled={ending} onClick={() => setShowLeaveConfirm(false)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-muted">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 function Tile({
-  label, stream, muted, showAvatar, avatarLetter, onEnlarge, videoRef,
+  label, stream, muted, showAvatar, avatarLetter, onEnlarge, videoRef, speaking,
 }: {
   label: string;
   stream: MediaStream | null;
@@ -615,6 +766,7 @@ function Tile({
   avatarLetter: string;
   onEnlarge?: () => void;
   videoRef?: React.RefObject<HTMLVideoElement | null>;
+  speaking?: boolean;
 }) {
   const localRef = useRef<HTMLVideoElement>(null);
   const ref = videoRef ?? localRef;
@@ -625,7 +777,7 @@ function Tile({
   }, [stream, ref]);
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl bg-black ${onEnlarge ? "cursor-zoom-in" : ""}`}
+      className={`group relative overflow-hidden rounded-xl bg-black transition-all duration-150 ${onEnlarge ? "cursor-zoom-in" : ""} ${speaking ? "ring-4 ring-primary shadow-[0_0_24px_hsl(var(--primary)/0.6)] scale-[1.01]" : "ring-1 ring-transparent"}`}
       onClick={onEnlarge}
     >
       <video ref={ref} autoPlay muted={muted} playsInline className="h-full w-full object-cover" />
@@ -636,7 +788,10 @@ function Tile({
           </div>
         </div>
       )}
-      <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">{label}</div>
+      <div className={`absolute bottom-2 left-2 rounded px-2 py-0.5 text-xs text-white transition ${speaking ? "bg-primary font-semibold" : "bg-black/60"}`}>
+        {speaking && <span className="mr-1 inline-block h-2 w-2 rounded-full bg-white animate-pulse" />}
+        {label}
+      </div>
       {onEnlarge && (
         <div className="absolute right-2 top-2 hidden rounded bg-black/60 p-1.5 text-white group-hover:block">
           <Maximize2 className="h-3.5 w-3.5" />

@@ -169,6 +169,33 @@ export type Database = {
           },
         ]
       }
+      channel_categories: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          position: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          position?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       channel_members: {
         Row: {
           channel_id: string
@@ -197,28 +224,37 @@ export type Database = {
       }
       channel_messages: {
         Row: {
+          attachments: Json
           author_id: string
           body: string
           channel_id: string
           created_at: string
+          deleted_at: string | null
           edited_at: string | null
           id: string
+          reply_to_id: string | null
         }
         Insert: {
+          attachments?: Json
           author_id: string
           body: string
           channel_id: string
           created_at?: string
+          deleted_at?: string | null
           edited_at?: string | null
           id?: string
+          reply_to_id?: string | null
         }
         Update: {
+          attachments?: Json
           author_id?: string
           body?: string
           channel_id?: string
           created_at?: string
+          deleted_at?: string | null
           edited_at?: string | null
           id?: string
+          reply_to_id?: string | null
         }
         Relationships: [
           {
@@ -228,37 +264,94 @@ export type Database = {
             referencedRelation: "channels"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "channel_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "channel_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_role_access: {
+        Row: {
+          channel_id: string
+          created_at: string
+          id: string
+          role_id: string
+        }
+        Insert: {
+          channel_id: string
+          created_at?: string
+          id?: string
+          role_id: string
+        }
+        Update: {
+          channel_id?: string
+          created_at?: string
+          id?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_role_access_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "channel_role_access_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "custom_roles"
+            referencedColumns: ["id"]
+          },
         ]
       }
       channels: {
         Row: {
+          category_id: string | null
           created_at: string
           created_by: string
           description: string | null
           id: string
           is_private: boolean
           name: string
+          position: number
           updated_at: string
         }
         Insert: {
+          category_id?: string | null
           created_at?: string
           created_by: string
           description?: string | null
           id?: string
           is_private?: boolean
           name: string
+          position?: number
           updated_at?: string
         }
         Update: {
+          category_id?: string | null
           created_at?: string
           created_by?: string
           description?: string | null
           id?: string
           is_private?: boolean
           name?: string
+          position?: number
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "channels_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "channel_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contact_submissions: {
         Row: {
@@ -290,35 +383,85 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_roles: {
+        Row: {
+          color: string
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          permissions: Json
+          position: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          permissions?: Json
+          position?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          permissions?: Json
+          position?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       direct_messages: {
         Row: {
+          attachments: Json
           body: string
           created_at: string
+          deleted_at: string | null
           edited_at: string | null
           id: string
           read_at: string | null
           recipient_id: string
+          reply_to_id: string | null
           sender_id: string
         }
         Insert: {
+          attachments?: Json
           body: string
           created_at?: string
+          deleted_at?: string | null
           edited_at?: string | null
           id?: string
           read_at?: string | null
           recipient_id: string
+          reply_to_id?: string | null
           sender_id: string
         }
         Update: {
+          attachments?: Json
           body?: string
           created_at?: string
+          deleted_at?: string | null
           edited_at?: string | null
           id?: string
           read_at?: string | null
           recipient_id?: string
+          reply_to_id?: string | null
           sender_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "direct_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "direct_messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       guides: {
         Row: {
@@ -566,6 +709,7 @@ export type Database = {
           attendees: string[]
           author_id: string
           body: string | null
+          content_md: string | null
           created_at: string
           id: string
           meeting_date: string | null
@@ -578,6 +722,7 @@ export type Database = {
           attendees?: string[]
           author_id: string
           body?: string | null
+          content_md?: string | null
           created_at?: string
           id?: string
           meeting_date?: string | null
@@ -590,6 +735,7 @@ export type Database = {
           attendees?: string[]
           author_id?: string
           body?: string | null
+          content_md?: string | null
           created_at?: string
           id?: string
           meeting_date?: string | null
@@ -638,6 +784,8 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          ended_at: string | null
+          ended_by: string | null
           ends_at: string
           host_id: string
           id: string
@@ -651,6 +799,8 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
+          ended_at?: string | null
+          ended_by?: string | null
           ends_at: string
           host_id: string
           id?: string
@@ -664,6 +814,8 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
+          ended_at?: string | null
+          ended_by?: string | null
           ends_at?: string
           host_id?: string
           id?: string
@@ -880,6 +1032,35 @@ export type Database = {
         }
         Relationships: []
       }
+      user_custom_roles: {
+        Row: {
+          assigned_at: string
+          id: string
+          role_id: string
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          id?: string
+          role_id: string
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string
+          id?: string
+          role_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_custom_roles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "custom_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -917,6 +1098,10 @@ export type Database = {
           name: string
           token: string
         }[]
+      }
+      has_role_permission: {
+        Args: { _permission: string; _user_id: string }
+        Returns: boolean
       }
       mark_meeting_invite_joined: {
         Args: { _name?: string; _token: string }

@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MessagesSquare, Search, Send, User as UserIcon, Check, CheckCheck } from "lucide-react";
+import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
+import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
+import { MessageBody } from "@/components/hq/MessageBody";
+import { ProfilePopover } from "@/components/hq/ProfilePopover";
 
 export const Route = createFileRoute("/_hq/dm")({
   head: () => ({ meta: [{ title: "Messages — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -10,15 +13,16 @@ export const Route = createFileRoute("/_hq/dm")({
 });
 
 type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
-type DM = { id: string; sender_id: string; recipient_id: string; body: string; read_at: string | null; created_at: string };
+type DM = {
+  id: string; sender_id: string; recipient_id: string; body: string; read_at: string | null; created_at: string;
+  edited_at: string | null; deleted_at: string | null; attachments: Attachment[]; reply_to_id: string | null;
+};
 
 function initials(name: string) {
   return name.split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
 }
-
 function dayLabel(iso: string) {
-  const d = new Date(iso);
-  const now = new Date();
+  const d = new Date(iso); const now = new Date();
   if (d.toDateString() === now.toDateString()) return "Today";
   const y = new Date(now.getTime() - 86400000);
   if (d.toDateString() === y.toDateString()) return "Yesterday";
@@ -31,9 +35,9 @@ function DMPage() {
   const [messages, setMessages] = useState<DM[]>([]);
   const [active, setActive] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [input, setInput] = useState("");
+  const [editingMsg, setEditingMsg] = useState<{ id: string; body: string } | null>(null);
+  const [openProfile, setOpenProfile] = useState<{ userId: string; x: number; y: number } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -43,7 +47,7 @@ function DMPage() {
       const { data: p } = await supabase.from("profiles").select("id, full_name, email, department").neq("id", u.user.id).order("full_name");
       setProfiles((p ?? []) as Profile[]);
       const { data: dms } = await supabase.from("direct_messages").select("*").or(`sender_id.eq.${u.user.id},recipient_id.eq.${u.user.id}`).order("created_at", { ascending: true });
-      setMessages((dms ?? []) as DM[]);
+      setMessages((dms ?? []) as any as DM[]);
     })();
   }, []);
 
@@ -52,7 +56,7 @@ function DMPage() {
     const channel = supabase
       .channel("dm-realtime")
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "direct_messages" }, (payload) => {
-        const m = payload.new as DM;
+        const m = payload.new as any as DM;
         if (m.sender_id !== me && m.recipient_id !== me) return;
         setMessages((prev) => {
           if (prev.some((x) => x.id === m.id)) return prev;
@@ -62,20 +66,15 @@ function DMPage() {
         });
       })
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "direct_messages" }, (payload) => {
-        const m = payload.new as DM;
-        setMessages((prev) => prev.map((x) => (x.id === m.id ? m : x)));
+        const m = payload.new as any as DM;
+        setMessages((prev) => prev.map((x) => x.id === m.id ? m : x));
       })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
   }, [me]);
 
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages, active]);
+  useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages, active]);
 
-  useEffect(() => { inputRef.current?.focus(); }, [active]);
-
-  // Mark unread messages from active peer as read
   useEffect(() => {
     if (!me || !active) return;
     const unread = messages.filter((m) => m.sender_id === active && m.recipient_id === me && !m.read_at).map((m) => m.id);
@@ -83,7 +82,7 @@ function DMPage() {
     (async () => {
       const stamp = new Date().toISOString();
       await supabase.from("direct_messages").update({ read_at: stamp }).in("id", unread);
-      setMessages((prev) => prev.map((m) => (unread.includes(m.id) ? { ...m, read_at: stamp } : m)));
+      setMessages((prev) => prev.map((m) => unread.includes(m.id) ? { ...m, read_at: stamp } : m));
     })();
   }, [me, active, messages]);
 
@@ -117,37 +116,40 @@ function DMPage() {
   const activeProfile = profiles.find((p) => p.id === active);
 
   const rendered = useMemo(() => {
-    const out: Array<
-      | { kind: "day"; key: string; label: string }
-      | { kind: "msg"; key: string; m: DM }
-    > = [];
+    const out: Array<{ kind: "day"; key: string; label: string } | { kind: "msg"; key: string; m: DM }> = [];
     let lastDay = "";
     for (const m of thread) {
       const day = new Date(m.created_at).toDateString();
-      if (day !== lastDay) {
-        out.push({ kind: "day", key: `d-${day}`, label: dayLabel(m.created_at) });
-        lastDay = day;
-      }
+      if (day !== lastDay) { out.push({ kind: "day", key: `d-${day}`, label: dayLabel(m.created_at) }); lastDay = day; }
       out.push({ kind: "msg", key: m.id, m });
     }
     return out;
   }, [thread]);
 
-  const send = async () => {
-    if (!input.trim() || !me || !active) return;
-    const body = input.trim();
-    setInput("");
+  const send = async (body: string, attachments: Attachment[]) => {
+    if ((!body && attachments.length === 0) || !me || !active) return;
     const tempId = `tmp-${crypto.randomUUID()}`;
-    const optimistic: DM = { id: tempId, sender_id: me, recipient_id: active, body, read_at: null, created_at: new Date().toISOString() };
+    const optimistic: DM = { id: tempId, sender_id: me, recipient_id: active, body, read_at: null, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: null };
     setMessages((prev) => [...prev, optimistic]);
-    const { data, error } = await supabase.from("direct_messages").insert({ sender_id: me, recipient_id: active, body }).select().single();
-    if (error) {
-      setMessages((prev) => prev.filter((m) => m.id !== tempId));
-      alert(error.message);
-      return;
-    }
-    if (data) setMessages((prev) => prev.map((m) => (m.id === tempId ? (data as DM) : m)));
-    inputRef.current?.focus();
+    const { data, error } = await supabase.from("direct_messages").insert({ sender_id: me, recipient_id: active, body, attachments: attachments as any } as any).select().single();
+    if (error) { setMessages((prev) => prev.filter((m) => m.id !== tempId)); alert(error.message); return; }
+    if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as DM) : m));
+  };
+
+  const softDelete = async (id: string) => {
+    if (!confirm("Delete this message?")) return;
+    const stamp = new Date().toISOString();
+    setMessages((prev) => prev.map((m) => m.id === id ? { ...m, deleted_at: stamp, body: "", attachments: [] } : m));
+    await supabase.from("direct_messages").update({ deleted_at: stamp, body: "", attachments: [] as any } as any).eq("id", id);
+  };
+
+  const saveEdit = async () => {
+    if (!editingMsg) return;
+    const stamp = new Date().toISOString();
+    const body = editingMsg.body.trim();
+    setMessages((prev) => prev.map((m) => m.id === editingMsg.id ? { ...m, body, edited_at: stamp } : m));
+    setEditingMsg(null);
+    await supabase.from("direct_messages").update({ body, edited_at: stamp } as any).eq("id", editingMsg.id);
   };
 
   return (
@@ -164,12 +166,10 @@ function DMPage() {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto">
-          {displayed.length === 0 ? (
-            <p className="p-4 text-xs text-muted-foreground">No teammates found.</p>
-          ) : displayed.map((p) => {
+          {displayed.length === 0 ? <p className="p-4 text-xs text-muted-foreground">No teammates found.</p> : displayed.map((p) => {
             const conv = conversations.get(p.id);
             const name = p.full_name || p.email || "Unknown";
-            const preview = conv?.last.body ?? p.department ?? "Say hi";
+            const preview = conv?.last.deleted_at ? "Message deleted" : (conv?.last.body || (conv?.last.attachments?.length ? "📎 Attachment" : p.department || "Say hi"));
             const meSent = conv?.last.sender_id === me;
             return (
               <button key={p.id} onClick={() => setActive(p.id)} className={`flex w-full items-center gap-3 border-b border-border/50 px-4 py-3 text-left transition hover:bg-muted/50 ${active === p.id ? "bg-primary/10" : ""}`}>
@@ -180,9 +180,7 @@ function DMPage() {
                     {conv?.last && <p className="shrink-0 text-[10px] text-muted-foreground">{new Date(conv.last.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>}
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <p className={`truncate text-xs ${conv?.unread ? "font-medium text-foreground" : "text-muted-foreground"}`}>
-                      {meSent && "You: "}{preview}
-                    </p>
+                    <p className={`truncate text-xs ${conv?.unread ? "font-medium text-foreground" : "text-muted-foreground"}`}>{meSent && "You: "}{preview}</p>
                     {conv?.unread ? <span className="rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-bold text-primary-foreground">{conv.unread}</span> : null}
                   </div>
                 </div>
@@ -204,37 +202,51 @@ function DMPage() {
               <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
                 {initials(activeProfile?.full_name || activeProfile?.email || "")}
               </div>
-              <div>
+              <button onClick={(e) => active && setOpenProfile({ userId: active, x: e.clientX, y: e.clientY })} className="text-left hover:underline">
                 <p className="text-sm font-semibold">{activeProfile?.full_name || activeProfile?.email}</p>
                 {activeProfile?.department && <p className="text-xs text-muted-foreground">{activeProfile.department}</p>}
-              </div>
+              </button>
             </header>
             <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto px-5 py-4">
               {thread.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet. Say hello.</p>}
               {rendered.map((r) => {
-                if (r.kind === "day") {
-                  return (
-                    <div key={r.key} className="my-3 flex items-center gap-3">
-                      <div className="h-px flex-1 bg-border" />
-                      <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{r.label}</span>
-                      <div className="h-px flex-1 bg-border" />
-                    </div>
-                  );
-                }
+                if (r.kind === "day") return (
+                  <div key={r.key} className="my-3 flex items-center gap-3">
+                    <div className="h-px flex-1 bg-border" />
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{r.label}</span>
+                    <div className="h-px flex-1 bg-border" />
+                  </div>
+                );
                 const m = r.m;
                 const mine = m.sender_id === me;
                 const optimistic = m.id.startsWith("tmp-");
+                const isDeleted = !!m.deleted_at;
                 return (
                   <div key={r.key} className={`group flex ${mine ? "justify-end" : "justify-start"}`}>
                     <div className="max-w-[75%]">
-                      <div className={`rounded-2xl px-4 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"} ${optimistic ? "opacity-70" : ""}`}>
-                        <p className="whitespace-pre-wrap">{m.body}</p>
+                      <div className={`relative rounded-2xl px-4 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"} ${optimistic ? "opacity-70" : ""}`}>
+                        {editingMsg?.id === m.id ? (
+                          <div className="flex items-center gap-2">
+                            <input autoFocus value={editingMsg.body} onChange={(e) => setEditingMsg({ ...editingMsg, body: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") saveEdit(); if (e.key === "Escape") setEditingMsg(null); }} className="flex-1 rounded border border-border bg-background px-2 py-1 text-sm text-foreground outline-none" />
+                            <button onClick={saveEdit} className="rounded bg-background/20 p-1"><Check className="h-3 w-3" /></button>
+                            <button onClick={() => setEditingMsg(null)} className="rounded p-1"><X className="h-3 w-3" /></button>
+                          </div>
+                        ) : (
+                          <MessageBody body={m.body} attachments={m.attachments} deleted={isDeleted} />
+                        )}
                         <p className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                          {m.edited_at && !isDeleted && <span>(edited)</span>}
                           <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                           {mine && !optimistic && (m.read_at ? <CheckCheck className="h-3 w-3" /> : <Check className="h-3 w-3" />)}
                         </p>
+                        {mine && !optimistic && !isDeleted && editingMsg?.id !== m.id && (
+                          <div className="absolute -top-3 right-2 hidden gap-1 rounded-md border border-border bg-card p-0.5 shadow-sm group-hover:flex">
+                            <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>
+                            <button onClick={() => softDelete(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>
+                          </div>
+                        )}
                       </div>
-                      {!optimistic && (
+                      {!optimistic && !isDeleted && (
                         <div className={mine ? "flex justify-end" : "flex justify-start"}>
                           <MessageReactions messageType="dm" messageId={m.id} me={me} />
                         </div>
@@ -244,25 +256,12 @@ function DMPage() {
                 );
               })}
             </div>
-            <form onSubmit={(e) => { e.preventDefault(); send(); }} className="border-t border-border p-3">
-              <div className="flex items-end gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-primary">
-                <textarea
-                  ref={inputRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-                  rows={1}
-                  placeholder={`Message ${activeProfile?.full_name || "teammate"}…`}
-                  className="max-h-32 flex-1 resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-                <button type="submit" disabled={!input.trim()} className="rounded-lg bg-primary p-2 text-primary-foreground disabled:opacity-40" aria-label="Send">
-                  <Send className="h-4 w-4" />
-                </button>
-              </div>
-            </form>
+            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message ${activeProfile?.full_name || "teammate"}…`} />}
           </>
         )}
       </section>
+
+      {openProfile && <ProfilePopover userId={openProfile.userId} anchor={{ x: openProfile.x, y: openProfile.y }} onClose={() => setOpenProfile(null)} />}
     </div>
   );
 }
