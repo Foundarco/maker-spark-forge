@@ -182,16 +182,6 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "R&D",
-    items: [
-      { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
-      { label: "Research Papers", to: "/rd-papers", icon: BookMarked },
-      { label: "Material Database", to: "/rd-materials", icon: Database },
-      { label: "Simulations", to: "/rd-simulations", icon: CircuitBoard },
-      { label: "Patent Tracking", to: "/rd-patents", icon: Award },
-    ],
-  },
-  {
     label: "Product",
     items: [
       { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
