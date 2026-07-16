@@ -58,6 +58,15 @@ function DMPage() {
     })();
   }, []);
 
+  // Deep-link: open a DM with ?user=<id>
+  useEffect(() => {
+    if (searchParams.user && searchParams.user !== me) {
+      setActive(searchParams.user);
+      // Clear the param so refresh/back doesn't re-force it
+      navigate({ search: { user: undefined } as any, replace: true });
+    }
+  }, [searchParams.user, me, navigate]);
+
   useEffect(() => {
     if (!me) return;
     const channel = supabase
