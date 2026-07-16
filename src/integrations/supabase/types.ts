@@ -122,6 +122,7 @@ export type Database = {
           ends_at: string
           id: string
           location: string | null
+          meeting_id: string | null
           owner_id: string
           starts_at: string
           title: string
@@ -136,6 +137,7 @@ export type Database = {
           ends_at: string
           id?: string
           location?: string | null
+          meeting_id?: string | null
           owner_id: string
           starts_at: string
           title: string
@@ -150,13 +152,22 @@ export type Database = {
           ends_at?: string
           id?: string
           location?: string | null
+          meeting_id?: string | null
           owner_id?: string
           starts_at?: string
           title?: string
           updated_at?: string
           visibility?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       channel_members: {
         Row: {
@@ -190,6 +201,7 @@ export type Database = {
           body: string
           channel_id: string
           created_at: string
+          edited_at: string | null
           id: string
         }
         Insert: {
@@ -197,6 +209,7 @@ export type Database = {
           body: string
           channel_id: string
           created_at?: string
+          edited_at?: string | null
           id?: string
         }
         Update: {
@@ -204,6 +217,7 @@ export type Database = {
           body?: string
           channel_id?: string
           created_at?: string
+          edited_at?: string | null
           id?: string
         }
         Relationships: [
@@ -280,6 +294,7 @@ export type Database = {
         Row: {
           body: string
           created_at: string
+          edited_at: string | null
           id: string
           read_at: string | null
           recipient_id: string
@@ -288,6 +303,7 @@ export type Database = {
         Insert: {
           body: string
           created_at?: string
+          edited_at?: string | null
           id?: string
           read_at?: string | null
           recipient_id: string
@@ -296,6 +312,7 @@ export type Database = {
         Update: {
           body?: string
           created_at?: string
+          edited_at?: string | null
           id?: string
           read_at?: string | null
           recipient_id?: string
@@ -503,6 +520,47 @@ export type Database = {
         }
         Relationships: []
       }
+      meeting_external_invites: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          invited_by: string | null
+          joined_at: string | null
+          meeting_id: string
+          name: string | null
+          token: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          meeting_id: string
+          name?: string | null
+          token?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string | null
+          meeting_id?: string
+          name?: string | null
+          token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_external_invites_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       meeting_notes: {
         Row: {
           attendees: string[]
@@ -615,6 +673,33 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      message_reactions: {
+        Row: {
+          created_at: string
+          emoji: string
+          id: string
+          message_id: string
+          message_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emoji: string
+          id?: string
+          message_id: string
+          message_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string
+          id?: string
+          message_id?: string
+          message_type?: string
+          user_id?: string
         }
         Relationships: []
       }

@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Video, Plus, Calendar as CalIcon, MapPin, X, Clock, Check, XCircle, HelpCircle, Trash2 } from "lucide-react";
+import {
+  Video, Plus, Calendar as CalIcon, MapPin, X, Clock, Check, XCircle, HelpCircle, Trash2,
+  Users, Mail, Copy, Link as LinkIcon, UserPlus, Search,
+} from "lucide-react";
 
 export const Route = createFileRoute("/_hq/meetings")({
   head: () => ({ meta: [{ title: "Meetings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -10,7 +13,8 @@ export const Route = createFileRoute("/_hq/meetings")({
 
 type Meeting = { id: string; title: string; description: string | null; host_id: string; starts_at: string; ends_at: string; location: string | null; join_url: string | null; status: string; created_at: string };
 type Participant = { meeting_id: string; user_id: string; rsvp: string };
-type Profile = { id: string; full_name: string | null; email: string | null };
+type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
+type ExtInvite = { id: string; meeting_id: string; email: string; name: string | null; token: string; joined_at: string | null };
 
 function toLocalInput(iso: string) {
   const d = new Date(iso);
@@ -23,28 +27,46 @@ function MeetingsPage() {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [profiles, setProfiles] = useState<Record<string, Profile>>({});
+  const [allProfiles, setAllProfiles] = useState<Profile[]>([]);
+  const [extInvites, setExtInvites] = useState<ExtInvite[]>([]);
   const [tab, setTab] = useState<"upcoming" | "past" | "mine">("upcoming");
   const [showNew, setShowNew] = useState(false);
+  const [detailOpen, setDetailOpen] = useState<Meeting | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
   const [form, setForm] = useState(() => {
     const now = new Date(); now.setMinutes(0); now.setSeconds(0);
     const end = new Date(now.getTime() + 60 * 60 * 1000);
-    return { title: "", description: "", starts_at: toLocalInput(now.toISOString()), ends_at: toLocalInput(end.toISOString()), location: "", join_url: "" };
+    return {
+      title: "", description: "",
+      starts_at: toLocalInput(now.toISOString()),
+      ends_at: toLocalInput(end.toISOString()),
+      location: "",
+      color: "orange" as string,
+      teammates: [] as string[],
+      externals: [] as { email: string; name: string }[],
+    };
   });
+  const [teamSearch, setTeamSearch] = useState("");
+  const [extEmail, setExtEmail] = useState("");
+  const [extName, setExtName] = useState("");
 
   const load = async () => {
     const { data: u } = await supabase.auth.getUser();
     setMe(u.user?.id ?? null);
-    const { data: m } = await supabase.from("meetings").select("*").order("starts_at", { ascending: true });
+    const [{ data: m }, { data: pa }, { data: p }, { data: ei }] = await Promise.all([
+      supabase.from("meetings").select("*").order("starts_at", { ascending: true }),
+      supabase.from("meeting_participants").select("*"),
+      supabase.from("profiles").select("id, full_name, email, department").order("full_name"),
+      supabase.from("meeting_external_invites").select("*"),
+    ]);
     setMeetings((m ?? []) as Meeting[]);
-    const { data: pa } = await supabase.from("meeting_participants").select("*");
     setParticipants((pa ?? []) as Participant[]);
-    const ids = Array.from(new Set((m ?? []).map((x: any) => x.host_id)));
-    if (ids.length) {
-      const { data: p } = await supabase.from("profiles").select("id, full_name, email").in("id", ids);
-      const map: Record<string, Profile> = {};
-      (p ?? []).forEach((row: any) => { map[row.id] = row; });
-      setProfiles(map);
-    }
+    setAllProfiles((p ?? []) as Profile[]);
+    setExtInvites((ei ?? []) as ExtInvite[]);
+    const map: Record<string, Profile> = {};
+    (p ?? []).forEach((row: any) => { map[row.id] = row; });
+    setProfiles(map);
   };
   useEffect(() => { load(); }, []);
 
@@ -59,7 +81,7 @@ function MeetingsPage() {
   }, [meetings, tab, me]);
 
   const rsvpFor = (mid: string) => participants.find((p) => p.meeting_id === mid && p.user_id === me)?.rsvp;
-  const attendeeCount = (mid: string) => participants.filter((p) => p.meeting_id === mid && p.rsvp === "yes").length;
+  const attending = (mid: string) => participants.filter((p) => p.meeting_id === mid && p.rsvp !== "no");
 
   const setRsvp = async (mid: string, rsvp: string) => {
     if (!me) return;
@@ -75,25 +97,92 @@ function MeetingsPage() {
 
   const create = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!me) return;
-    const { error } = await supabase.from("meetings").insert({
+    if (!me || !form.title.trim()) return;
+    const startsIso = new Date(form.starts_at).toISOString();
+    const endsIso = new Date(form.ends_at).toISOString();
+
+    // 1. Create meeting
+    const { data: mData, error } = await supabase.from("meetings").insert({
       title: form.title.trim(),
       description: form.description.trim() || null,
       host_id: me,
-      starts_at: new Date(form.starts_at).toISOString(),
-      ends_at: new Date(form.ends_at).toISOString(),
+      starts_at: startsIso,
+      ends_at: endsIso,
       location: form.location.trim() || null,
-      join_url: form.join_url.trim() || null,
-    });
-    if (error) { alert(error.message); return; }
+    }).select().single();
+    if (error || !mData) { alert(error?.message ?? "Failed"); return; }
+
+    // 2. Add host + invited teammates as participants
+    const inviteeIds = Array.from(new Set([me, ...form.teammates]));
+    if (inviteeIds.length) {
+      await supabase.from("meeting_participants").upsert(
+        inviteeIds.map((uid) => ({ meeting_id: mData.id, user_id: uid, rsvp: uid === me ? "yes" : "invited" })),
+        { onConflict: "meeting_id,user_id" },
+      );
+    }
+
+    // 3. Add calendar events (host + each teammate). visibility=private per user, meeting_id links them.
+    const evPayload = inviteeIds.map((uid) => ({
+      owner_id: uid,
+      title: form.title.trim(),
+      description: form.description.trim() || null,
+      starts_at: startsIso,
+      ends_at: endsIso,
+      all_day: false,
+      location: form.location.trim() || null,
+      color: form.color,
+      visibility: "private",
+      meeting_id: mData.id,
+    }));
+    if (evPayload.length) await supabase.from("calendar_events").insert(evPayload);
+
+    // 4. External invites
+    if (form.externals.length) {
+      await supabase.from("meeting_external_invites").insert(
+        form.externals.map((x) => ({ meeting_id: mData.id, email: x.email, name: x.name || null, invited_by: me })),
+      );
+    }
+
     setShowNew(false);
+    setForm({
+      title: "", description: "",
+      starts_at: toLocalInput(new Date().toISOString()),
+      ends_at: toLocalInput(new Date(Date.now() + 3600000).toISOString()),
+      location: "", color: "orange", teammates: [], externals: [],
+    });
     load();
   };
 
   const remove = async (m: Meeting) => {
-    if (!confirm("Delete this meeting?")) return;
+    if (!confirm("Delete this meeting? It'll also be removed from attendees' calendars.")) return;
+    await supabase.from("calendar_events").delete().eq("meeting_id", m.id);
     await supabase.from("meetings").delete().eq("id", m.id);
     setMeetings((prev) => prev.filter((x) => x.id !== m.id));
+    setDetailOpen(null);
+  };
+
+  const copyLink = async (m: Meeting, token?: string) => {
+    const base = `${window.location.origin}/meeting/${m.id}`;
+    const url = token ? `${base}?t=${token}` : base;
+    await navigator.clipboard.writeText(url);
+    setCopiedId(m.id + (token ?? ""));
+    setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  const filteredTeam = allProfiles.filter((p) =>
+    p.id !== me && (
+      !teamSearch ||
+      (p.full_name ?? "").toLowerCase().includes(teamSearch.toLowerCase()) ||
+      (p.email ?? "").toLowerCase().includes(teamSearch.toLowerCase())
+    )
+  );
+
+  const addExternal = () => {
+    const email = extEmail.trim().toLowerCase();
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) { alert("Enter a valid email"); return; }
+    if (form.externals.some((x) => x.email === email)) return;
+    setForm({ ...form, externals: [...form.externals, { email, name: extName.trim() }] });
+    setExtEmail(""); setExtName("");
   };
 
   return (
@@ -105,7 +194,7 @@ function MeetingsPage() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Communication · Meetings</p>
-            <h1 className="text-3xl font-semibold tracking-tight">Calls & Meetings</h1>
+            <h1 className="text-3xl font-semibold tracking-tight">Meetings</h1>
           </div>
         </div>
         <button onClick={() => setShowNew(true)} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
@@ -134,10 +223,12 @@ function MeetingsPage() {
             const start = new Date(m.starts_at);
             const end = new Date(m.ends_at);
             const isPast = end < new Date();
+            const attendees = attending(m.id);
+            const externals = extInvites.filter((x) => x.meeting_id === m.id);
             return (
               <li key={m.id} className="rounded-xl border border-border bg-card p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0 flex-1">
+                  <button onClick={() => setDetailOpen(m)} className="min-w-0 flex-1 text-left">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <CalIcon className="h-3.5 w-3.5" />
                       {start.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" })}
@@ -149,15 +240,20 @@ function MeetingsPage() {
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                       <span>Hosted by {host}</span>
                       {m.location && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {m.location}</span>}
-                      <span>{attendeeCount(m.id)} attending</span>
+                      <span className="flex items-center gap-1"><Users className="h-3 w-3" />{attendees.length} teammate{attendees.length === 1 ? "" : "s"}</span>
+                      {externals.length > 0 && <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{externals.length} guest{externals.length === 1 ? "" : "s"}</span>}
                     </div>
-                  </div>
+                  </button>
                   <div className="flex flex-col items-end gap-2">
                     {!isPast && (
                       <Link to="/meeting/$id" params={{ id: m.id }} className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">
                         <Video className="h-3 w-3" /> Join room
                       </Link>
                     )}
+                    <button onClick={() => copyLink(m)} className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs hover:bg-muted">
+                      {copiedId === m.id ? <Check className="h-3 w-3" /> : <LinkIcon className="h-3 w-3" />}
+                      Copy link
+                    </button>
                     {!isPast && (
                       <div className="flex gap-1">
                         {([["yes", Check], ["maybe", HelpCircle], ["no", XCircle]] as const).map(([k, Icon]) => (
@@ -178,16 +274,74 @@ function MeetingsPage() {
         </ul>
       )}
 
+      {/* Detail modal */}
+      {detailOpen && (() => {
+        const m = detailOpen;
+        const attendees = participants.filter((p) => p.meeting_id === m.id);
+        const externals = extInvites.filter((x) => x.meeting_id === m.id);
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setDetailOpen(null)}>
+            <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+              <div className="mb-3 flex items-start justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold">{m.title}</h3>
+                  <p className="mt-0.5 text-xs text-muted-foreground">
+                    {new Date(m.starts_at).toLocaleString([], { dateStyle: "medium", timeStyle: "short" })}
+                  </p>
+                </div>
+                <button onClick={() => setDetailOpen(null)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
+              </div>
+              {m.description && <p className="mb-3 text-sm text-muted-foreground">{m.description}</p>}
+              <div className="mb-3">
+                <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Teammates</p>
+                {attendees.length === 0 ? <p className="text-xs text-muted-foreground">Just the host.</p> : (
+                  <ul className="space-y-1">
+                    {attendees.map((p) => (
+                      <li key={p.user_id} className="flex items-center justify-between text-sm">
+                        <span>{profiles[p.user_id]?.full_name || profiles[p.user_id]?.email || "Unknown"}</span>
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.rsvp}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              {externals.length > 0 && (
+                <div className="mb-3">
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">External guests</p>
+                  <ul className="space-y-1">
+                    {externals.map((x) => (
+                      <li key={x.id} className="flex items-center justify-between gap-2 text-sm">
+                        <span className="min-w-0 truncate">{x.name ? `${x.name} · ` : ""}{x.email}{x.joined_at ? " ✓" : ""}</span>
+                        <button onClick={() => copyLink(m, x.token)} className="shrink-0 rounded border border-border px-2 py-0.5 text-[10px] hover:bg-muted">
+                          {copiedId === m.id + x.token ? "Copied" : "Copy guest link"}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <div className="mt-4 flex justify-end gap-2">
+                <button onClick={() => copyLink(m)} className="rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
+                  {copiedId === m.id ? "Copied" : "Copy team link"}
+                </button>
+                <Link to="/meeting/$id" params={{ id: m.id }} className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">Join room</Link>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* New meeting */}
       {showNew && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNew(false)}>
-          <form onSubmit={create} className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <form onSubmit={create} className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">Schedule meeting</h3>
               <button type="button" onClick={() => setShowNew(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
             </div>
             <div className="space-y-3">
               <input required autoFocus placeholder="Meeting title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
-              <textarea placeholder="Agenda / description" rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <textarea placeholder="Agenda / description" rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Starts</label>
@@ -199,7 +353,74 @@ function MeetingsPage() {
                 </div>
               </div>
               <input placeholder="Location (optional)" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
-              <input placeholder="Join URL (optional)" value={form.join_url} onChange={(e) => setForm({ ...form, join_url: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+
+              {/* Teammates */}
+              <div>
+                <label className="mb-1 flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground">
+                  <UserPlus className="h-3 w-3" /> Invite teammates
+                </label>
+                {form.teammates.length > 0 && (
+                  <div className="mb-2 flex flex-wrap gap-1">
+                    {form.teammates.map((tid) => {
+                      const p = allProfiles.find((x) => x.id === tid);
+                      return (
+                        <span key={tid} className="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">
+                          {p?.full_name || p?.email || "Unknown"}
+                          <button type="button" onClick={() => setForm({ ...form, teammates: form.teammates.filter((x) => x !== tid) })}><X className="h-3 w-3" /></button>
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-2 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
+                  <input value={teamSearch} onChange={(e) => setTeamSearch(e.target.value)} placeholder="Search teammates…" className="w-full rounded-lg border border-border bg-background pl-7 pr-2 py-2 text-sm outline-none focus:border-primary" />
+                </div>
+                {teamSearch && (
+                  <div className="mt-1 max-h-40 overflow-y-auto rounded-lg border border-border bg-background">
+                    {filteredTeam.length === 0 ? (
+                      <p className="p-2 text-xs text-muted-foreground">No matches.</p>
+                    ) : filteredTeam.map((p) => {
+                      const already = form.teammates.includes(p.id);
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          disabled={already}
+                          onClick={() => { setForm({ ...form, teammates: [...form.teammates, p.id] }); setTeamSearch(""); }}
+                          className="flex w-full items-center justify-between px-3 py-1.5 text-left text-sm hover:bg-muted disabled:opacity-40"
+                        >
+                          <span>{p.full_name || p.email}</span>
+                          {p.department && <span className="text-[10px] text-muted-foreground">{p.department}</span>}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* External guests */}
+              <div>
+                <label className="mb-1 flex items-center gap-1 text-xs uppercase tracking-wider text-muted-foreground">
+                  <Mail className="h-3 w-3" /> Invite external guests
+                </label>
+                {form.externals.length > 0 && (
+                  <div className="mb-2 flex flex-wrap gap-1">
+                    {form.externals.map((x) => (
+                      <span key={x.email} className="flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs">
+                        {x.name ? `${x.name} · ` : ""}{x.email}
+                        <button type="button" onClick={() => setForm({ ...form, externals: form.externals.filter((y) => y.email !== x.email) })}><X className="h-3 w-3" /></button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <input value={extName} onChange={(e) => setExtName(e.target.value)} placeholder="Name (optional)" className="w-32 rounded-lg border border-border bg-background px-2 py-2 text-sm outline-none focus:border-primary" />
+                  <input value={extEmail} onChange={(e) => setExtEmail(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addExternal(); } }} placeholder="guest@example.com" className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                  <button type="button" onClick={addExternal} className="rounded-lg border border-border px-3 text-sm hover:bg-muted">Add</button>
+                </div>
+                <p className="mt-1 text-[10px] text-muted-foreground">Guests get a unique join link (copy it from the meeting after saving).</p>
+              </div>
             </div>
             <div className="mt-5 flex justify-end gap-2">
               <button type="button" onClick={() => setShowNew(false)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>

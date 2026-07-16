@@ -1,13 +1,16 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link, useSearch } from "@tanstack/react-router";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Mic, MicOff, Video as VideoIcon, VideoOff, ScreenShare, ScreenShareOff,
-  PhoneOff, Users, FileText, Copy, Check,
+  PhoneOff, FileText, Copy, Check, ArrowLeft, Users,
 } from "lucide-react";
 
-export const Route = createFileRoute("/_hq/meeting/$id")({
+type MeetingSearch = { t?: string };
+
+export const Route = createFileRoute("/meeting/$id")({
   head: () => ({ meta: [{ title: "Meeting Room — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
+  validateSearch: (s: Record<string, unknown>): MeetingSearch => ({ t: typeof s.t === "string" ? s.t : undefined }),
   component: MeetingRoom,
 });
 
@@ -19,18 +22,16 @@ const ICE_SERVERS: RTCIceServer[] = [
   { urls: "stun:stun1.l.google.com:19302" },
 ];
 
-type Peer = {
-  pc: RTCPeerConnection;
-  stream: MediaStream;
-  name: string;
-};
+type Peer = { pc: RTCPeerConnection; stream: MediaStream; name: string };
 
 function MeetingRoom() {
   const { id } = Route.useParams();
+  const { t: inviteToken } = useSearch({ from: "/meeting/$id" }) as MeetingSearch;
   const navigate = useNavigate();
 
   const [meeting, setMeeting] = useState<Meeting | null>(null);
-  const [me, setMe] = useState<{ id: string; name: string } | null>(null);
+  const [me, setMe] = useState<{ id: string; name: string; external: boolean } | null>(null);
+  const [guestNamePrompt, setGuestNamePrompt] = useState<string | null>(null);
   const [peers, setPeers] = useState<Record<string, Peer>>({});
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
@@ -49,7 +50,8 @@ function MeetingRoom() {
   const peersRef = useRef<Record<string, Peer>>({});
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const recognitionRef = useRef<any>(null);
-  const meRef = useRef<{ id: string; name: string } | null>(null);
+  const meRef = useRef<{ id: string; name: string; external: boolean } | null>(null);
+  const noteSavedRef = useRef(false);
 
   const updatePeer = (uid: string, updater: (p: Peer | undefined) => Peer | undefined) => {
     const next = updater(peersRef.current[uid]);
@@ -65,40 +67,24 @@ function MeetingRoom() {
   const createPeer = useCallback((remoteId: string, remoteName: string, initiator: boolean) => {
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
     const remoteStream = new MediaStream();
-
     localStreamRef.current?.getTracks().forEach((t) => pc.addTrack(t, localStreamRef.current!));
-
     pc.ontrack = (e) => {
       e.streams[0].getTracks().forEach((t) => {
         if (!remoteStream.getTracks().find((x) => x.id === t.id)) remoteStream.addTrack(t);
       });
       updatePeer(remoteId, (p) => (p ? { ...p, stream: remoteStream } : { pc, stream: remoteStream, name: remoteName }));
     };
-
     pc.onicecandidate = (e) => {
-      if (e.candidate) {
-        channelRef.current?.send({
-          type: "broadcast",
-          event: "ice",
-          payload: { to: remoteId, from: meRef.current?.id, candidate: e.candidate },
-        });
-      }
+      if (e.candidate) channelRef.current?.send({ type: "broadcast", event: "ice", payload: { to: remoteId, from: meRef.current?.id, candidate: e.candidate } });
     };
-
     updatePeer(remoteId, () => ({ pc, stream: remoteStream, name: remoteName }));
-
     if (initiator) {
       (async () => {
         const offer = await pc.createOffer();
         await pc.setLocalDescription(offer);
-        channelRef.current?.send({
-          type: "broadcast",
-          event: "offer",
-          payload: { to: remoteId, from: meRef.current?.id, fromName: meRef.current?.name, sdp: offer },
-        });
+        channelRef.current?.send({ type: "broadcast", event: "offer", payload: { to: remoteId, from: meRef.current?.id, fromName: meRef.current?.name, sdp: offer } });
       })();
     }
-
     return pc;
   }, []);
 
@@ -112,29 +98,55 @@ function MeetingRoom() {
     channelRef.current = null;
   }, []);
 
-  // Save transcript as meeting note on leave
-  const saveTranscriptNote = useCallback(async () => {
-    if (!meRef.current || transcript.length === 0) return;
-    const body = transcript.map((t) => `[${new Date(t.t).toLocaleTimeString()}] ${t.speaker}: ${t.text}`).join("\n");
+  // Auto-create a meeting note on leave (transcript if we captured any, otherwise a summary).
+  const saveMeetingNote = useCallback(async () => {
+    if (noteSavedRef.current) return;
+    if (!meRef.current || meRef.current.external) return; // only authenticated participants save
+    // Skip if a note already exists for this meeting
+    const { data: existing } = await supabase.from("meeting_notes").select("id").eq("meeting_id", id).limit(1);
+    if (existing && existing.length > 0) { noteSavedRef.current = true; return; }
+    const attendeeNames = Array.from(new Set([
+      meRef.current.name,
+      ...Object.values(peersRef.current).map((p) => p.name),
+    ]));
+    const body = transcript.length
+      ? transcript.map((t) => `[${new Date(t.t).toLocaleTimeString()}] ${t.speaker}: ${t.text}`).join("\n")
+      : `Meeting ended ${new Date().toLocaleString()}.\n\nAttendees: ${attendeeNames.join(", ")}\n\n_No live transcript was captured. Add notes here._`;
     await supabase.from("meeting_notes").insert({
       meeting_id: id,
       author_id: meRef.current.id,
-      title: `Transcript — ${meeting?.title ?? "Meeting"}`,
+      title: `${meeting?.title ?? "Meeting"} — Notes`,
       body,
       meeting_date: new Date().toISOString(),
-      tags: ["transcript", "auto"],
-      attendees: [],
+      tags: transcript.length ? ["transcript", "auto"] : ["auto"],
+      attendees: attendeeNames,
     });
+    noteSavedRef.current = true;
   }, [id, transcript, meeting?.title]);
 
   useEffect(() => {
     let mounted = true;
     (async () => {
+      // Determine who I am: authenticated user, or external guest with a valid invite token
       const { data: u } = await supabase.auth.getUser();
-      if (!u.user) { navigate({ to: "/hq-login" }); return; }
-      const { data: p } = await supabase.from("profiles").select("id, full_name, email").eq("id", u.user.id).maybeSingle();
-      const name = (p as Profile | null)?.full_name || (p as Profile | null)?.email || "Guest";
-      const meData = { id: u.user.id, name };
+      let meData: { id: string; name: string; external: boolean } | null = null;
+
+      if (u.user) {
+        const { data: p } = await supabase.from("profiles").select("id, full_name, email").eq("id", u.user.id).maybeSingle();
+        const name = (p as Profile | null)?.full_name || (p as Profile | null)?.email || "Teammate";
+        meData = { id: u.user.id, name, external: false };
+      } else if (inviteToken) {
+        const { data: inv } = await supabase.from("meeting_external_invites").select("*").eq("token", inviteToken).eq("meeting_id", id).maybeSingle();
+        if (!inv) { setError("This guest link is invalid or has expired."); return; }
+        const cachedName = typeof window !== "undefined" ? window.sessionStorage.getItem(`meeting-guest-${id}`) : null;
+        const name = inv.name || cachedName || null;
+        if (!name) { setGuestNamePrompt(inv.email); return; } // wait for user input
+        meData = { id: `guest-${inv.id}`, name, external: true };
+        await supabase.from("meeting_external_invites").update({ joined_at: new Date().toISOString() }).eq("id", inv.id);
+      } else {
+        navigate({ to: "/hq-login" }); return;
+      }
+
       meRef.current = meData;
       setMe(meData);
 
@@ -142,8 +154,9 @@ function MeetingRoom() {
       if (!m) { setError("Meeting not found or you don't have access."); return; }
       setMeeting(m as Meeting);
 
-      // record participation
-      await supabase.from("meeting_participants").upsert({ meeting_id: id, user_id: u.user.id, rsvp: "yes" }, { onConflict: "meeting_id,user_id" });
+      if (!meData.external) {
+        await supabase.from("meeting_participants").upsert({ meeting_id: id, user_id: meData.id, rsvp: "yes" }, { onConflict: "meeting_id,user_id" });
+      }
 
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -156,53 +169,41 @@ function MeetingRoom() {
         return;
       }
 
-      // Signaling channel scoped to the meeting id
-      const ch = supabase.channel(`meeting:${id}`, { config: { presence: { key: u.user.id } } });
+      const ch = supabase.channel(`meeting:${id}`, { config: { presence: { key: meData.id } } });
       channelRef.current = ch;
 
       ch.on("broadcast", { event: "offer" }, async ({ payload }) => {
         if (payload.to !== meRef.current?.id) return;
         let peer = peersRef.current[payload.from];
-        if (!peer) {
-          createPeer(payload.from, payload.fromName ?? "Guest", false);
-          peer = peersRef.current[payload.from];
-        }
+        if (!peer) { createPeer(payload.from, payload.fromName ?? "Guest", false); peer = peersRef.current[payload.from]; }
         await peer.pc.setRemoteDescription(new RTCSessionDescription(payload.sdp));
         const answer = await peer.pc.createAnswer();
         await peer.pc.setLocalDescription(answer);
         ch.send({ type: "broadcast", event: "answer", payload: { to: payload.from, from: meRef.current?.id, sdp: answer } });
       });
-
       ch.on("broadcast", { event: "answer" }, async ({ payload }) => {
         if (payload.to !== meRef.current?.id) return;
         const peer = peersRef.current[payload.from];
         if (peer) await peer.pc.setRemoteDescription(new RTCSessionDescription(payload.sdp));
       });
-
       ch.on("broadcast", { event: "ice" }, async ({ payload }) => {
         if (payload.to !== meRef.current?.id) return;
         const peer = peersRef.current[payload.from];
-        if (peer && payload.candidate) {
-          try { await peer.pc.addIceCandidate(new RTCIceCandidate(payload.candidate)); } catch {}
-        }
+        if (peer && payload.candidate) { try { await peer.pc.addIceCandidate(new RTCIceCandidate(payload.candidate)); } catch {} }
       });
-
       ch.on("broadcast", { event: "leave" }, ({ payload }) => {
         const peer = peersRef.current[payload.from];
         if (peer) { peer.pc.close(); updatePeer(payload.from, () => undefined); }
       });
-
       ch.on("broadcast", { event: "transcript" }, ({ payload }) => {
         if (payload.from === meRef.current?.id) return;
         setTranscript((prev) => [...prev, { t: payload.t, text: payload.text, speaker: payload.speaker }]);
       });
-
       ch.on("presence", { event: "sync" }, () => {
         const state = ch.presenceState() as Record<string, Array<{ name?: string }>>;
         Object.keys(state).forEach((uid) => {
           if (uid === meRef.current?.id) return;
           if (peersRef.current[uid]) return;
-          // Deterministic initiator: lower id initiates
           const initiate = (meRef.current!.id) < uid;
           const name = state[uid]?.[0]?.name ?? "Guest";
           if (initiate) createPeer(uid, name, true);
@@ -210,30 +211,28 @@ function MeetingRoom() {
       });
 
       await ch.subscribe(async (status) => {
-        if (status === "SUBSCRIBED") {
-          await ch.track({ name: meData.name });
-        }
+        if (status === "SUBSCRIBED") await ch.track({ name: meData!.name });
       });
     })();
 
     return () => {
       mounted = false;
       channelRef.current?.send({ type: "broadcast", event: "leave", payload: { from: meRef.current?.id } });
+      // Best-effort: save auto note before tearing down
+      void saveMeetingNote();
       cleanupAll();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, guestNamePrompt]);
 
   const toggleMic = () => {
     const track = localStreamRef.current?.getAudioTracks()[0];
     if (track) { track.enabled = !track.enabled; setMicOn(track.enabled); }
   };
-
   const toggleCam = () => {
     const track = localStreamRef.current?.getVideoTracks()[0];
     if (track) { track.enabled = !track.enabled; setCamOn(track.enabled); }
   };
-
   const toggleShare = async () => {
     if (sharing) {
       screenTrackRef.current?.stop();
@@ -259,30 +258,22 @@ function MeetingRoom() {
         const sender = p.pc.getSenders().find((s) => s.track?.kind === "video");
         if (sender) sender.replaceTrack(track);
       });
-      // Show locally
       const preview = new MediaStream([track, ...(localStreamRef.current?.getAudioTracks() ?? [])]);
       if (localVideoRef.current) localVideoRef.current.srcObject = preview;
       track.onended = () => toggleShare();
       setSharing(true);
-    } catch (e) {
-      // user cancelled
-    }
+    } catch {}
   };
-
   const toggleTranscribe = () => {
     const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) { alert("Live transcription is not supported in this browser. Try Chrome or Edge."); return; }
     if (transcribing) {
       try { recognitionRef.current?.stop(); } catch {}
       recognitionRef.current = null;
-      setTranscribing(false);
-      setInterim("");
-      return;
+      setTranscribing(false); setInterim(""); return;
     }
     const rec = new SR();
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.lang = "en-US";
+    rec.continuous = true; rec.interimResults = true; rec.lang = "en-US";
     rec.onresult = (event: any) => {
       let interimStr = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -292,49 +283,80 @@ function MeetingRoom() {
           const entry = { t: Date.now(), text, speaker: meRef.current?.name ?? "Me" };
           setTranscript((prev) => [...prev, entry]);
           channelRef.current?.send({ type: "broadcast", event: "transcript", payload: { ...entry, from: meRef.current?.id } });
-        } else {
-          interimStr += text + " ";
-        }
+        } else { interimStr += text + " "; }
       }
       setInterim(interimStr);
     };
-    rec.onerror = (e: any) => { console.warn("SR error", e.error); };
+    rec.onerror = () => {};
     rec.onend = () => { if (recognitionRef.current === rec) { try { rec.start(); } catch {} } };
     recognitionRef.current = rec;
     try { rec.start(); setTranscribing(true); } catch (e: any) { alert(e.message); }
   };
 
   const leave = async () => {
-    await saveTranscriptNote();
+    await saveMeetingNote();
     channelRef.current?.send({ type: "broadcast", event: "leave", payload: { from: meRef.current?.id } });
     cleanupAll();
-    navigate({ to: "/meetings" });
+    if (meRef.current?.external) navigate({ to: "/" });
+    else navigate({ to: "/meetings" });
   };
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setCopied(true); setTimeout(() => setCopied(false), 1500);
   };
 
   const remotePeers = Object.entries(peers);
   const gridCols = remotePeers.length >= 3 ? "grid-cols-2" : remotePeers.length >= 1 ? "grid-cols-2" : "grid-cols-1";
 
+  // Guest name prompt
+  if (guestNamePrompt) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-background p-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const fd = new FormData(e.currentTarget);
+            const name = String(fd.get("name") ?? "").trim();
+            if (!name) return;
+            window.sessionStorage.setItem(`meeting-guest-${id}`, name);
+            setGuestNamePrompt(null);
+          }}
+          className="w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-2xl"
+        >
+          <h1 className="text-lg font-semibold">Join the meeting</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Signed in as guest: {guestNamePrompt}</p>
+          <input name="name" required autoFocus placeholder="Your name" className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+          <button type="submit" className="mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Continue</button>
+        </form>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="mx-auto max-w-lg px-6 py-16 text-center">
         <p className="text-lg font-semibold">{error}</p>
-        <Link to="/meetings" className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">Back to meetings</Link>
+        <Link to="/" className="mt-4 inline-block rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground">Home</Link>
       </div>
     );
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] flex-col bg-background">
+    <div className="flex h-dvh flex-col bg-background text-foreground">
       <div className="flex items-center justify-between border-b border-border px-4 py-3">
-        <div className="min-w-0">
-          <h1 className="truncate text-lg font-semibold">{meeting?.title ?? "Meeting"}</h1>
-          <p className="text-xs text-muted-foreground">{Object.keys(peers).length + 1} in room · {me?.name}</p>
+        <div className="flex min-w-0 items-center gap-3">
+          {!me?.external && (
+            <Link to="/meetings" className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs hover:bg-muted">
+              <ArrowLeft className="h-3 w-3" /> Meetings
+            </Link>
+          )}
+          <div className="min-w-0">
+            <h1 className="truncate text-lg font-semibold">{meeting?.title ?? "Meeting"}</h1>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <Users className="h-3 w-3" /> {Object.keys(peers).length + 1} in room · {me?.name}{me?.external ? " (guest)" : ""}
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={copyLink} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
@@ -362,9 +384,7 @@ function MeetingRoom() {
                 </div>
               )}
             </div>
-            {remotePeers.map(([uid, p]) => (
-              <RemoteTile key={uid} peer={p} />
-            ))}
+            {remotePeers.map(([uid, p]) => (<RemoteTile key={uid} peer={p} />))}
           </div>
 
           <div className="mt-3 flex items-center justify-center gap-2">
@@ -384,7 +404,7 @@ function MeetingRoom() {
             <div className="flex-1 overflow-y-auto px-4 py-3 text-sm">
               {transcript.length === 0 && !interim && (
                 <p className="text-xs text-muted-foreground">
-                  {transcribing ? "Listening…" : "Click Live transcribe to start capturing your mic. Transcript saves to Meeting Notes on leave."}
+                  {transcribing ? "Listening…" : "Click Live transcribe to capture your mic. A meeting note is auto-created when you leave."}
                 </p>
               )}
               {transcript.map((t, i) => (
@@ -426,6 +446,3 @@ function ControlBtn({ active, onClick, label, icon: Icon, danger }: { active: bo
     </button>
   );
 }
-
-// unused helper kept for future presence UI
-export const _users = Users;

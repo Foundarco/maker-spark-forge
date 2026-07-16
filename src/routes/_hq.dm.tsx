@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { MessagesSquare, Search, Send, User as UserIcon, Check, CheckCheck } from "lucide-react";
+import { MessageReactions } from "@/components/hq/MessageReactions";
 
 export const Route = createFileRoute("/_hq/dm")({
   head: () => ({ meta: [{ title: "Messages — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -224,13 +225,20 @@ function DMPage() {
                 const mine = m.sender_id === me;
                 const optimistic = m.id.startsWith("tmp-");
                 return (
-                  <div key={r.key} className={mine ? "flex justify-end" : "flex justify-start"}>
-                    <div className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"} ${optimistic ? "opacity-70" : ""}`}>
-                      <p className="whitespace-pre-wrap">{m.body}</p>
-                      <p className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                        <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-                        {mine && !optimistic && (m.read_at ? <CheckCheck className="h-3 w-3" /> : <Check className="h-3 w-3" />)}
-                      </p>
+                  <div key={r.key} className={`group flex ${mine ? "justify-end" : "justify-start"}`}>
+                    <div className="max-w-[75%]">
+                      <div className={`rounded-2xl px-4 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"} ${optimistic ? "opacity-70" : ""}`}>
+                        <p className="whitespace-pre-wrap">{m.body}</p>
+                        <p className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${mine ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                          <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                          {mine && !optimistic && (m.read_at ? <CheckCheck className="h-3 w-3" /> : <Check className="h-3 w-3" />)}
+                        </p>
+                      </div>
+                      {!optimistic && (
+                        <div className={mine ? "flex justify-end" : "flex justify-start"}>
+                          <MessageReactions messageType="dm" messageId={m.id} me={me} />
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
