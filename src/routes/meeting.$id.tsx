@@ -220,6 +220,7 @@ function MeetingRoom() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         if (!mounted) { stream.getTracks().forEach((t) => t.stop()); return; }
         localStreamRef.current = stream;
+        forceTick((n) => n + 1);
         if (localVideoRef.current) localVideoRef.current.srcObject = stream;
       } catch (err: any) {
         setError("Camera/mic access denied. " + err.message);
