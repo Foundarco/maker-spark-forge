@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check } from "lucide-react";
+import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
 import { ProfilePopover } from "@/components/hq/ProfilePopover";
+import { ChannelAccessDialog } from "@/components/hq/ChannelAccessDialog";
 import { loadMyPermissions, type Permissions } from "@/lib/hq/permissions";
 
 export const Route = createFileRoute("/_hq/channels")({
