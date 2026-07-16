@@ -1,14 +1,23 @@
 import { Outlet } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { AIAssistant } from "./AIAssistant";
+import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
 
 export function HQShell() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  useEffect(() => {
+    applyTheme(getStoredTheme());
+    return () => {
+      // Restore light mode when leaving HQ
+      document.documentElement.classList.remove("dark");
+    };
+  }, []);
+
   return (
-    <div className="flex min-h-dvh flex-col bg-background">
+    <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <Topbar onMenuClick={() => setMobileOpen(true)} />
       <div className="flex flex-1 min-h-0">
         <aside className="hidden w-64 flex-shrink-0 lg:block">

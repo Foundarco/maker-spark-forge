@@ -4,10 +4,12 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useMatches,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -117,25 +119,26 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function isHQHost(): boolean {
-  if (typeof window === "undefined") return false;
-  const h = window.location.hostname;
-  return h === "hq.clovrlab.com" || h.startsWith("hq--") || h.startsWith("hq.");
-}
+
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const hq = typeof window !== "undefined" && isHQHost();
+  const matches = useMatches();
+  const isHQ = matches.some((m) => m.routeId?.startsWith("/_hq") || m.routeId === "/hq-login");
 
   useEffect(() => {
-    if (hq && window.location.pathname === "/") {
+    if (typeof window === "undefined") return;
+    const h = window.location.hostname;
+    const hqHost = h === "hq.clovrlab.com" || h.startsWith("hq--") || h.startsWith("hq.");
+    if (hqHost && window.location.pathname === "/") {
       window.location.replace("/dashboard");
     }
-  }, [hq]);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {hq ? (
+      {isHQ ? (
         <Outlet />
       ) : (
         <div className="flex min-h-dvh flex-col">
@@ -149,3 +152,4 @@ function RootComponent() {
     </QueryClientProvider>
   );
 }
+

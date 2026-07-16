@@ -40,10 +40,10 @@ export const navGroups: NavGroup[] = [
       { label: "Notifications", to: "/notifications", icon: Bell },
       { label: "Universal Search", to: "/search", icon: Search },
       { label: "AI Assistant", to: "/assistant", icon: Bot },
-      { label: "Profile", to: "/profile", icon: User },
       { label: "Settings", to: "/settings", icon: Settings },
     ],
   },
+
   {
     label: "Communication",
     items: [
