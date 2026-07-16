@@ -162,7 +162,13 @@ function MeetingsPage() {
   };
 
   const copyLink = async (m: Meeting, token?: string) => {
-    const base = `${window.location.origin}/meeting/${m.id}`;
+    // Preview hosts require Lovable auth; share via the public custom domain so guests can join.
+    const host = window.location.hostname;
+    const origin =
+      /^id-preview--/i.test(host) && /(^|\.)lovable\.app$/i.test(host)
+        ? "https://hq.clovrlab.com"
+        : window.location.origin;
+    const base = `${origin}/meeting/${m.id}`;
     const url = token ? `${base}?t=${token}` : base;
     await navigator.clipboard.writeText(url);
     setCopiedId(m.id + (token ?? ""));
