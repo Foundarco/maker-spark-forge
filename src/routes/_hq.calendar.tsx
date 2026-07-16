@@ -251,7 +251,15 @@ function CalendarPage() {
                   <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><UserIcon className="h-3 w-3" /> Host: {meta.host_name}</p>
                 )}
                 {meta && meta.attendee_count > 0 && (
-                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
+                  <>
+                    <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      {meta.attendee_names.slice(0, 6).map((n, idx) => (
+                        <span key={idx} className="rounded-full border border-current/30 bg-background/50 px-1.5 py-0.5 text-[10px]">{n}</span>
+                      ))}
+                      {meta.attendee_names.length > 6 && <span className="text-[10px] opacity-70">+{meta.attendee_names.length - 6}</span>}
+                    </div>
+                  </>
                 )}
                 {e.location && <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><MapPin className="h-3 w-3" /> {e.location}</p>}
                 {e.description && !meta?.note_preview && (
