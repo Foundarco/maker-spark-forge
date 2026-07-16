@@ -68,6 +68,7 @@ function MeetingRoom() {
   const [error, setError] = useState<string | null>(null);
   const [sidePanel, setSidePanel] = useState<"chat" | "transcript" | null>("chat");
   const [enlarged, setEnlarged] = useState<{ stream: MediaStream; label: string } | null>(null);
+  const [, forceTick] = useState(0);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
