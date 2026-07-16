@@ -730,6 +730,28 @@ function MeetingRoom() {
           <EnlargedVideo stream={enlarged.stream} />
         </div>
       )}
+
+      {showLeaveConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setShowLeaveConfirm(false)}>
+          <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-lg font-semibold">Leaving as host</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              You're the host of this meeting. End it for everyone (this generates polished meeting notes and removes it from schedules), or just leave and let the meeting continue.
+            </p>
+            <div className="mt-5 flex flex-col gap-2">
+              <button disabled={ending} onClick={() => doLeave(true)} className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50">
+                End meeting for everyone
+              </button>
+              <button disabled={ending} onClick={() => doLeave(false)} className="rounded-lg border border-border bg-background px-4 py-2 text-sm">
+                Just leave (others stay)
+              </button>
+              <button disabled={ending} onClick={() => setShowLeaveConfirm(false)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-muted">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
