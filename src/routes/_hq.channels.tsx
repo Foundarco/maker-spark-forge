@@ -257,6 +257,7 @@ function ChannelsPage() {
                         </div>
                       )}
                       <p className={`whitespace-pre-wrap text-sm ${optimistic ? "opacity-70" : ""}`}>{m.body}</p>
+                      {!optimistic && <MessageReactions messageType="channel" messageId={m.id} me={me} />}
                     </div>
                     {isMe && !optimistic && (
                       <button onClick={() => removeMsg(m.id)} className="hidden shrink-0 rounded p-1 text-muted-foreground opacity-0 transition hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100 sm:block" aria-label="Delete message">
