@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Mic, MicOff, Video as VideoIcon, VideoOff, ScreenShare, ScreenShareOff,
-  PhoneOff, FileText, Copy, Check, ArrowLeft, Users,
+  PhoneOff, FileText, Copy, Check, Users, MessageSquare, Send, Maximize2, X,
 } from "lucide-react";
 
 type MeetingSearch = { t?: string };
@@ -16,22 +16,45 @@ export const Route = createFileRoute("/meeting/$id")({
 
 type Meeting = { id: string; title: string; description: string | null; host_id: string; starts_at: string; ends_at: string };
 type Profile = { id: string; full_name: string | null; email: string | null };
+type ChatMsg = { id: string; from: string; fromName: string; text: string; t: number };
 
 const ICE_SERVERS: RTCIceServer[] = [
   { urls: "stun:stun.l.google.com:19302" },
   { urls: "stun:stun1.l.google.com:19302" },
 ];
 
-type Peer = { pc: RTCPeerConnection; stream: MediaStream; name: string };
+type Peer = { pc: RTCPeerConnection; name: string; streams: Record<string, MediaStream> };
+
+// Apply the HQ dark/light theme on the meeting route so it matches the rest of the app.
+function useHQThemeSync() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const apply = () => {
+      const stored = window.localStorage.getItem("hq-theme") ?? "dark";
+      const resolved =
+        stored === "system"
+          ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+          : stored;
+      const root = document.documentElement;
+      if (resolved === "dark") root.classList.add("dark");
+      else root.classList.remove("dark");
+    };
+    apply();
+    const mm = window.matchMedia("(prefers-color-scheme: dark)");
+    mm.addEventListener?.("change", apply);
+    return () => mm.removeEventListener?.("change", apply);
+  }, []);
+}
 
 function MeetingRoom() {
+  useHQThemeSync();
   const { id } = Route.useParams();
   const { t: inviteToken } = useSearch({ from: "/meeting/$id" }) as MeetingSearch;
   const navigate = useNavigate();
 
   const [meeting, setMeeting] = useState<Meeting | null>(null);
   const [me, setMe] = useState<{ id: string; name: string; external: boolean } | null>(null);
-  const [guestNamePrompt, setGuestNamePrompt] = useState<string | null>(null);
+  const [guestNamePrompt, setGuestNamePrompt] = useState<{ email: string | null } | null>(null);
   const [peers, setPeers] = useState<Record<string, Peer>>({});
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
@@ -39,19 +62,22 @@ function MeetingRoom() {
   const [transcribing, setTranscribing] = useState(false);
   const [transcript, setTranscript] = useState<{ t: number; text: string; speaker: string }[]>([]);
   const [interim, setInterim] = useState("");
+  const [chat, setChat] = useState<ChatMsg[]>([]);
+  const [chatDraft, setChatDraft] = useState("");
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showNotes, setShowNotes] = useState(true);
+  const [sidePanel, setSidePanel] = useState<"chat" | "transcript" | null>("chat");
+  const [enlarged, setEnlarged] = useState<{ stream: MediaStream; label: string } | null>(null);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
-  const screenTrackRef = useRef<MediaStreamTrack | null>(null);
-  const camTrackRef = useRef<MediaStreamTrack | null>(null);
+  const screenStreamRef = useRef<MediaStream | null>(null);
   const peersRef = useRef<Record<string, Peer>>({});
   const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const recognitionRef = useRef<any>(null);
   const meRef = useRef<{ id: string; name: string; external: boolean } | null>(null);
   const noteSavedRef = useRef(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
   const updatePeer = (uid: string, updater: (p: Peer | undefined) => Peer | undefined) => {
     const next = updater(peersRef.current[uid]);
@@ -64,45 +90,68 @@ function MeetingRoom() {
     setPeers({ ...peersRef.current });
   };
 
+  const sendOffer = useCallback(async (remoteId: string, pc: RTCPeerConnection) => {
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    channelRef.current?.send({
+      type: "broadcast", event: "offer",
+      payload: { to: remoteId, from: meRef.current?.id, fromName: meRef.current?.name, sdp: offer },
+    });
+  }, []);
+
   const createPeer = useCallback((remoteId: string, remoteName: string, initiator: boolean) => {
     const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
-    const remoteStream = new MediaStream();
+
+    // Add all local tracks (camera + optional screen)
     localStreamRef.current?.getTracks().forEach((t) => pc.addTrack(t, localStreamRef.current!));
+    screenStreamRef.current?.getTracks().forEach((t) => pc.addTrack(t, screenStreamRef.current!));
+
     pc.ontrack = (e) => {
-      e.streams[0].getTracks().forEach((t) => {
-        if (!remoteStream.getTracks().find((x) => x.id === t.id)) remoteStream.addTrack(t);
+      const stream = e.streams[0];
+      if (!stream) return;
+      updatePeer(remoteId, (p) => {
+        const base = p ?? { pc, name: remoteName, streams: {} };
+        if (!base.streams[stream.id]) {
+          base.streams = { ...base.streams, [stream.id]: stream };
+          stream.onremovetrack = () => {
+            if (stream.getTracks().length === 0) {
+              updatePeer(remoteId, (pp) => {
+                if (!pp) return pp;
+                const { [stream.id]: _drop, ...rest } = pp.streams;
+                return { ...pp, streams: rest };
+              });
+            }
+          };
+        }
+        return { ...base };
       });
-      updatePeer(remoteId, (p) => (p ? { ...p, stream: remoteStream } : { pc, stream: remoteStream, name: remoteName }));
     };
+
     pc.onicecandidate = (e) => {
-      if (e.candidate) channelRef.current?.send({ type: "broadcast", event: "ice", payload: { to: remoteId, from: meRef.current?.id, candidate: e.candidate } });
+      if (e.candidate) channelRef.current?.send({
+        type: "broadcast", event: "ice",
+        payload: { to: remoteId, from: meRef.current?.id, candidate: e.candidate },
+      });
     };
-    updatePeer(remoteId, () => ({ pc, stream: remoteStream, name: remoteName }));
-    if (initiator) {
-      (async () => {
-        const offer = await pc.createOffer();
-        await pc.setLocalDescription(offer);
-        channelRef.current?.send({ type: "broadcast", event: "offer", payload: { to: remoteId, from: meRef.current?.id, fromName: meRef.current?.name, sdp: offer } });
-      })();
-    }
+
+    updatePeer(remoteId, () => ({ pc, name: remoteName, streams: {} }));
+    if (initiator) void sendOffer(remoteId, pc);
     return pc;
-  }, []);
+  }, [sendOffer]);
 
   const cleanupAll = useCallback(() => {
     try { recognitionRef.current?.stop(); } catch {}
     Object.values(peersRef.current).forEach((p) => p.pc.close());
     peersRef.current = {};
     localStreamRef.current?.getTracks().forEach((t) => t.stop());
-    screenTrackRef.current?.stop();
+    screenStreamRef.current?.getTracks().forEach((t) => t.stop());
     if (channelRef.current) supabase.removeChannel(channelRef.current);
     channelRef.current = null;
   }, []);
 
-  // Auto-create a meeting note on leave (transcript if we captured any, otherwise a summary).
   const saveMeetingNote = useCallback(async () => {
     if (noteSavedRef.current) return;
-    if (!meRef.current || meRef.current.external) return; // only authenticated participants save
-    // Skip if a note already exists for this meeting
+    if (!meRef.current || meRef.current.external) return;
     const { data: existing } = await supabase.from("meeting_notes").select("id").eq("meeting_id", id).limit(1);
     if (existing && existing.length > 0) { noteSavedRef.current = true; return; }
     const attendeeNames = Array.from(new Set([
@@ -127,7 +176,6 @@ function MeetingRoom() {
   useEffect(() => {
     let mounted = true;
     (async () => {
-      // Determine who I am: authenticated user, or external guest with a valid invite token
       const { data: u } = await supabase.auth.getUser();
       let meData: { id: string; name: string; external: boolean } | null = null;
 
@@ -140,19 +188,24 @@ function MeetingRoom() {
         if (!inv) { setError("This guest link is invalid or has expired."); return; }
         const cachedName = typeof window !== "undefined" ? window.sessionStorage.getItem(`meeting-guest-${id}`) : null;
         const name = inv.name || cachedName || null;
-        if (!name) { setGuestNamePrompt(inv.email); return; } // wait for user input
+        if (!name) { setGuestNamePrompt({ email: inv.email }); return; }
         meData = { id: `guest-${inv.id}`, name, external: true };
         await supabase.from("meeting_external_invites").update({ joined_at: new Date().toISOString() }).eq("id", inv.id);
       } else {
-        navigate({ to: "/hq-login" }); return;
+        // Open link — anyone with the URL can join by giving a name.
+        const cachedName = typeof window !== "undefined" ? window.sessionStorage.getItem(`meeting-guest-${id}`) : null;
+        if (!cachedName) { setGuestNamePrompt({ email: null }); return; }
+        const guestId = window.sessionStorage.getItem(`meeting-guestid-${id}`) ||
+          `guest-${Math.random().toString(36).slice(2, 10)}`;
+        window.sessionStorage.setItem(`meeting-guestid-${id}`, guestId);
+        meData = { id: guestId, name: cachedName, external: true };
       }
 
       meRef.current = meData;
       setMe(meData);
 
       const { data: m } = await supabase.from("meetings").select("*").eq("id", id).maybeSingle();
-      if (!m) { setError("Meeting not found or you don't have access."); return; }
-      setMeeting(m as Meeting);
+      if (m) setMeeting(m as Meeting);
 
       if (!meData.external) {
         await supabase.from("meeting_participants").upsert({ meeting_id: id, user_id: meData.id, rsvp: "yes" }, { onConflict: "meeting_id,user_id" });
@@ -162,7 +215,6 @@ function MeetingRoom() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         if (!mounted) { stream.getTracks().forEach((t) => t.stop()); return; }
         localStreamRef.current = stream;
-        camTrackRef.current = stream.getVideoTracks()[0] ?? null;
         if (localVideoRef.current) localVideoRef.current.srcObject = stream;
       } catch (err: any) {
         setError("Camera/mic access denied. " + err.message);
@@ -199,6 +251,10 @@ function MeetingRoom() {
         if (payload.from === meRef.current?.id) return;
         setTranscript((prev) => [...prev, { t: payload.t, text: payload.text, speaker: payload.speaker }]);
       });
+      ch.on("broadcast", { event: "chat" }, ({ payload }) => {
+        if (payload.from === meRef.current?.id) return;
+        setChat((prev) => [...prev, payload as ChatMsg]);
+      });
       ch.on("presence", { event: "sync" }, () => {
         const state = ch.presenceState() as Record<string, Array<{ name?: string }>>;
         Object.keys(state).forEach((uid) => {
@@ -218,12 +274,15 @@ function MeetingRoom() {
     return () => {
       mounted = false;
       channelRef.current?.send({ type: "broadcast", event: "leave", payload: { from: meRef.current?.id } });
-      // Best-effort: save auto note before tearing down
       void saveMeetingNote();
       cleanupAll();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, guestNamePrompt]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat.length]);
 
   const toggleMic = () => {
     const track = localStreamRef.current?.getAudioTracks()[0];
@@ -233,37 +292,45 @@ function MeetingRoom() {
     const track = localStreamRef.current?.getVideoTracks()[0];
     if (track) { track.enabled = !track.enabled; setCamOn(track.enabled); }
   };
+
+  const renegotiateAll = async () => {
+    for (const [uid, p] of Object.entries(peersRef.current)) {
+      // Only initiators re-offer to avoid glare; the other side already receives new track on remote offer.
+      if ((meRef.current!.id) < uid) {
+        try { await sendOffer(uid, p.pc); } catch {}
+      }
+    }
+  };
+
   const toggleShare = async () => {
     if (sharing) {
-      screenTrackRef.current?.stop();
-      screenTrackRef.current = null;
-      const cam = camTrackRef.current;
-      if (cam) {
-        Object.values(peersRef.current).forEach((p) => {
-          const sender = p.pc.getSenders().find((s) => s.track?.kind === "video");
-          if (sender) sender.replaceTrack(cam);
+      const s = screenStreamRef.current;
+      if (s) {
+        s.getTracks().forEach((t) => {
+          Object.values(peersRef.current).forEach((p) => {
+            const sender = p.pc.getSenders().find((sn) => sn.track === t);
+            if (sender) try { p.pc.removeTrack(sender); } catch {}
+          });
+          t.stop();
         });
-        localStreamRef.current?.getVideoTracks().forEach((t) => localStreamRef.current!.removeTrack(t));
-        localStreamRef.current?.addTrack(cam);
-        if (localVideoRef.current) localVideoRef.current.srcObject = localStreamRef.current;
       }
+      screenStreamRef.current = null;
       setSharing(false);
+      await renegotiateAll();
       return;
     }
     try {
-      const disp = await navigator.mediaDevices.getDisplayMedia({ video: true });
-      const track = disp.getVideoTracks()[0];
-      screenTrackRef.current = track;
-      Object.values(peersRef.current).forEach((p) => {
-        const sender = p.pc.getSenders().find((s) => s.track?.kind === "video");
-        if (sender) sender.replaceTrack(track);
+      const disp = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+      screenStreamRef.current = disp;
+      disp.getTracks().forEach((t) => {
+        Object.values(peersRef.current).forEach((p) => { p.pc.addTrack(t, disp); });
       });
-      const preview = new MediaStream([track, ...(localStreamRef.current?.getAudioTracks() ?? [])]);
-      if (localVideoRef.current) localVideoRef.current.srcObject = preview;
-      track.onended = () => toggleShare();
+      disp.getVideoTracks()[0].onended = () => { void toggleShare(); };
       setSharing(true);
+      await renegotiateAll();
     } catch {}
   };
+
   const toggleTranscribe = () => {
     const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SR) { alert("Live transcription is not supported in this browser. Try Chrome or Edge."); return; }
@@ -293,6 +360,22 @@ function MeetingRoom() {
     try { rec.start(); setTranscribing(true); } catch (e: any) { alert(e.message); }
   };
 
+  const sendChat = (e: React.FormEvent) => {
+    e.preventDefault();
+    const text = chatDraft.trim();
+    if (!text || !meRef.current) return;
+    const msg: ChatMsg = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      from: meRef.current.id,
+      fromName: meRef.current.name,
+      text,
+      t: Date.now(),
+    };
+    setChat((prev) => [...prev, msg]);
+    channelRef.current?.send({ type: "broadcast", event: "chat", payload: msg });
+    setChatDraft("");
+  };
+
   const leave = async () => {
     await saveMeetingNote();
     channelRef.current?.send({ type: "broadcast", event: "leave", payload: { from: meRef.current?.id } });
@@ -302,14 +385,41 @@ function MeetingRoom() {
   };
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(window.location.href);
+    const url = new URL(window.location.href);
+    url.search = ""; // share the open link, without any guest token
+    await navigator.clipboard.writeText(url.toString());
     setCopied(true); setTimeout(() => setCopied(false), 1500);
   };
 
-  const remotePeers = Object.entries(peers);
-  const gridCols = remotePeers.length >= 3 ? "grid-cols-2" : remotePeers.length >= 1 ? "grid-cols-2" : "grid-cols-1";
+  // Build the flat tile list: my camera, my screen (if any), then each remote stream.
+  const tiles: { key: string; label: string; stream: MediaStream | null; muted: boolean; isMe: boolean; isScreen: boolean }[] = [];
+  if (localStreamRef.current) {
+    tiles.push({ key: "me-cam", label: `${me?.name ?? "You"} (you)`, stream: localStreamRef.current, muted: true, isMe: true, isScreen: false });
+  }
+  if (screenStreamRef.current) {
+    tiles.push({ key: "me-screen", label: `${me?.name ?? "You"} · screen`, stream: screenStreamRef.current, muted: true, isMe: true, isScreen: true });
+  }
+  Object.entries(peers).forEach(([uid, p]) => {
+    const streams = Object.values(p.streams);
+    if (streams.length === 0) {
+      tiles.push({ key: uid, label: p.name, stream: null, muted: false, isMe: false, isScreen: false });
+    } else {
+      streams.forEach((s, i) => {
+        const isScreen = streams.length > 1 && i > 0;
+        tiles.push({
+          key: `${uid}-${s.id}`,
+          label: isScreen ? `${p.name} · screen` : p.name,
+          stream: s,
+          muted: false,
+          isMe: false,
+          isScreen,
+        });
+      });
+    }
+  });
 
-  // Guest name prompt
+  const gridCols = tiles.length >= 4 ? "grid-cols-2 lg:grid-cols-3" : tiles.length >= 2 ? "grid-cols-2" : "grid-cols-1";
+
   if (guestNamePrompt) {
     return (
       <div className="flex h-dvh items-center justify-center bg-background p-6">
@@ -325,7 +435,9 @@ function MeetingRoom() {
           className="w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-2xl"
         >
           <h1 className="text-lg font-semibold">Join the meeting</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Signed in as guest: {guestNamePrompt}</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {guestNamePrompt.email ? `Signed in as guest: ${guestNamePrompt.email}` : "Enter your name to join."}
+          </p>
           <input name="name" required autoFocus placeholder="Your name" className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
           <button type="submit" className="mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Continue</button>
         </form>
@@ -344,26 +456,16 @@ function MeetingRoom() {
 
   return (
     <div className="flex h-dvh flex-col bg-background text-foreground">
-      <div className="flex items-center justify-between border-b border-border px-4 py-3">
-        <div className="flex min-w-0 items-center gap-3">
-          {!me?.external && (
-            <Link to="/meetings" className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs hover:bg-muted">
-              <ArrowLeft className="h-3 w-3" /> Meetings
-            </Link>
-          )}
-          <div className="min-w-0">
-            <h1 className="truncate text-lg font-semibold">{meeting?.title ?? "Meeting"}</h1>
-            <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <Users className="h-3 w-3" /> {Object.keys(peers).length + 1} in room · {me?.name}{me?.external ? " (guest)" : ""}
-            </p>
-          </div>
+      <div className="flex items-center justify-between border-b border-border px-4 py-2">
+        <div className="min-w-0">
+          <h1 className="truncate text-sm font-semibold">{meeting?.title ?? "Meeting"}</h1>
+          <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+            <Users className="h-3 w-3" /> {Object.keys(peers).length + 1} in room · {me?.name}{me?.external ? " (guest)" : ""}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <button onClick={copyLink} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />} Invite link
-          </button>
-          <button onClick={() => setShowNotes((s) => !s)} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
-            <FileText className="h-3.5 w-3.5" /> {showNotes ? "Hide" : "Show"} transcript
           </button>
         </div>
       </div>
@@ -371,20 +473,18 @@ function MeetingRoom() {
       <div className="flex min-h-0 flex-1">
         <div className="flex min-h-0 flex-1 flex-col p-3">
           <div className={`grid flex-1 gap-3 ${gridCols}`}>
-            <div className="relative overflow-hidden rounded-xl bg-black">
-              <video ref={localVideoRef} autoPlay muted playsInline className="h-full w-full object-cover" />
-              <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">
-                {me?.name} (you){sharing ? " · sharing" : ""}
-              </div>
-              {!camOn && !sharing && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 text-2xl font-semibold">
-                    {me?.name?.[0]?.toUpperCase() ?? "?"}
-                  </div>
-                </div>
-              )}
-            </div>
-            {remotePeers.map(([uid, p]) => (<RemoteTile key={uid} peer={p} />))}
+            {tiles.map((tile) => (
+              <Tile
+                key={tile.key}
+                label={tile.label}
+                stream={tile.stream}
+                muted={tile.muted}
+                showAvatar={tile.isMe && !camOn && !tile.isScreen}
+                avatarLetter={me?.name?.[0]?.toUpperCase() ?? "?"}
+                onEnlarge={tile.stream ? () => setEnlarged({ stream: tile.stream!, label: tile.label }) : undefined}
+                videoRef={tile.key === "me-cam" ? localVideoRef : undefined}
+              />
+            ))}
           </div>
 
           <div className="mt-3 flex items-center justify-center gap-2">
@@ -392,44 +492,151 @@ function MeetingRoom() {
             <ControlBtn active={camOn} onClick={toggleCam} label={camOn ? "Stop video" : "Start video"} icon={camOn ? VideoIcon : VideoOff} danger={!camOn} />
             <ControlBtn active={sharing} onClick={toggleShare} label={sharing ? "Stop share" : "Share screen"} icon={sharing ? ScreenShareOff : ScreenShare} />
             <ControlBtn active={transcribing} onClick={toggleTranscribe} label={transcribing ? "Stop transcribing" : "Live transcribe"} icon={FileText} />
+            <ControlBtn active={sidePanel === "chat"} onClick={() => setSidePanel(sidePanel === "chat" ? null : "chat")} label="Chat" icon={MessageSquare} />
             <button onClick={leave} className="ml-2 flex items-center gap-2 rounded-full bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">
               <PhoneOff className="h-4 w-4" /> Leave
             </button>
           </div>
         </div>
 
-        {showNotes && (
+        {sidePanel && (
           <aside className="hidden w-80 flex-col border-l border-border md:flex">
-            <div className="border-b border-border px-4 py-3 text-sm font-semibold">Live transcript</div>
-            <div className="flex-1 overflow-y-auto px-4 py-3 text-sm">
-              {transcript.length === 0 && !interim && (
-                <p className="text-xs text-muted-foreground">
-                  {transcribing ? "Listening…" : "Click Live transcribe to capture your mic. A meeting note is auto-created when you leave."}
-                </p>
-              )}
-              {transcript.map((t, i) => (
-                <div key={i} className="mb-2">
-                  <p className="text-xs text-muted-foreground">{t.speaker} · {new Date(t.t).toLocaleTimeString()}</p>
-                  <p>{t.text}</p>
-                </div>
-              ))}
-              {interim && <p className="italic text-muted-foreground">{interim}</p>}
+            <div className="flex items-center justify-between border-b border-border px-4 py-3 text-sm font-semibold">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setSidePanel("chat")}
+                  className={sidePanel === "chat" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}
+                >Chat</button>
+                <button
+                  onClick={() => setSidePanel("transcript")}
+                  className={sidePanel === "transcript" ? "text-foreground" : "text-muted-foreground hover:text-foreground"}
+                >Transcript</button>
+              </div>
+              <button onClick={() => setSidePanel(null)} className="text-muted-foreground hover:text-foreground">
+                <X className="h-4 w-4" />
+              </button>
             </div>
+
+            {sidePanel === "chat" ? (
+              <>
+                <div className="flex-1 overflow-y-auto px-4 py-3 text-sm space-y-3">
+                  {chat.length === 0 && (
+                    <p className="text-xs text-muted-foreground">Send messages, links, or notes to everyone in the meeting.</p>
+                  )}
+                  {chat.map((m) => (
+                    <div key={m.id}>
+                      <p className="text-[11px] text-muted-foreground">
+                        {m.fromName} · {new Date(m.t).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                      <p className="whitespace-pre-wrap break-words">
+                        {linkify(m.text)}
+                      </p>
+                    </div>
+                  ))}
+                  <div ref={chatEndRef} />
+                </div>
+                <form onSubmit={sendChat} className="flex items-center gap-2 border-t border-border p-3">
+                  <input
+                    value={chatDraft}
+                    onChange={(e) => setChatDraft(e.target.value)}
+                    placeholder="Message everyone"
+                    className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
+                  <button type="submit" className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground hover:opacity-90">
+                    <Send className="h-4 w-4" />
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="flex-1 overflow-y-auto px-4 py-3 text-sm">
+                {transcript.length === 0 && !interim && (
+                  <p className="text-xs text-muted-foreground">
+                    {transcribing ? "Listening…" : "Click Live transcribe to capture your mic. A meeting note is auto-created when you leave."}
+                  </p>
+                )}
+                {transcript.map((t, i) => (
+                  <div key={i} className="mb-2">
+                    <p className="text-xs text-muted-foreground">{t.speaker} · {new Date(t.t).toLocaleTimeString()}</p>
+                    <p>{t.text}</p>
+                  </div>
+                ))}
+                {interim && <p className="italic text-muted-foreground">{interim}</p>}
+              </div>
+            )}
           </aside>
         )}
       </div>
+
+      {enlarged && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6"
+          onClick={() => setEnlarged(null)}
+        >
+          <button
+            onClick={(e) => { e.stopPropagation(); setEnlarged(null); }}
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white hover:bg-black/80"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5" />
+          </button>
+          <div className="absolute left-6 top-6 rounded bg-black/60 px-3 py-1 text-sm text-white">{enlarged.label}</div>
+          <EnlargedVideo stream={enlarged.stream} />
+        </div>
+      )}
     </div>
   );
 }
 
-function RemoteTile({ peer }: { peer: Peer }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => { if (ref.current) ref.current.srcObject = peer.stream; }, [peer.stream]);
+function Tile({
+  label, stream, muted, showAvatar, avatarLetter, onEnlarge, videoRef,
+}: {
+  label: string;
+  stream: MediaStream | null;
+  muted: boolean;
+  showAvatar: boolean;
+  avatarLetter: string;
+  onEnlarge?: () => void;
+  videoRef?: React.RefObject<HTMLVideoElement>;
+}) {
+  const localRef = useRef<HTMLVideoElement>(null);
+  const ref = videoRef ?? localRef;
+  useEffect(() => {
+    if (ref.current && stream && !videoRef) ref.current.srcObject = stream;
+  }, [stream, ref, videoRef]);
   return (
-    <div className="relative overflow-hidden rounded-xl bg-black">
-      <video ref={ref} autoPlay playsInline className="h-full w-full object-cover" />
-      <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">{peer.name}</div>
+    <div
+      className={`group relative overflow-hidden rounded-xl bg-black ${onEnlarge ? "cursor-zoom-in" : ""}`}
+      onClick={onEnlarge}
+    >
+      <video ref={ref} autoPlay muted={muted} playsInline className="h-full w-full object-cover" />
+      {showAvatar && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/20 text-2xl font-semibold">
+            {avatarLetter}
+          </div>
+        </div>
+      )}
+      <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">{label}</div>
+      {onEnlarge && (
+        <div className="absolute right-2 top-2 hidden rounded bg-black/60 p-1.5 text-white group-hover:block">
+          <Maximize2 className="h-3.5 w-3.5" />
+        </div>
+      )}
     </div>
+  );
+}
+
+function EnlargedVideo({ stream }: { stream: MediaStream }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => { if (ref.current) ref.current.srcObject = stream; }, [stream]);
+  return (
+    <video
+      ref={ref}
+      autoPlay
+      playsInline
+      className="max-h-full max-w-full rounded-xl object-contain"
+      onClick={(e) => e.stopPropagation()}
+    />
   );
 }
 
@@ -444,5 +651,16 @@ function ControlBtn({ active, onClick, label, icon: Icon, danger }: { active: bo
     >
       <Icon className="h-5 w-5" />
     </button>
+  );
+}
+
+function linkify(text: string) {
+  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  return parts.map((p, i) =>
+    /^https?:\/\//.test(p) ? (
+      <a key={i} href={p} target="_blank" rel="noreferrer" className="text-primary underline break-all">{p}</a>
+    ) : (
+      <span key={i}>{p}</span>
+    ),
   );
 }
