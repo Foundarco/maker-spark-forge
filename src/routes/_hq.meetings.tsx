@@ -104,46 +104,68 @@ function MeetingsPage() {
     const startsIso = new Date(form.starts_at).toISOString();
     const endsIso = new Date(form.ends_at).toISOString();
 
-    // 1. Create meeting
-    const { data: mData, error } = await supabase.from("meetings").insert({
-      title: form.title.trim(),
-      description: form.description.trim() || null,
-      host_id: me,
-      starts_at: startsIso,
-      ends_at: endsIso,
-      location: form.location.trim() || null,
-    }).select().single();
-    if (error || !mData) { alert(error?.message ?? "Failed"); return; }
-
-    // 2. Add host + invited teammates as participants
-    const inviteeIds = Array.from(new Set([me, ...form.teammates]));
-    if (inviteeIds.length) {
-      await supabase.from("meeting_participants").upsert(
-        inviteeIds.map((uid) => ({ meeting_id: mData.id, user_id: uid, rsvp: uid === me ? "yes" : "invited" })),
-        { onConflict: "meeting_id,user_id" },
-      );
+    // Build occurrence list based on recurrence
+    const stepDays = form.recurrence === "daily" ? 1
+      : form.recurrence === "weekly" ? 7
+      : form.recurrence === "biweekly" ? 14
+      : form.recurrence === "monthly" ? 0 // month step handled below
+      : null;
+    const total = form.recurrence === "none" ? 1 : Math.max(1, Math.min(24, form.occurrences));
+    const occurrences: { starts: string; ends: string }[] = [];
+    for (let i = 0; i < total; i++) {
+      let s = new Date(startsIso);
+      let en = new Date(endsIso);
+      if (stepDays !== null && i > 0) {
+        if (form.recurrence === "monthly") {
+          s.setMonth(s.getMonth() + i);
+          en.setMonth(en.getMonth() + i);
+        } else {
+          s.setDate(s.getDate() + stepDays * i);
+          en.setDate(en.getDate() + stepDays * i);
+        }
+      }
+      occurrences.push({ starts: s.toISOString(), ends: en.toISOString() });
     }
 
-    // 3. Add calendar events (host + each teammate). visibility=private per user, meeting_id links them.
-    const evPayload = inviteeIds.map((uid) => ({
-      owner_id: uid,
-      title: form.title.trim(),
-      description: form.description.trim() || null,
-      starts_at: startsIso,
-      ends_at: endsIso,
-      all_day: false,
-      location: form.location.trim() || null,
-      color: form.color,
-      visibility: "private",
-      meeting_id: mData.id,
-    }));
-    if (evPayload.length) await supabase.from("calendar_events").insert(evPayload);
+    const inviteeIds = Array.from(new Set([me, ...form.teammates]));
 
-    // 4. External invites
-    if (form.externals.length) {
-      await supabase.from("meeting_external_invites").insert(
-        form.externals.map((x) => ({ meeting_id: mData.id, email: x.email, name: x.name || null, invited_by: me })),
-      );
+    for (const occ of occurrences) {
+      const { data: mData, error } = await supabase.from("meetings").insert({
+        title: form.title.trim(),
+        description: form.description.trim() || null,
+        host_id: me,
+        starts_at: occ.starts,
+        ends_at: occ.ends,
+        location: form.location.trim() || null,
+      }).select().single();
+      if (error || !mData) { alert(error?.message ?? "Failed"); return; }
+
+      if (inviteeIds.length) {
+        await supabase.from("meeting_participants").upsert(
+          inviteeIds.map((uid) => ({ meeting_id: mData.id, user_id: uid, rsvp: uid === me ? "yes" : "invited" })),
+          { onConflict: "meeting_id,user_id" },
+        );
+      }
+
+      const evPayload = inviteeIds.map((uid) => ({
+        owner_id: uid,
+        title: form.title.trim(),
+        description: form.description.trim() || null,
+        starts_at: occ.starts,
+        ends_at: occ.ends,
+        all_day: false,
+        location: form.location.trim() || null,
+        color: form.color,
+        visibility: "private",
+        meeting_id: mData.id,
+      }));
+      if (evPayload.length) await supabase.from("calendar_events").insert(evPayload);
+
+      if (form.externals.length) {
+        await supabase.from("meeting_external_invites").insert(
+          form.externals.map((x) => ({ meeting_id: mData.id, email: x.email, name: x.name || null, invited_by: me })),
+        );
+      }
     }
 
     setShowNew(false);
@@ -152,6 +174,7 @@ function MeetingsPage() {
       starts_at: toLocalInput(new Date().toISOString()),
       ends_at: toLocalInput(new Date(Date.now() + 3600000).toISOString()),
       location: "", color: "orange", teammates: [], externals: [],
+      recurrence: "none", occurrences: 4,
     });
     load();
   };
