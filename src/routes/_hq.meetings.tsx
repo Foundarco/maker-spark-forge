@@ -349,12 +349,15 @@ function MeetingsPage() {
                 <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Teammates</p>
                 {attendees.length === 0 ? <p className="text-xs text-muted-foreground">Just the host.</p> : (
                   <ul className="space-y-1">
-                    {attendees.map((p) => (
-                      <li key={p.user_id} className="flex items-center justify-between text-sm">
-                        <span>{profiles[p.user_id]?.full_name || profiles[p.user_id]?.email || "Unknown"}</span>
-                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.rsvp}</span>
-                      </li>
-                    ))}
+                    {attendees.map((p) => {
+                      const nm = profiles[p.user_id]?.full_name || profiles[p.user_id]?.email || "Unknown";
+                      return (
+                        <li key={p.user_id} className="flex items-center justify-between text-sm">
+                          <UserMention userId={p.user_id} name={nm} />
+                          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.rsvp}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
