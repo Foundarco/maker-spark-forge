@@ -106,8 +106,11 @@ function IdeasPage() {
     const { data: u } = await supabase.auth.getUser();
     setUserId(u.user?.id ?? null);
     if (u.user) {
-      const { data: admin } = await supabase.rpc("is_hq_admin", { _user_id: u.user.id });
-      setIsAdmin(Boolean(admin));
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", u.user.id);
+      setIsAdmin((roles ?? []).some((r: { role: string }) => r.role === "admin" || r.role === "super_admin"));
     }
     const { data, error } = await supabase.from("ideas").select("*").order("created_at", { ascending: false });
     if (error) setError(error.message);
