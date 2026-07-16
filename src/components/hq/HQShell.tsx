@@ -20,7 +20,7 @@ export function HQShell() {
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <Topbar onMenuClick={() => setMobileOpen(true)} />
       <div className="flex flex-1 min-h-0">
-        <aside className="hidden w-64 flex-shrink-0 lg:block">
+        <aside className="hidden h-full w-64 flex-shrink-0 overflow-hidden lg:block">
           <Sidebar />
         </aside>
 
