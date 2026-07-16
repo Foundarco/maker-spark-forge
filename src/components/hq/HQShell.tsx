@@ -37,7 +37,7 @@ export function HQShell() {
           <Outlet />
         </main>
       </div>
-      <AIAssistant />
+      
     </div>
   );
 }
