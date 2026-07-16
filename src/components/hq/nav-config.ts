@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, Bot, Settings, Users, Shield,
   MessagesSquare, Hash, Video, Calendar,
-  FolderKanban, CheckSquare, Flag, FileBox, Cpu, GitBranch, BookText, ListTree, Eye, FileBarChart, Bug,
+  FolderKanban, CheckSquare, Flag, FileBox, Cpu, Terminal, GitBranch, BookText, ListTree, Eye, FileBarChart, Bug,
   Factory, ClipboardList, Boxes, ShieldCheck, Activity, Package, Store, ShoppingCart, MapPin,
   LifeBuoy, MessageCircle, ShieldAlert, Hammer, BookOpen, Timer,
   Receipt, Users2, Filter, ScrollText, Building2, Tag, LineChart,
