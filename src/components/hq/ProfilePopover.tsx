@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { X, Mail, Building2 } from "lucide-react";
+import { X, Mail, Building2, MessageSquare, User as UserIcon } from "lucide-react";
 
 type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
 type Role = { id: string; name: string; color: string; position: number };
