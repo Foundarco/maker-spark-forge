@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar as CalIcon, ChevronLeft, ChevronRight, Plus, X, MapPin, Clock, Trash2 } from "lucide-react";
+import { Calendar as CalIcon, ChevronLeft, ChevronRight, Plus, X, MapPin, Clock, Trash2, Users, User as UserIcon, StickyNote, Video } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/calendar")({
   head: () => ({ meta: [{ title: "Calendar — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -19,6 +19,15 @@ type Event = {
   location: string | null;
   color: string;
   visibility: string;
+  meeting_id?: string | null;
+};
+
+type MeetingMeta = {
+  id: string;
+  host_id: string;
+  host_name: string | null;
+  attendee_count: number;
+  note_preview: string | null;
 };
 
 const COLORS = ["orange", "blue", "green", "purple", "pink", "red"];
@@ -41,9 +50,21 @@ function startOfMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth(), 
 function daysInMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); }
 function sameDay(a: Date, b: Date) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
 
+function formatDuration(startIso: string, endIso: string, allDay: boolean) {
+  if (allDay) return "All day";
+  const ms = new Date(endIso).getTime() - new Date(startIso).getTime();
+  if (ms <= 0) return "";
+  const mins = Math.round(ms / 60000);
+  if (mins < 60) return `${mins} min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
+}
+
 function CalendarPage() {
   const [me, setMe] = useState<string | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+  const [meetingsMeta, setMeetingsMeta] = useState<Record<string, MeetingMeta>>({});
   const [cursor, setCursor] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -53,9 +74,44 @@ function CalendarPage() {
     const { data: u } = await supabase.auth.getUser();
     setMe(u.user?.id ?? null);
     const { data } = await supabase.from("calendar_events").select("*").order("starts_at", { ascending: true });
-    setEvents((data ?? []) as Event[]);
+    const evs = (data ?? []) as Event[];
+    setEvents(evs);
+    const mIds = Array.from(new Set(evs.map((e) => e.meeting_id).filter(Boolean))) as string[];
+    if (mIds.length) {
+      const [{ data: mts }, { data: parts }, { data: notes }] = await Promise.all([
+        supabase.from("meetings").select("id, host_id").in("id", mIds),
+        supabase.from("meeting_participants").select("meeting_id, user_id").in("meeting_id", mIds),
+        supabase.from("meeting_notes").select("meeting_id, body, content_md").in("meeting_id", mIds),
+      ]);
+      const hostIds = Array.from(new Set(((mts ?? []) as any[]).map((m) => m.host_id)));
+      const { data: hosts } = hostIds.length
+        ? await supabase.from("profiles").select("id, full_name, email").in("id", hostIds)
+        : { data: [] as any[] };
+      const hostMap = new Map<string, string>();
+      (hosts ?? []).forEach((h: any) => hostMap.set(h.id, h.full_name || h.email || "Someone"));
+      const counts = new Map<string, number>();
+      ((parts ?? []) as any[]).forEach((p) => counts.set(p.meeting_id, (counts.get(p.meeting_id) ?? 0) + 1));
+      const noteMap = new Map<string, string>();
+      ((notes ?? []) as any[]).forEach((n) => {
+        const src = (n.content_md || n.body || "") as string;
+        const preview = src.replace(/[#*_>`\-]/g, "").split("\n").map((l: string) => l.trim()).filter(Boolean).slice(0, 3).join(" · ");
+        noteMap.set(n.meeting_id, preview.slice(0, 220));
+      });
+      const meta: Record<string, MeetingMeta> = {};
+      ((mts ?? []) as any[]).forEach((m) => {
+        meta[m.id] = {
+          id: m.id,
+          host_id: m.host_id,
+          host_name: hostMap.get(m.host_id) ?? null,
+          attendee_count: counts.get(m.id) ?? 0,
+          note_preview: noteMap.get(m.id) ?? null,
+        };
+      });
+      setMeetingsMeta(meta);
+    }
   };
   useEffect(() => { load(); }, []);
+
 
   const monthStart = startOfMonth(cursor);
   const monthDays = daysInMonth(cursor);
