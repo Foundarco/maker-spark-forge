@@ -2,7 +2,7 @@ import { Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
-import { AIAssistant } from "./AIAssistant";
+
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
 
 export function HQShell() {
