@@ -17,7 +17,7 @@ export function HQShell() {
   }, []);
 
   return (
-    <div className="flex min-h-dvh flex-col bg-background text-foreground">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background text-foreground">
       <Topbar onMenuClick={() => setMobileOpen(true)} />
       <div className="flex flex-1 min-h-0">
         <aside className="hidden h-full w-64 flex-shrink-0 overflow-hidden lg:block">
@@ -33,7 +33,7 @@ export function HQShell() {
           </div>
         )}
 
-        <main className="flex-1 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto">
           <Outlet />
         </main>
       </div>
