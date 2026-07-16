@@ -225,6 +225,7 @@ import { Route as HqAiInsightsRouteImport } from './routes/_hq.ai-insights'
 import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
+import { Route as HqMeetingIdRouteImport } from './routes/_hq.meeting.$id'
 import { Route as HqAdminUsersRouteImport } from './routes/_hq.admin.users'
 import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
 import { Route as HqAdminRolesRouteImport } from './routes/_hq.admin.roles'
@@ -1313,6 +1314,11 @@ const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   path: '/api/hq/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HqMeetingIdRoute = HqMeetingIdRouteImport.update({
+  id: '/meeting/$id',
+  path: '/meeting/$id',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqAdminUsersRoute = HqAdminUsersRouteImport.update({
   id: '/admin/users',
   path: '/admin/users',
@@ -1577,6 +1583,7 @@ export interface FileRoutesByFullPath {
   '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/admin/users': typeof HqAdminUsersRoute
+  '/meeting/$id': typeof HqMeetingIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesByTo {
@@ -1802,6 +1809,7 @@ export interface FileRoutesByTo {
   '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/admin/users': typeof HqAdminUsersRoute
+  '/meeting/$id': typeof HqMeetingIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesById {
@@ -2029,6 +2037,7 @@ export interface FileRoutesById {
   '/_hq/admin/roles': typeof HqAdminRolesRoute
   '/_hq/admin/security': typeof HqAdminSecurityRoute
   '/_hq/admin/users': typeof HqAdminUsersRoute
+  '/_hq/meeting/$id': typeof HqMeetingIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRouteTypes {
@@ -2256,6 +2265,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/security'
     | '/admin/users'
+    | '/meeting/$id'
     | '/api/hq/assistant'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -2481,6 +2491,7 @@ export interface FileRouteTypes {
     | '/admin/roles'
     | '/admin/security'
     | '/admin/users'
+    | '/meeting/$id'
     | '/api/hq/assistant'
   id:
     | '__root__'
@@ -2707,6 +2718,7 @@ export interface FileRouteTypes {
     | '/_hq/admin/roles'
     | '/_hq/admin/security'
     | '/_hq/admin/users'
+    | '/_hq/meeting/$id'
     | '/api/hq/assistant'
   fileRoutesById: FileRoutesById
 }
@@ -4258,6 +4270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHqAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_hq/meeting/$id': {
+      id: '/_hq/meeting/$id'
+      path: '/meeting/$id'
+      fullPath: '/meeting/$id'
+      preLoaderRoute: typeof HqMeetingIdRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/admin/users': {
       id: '/_hq/admin/users'
       path: '/admin/users'
@@ -4500,6 +4519,7 @@ interface HqRouteChildren {
   HqAdminRolesRoute: typeof HqAdminRolesRoute
   HqAdminSecurityRoute: typeof HqAdminSecurityRoute
   HqAdminUsersRoute: typeof HqAdminUsersRoute
+  HqMeetingIdRoute: typeof HqMeetingIdRoute
 }
 
 const HqRouteChildren: HqRouteChildren = {
@@ -4685,6 +4705,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqAdminRolesRoute: HqAdminRolesRoute,
   HqAdminSecurityRoute: HqAdminSecurityRoute,
   HqAdminUsersRoute: HqAdminUsersRoute,
+  HqMeetingIdRoute: HqMeetingIdRoute,
 }
 
 const HqRouteWithChildren = HqRoute._addFileChildren(HqRouteChildren)
