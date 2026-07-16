@@ -13,7 +13,7 @@ import {
   Inbox, SendHorizontal, PenLine, Users as UsersAlt, Filter as FilterAlt, LayoutTemplate,
   Server, Cable, KeyRound, Plug, ShieldOff, Save, ScrollText as LogsIcon, MonitorCheck, Fingerprint, FileSearch,
   Store, DoorOpen, FileQuestion, Quote, ArchiveRestore, Clock3, CheckCircle2, MapPin,
-  Lightbulb, FlaskConical, BookMarked, Database, LineChart as ChartLine, CircuitBoard, Award,
+  Lightbulb, LineChart as ChartLine,
   Package as ProdIcon, Sparkles, Rocket as LaunchIcon, RefreshCw, Layers,
   Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Webhook, Code2,
   Cog, ShieldPlus, Building, Palette as BrandIcon, Globe2, KeyRound as PolicyIcon,
@@ -38,6 +38,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Assistant", to: "/assistant", icon: Bot },
+      { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
       { label: "Settings", to: "/settings", icon: Settings },
     ],
   },
@@ -178,16 +179,6 @@ export const navGroups: NavGroup[] = [
       { label: "Infrastructure", to: "/it-servers", icon: Server },
       { label: "Security & Keys", to: "/it-security", icon: Shield },
       { label: "Monitoring & Logs", to: "/it-logs", icon: LogsIcon },
-    ],
-  },
-  {
-    label: "R&D",
-    items: [
-      { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
-      { label: "Research Papers", to: "/rd-papers", icon: BookMarked },
-      { label: "Material Database", to: "/rd-materials", icon: Database },
-      { label: "Simulations", to: "/rd-simulations", icon: CircuitBoard },
-      { label: "Patent Tracking", to: "/rd-patents", icon: Award },
     ],
   },
   {
