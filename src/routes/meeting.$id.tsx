@@ -569,7 +569,7 @@ function MeetingRoom() {
             <ControlBtn active={sharing} onClick={toggleShare} label={sharing ? "Stop share" : "Share screen"} icon={sharing ? ScreenShareOff : ScreenShare} />
             <ControlBtn active={transcribing} onClick={toggleTranscribe} label={transcribing ? "Stop transcribing" : "Live transcribe"} icon={FileText} />
             <ControlBtn active={sidePanel === "chat"} onClick={() => setSidePanel(sidePanel === "chat" ? null : "chat")} label="Chat" icon={MessageSquare} />
-            <button onClick={leave} className="ml-2 flex items-center gap-2 rounded-full bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">
+            <button onClick={handleLeaveClick} className="ml-2 flex items-center gap-2 rounded-full bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground hover:opacity-90">
               <PhoneOff className="h-4 w-4" /> Leave
             </button>
           </div>
