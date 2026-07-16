@@ -13,7 +13,7 @@ import {
   Inbox, SendHorizontal, PenLine, Users as UsersAlt, Filter as FilterAlt, LayoutTemplate,
   Server, Cable, KeyRound, Plug, ShieldOff, Save, ScrollText as LogsIcon, MonitorCheck, Fingerprint, FileSearch,
   Store, DoorOpen, FileQuestion, Quote, ArchiveRestore, Clock3, CheckCircle2, MapPin,
-  Lightbulb, FlaskConical, BookMarked, Database, LineChart as ChartLine, CircuitBoard, Award,
+  Lightbulb, LineChart as ChartLine,
   Package as ProdIcon, Sparkles, Rocket as LaunchIcon, RefreshCw, Layers,
   Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Webhook, Code2,
   Cog, ShieldPlus, Building, Palette as BrandIcon, Globe2, KeyRound as PolicyIcon,
