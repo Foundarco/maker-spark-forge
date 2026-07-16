@@ -340,6 +340,63 @@ function MeetingRoom() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chat.length]);
 
+  // Active-speaker detection: hook an AnalyserNode into each stream (local + remote)
+  // and poll RMS every ~150ms; keys of streams above threshold are "speaking".
+  useEffect(() => {
+    const AC: typeof AudioContext | undefined = (window as any).AudioContext || (window as any).webkitAudioContext;
+    if (!AC) return;
+    if (!audioCtxRef.current) audioCtxRef.current = new AC();
+    const ctx = audioCtxRef.current;
+
+    type Entry = { key: string; stream: MediaStream };
+    const entries: Entry[] = [];
+    if (localStreamRef.current && localStreamRef.current.getAudioTracks().length) {
+      entries.push({ key: "me-cam", stream: localStreamRef.current });
+    }
+    Object.entries(peersRef.current).forEach(([uid, p]) => {
+      Object.values(p.streams).forEach((s, i) => {
+        if (s.getAudioTracks().length) entries.push({ key: i === 0 ? uid : `${uid}-${s.id}`, stream: s });
+      });
+    });
+
+    // Refresh analysers: remove stale, add new
+    const live = new Set(entries.map((e) => e.key));
+    for (const [key, node] of analysersRef.current) {
+      if (!live.has(key)) { try { node.source.disconnect(); node.analyser.disconnect(); } catch {} analysersRef.current.delete(key); }
+    }
+    for (const { key, stream } of entries) {
+      if (analysersRef.current.has(key)) continue;
+      try {
+        const source = ctx.createMediaStreamSource(stream);
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 512;
+        source.connect(analyser);
+        analysersRef.current.set(key, { analyser, source });
+      } catch {}
+    }
+
+    const buf = new Uint8Array(512);
+    let raf = 0;
+    const tick = () => {
+      const next: Record<string, boolean> = {};
+      analysersRef.current.forEach(({ analyser }, key) => {
+        analyser.getByteTimeDomainData(buf);
+        let sum = 0;
+        for (let i = 0; i < buf.length; i++) { const v = buf[i] - 128; sum += v * v; }
+        const rms = Math.sqrt(sum / buf.length);
+        if (rms > 8) next[key] = true;
+      });
+      setSpeakingKeys((prev) => {
+        const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+        for (const k of keys) if (!!prev[k] !== !!next[k]) return next;
+        return prev;
+      });
+      raf = window.setTimeout(tick, 150) as unknown as number;
+    };
+    tick();
+    return () => { window.clearTimeout(raf); };
+  }, [peers, camOn, micOn]);
+
   const toggleMic = () => {
     const track = localStreamRef.current?.getAudioTracks()[0];
     if (track) { track.enabled = !track.enabled; setMicOn(track.enabled); }
