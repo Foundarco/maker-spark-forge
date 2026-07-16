@@ -126,6 +126,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const matches = useMatches();
   const isHQ = matches.some((m) => m.routeId?.startsWith("/_hq") || m.routeId === "/hq-login");
+  const isChromeless = matches.some((m) => m.routeId?.startsWith("/meeting"));
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -138,7 +139,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {isHQ ? (
+      {isHQ || isChromeless ? (
         <Outlet />
       ) : (
         <div className="flex min-h-dvh flex-col">
