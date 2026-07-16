@@ -18,6 +18,7 @@ import { Route as PartsRouteImport } from './routes/parts'
 import { Route as MissionRouteImport } from './routes/mission'
 import { Route as MaterialsRouteImport } from './routes/materials'
 import { Route as LearnRouteImport } from './routes/learn'
+import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HowItsBuiltRouteImport } from './routes/how-its-built'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as GetInvolvedRouteImport } from './routes/get-involved'
@@ -31,6 +32,7 @@ import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AccessoriesRouteImport } from './routes/accessories'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as SoftwareSlicerRouteImport } from './routes/software.slicer'
@@ -48,6 +50,189 @@ import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LearnTrackRouteImport } from './routes/learn.$track'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as HqWorkflowsRouteImport } from './routes/_hq.workflows'
+import { Route as HqWorkOrdersRouteImport } from './routes/_hq.work-orders'
+import { Route as HqWebhooksRouteImport } from './routes/_hq.webhooks'
+import { Route as HqWarrantyClaimsRouteImport } from './routes/_hq.warranty-claims'
+import { Route as HqWarehouseRouteImport } from './routes/_hq.warehouse'
+import { Route as HqVersionControlRouteImport } from './routes/_hq.version-control'
+import { Route as HqVendorQuotesRouteImport } from './routes/_hq.vendor-quotes'
+import { Route as HqVendorPortalRouteImport } from './routes/_hq.vendor-portal'
+import { Route as HqTrainingRouteImport } from './routes/_hq.training'
+import { Route as HqTimelineRouteImport } from './routes/_hq.timeline'
+import { Route as HqTimeTrackingRouteImport } from './routes/_hq.time-tracking'
+import { Route as HqTimeOffRouteImport } from './routes/_hq.time-off'
+import { Route as HqTicketsRouteImport } from './routes/_hq.tickets'
+import { Route as HqTestReportsRouteImport } from './routes/_hq.test-reports'
+import { Route as HqTaxesRouteImport } from './routes/_hq.taxes'
+import { Route as HqTasksRouteImport } from './routes/_hq.tasks'
+import { Route as HqSupportFaqsRouteImport } from './routes/_hq.support-faqs'
+import { Route as HqSuppliersRouteImport } from './routes/_hq.suppliers'
+import { Route as HqStrategyRouteImport } from './routes/_hq.strategy'
+import { Route as HqSocialRouteImport } from './routes/_hq.social'
+import { Route as HqShippingTrackingRouteImport } from './routes/_hq.shipping-tracking'
+import { Route as HqShippingPrepRouteImport } from './routes/_hq.shipping-prep'
+import { Route as HqSettingsRouteImport } from './routes/_hq.settings'
+import { Route as HqSerialsRouteImport } from './routes/_hq.serials'
+import { Route as HqSearchRouteImport } from './routes/_hq.search'
+import { Route as HqScheduledJobsRouteImport } from './routes/_hq.scheduled-jobs'
+import { Route as HqSalesContactsRouteImport } from './routes/_hq.sales-contacts'
+import { Route as HqSalesAnalyticsRouteImport } from './routes/_hq.sales-analytics'
+import { Route as HqRoadmapRouteImport } from './routes/_hq.roadmap'
+import { Route as HqRmaRouteImport } from './routes/_hq.rma'
+import { Route as HqRfqsRouteImport } from './routes/_hq.rfqs'
+import { Route as HqReviewsRouteImport } from './routes/_hq.reviews'
+import { Route as HqReposRouteImport } from './routes/_hq.repos'
+import { Route as HqRepairsRouteImport } from './routes/_hq.repairs'
+import { Route as HqReceivingRouteImport } from './routes/_hq.receiving'
+import { Route as HqRdTestDataRouteImport } from './routes/_hq.rd-test-data'
+import { Route as HqRdSimulationsRouteImport } from './routes/_hq.rd-simulations'
+import { Route as HqRdPatentsRouteImport } from './routes/_hq.rd-patents'
+import { Route as HqRdPapersRouteImport } from './routes/_hq.rd-papers'
+import { Route as HqRdMaterialsRouteImport } from './routes/_hq.rd-materials'
+import { Route as HqRdIdeasRouteImport } from './routes/_hq.rd-ideas'
+import { Route as HqRdExperimentsRouteImport } from './routes/_hq.rd-experiments'
+import { Route as HqQuotesRouteImport } from './routes/_hq.quotes'
+import { Route as HqQcRouteImport } from './routes/_hq.qc'
+import { Route as HqPurchasingRouteImport } from './routes/_hq.purchasing'
+import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orders'
+import { Route as HqPurchaseHistoryRouteImport } from './routes/_hq.purchase-history'
+import { Route as HqPrototypesRouteImport } from './routes/_hq.prototypes'
+import { Route as HqProjectsRouteImport } from './routes/_hq.projects'
+import { Route as HqProfileRouteImport } from './routes/_hq.profile'
+import { Route as HqProductionRouteImport } from './routes/_hq.production'
+import { Route as HqProductReleasesRouteImport } from './routes/_hq.product-releases'
+import { Route as HqProductLifecycleRouteImport } from './routes/_hq.product-lifecycle'
+import { Route as HqProductFeaturesRouteImport } from './routes/_hq.product-features'
+import { Route as HqProductDocsRouteImport } from './routes/_hq.product-docs'
+import { Route as HqProductCompatibilityRouteImport } from './routes/_hq.product-compatibility'
+import { Route as HqProductCatalogRouteImport } from './routes/_hq.product-catalog'
+import { Route as HqPricingAdminRouteImport } from './routes/_hq.pricing-admin'
+import { Route as HqPressReleasesRouteImport } from './routes/_hq.press-releases'
+import { Route as HqPoliciesRouteImport } from './routes/_hq.policies'
+import { Route as HqPnlRouteImport } from './routes/_hq.pnl'
+import { Route as HqPipelineRouteImport } from './routes/_hq.pipeline'
+import { Route as HqPhoneLogsRouteImport } from './routes/_hq.phone-logs'
+import { Route as HqPcbRouteImport } from './routes/_hq.pcb'
+import { Route as HqPayrollRouteImport } from './routes/_hq.payroll'
+import { Route as HqPartnershipsRouteImport } from './routes/_hq.partnerships'
+import { Route as HqPackagingRouteImport } from './routes/_hq.packaging'
+import { Route as HqOrgChartRouteImport } from './routes/_hq.org-chart'
+import { Route as HqOrdersRouteImport } from './routes/_hq.orders'
+import { Route as HqOnboardingRouteImport } from './routes/_hq.onboarding'
+import { Route as HqOkrsRouteImport } from './routes/_hq.okrs'
+import { Route as HqNotificationsRouteImport } from './routes/_hq.notifications'
+import { Route as HqMilestonesRouteImport } from './routes/_hq.milestones'
+import { Route as HqMeetingsRouteImport } from './routes/_hq.meetings'
+import { Route as HqMeetingSummariesRouteImport } from './routes/_hq.meeting-summaries'
+import { Route as HqMeetingNotesRouteImport } from './routes/_hq.meeting-notes'
+import { Route as HqMediaLibraryRouteImport } from './routes/_hq.media-library'
+import { Route as HqMarketingBlogRouteImport } from './routes/_hq.marketing-blog'
+import { Route as HqMarketingAnalyticsRouteImport } from './routes/_hq.marketing-analytics'
+import { Route as HqMaintenanceRouteImport } from './routes/_hq.maintenance'
+import { Route as HqMailTemplatesRouteImport } from './routes/_hq.mail-templates'
+import { Route as HqMailSharedRouteImport } from './routes/_hq.mail-shared'
+import { Route as HqMailSentRouteImport } from './routes/_hq.mail-sent'
+import { Route as HqMailRulesRouteImport } from './routes/_hq.mail-rules'
+import { Route as HqMailDraftsRouteImport } from './routes/_hq.mail-drafts'
+import { Route as HqMailRouteImport } from './routes/_hq.mail'
+import { Route as HqMachinesRouteImport } from './routes/_hq.machines'
+import { Route as HqLiveChatRouteImport } from './routes/_hq.live-chat'
+import { Route as HqLegalDocsRouteImport } from './routes/_hq.legal-docs'
+import { Route as HqLeadsRouteImport } from './routes/_hq.leads'
+import { Route as HqLeadTimesRouteImport } from './routes/_hq.lead-times'
+import { Route as HqLaunchesRouteImport } from './routes/_hq.launches'
+import { Route as HqLabNotebookRouteImport } from './routes/_hq.lab-notebook'
+import { Route as HqKpisRouteImport } from './routes/_hq.kpis'
+import { Route as HqKbRouteImport } from './routes/_hq.kb'
+import { Route as HqKanbanRouteImport } from './routes/_hq.kanban'
+import { Route as HqItSsoRouteImport } from './routes/_hq.it-sso'
+import { Route as HqItServersRouteImport } from './routes/_hq.it-servers'
+import { Route as HqItSecurityRouteImport } from './routes/_hq.it-security'
+import { Route as HqItNetworkRouteImport } from './routes/_hq.it-network'
+import { Route as HqItMonitoringRouteImport } from './routes/_hq.it-monitoring'
+import { Route as HqItLogsRouteImport } from './routes/_hq.it-logs'
+import { Route as HqItIntegrationsRouteImport } from './routes/_hq.it-integrations'
+import { Route as HqItDevicesRouteImport } from './routes/_hq.it-devices'
+import { Route as HqItBackupsRouteImport } from './routes/_hq.it-backups'
+import { Route as HqItAuditRouteImport } from './routes/_hq.it-audit'
+import { Route as HqItApiKeysRouteImport } from './routes/_hq.it-api-keys'
+import { Route as HqIssuesRouteImport } from './routes/_hq.issues'
+import { Route as HqInvoicesRouteImport } from './routes/_hq.invoices'
+import { Route as HqInvestorsRouteImport } from './routes/_hq.investors'
+import { Route as HqInventoryRouteImport } from './routes/_hq.inventory'
+import { Route as HqInterviewsRouteImport } from './routes/_hq.interviews'
+import { Route as HqHiringRouteImport } from './routes/_hq.hiring'
+import { Route as HqGoalsRouteImport } from './routes/_hq.goals'
+import { Route as HqGanttRouteImport } from './routes/_hq.gantt'
+import { Route as HqForecastingRouteImport } from './routes/_hq.forecasting'
+import { Route as HqFirmwareRouteImport } from './routes/_hq.firmware'
+import { Route as HqFinancialReportsRouteImport } from './routes/_hq.financial-reports'
+import { Route as HqFilesVersionsRouteImport } from './routes/_hq.files-versions'
+import { Route as HqFilesSharedRouteImport } from './routes/_hq.files-shared'
+import { Route as HqFilesPermissionsRouteImport } from './routes/_hq.files-permissions'
+import { Route as HqFilesBackupRouteImport } from './routes/_hq.files-backup'
+import { Route as HqFilesRouteImport } from './routes/_hq.files'
+import { Route as HqFeedRouteImport } from './routes/_hq.feed'
+import { Route as HqFactoryLiveRouteImport } from './routes/_hq.factory-live'
+import { Route as HqExpensesRouteImport } from './routes/_hq.expenses'
+import { Route as HqEmployeesRouteImport } from './routes/_hq.employees'
+import { Route as HqEmailSupportRouteImport } from './routes/_hq.email-support'
+import { Route as HqEmailCampaignsRouteImport } from './routes/_hq.email-campaigns'
+import { Route as HqEcoRouteImport } from './routes/_hq.eco'
+import { Route as HqDocsRouteImport } from './routes/_hq.docs'
+import { Route as HqDmRouteImport } from './routes/_hq.dm'
+import { Route as HqDiscountsRouteImport } from './routes/_hq.discounts'
+import { Route as HqDigitalTwinRouteImport } from './routes/_hq.digital-twin'
+import { Route as HqDiagnosticsRouteImport } from './routes/_hq.diagnostics'
+import { Route as HqDesignReviewsRouteImport } from './routes/_hq.design-reviews'
+import { Route as HqDecisionLogRouteImport } from './routes/_hq.decision-log'
+import { Route as HqDashboardRouteImport } from './routes/_hq.dashboard'
+import { Route as HqCustomerTimelineRouteImport } from './routes/_hq.customer-timeline'
+import { Route as HqCsatRouteImport } from './routes/_hq.csat'
+import { Route as HqCrmRouteImport } from './routes/_hq.crm'
+import { Route as HqContractsRouteImport } from './routes/_hq.contracts'
+import { Route as HqContentCalendarRouteImport } from './routes/_hq.content-calendar'
+import { Route as HqContactsRouteImport } from './routes/_hq.contacts'
+import { Route as HqCmsRouteImport } from './routes/_hq.cms'
+import { Route as HqChatRouteImport } from './routes/_hq.chat'
+import { Route as HqChannelsRouteImport } from './routes/_hq.channels'
+import { Route as HqCallsRouteImport } from './routes/_hq.calls'
+import { Route as HqCalibrationRouteImport } from './routes/_hq.calibration'
+import { Route as HqCalendarRouteImport } from './routes/_hq.calendar'
+import { Route as HqCadViewerRouteImport } from './routes/_hq.cad-viewer'
+import { Route as HqCadRouteImport } from './routes/_hq.cad'
+import { Route as HqBudgetsRouteImport } from './routes/_hq.budgets'
+import { Route as HqBrandAssetsRouteImport } from './routes/_hq.brand-assets'
+import { Route as HqBomRouteImport } from './routes/_hq.bom'
+import { Route as HqBenefitsRouteImport } from './routes/_hq.benefits'
+import { Route as HqBankingRouteImport } from './routes/_hq.banking'
+import { Route as HqBalanceSheetRouteImport } from './routes/_hq.balance-sheet'
+import { Route as HqAssistantRouteImport } from './routes/_hq.assistant'
+import { Route as HqAssemblyRouteImport } from './routes/_hq.assembly'
+import { Route as HqApprovedVendorsRouteImport } from './routes/_hq.approved-vendors'
+import { Route as HqApprovalsRouteImport } from './routes/_hq.approvals'
+import { Route as HqApplicantsRouteImport } from './routes/_hq.applicants'
+import { Route as HqApiBuilderRouteImport } from './routes/_hq.api-builder'
+import { Route as HqAnnouncementsRouteImport } from './routes/_hq.announcements'
+import { Route as HqAnalyticsSalesRouteImport } from './routes/_hq.analytics-sales'
+import { Route as HqAnalyticsMfgRouteImport } from './routes/_hq.analytics-mfg'
+import { Route as HqAnalyticsFinanceRouteImport } from './routes/_hq.analytics-finance'
+import { Route as HqAnalyticsEmployeeRouteImport } from './routes/_hq.analytics-employee'
+import { Route as HqAnalyticsCustomerRouteImport } from './routes/_hq.analytics-customer'
+import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
+import { Route as HqAiInsightsRouteImport } from './routes/_hq.ai-insights'
+import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
+import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
+import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
+import { Route as HqAdminUsersRouteImport } from './routes/_hq.admin.users'
+import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
+import { Route as HqAdminRolesRouteImport } from './routes/_hq.admin.roles'
+import { Route as HqAdminPermissionsRouteImport } from './routes/_hq.admin.permissions'
+import { Route as HqAdminDomainsRouteImport } from './routes/_hq.admin.domains'
+import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
+import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
+import { Route as HqAdminBrandingRouteImport } from './routes/_hq.admin.branding'
 
 const UpgradesRoute = UpgradesRouteImport.update({
   id: '/upgrades',
@@ -92,6 +277,11 @@ const MaterialsRoute = MaterialsRouteImport.update({
 const LearnRoute = LearnRouteImport.update({
   id: '/learn',
   path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HqLoginRoute = HqLoginRouteImport.update({
+  id: '/hq-login',
+  path: '/hq-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HowItsBuiltRoute = HowItsBuiltRouteImport.update({
@@ -157,6 +347,10 @@ const AccessoriesRoute = AccessoriesRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HqRoute = HqRouteImport.update({
+  id: '/_hq',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -244,6 +438,921 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
+const HqWorkflowsRoute = HqWorkflowsRouteImport.update({
+  id: '/workflows',
+  path: '/workflows',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqWorkOrdersRoute = HqWorkOrdersRouteImport.update({
+  id: '/work-orders',
+  path: '/work-orders',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqWebhooksRoute = HqWebhooksRouteImport.update({
+  id: '/webhooks',
+  path: '/webhooks',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqWarrantyClaimsRoute = HqWarrantyClaimsRouteImport.update({
+  id: '/warranty-claims',
+  path: '/warranty-claims',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqWarehouseRoute = HqWarehouseRouteImport.update({
+  id: '/warehouse',
+  path: '/warehouse',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqVersionControlRoute = HqVersionControlRouteImport.update({
+  id: '/version-control',
+  path: '/version-control',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqVendorQuotesRoute = HqVendorQuotesRouteImport.update({
+  id: '/vendor-quotes',
+  path: '/vendor-quotes',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqVendorPortalRoute = HqVendorPortalRouteImport.update({
+  id: '/vendor-portal',
+  path: '/vendor-portal',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTrainingRoute = HqTrainingRouteImport.update({
+  id: '/training',
+  path: '/training',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTimelineRoute = HqTimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTimeTrackingRoute = HqTimeTrackingRouteImport.update({
+  id: '/time-tracking',
+  path: '/time-tracking',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTimeOffRoute = HqTimeOffRouteImport.update({
+  id: '/time-off',
+  path: '/time-off',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTicketsRoute = HqTicketsRouteImport.update({
+  id: '/tickets',
+  path: '/tickets',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTestReportsRoute = HqTestReportsRouteImport.update({
+  id: '/test-reports',
+  path: '/test-reports',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTaxesRoute = HqTaxesRouteImport.update({
+  id: '/taxes',
+  path: '/taxes',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqTasksRoute = HqTasksRouteImport.update({
+  id: '/tasks',
+  path: '/tasks',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSupportFaqsRoute = HqSupportFaqsRouteImport.update({
+  id: '/support-faqs',
+  path: '/support-faqs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSuppliersRoute = HqSuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqStrategyRoute = HqStrategyRouteImport.update({
+  id: '/strategy',
+  path: '/strategy',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSocialRoute = HqSocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqShippingTrackingRoute = HqShippingTrackingRouteImport.update({
+  id: '/shipping-tracking',
+  path: '/shipping-tracking',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqShippingPrepRoute = HqShippingPrepRouteImport.update({
+  id: '/shipping-prep',
+  path: '/shipping-prep',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSettingsRoute = HqSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSerialsRoute = HqSerialsRouteImport.update({
+  id: '/serials',
+  path: '/serials',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSearchRoute = HqSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqScheduledJobsRoute = HqScheduledJobsRouteImport.update({
+  id: '/scheduled-jobs',
+  path: '/scheduled-jobs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSalesContactsRoute = HqSalesContactsRouteImport.update({
+  id: '/sales-contacts',
+  path: '/sales-contacts',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSalesAnalyticsRoute = HqSalesAnalyticsRouteImport.update({
+  id: '/sales-analytics',
+  path: '/sales-analytics',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRoadmapRoute = HqRoadmapRouteImport.update({
+  id: '/roadmap',
+  path: '/roadmap',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRmaRoute = HqRmaRouteImport.update({
+  id: '/rma',
+  path: '/rma',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRfqsRoute = HqRfqsRouteImport.update({
+  id: '/rfqs',
+  path: '/rfqs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqReviewsRoute = HqReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqReposRoute = HqReposRouteImport.update({
+  id: '/repos',
+  path: '/repos',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRepairsRoute = HqRepairsRouteImport.update({
+  id: '/repairs',
+  path: '/repairs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqReceivingRoute = HqReceivingRouteImport.update({
+  id: '/receiving',
+  path: '/receiving',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdTestDataRoute = HqRdTestDataRouteImport.update({
+  id: '/rd-test-data',
+  path: '/rd-test-data',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdSimulationsRoute = HqRdSimulationsRouteImport.update({
+  id: '/rd-simulations',
+  path: '/rd-simulations',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdPatentsRoute = HqRdPatentsRouteImport.update({
+  id: '/rd-patents',
+  path: '/rd-patents',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdPapersRoute = HqRdPapersRouteImport.update({
+  id: '/rd-papers',
+  path: '/rd-papers',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdMaterialsRoute = HqRdMaterialsRouteImport.update({
+  id: '/rd-materials',
+  path: '/rd-materials',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdIdeasRoute = HqRdIdeasRouteImport.update({
+  id: '/rd-ideas',
+  path: '/rd-ideas',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqRdExperimentsRoute = HqRdExperimentsRouteImport.update({
+  id: '/rd-experiments',
+  path: '/rd-experiments',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqQuotesRoute = HqQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqQcRoute = HqQcRouteImport.update({
+  id: '/qc',
+  path: '/qc',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPurchasingRoute = HqPurchasingRouteImport.update({
+  id: '/purchasing',
+  path: '/purchasing',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPurchaseOrdersRoute = HqPurchaseOrdersRouteImport.update({
+  id: '/purchase-orders',
+  path: '/purchase-orders',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPurchaseHistoryRoute = HqPurchaseHistoryRouteImport.update({
+  id: '/purchase-history',
+  path: '/purchase-history',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPrototypesRoute = HqPrototypesRouteImport.update({
+  id: '/prototypes',
+  path: '/prototypes',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProjectsRoute = HqProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProfileRoute = HqProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductionRoute = HqProductionRouteImport.update({
+  id: '/production',
+  path: '/production',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductReleasesRoute = HqProductReleasesRouteImport.update({
+  id: '/product-releases',
+  path: '/product-releases',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductLifecycleRoute = HqProductLifecycleRouteImport.update({
+  id: '/product-lifecycle',
+  path: '/product-lifecycle',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductFeaturesRoute = HqProductFeaturesRouteImport.update({
+  id: '/product-features',
+  path: '/product-features',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductDocsRoute = HqProductDocsRouteImport.update({
+  id: '/product-docs',
+  path: '/product-docs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductCompatibilityRoute = HqProductCompatibilityRouteImport.update({
+  id: '/product-compatibility',
+  path: '/product-compatibility',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqProductCatalogRoute = HqProductCatalogRouteImport.update({
+  id: '/product-catalog',
+  path: '/product-catalog',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPricingAdminRoute = HqPricingAdminRouteImport.update({
+  id: '/pricing-admin',
+  path: '/pricing-admin',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPressReleasesRoute = HqPressReleasesRouteImport.update({
+  id: '/press-releases',
+  path: '/press-releases',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPoliciesRoute = HqPoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPnlRoute = HqPnlRouteImport.update({
+  id: '/pnl',
+  path: '/pnl',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPipelineRoute = HqPipelineRouteImport.update({
+  id: '/pipeline',
+  path: '/pipeline',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPhoneLogsRoute = HqPhoneLogsRouteImport.update({
+  id: '/phone-logs',
+  path: '/phone-logs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPcbRoute = HqPcbRouteImport.update({
+  id: '/pcb',
+  path: '/pcb',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPayrollRoute = HqPayrollRouteImport.update({
+  id: '/payroll',
+  path: '/payroll',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPartnershipsRoute = HqPartnershipsRouteImport.update({
+  id: '/partnerships',
+  path: '/partnerships',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPackagingRoute = HqPackagingRouteImport.update({
+  id: '/packaging',
+  path: '/packaging',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqOrgChartRoute = HqOrgChartRouteImport.update({
+  id: '/org-chart',
+  path: '/org-chart',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqOrdersRoute = HqOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqOnboardingRoute = HqOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqOkrsRoute = HqOkrsRouteImport.update({
+  id: '/okrs',
+  path: '/okrs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqNotificationsRoute = HqNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMilestonesRoute = HqMilestonesRouteImport.update({
+  id: '/milestones',
+  path: '/milestones',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMeetingsRoute = HqMeetingsRouteImport.update({
+  id: '/meetings',
+  path: '/meetings',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMeetingSummariesRoute = HqMeetingSummariesRouteImport.update({
+  id: '/meeting-summaries',
+  path: '/meeting-summaries',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMeetingNotesRoute = HqMeetingNotesRouteImport.update({
+  id: '/meeting-notes',
+  path: '/meeting-notes',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMediaLibraryRoute = HqMediaLibraryRouteImport.update({
+  id: '/media-library',
+  path: '/media-library',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMarketingBlogRoute = HqMarketingBlogRouteImport.update({
+  id: '/marketing-blog',
+  path: '/marketing-blog',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMarketingAnalyticsRoute = HqMarketingAnalyticsRouteImport.update({
+  id: '/marketing-analytics',
+  path: '/marketing-analytics',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMaintenanceRoute = HqMaintenanceRouteImport.update({
+  id: '/maintenance',
+  path: '/maintenance',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMailTemplatesRoute = HqMailTemplatesRouteImport.update({
+  id: '/mail-templates',
+  path: '/mail-templates',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMailSharedRoute = HqMailSharedRouteImport.update({
+  id: '/mail-shared',
+  path: '/mail-shared',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMailSentRoute = HqMailSentRouteImport.update({
+  id: '/mail-sent',
+  path: '/mail-sent',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMailRulesRoute = HqMailRulesRouteImport.update({
+  id: '/mail-rules',
+  path: '/mail-rules',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMailDraftsRoute = HqMailDraftsRouteImport.update({
+  id: '/mail-drafts',
+  path: '/mail-drafts',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMailRoute = HqMailRouteImport.update({
+  id: '/mail',
+  path: '/mail',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqMachinesRoute = HqMachinesRouteImport.update({
+  id: '/machines',
+  path: '/machines',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqLiveChatRoute = HqLiveChatRouteImport.update({
+  id: '/live-chat',
+  path: '/live-chat',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqLegalDocsRoute = HqLegalDocsRouteImport.update({
+  id: '/legal-docs',
+  path: '/legal-docs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqLeadsRoute = HqLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqLeadTimesRoute = HqLeadTimesRouteImport.update({
+  id: '/lead-times',
+  path: '/lead-times',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqLaunchesRoute = HqLaunchesRouteImport.update({
+  id: '/launches',
+  path: '/launches',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqLabNotebookRoute = HqLabNotebookRouteImport.update({
+  id: '/lab-notebook',
+  path: '/lab-notebook',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqKpisRoute = HqKpisRouteImport.update({
+  id: '/kpis',
+  path: '/kpis',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqKbRoute = HqKbRouteImport.update({
+  id: '/kb',
+  path: '/kb',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqKanbanRoute = HqKanbanRouteImport.update({
+  id: '/kanban',
+  path: '/kanban',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItSsoRoute = HqItSsoRouteImport.update({
+  id: '/it-sso',
+  path: '/it-sso',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItServersRoute = HqItServersRouteImport.update({
+  id: '/it-servers',
+  path: '/it-servers',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItSecurityRoute = HqItSecurityRouteImport.update({
+  id: '/it-security',
+  path: '/it-security',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItNetworkRoute = HqItNetworkRouteImport.update({
+  id: '/it-network',
+  path: '/it-network',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItMonitoringRoute = HqItMonitoringRouteImport.update({
+  id: '/it-monitoring',
+  path: '/it-monitoring',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItLogsRoute = HqItLogsRouteImport.update({
+  id: '/it-logs',
+  path: '/it-logs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItIntegrationsRoute = HqItIntegrationsRouteImport.update({
+  id: '/it-integrations',
+  path: '/it-integrations',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItDevicesRoute = HqItDevicesRouteImport.update({
+  id: '/it-devices',
+  path: '/it-devices',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItBackupsRoute = HqItBackupsRouteImport.update({
+  id: '/it-backups',
+  path: '/it-backups',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItAuditRoute = HqItAuditRouteImport.update({
+  id: '/it-audit',
+  path: '/it-audit',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqItApiKeysRoute = HqItApiKeysRouteImport.update({
+  id: '/it-api-keys',
+  path: '/it-api-keys',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqIssuesRoute = HqIssuesRouteImport.update({
+  id: '/issues',
+  path: '/issues',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqInvoicesRoute = HqInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqInvestorsRoute = HqInvestorsRouteImport.update({
+  id: '/investors',
+  path: '/investors',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqInventoryRoute = HqInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqInterviewsRoute = HqInterviewsRouteImport.update({
+  id: '/interviews',
+  path: '/interviews',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqHiringRoute = HqHiringRouteImport.update({
+  id: '/hiring',
+  path: '/hiring',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqGoalsRoute = HqGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqGanttRoute = HqGanttRouteImport.update({
+  id: '/gantt',
+  path: '/gantt',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqForecastingRoute = HqForecastingRouteImport.update({
+  id: '/forecasting',
+  path: '/forecasting',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFirmwareRoute = HqFirmwareRouteImport.update({
+  id: '/firmware',
+  path: '/firmware',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFinancialReportsRoute = HqFinancialReportsRouteImport.update({
+  id: '/financial-reports',
+  path: '/financial-reports',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFilesVersionsRoute = HqFilesVersionsRouteImport.update({
+  id: '/files-versions',
+  path: '/files-versions',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFilesSharedRoute = HqFilesSharedRouteImport.update({
+  id: '/files-shared',
+  path: '/files-shared',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFilesPermissionsRoute = HqFilesPermissionsRouteImport.update({
+  id: '/files-permissions',
+  path: '/files-permissions',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFilesBackupRoute = HqFilesBackupRouteImport.update({
+  id: '/files-backup',
+  path: '/files-backup',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFilesRoute = HqFilesRouteImport.update({
+  id: '/files',
+  path: '/files',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFeedRoute = HqFeedRouteImport.update({
+  id: '/feed',
+  path: '/feed',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqFactoryLiveRoute = HqFactoryLiveRouteImport.update({
+  id: '/factory-live',
+  path: '/factory-live',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqExpensesRoute = HqExpensesRouteImport.update({
+  id: '/expenses',
+  path: '/expenses',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqEmployeesRoute = HqEmployeesRouteImport.update({
+  id: '/employees',
+  path: '/employees',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqEmailSupportRoute = HqEmailSupportRouteImport.update({
+  id: '/email-support',
+  path: '/email-support',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqEmailCampaignsRoute = HqEmailCampaignsRouteImport.update({
+  id: '/email-campaigns',
+  path: '/email-campaigns',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqEcoRoute = HqEcoRouteImport.update({
+  id: '/eco',
+  path: '/eco',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDocsRoute = HqDocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDmRoute = HqDmRouteImport.update({
+  id: '/dm',
+  path: '/dm',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDiscountsRoute = HqDiscountsRouteImport.update({
+  id: '/discounts',
+  path: '/discounts',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDigitalTwinRoute = HqDigitalTwinRouteImport.update({
+  id: '/digital-twin',
+  path: '/digital-twin',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDiagnosticsRoute = HqDiagnosticsRouteImport.update({
+  id: '/diagnostics',
+  path: '/diagnostics',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDesignReviewsRoute = HqDesignReviewsRouteImport.update({
+  id: '/design-reviews',
+  path: '/design-reviews',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDecisionLogRoute = HqDecisionLogRouteImport.update({
+  id: '/decision-log',
+  path: '/decision-log',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDashboardRoute = HqDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCustomerTimelineRoute = HqCustomerTimelineRouteImport.update({
+  id: '/customer-timeline',
+  path: '/customer-timeline',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCsatRoute = HqCsatRouteImport.update({
+  id: '/csat',
+  path: '/csat',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCrmRoute = HqCrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqContractsRoute = HqContractsRouteImport.update({
+  id: '/contracts',
+  path: '/contracts',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqContentCalendarRoute = HqContentCalendarRouteImport.update({
+  id: '/content-calendar',
+  path: '/content-calendar',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqContactsRoute = HqContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCmsRoute = HqCmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqChatRoute = HqChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqChannelsRoute = HqChannelsRouteImport.update({
+  id: '/channels',
+  path: '/channels',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCallsRoute = HqCallsRouteImport.update({
+  id: '/calls',
+  path: '/calls',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCalibrationRoute = HqCalibrationRouteImport.update({
+  id: '/calibration',
+  path: '/calibration',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCalendarRoute = HqCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCadViewerRoute = HqCadViewerRouteImport.update({
+  id: '/cad-viewer',
+  path: '/cad-viewer',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqCadRoute = HqCadRouteImport.update({
+  id: '/cad',
+  path: '/cad',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqBudgetsRoute = HqBudgetsRouteImport.update({
+  id: '/budgets',
+  path: '/budgets',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqBrandAssetsRoute = HqBrandAssetsRouteImport.update({
+  id: '/brand-assets',
+  path: '/brand-assets',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqBomRoute = HqBomRouteImport.update({
+  id: '/bom',
+  path: '/bom',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqBenefitsRoute = HqBenefitsRouteImport.update({
+  id: '/benefits',
+  path: '/benefits',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqBankingRoute = HqBankingRouteImport.update({
+  id: '/banking',
+  path: '/banking',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqBalanceSheetRoute = HqBalanceSheetRouteImport.update({
+  id: '/balance-sheet',
+  path: '/balance-sheet',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAssistantRoute = HqAssistantRouteImport.update({
+  id: '/assistant',
+  path: '/assistant',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAssemblyRoute = HqAssemblyRouteImport.update({
+  id: '/assembly',
+  path: '/assembly',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqApprovedVendorsRoute = HqApprovedVendorsRouteImport.update({
+  id: '/approved-vendors',
+  path: '/approved-vendors',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqApprovalsRoute = HqApprovalsRouteImport.update({
+  id: '/approvals',
+  path: '/approvals',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqApplicantsRoute = HqApplicantsRouteImport.update({
+  id: '/applicants',
+  path: '/applicants',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqApiBuilderRoute = HqApiBuilderRouteImport.update({
+  id: '/api-builder',
+  path: '/api-builder',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnnouncementsRoute = HqAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnalyticsSalesRoute = HqAnalyticsSalesRouteImport.update({
+  id: '/analytics-sales',
+  path: '/analytics-sales',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnalyticsMfgRoute = HqAnalyticsMfgRouteImport.update({
+  id: '/analytics-mfg',
+  path: '/analytics-mfg',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnalyticsFinanceRoute = HqAnalyticsFinanceRouteImport.update({
+  id: '/analytics-finance',
+  path: '/analytics-finance',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnalyticsEmployeeRoute = HqAnalyticsEmployeeRouteImport.update({
+  id: '/analytics-employee',
+  path: '/analytics-employee',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnalyticsCustomerRoute = HqAnalyticsCustomerRouteImport.update({
+  id: '/analytics-customer',
+  path: '/analytics-customer',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAnalyticsRoute = HqAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAiInsightsRoute = HqAiInsightsRouteImport.update({
+  id: '/ai-insights',
+  path: '/ai-insights',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAccountsRoute = HqAccountsRouteImport.update({
+  id: '/accounts',
+  path: '/accounts',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAccountingRoute = HqAccountingRouteImport.update({
+  id: '/accounting',
+  path: '/accounting',
+  getParentRoute: () => HqRoute,
+} as any)
+const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
+  id: '/api/hq/assistant',
+  path: '/api/hq/assistant',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HqAdminUsersRoute = HqAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminSecurityRoute = HqAdminSecurityRouteImport.update({
+  id: '/admin/security',
+  path: '/admin/security',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminRolesRoute = HqAdminRolesRouteImport.update({
+  id: '/admin/roles',
+  path: '/admin/roles',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminPermissionsRoute = HqAdminPermissionsRouteImport.update({
+  id: '/admin/permissions',
+  path: '/admin/permissions',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminDomainsRoute = HqAdminDomainsRouteImport.update({
+  id: '/admin/domains',
+  path: '/admin/domains',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminDepartmentsRoute = HqAdminDepartmentsRouteImport.update({
+  id: '/admin/departments',
+  path: '/admin/departments',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminCompanyRoute = HqAdminCompanyRouteImport.update({
+  id: '/admin/company',
+  path: '/admin/company',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminBrandingRoute = HqAdminBrandingRouteImport.update({
+  id: '/admin/branding',
+  path: '/admin/branding',
+  getParentRoute: () => HqRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -260,6 +1369,7 @@ export interface FileRoutesByFullPath {
   '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
   '/how-its-built': typeof HowItsBuiltRoute
+  '/hq-login': typeof HqLoginRoute
   '/learn': typeof LearnRouteWithChildren
   '/materials': typeof MaterialsRouteWithChildren
   '/mission': typeof MissionRoute
@@ -269,6 +1379,180 @@ export interface FileRoutesByFullPath {
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
   '/upgrades': typeof UpgradesRoute
+  '/accounting': typeof HqAccountingRoute
+  '/accounts': typeof HqAccountsRoute
+  '/ai-insights': typeof HqAiInsightsRoute
+  '/analytics': typeof HqAnalyticsRoute
+  '/analytics-customer': typeof HqAnalyticsCustomerRoute
+  '/analytics-employee': typeof HqAnalyticsEmployeeRoute
+  '/analytics-finance': typeof HqAnalyticsFinanceRoute
+  '/analytics-mfg': typeof HqAnalyticsMfgRoute
+  '/analytics-sales': typeof HqAnalyticsSalesRoute
+  '/announcements': typeof HqAnnouncementsRoute
+  '/api-builder': typeof HqApiBuilderRoute
+  '/applicants': typeof HqApplicantsRoute
+  '/approvals': typeof HqApprovalsRoute
+  '/approved-vendors': typeof HqApprovedVendorsRoute
+  '/assembly': typeof HqAssemblyRoute
+  '/assistant': typeof HqAssistantRoute
+  '/balance-sheet': typeof HqBalanceSheetRoute
+  '/banking': typeof HqBankingRoute
+  '/benefits': typeof HqBenefitsRoute
+  '/bom': typeof HqBomRoute
+  '/brand-assets': typeof HqBrandAssetsRoute
+  '/budgets': typeof HqBudgetsRoute
+  '/cad': typeof HqCadRoute
+  '/cad-viewer': typeof HqCadViewerRoute
+  '/calendar': typeof HqCalendarRoute
+  '/calibration': typeof HqCalibrationRoute
+  '/calls': typeof HqCallsRoute
+  '/channels': typeof HqChannelsRoute
+  '/chat': typeof HqChatRoute
+  '/cms': typeof HqCmsRoute
+  '/contacts': typeof HqContactsRoute
+  '/content-calendar': typeof HqContentCalendarRoute
+  '/contracts': typeof HqContractsRoute
+  '/crm': typeof HqCrmRoute
+  '/csat': typeof HqCsatRoute
+  '/customer-timeline': typeof HqCustomerTimelineRoute
+  '/dashboard': typeof HqDashboardRoute
+  '/decision-log': typeof HqDecisionLogRoute
+  '/design-reviews': typeof HqDesignReviewsRoute
+  '/diagnostics': typeof HqDiagnosticsRoute
+  '/digital-twin': typeof HqDigitalTwinRoute
+  '/discounts': typeof HqDiscountsRoute
+  '/dm': typeof HqDmRoute
+  '/docs': typeof HqDocsRoute
+  '/eco': typeof HqEcoRoute
+  '/email-campaigns': typeof HqEmailCampaignsRoute
+  '/email-support': typeof HqEmailSupportRoute
+  '/employees': typeof HqEmployeesRoute
+  '/expenses': typeof HqExpensesRoute
+  '/factory-live': typeof HqFactoryLiveRoute
+  '/feed': typeof HqFeedRoute
+  '/files': typeof HqFilesRoute
+  '/files-backup': typeof HqFilesBackupRoute
+  '/files-permissions': typeof HqFilesPermissionsRoute
+  '/files-shared': typeof HqFilesSharedRoute
+  '/files-versions': typeof HqFilesVersionsRoute
+  '/financial-reports': typeof HqFinancialReportsRoute
+  '/firmware': typeof HqFirmwareRoute
+  '/forecasting': typeof HqForecastingRoute
+  '/gantt': typeof HqGanttRoute
+  '/goals': typeof HqGoalsRoute
+  '/hiring': typeof HqHiringRoute
+  '/interviews': typeof HqInterviewsRoute
+  '/inventory': typeof HqInventoryRoute
+  '/investors': typeof HqInvestorsRoute
+  '/invoices': typeof HqInvoicesRoute
+  '/issues': typeof HqIssuesRoute
+  '/it-api-keys': typeof HqItApiKeysRoute
+  '/it-audit': typeof HqItAuditRoute
+  '/it-backups': typeof HqItBackupsRoute
+  '/it-devices': typeof HqItDevicesRoute
+  '/it-integrations': typeof HqItIntegrationsRoute
+  '/it-logs': typeof HqItLogsRoute
+  '/it-monitoring': typeof HqItMonitoringRoute
+  '/it-network': typeof HqItNetworkRoute
+  '/it-security': typeof HqItSecurityRoute
+  '/it-servers': typeof HqItServersRoute
+  '/it-sso': typeof HqItSsoRoute
+  '/kanban': typeof HqKanbanRoute
+  '/kb': typeof HqKbRoute
+  '/kpis': typeof HqKpisRoute
+  '/lab-notebook': typeof HqLabNotebookRoute
+  '/launches': typeof HqLaunchesRoute
+  '/lead-times': typeof HqLeadTimesRoute
+  '/leads': typeof HqLeadsRoute
+  '/legal-docs': typeof HqLegalDocsRoute
+  '/live-chat': typeof HqLiveChatRoute
+  '/machines': typeof HqMachinesRoute
+  '/mail': typeof HqMailRoute
+  '/mail-drafts': typeof HqMailDraftsRoute
+  '/mail-rules': typeof HqMailRulesRoute
+  '/mail-sent': typeof HqMailSentRoute
+  '/mail-shared': typeof HqMailSharedRoute
+  '/mail-templates': typeof HqMailTemplatesRoute
+  '/maintenance': typeof HqMaintenanceRoute
+  '/marketing-analytics': typeof HqMarketingAnalyticsRoute
+  '/marketing-blog': typeof HqMarketingBlogRoute
+  '/media-library': typeof HqMediaLibraryRoute
+  '/meeting-notes': typeof HqMeetingNotesRoute
+  '/meeting-summaries': typeof HqMeetingSummariesRoute
+  '/meetings': typeof HqMeetingsRoute
+  '/milestones': typeof HqMilestonesRoute
+  '/notifications': typeof HqNotificationsRoute
+  '/okrs': typeof HqOkrsRoute
+  '/onboarding': typeof HqOnboardingRoute
+  '/orders': typeof HqOrdersRoute
+  '/org-chart': typeof HqOrgChartRoute
+  '/packaging': typeof HqPackagingRoute
+  '/partnerships': typeof HqPartnershipsRoute
+  '/payroll': typeof HqPayrollRoute
+  '/pcb': typeof HqPcbRoute
+  '/phone-logs': typeof HqPhoneLogsRoute
+  '/pipeline': typeof HqPipelineRoute
+  '/pnl': typeof HqPnlRoute
+  '/policies': typeof HqPoliciesRoute
+  '/press-releases': typeof HqPressReleasesRoute
+  '/pricing-admin': typeof HqPricingAdminRoute
+  '/product-catalog': typeof HqProductCatalogRoute
+  '/product-compatibility': typeof HqProductCompatibilityRoute
+  '/product-docs': typeof HqProductDocsRoute
+  '/product-features': typeof HqProductFeaturesRoute
+  '/product-lifecycle': typeof HqProductLifecycleRoute
+  '/product-releases': typeof HqProductReleasesRoute
+  '/production': typeof HqProductionRoute
+  '/profile': typeof HqProfileRoute
+  '/projects': typeof HqProjectsRoute
+  '/prototypes': typeof HqPrototypesRoute
+  '/purchase-history': typeof HqPurchaseHistoryRoute
+  '/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/purchasing': typeof HqPurchasingRoute
+  '/qc': typeof HqQcRoute
+  '/quotes': typeof HqQuotesRoute
+  '/rd-experiments': typeof HqRdExperimentsRoute
+  '/rd-ideas': typeof HqRdIdeasRoute
+  '/rd-materials': typeof HqRdMaterialsRoute
+  '/rd-papers': typeof HqRdPapersRoute
+  '/rd-patents': typeof HqRdPatentsRoute
+  '/rd-simulations': typeof HqRdSimulationsRoute
+  '/rd-test-data': typeof HqRdTestDataRoute
+  '/receiving': typeof HqReceivingRoute
+  '/repairs': typeof HqRepairsRoute
+  '/repos': typeof HqReposRoute
+  '/reviews': typeof HqReviewsRoute
+  '/rfqs': typeof HqRfqsRoute
+  '/rma': typeof HqRmaRoute
+  '/roadmap': typeof HqRoadmapRoute
+  '/sales-analytics': typeof HqSalesAnalyticsRoute
+  '/sales-contacts': typeof HqSalesContactsRoute
+  '/scheduled-jobs': typeof HqScheduledJobsRoute
+  '/search': typeof HqSearchRoute
+  '/serials': typeof HqSerialsRoute
+  '/settings': typeof HqSettingsRoute
+  '/shipping-prep': typeof HqShippingPrepRoute
+  '/shipping-tracking': typeof HqShippingTrackingRoute
+  '/social': typeof HqSocialRoute
+  '/strategy': typeof HqStrategyRoute
+  '/suppliers': typeof HqSuppliersRoute
+  '/support-faqs': typeof HqSupportFaqsRoute
+  '/tasks': typeof HqTasksRoute
+  '/taxes': typeof HqTaxesRoute
+  '/test-reports': typeof HqTestReportsRoute
+  '/tickets': typeof HqTicketsRoute
+  '/time-off': typeof HqTimeOffRoute
+  '/time-tracking': typeof HqTimeTrackingRoute
+  '/timeline': typeof HqTimelineRoute
+  '/training': typeof HqTrainingRoute
+  '/vendor-portal': typeof HqVendorPortalRoute
+  '/vendor-quotes': typeof HqVendorQuotesRoute
+  '/version-control': typeof HqVersionControlRoute
+  '/warehouse': typeof HqWarehouseRoute
+  '/warranty-claims': typeof HqWarrantyClaimsRoute
+  '/webhooks': typeof HqWebhooksRoute
+  '/work-orders': typeof HqWorkOrdersRoute
+  '/workflows': typeof HqWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -285,6 +1569,15 @@ export interface FileRoutesByFullPath {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/admin/branding': typeof HqAdminBrandingRoute
+  '/admin/company': typeof HqAdminCompanyRoute
+  '/admin/departments': typeof HqAdminDepartmentsRoute
+  '/admin/domains': typeof HqAdminDomainsRoute
+  '/admin/permissions': typeof HqAdminPermissionsRoute
+  '/admin/roles': typeof HqAdminRolesRoute
+  '/admin/security': typeof HqAdminSecurityRoute
+  '/admin/users': typeof HqAdminUsersRoute
+  '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -301,6 +1594,7 @@ export interface FileRoutesByTo {
   '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
   '/how-its-built': typeof HowItsBuiltRoute
+  '/hq-login': typeof HqLoginRoute
   '/learn': typeof LearnRouteWithChildren
   '/materials': typeof MaterialsRouteWithChildren
   '/mission': typeof MissionRoute
@@ -310,6 +1604,180 @@ export interface FileRoutesByTo {
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
   '/upgrades': typeof UpgradesRoute
+  '/accounting': typeof HqAccountingRoute
+  '/accounts': typeof HqAccountsRoute
+  '/ai-insights': typeof HqAiInsightsRoute
+  '/analytics': typeof HqAnalyticsRoute
+  '/analytics-customer': typeof HqAnalyticsCustomerRoute
+  '/analytics-employee': typeof HqAnalyticsEmployeeRoute
+  '/analytics-finance': typeof HqAnalyticsFinanceRoute
+  '/analytics-mfg': typeof HqAnalyticsMfgRoute
+  '/analytics-sales': typeof HqAnalyticsSalesRoute
+  '/announcements': typeof HqAnnouncementsRoute
+  '/api-builder': typeof HqApiBuilderRoute
+  '/applicants': typeof HqApplicantsRoute
+  '/approvals': typeof HqApprovalsRoute
+  '/approved-vendors': typeof HqApprovedVendorsRoute
+  '/assembly': typeof HqAssemblyRoute
+  '/assistant': typeof HqAssistantRoute
+  '/balance-sheet': typeof HqBalanceSheetRoute
+  '/banking': typeof HqBankingRoute
+  '/benefits': typeof HqBenefitsRoute
+  '/bom': typeof HqBomRoute
+  '/brand-assets': typeof HqBrandAssetsRoute
+  '/budgets': typeof HqBudgetsRoute
+  '/cad': typeof HqCadRoute
+  '/cad-viewer': typeof HqCadViewerRoute
+  '/calendar': typeof HqCalendarRoute
+  '/calibration': typeof HqCalibrationRoute
+  '/calls': typeof HqCallsRoute
+  '/channels': typeof HqChannelsRoute
+  '/chat': typeof HqChatRoute
+  '/cms': typeof HqCmsRoute
+  '/contacts': typeof HqContactsRoute
+  '/content-calendar': typeof HqContentCalendarRoute
+  '/contracts': typeof HqContractsRoute
+  '/crm': typeof HqCrmRoute
+  '/csat': typeof HqCsatRoute
+  '/customer-timeline': typeof HqCustomerTimelineRoute
+  '/dashboard': typeof HqDashboardRoute
+  '/decision-log': typeof HqDecisionLogRoute
+  '/design-reviews': typeof HqDesignReviewsRoute
+  '/diagnostics': typeof HqDiagnosticsRoute
+  '/digital-twin': typeof HqDigitalTwinRoute
+  '/discounts': typeof HqDiscountsRoute
+  '/dm': typeof HqDmRoute
+  '/docs': typeof HqDocsRoute
+  '/eco': typeof HqEcoRoute
+  '/email-campaigns': typeof HqEmailCampaignsRoute
+  '/email-support': typeof HqEmailSupportRoute
+  '/employees': typeof HqEmployeesRoute
+  '/expenses': typeof HqExpensesRoute
+  '/factory-live': typeof HqFactoryLiveRoute
+  '/feed': typeof HqFeedRoute
+  '/files': typeof HqFilesRoute
+  '/files-backup': typeof HqFilesBackupRoute
+  '/files-permissions': typeof HqFilesPermissionsRoute
+  '/files-shared': typeof HqFilesSharedRoute
+  '/files-versions': typeof HqFilesVersionsRoute
+  '/financial-reports': typeof HqFinancialReportsRoute
+  '/firmware': typeof HqFirmwareRoute
+  '/forecasting': typeof HqForecastingRoute
+  '/gantt': typeof HqGanttRoute
+  '/goals': typeof HqGoalsRoute
+  '/hiring': typeof HqHiringRoute
+  '/interviews': typeof HqInterviewsRoute
+  '/inventory': typeof HqInventoryRoute
+  '/investors': typeof HqInvestorsRoute
+  '/invoices': typeof HqInvoicesRoute
+  '/issues': typeof HqIssuesRoute
+  '/it-api-keys': typeof HqItApiKeysRoute
+  '/it-audit': typeof HqItAuditRoute
+  '/it-backups': typeof HqItBackupsRoute
+  '/it-devices': typeof HqItDevicesRoute
+  '/it-integrations': typeof HqItIntegrationsRoute
+  '/it-logs': typeof HqItLogsRoute
+  '/it-monitoring': typeof HqItMonitoringRoute
+  '/it-network': typeof HqItNetworkRoute
+  '/it-security': typeof HqItSecurityRoute
+  '/it-servers': typeof HqItServersRoute
+  '/it-sso': typeof HqItSsoRoute
+  '/kanban': typeof HqKanbanRoute
+  '/kb': typeof HqKbRoute
+  '/kpis': typeof HqKpisRoute
+  '/lab-notebook': typeof HqLabNotebookRoute
+  '/launches': typeof HqLaunchesRoute
+  '/lead-times': typeof HqLeadTimesRoute
+  '/leads': typeof HqLeadsRoute
+  '/legal-docs': typeof HqLegalDocsRoute
+  '/live-chat': typeof HqLiveChatRoute
+  '/machines': typeof HqMachinesRoute
+  '/mail': typeof HqMailRoute
+  '/mail-drafts': typeof HqMailDraftsRoute
+  '/mail-rules': typeof HqMailRulesRoute
+  '/mail-sent': typeof HqMailSentRoute
+  '/mail-shared': typeof HqMailSharedRoute
+  '/mail-templates': typeof HqMailTemplatesRoute
+  '/maintenance': typeof HqMaintenanceRoute
+  '/marketing-analytics': typeof HqMarketingAnalyticsRoute
+  '/marketing-blog': typeof HqMarketingBlogRoute
+  '/media-library': typeof HqMediaLibraryRoute
+  '/meeting-notes': typeof HqMeetingNotesRoute
+  '/meeting-summaries': typeof HqMeetingSummariesRoute
+  '/meetings': typeof HqMeetingsRoute
+  '/milestones': typeof HqMilestonesRoute
+  '/notifications': typeof HqNotificationsRoute
+  '/okrs': typeof HqOkrsRoute
+  '/onboarding': typeof HqOnboardingRoute
+  '/orders': typeof HqOrdersRoute
+  '/org-chart': typeof HqOrgChartRoute
+  '/packaging': typeof HqPackagingRoute
+  '/partnerships': typeof HqPartnershipsRoute
+  '/payroll': typeof HqPayrollRoute
+  '/pcb': typeof HqPcbRoute
+  '/phone-logs': typeof HqPhoneLogsRoute
+  '/pipeline': typeof HqPipelineRoute
+  '/pnl': typeof HqPnlRoute
+  '/policies': typeof HqPoliciesRoute
+  '/press-releases': typeof HqPressReleasesRoute
+  '/pricing-admin': typeof HqPricingAdminRoute
+  '/product-catalog': typeof HqProductCatalogRoute
+  '/product-compatibility': typeof HqProductCompatibilityRoute
+  '/product-docs': typeof HqProductDocsRoute
+  '/product-features': typeof HqProductFeaturesRoute
+  '/product-lifecycle': typeof HqProductLifecycleRoute
+  '/product-releases': typeof HqProductReleasesRoute
+  '/production': typeof HqProductionRoute
+  '/profile': typeof HqProfileRoute
+  '/projects': typeof HqProjectsRoute
+  '/prototypes': typeof HqPrototypesRoute
+  '/purchase-history': typeof HqPurchaseHistoryRoute
+  '/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/purchasing': typeof HqPurchasingRoute
+  '/qc': typeof HqQcRoute
+  '/quotes': typeof HqQuotesRoute
+  '/rd-experiments': typeof HqRdExperimentsRoute
+  '/rd-ideas': typeof HqRdIdeasRoute
+  '/rd-materials': typeof HqRdMaterialsRoute
+  '/rd-papers': typeof HqRdPapersRoute
+  '/rd-patents': typeof HqRdPatentsRoute
+  '/rd-simulations': typeof HqRdSimulationsRoute
+  '/rd-test-data': typeof HqRdTestDataRoute
+  '/receiving': typeof HqReceivingRoute
+  '/repairs': typeof HqRepairsRoute
+  '/repos': typeof HqReposRoute
+  '/reviews': typeof HqReviewsRoute
+  '/rfqs': typeof HqRfqsRoute
+  '/rma': typeof HqRmaRoute
+  '/roadmap': typeof HqRoadmapRoute
+  '/sales-analytics': typeof HqSalesAnalyticsRoute
+  '/sales-contacts': typeof HqSalesContactsRoute
+  '/scheduled-jobs': typeof HqScheduledJobsRoute
+  '/search': typeof HqSearchRoute
+  '/serials': typeof HqSerialsRoute
+  '/settings': typeof HqSettingsRoute
+  '/shipping-prep': typeof HqShippingPrepRoute
+  '/shipping-tracking': typeof HqShippingTrackingRoute
+  '/social': typeof HqSocialRoute
+  '/strategy': typeof HqStrategyRoute
+  '/suppliers': typeof HqSuppliersRoute
+  '/support-faqs': typeof HqSupportFaqsRoute
+  '/tasks': typeof HqTasksRoute
+  '/taxes': typeof HqTaxesRoute
+  '/test-reports': typeof HqTestReportsRoute
+  '/tickets': typeof HqTicketsRoute
+  '/time-off': typeof HqTimeOffRoute
+  '/time-tracking': typeof HqTimeTrackingRoute
+  '/timeline': typeof HqTimelineRoute
+  '/training': typeof HqTrainingRoute
+  '/vendor-portal': typeof HqVendorPortalRoute
+  '/vendor-quotes': typeof HqVendorQuotesRoute
+  '/version-control': typeof HqVersionControlRoute
+  '/warehouse': typeof HqWarehouseRoute
+  '/warranty-claims': typeof HqWarrantyClaimsRoute
+  '/webhooks': typeof HqWebhooksRoute
+  '/work-orders': typeof HqWorkOrdersRoute
+  '/workflows': typeof HqWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -326,10 +1794,20 @@ export interface FileRoutesByTo {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/admin/branding': typeof HqAdminBrandingRoute
+  '/admin/company': typeof HqAdminCompanyRoute
+  '/admin/departments': typeof HqAdminDepartmentsRoute
+  '/admin/domains': typeof HqAdminDomainsRoute
+  '/admin/permissions': typeof HqAdminPermissionsRoute
+  '/admin/roles': typeof HqAdminRolesRoute
+  '/admin/security': typeof HqAdminSecurityRoute
+  '/admin/users': typeof HqAdminUsersRoute
+  '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_hq': typeof HqRouteWithChildren
   '/about': typeof AboutRoute
   '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
@@ -343,6 +1821,7 @@ export interface FileRoutesById {
   '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
   '/how-its-built': typeof HowItsBuiltRoute
+  '/hq-login': typeof HqLoginRoute
   '/learn': typeof LearnRouteWithChildren
   '/materials': typeof MaterialsRouteWithChildren
   '/mission': typeof MissionRoute
@@ -352,6 +1831,180 @@ export interface FileRoutesById {
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
   '/upgrades': typeof UpgradesRoute
+  '/_hq/accounting': typeof HqAccountingRoute
+  '/_hq/accounts': typeof HqAccountsRoute
+  '/_hq/ai-insights': typeof HqAiInsightsRoute
+  '/_hq/analytics': typeof HqAnalyticsRoute
+  '/_hq/analytics-customer': typeof HqAnalyticsCustomerRoute
+  '/_hq/analytics-employee': typeof HqAnalyticsEmployeeRoute
+  '/_hq/analytics-finance': typeof HqAnalyticsFinanceRoute
+  '/_hq/analytics-mfg': typeof HqAnalyticsMfgRoute
+  '/_hq/analytics-sales': typeof HqAnalyticsSalesRoute
+  '/_hq/announcements': typeof HqAnnouncementsRoute
+  '/_hq/api-builder': typeof HqApiBuilderRoute
+  '/_hq/applicants': typeof HqApplicantsRoute
+  '/_hq/approvals': typeof HqApprovalsRoute
+  '/_hq/approved-vendors': typeof HqApprovedVendorsRoute
+  '/_hq/assembly': typeof HqAssemblyRoute
+  '/_hq/assistant': typeof HqAssistantRoute
+  '/_hq/balance-sheet': typeof HqBalanceSheetRoute
+  '/_hq/banking': typeof HqBankingRoute
+  '/_hq/benefits': typeof HqBenefitsRoute
+  '/_hq/bom': typeof HqBomRoute
+  '/_hq/brand-assets': typeof HqBrandAssetsRoute
+  '/_hq/budgets': typeof HqBudgetsRoute
+  '/_hq/cad': typeof HqCadRoute
+  '/_hq/cad-viewer': typeof HqCadViewerRoute
+  '/_hq/calendar': typeof HqCalendarRoute
+  '/_hq/calibration': typeof HqCalibrationRoute
+  '/_hq/calls': typeof HqCallsRoute
+  '/_hq/channels': typeof HqChannelsRoute
+  '/_hq/chat': typeof HqChatRoute
+  '/_hq/cms': typeof HqCmsRoute
+  '/_hq/contacts': typeof HqContactsRoute
+  '/_hq/content-calendar': typeof HqContentCalendarRoute
+  '/_hq/contracts': typeof HqContractsRoute
+  '/_hq/crm': typeof HqCrmRoute
+  '/_hq/csat': typeof HqCsatRoute
+  '/_hq/customer-timeline': typeof HqCustomerTimelineRoute
+  '/_hq/dashboard': typeof HqDashboardRoute
+  '/_hq/decision-log': typeof HqDecisionLogRoute
+  '/_hq/design-reviews': typeof HqDesignReviewsRoute
+  '/_hq/diagnostics': typeof HqDiagnosticsRoute
+  '/_hq/digital-twin': typeof HqDigitalTwinRoute
+  '/_hq/discounts': typeof HqDiscountsRoute
+  '/_hq/dm': typeof HqDmRoute
+  '/_hq/docs': typeof HqDocsRoute
+  '/_hq/eco': typeof HqEcoRoute
+  '/_hq/email-campaigns': typeof HqEmailCampaignsRoute
+  '/_hq/email-support': typeof HqEmailSupportRoute
+  '/_hq/employees': typeof HqEmployeesRoute
+  '/_hq/expenses': typeof HqExpensesRoute
+  '/_hq/factory-live': typeof HqFactoryLiveRoute
+  '/_hq/feed': typeof HqFeedRoute
+  '/_hq/files': typeof HqFilesRoute
+  '/_hq/files-backup': typeof HqFilesBackupRoute
+  '/_hq/files-permissions': typeof HqFilesPermissionsRoute
+  '/_hq/files-shared': typeof HqFilesSharedRoute
+  '/_hq/files-versions': typeof HqFilesVersionsRoute
+  '/_hq/financial-reports': typeof HqFinancialReportsRoute
+  '/_hq/firmware': typeof HqFirmwareRoute
+  '/_hq/forecasting': typeof HqForecastingRoute
+  '/_hq/gantt': typeof HqGanttRoute
+  '/_hq/goals': typeof HqGoalsRoute
+  '/_hq/hiring': typeof HqHiringRoute
+  '/_hq/interviews': typeof HqInterviewsRoute
+  '/_hq/inventory': typeof HqInventoryRoute
+  '/_hq/investors': typeof HqInvestorsRoute
+  '/_hq/invoices': typeof HqInvoicesRoute
+  '/_hq/issues': typeof HqIssuesRoute
+  '/_hq/it-api-keys': typeof HqItApiKeysRoute
+  '/_hq/it-audit': typeof HqItAuditRoute
+  '/_hq/it-backups': typeof HqItBackupsRoute
+  '/_hq/it-devices': typeof HqItDevicesRoute
+  '/_hq/it-integrations': typeof HqItIntegrationsRoute
+  '/_hq/it-logs': typeof HqItLogsRoute
+  '/_hq/it-monitoring': typeof HqItMonitoringRoute
+  '/_hq/it-network': typeof HqItNetworkRoute
+  '/_hq/it-security': typeof HqItSecurityRoute
+  '/_hq/it-servers': typeof HqItServersRoute
+  '/_hq/it-sso': typeof HqItSsoRoute
+  '/_hq/kanban': typeof HqKanbanRoute
+  '/_hq/kb': typeof HqKbRoute
+  '/_hq/kpis': typeof HqKpisRoute
+  '/_hq/lab-notebook': typeof HqLabNotebookRoute
+  '/_hq/launches': typeof HqLaunchesRoute
+  '/_hq/lead-times': typeof HqLeadTimesRoute
+  '/_hq/leads': typeof HqLeadsRoute
+  '/_hq/legal-docs': typeof HqLegalDocsRoute
+  '/_hq/live-chat': typeof HqLiveChatRoute
+  '/_hq/machines': typeof HqMachinesRoute
+  '/_hq/mail': typeof HqMailRoute
+  '/_hq/mail-drafts': typeof HqMailDraftsRoute
+  '/_hq/mail-rules': typeof HqMailRulesRoute
+  '/_hq/mail-sent': typeof HqMailSentRoute
+  '/_hq/mail-shared': typeof HqMailSharedRoute
+  '/_hq/mail-templates': typeof HqMailTemplatesRoute
+  '/_hq/maintenance': typeof HqMaintenanceRoute
+  '/_hq/marketing-analytics': typeof HqMarketingAnalyticsRoute
+  '/_hq/marketing-blog': typeof HqMarketingBlogRoute
+  '/_hq/media-library': typeof HqMediaLibraryRoute
+  '/_hq/meeting-notes': typeof HqMeetingNotesRoute
+  '/_hq/meeting-summaries': typeof HqMeetingSummariesRoute
+  '/_hq/meetings': typeof HqMeetingsRoute
+  '/_hq/milestones': typeof HqMilestonesRoute
+  '/_hq/notifications': typeof HqNotificationsRoute
+  '/_hq/okrs': typeof HqOkrsRoute
+  '/_hq/onboarding': typeof HqOnboardingRoute
+  '/_hq/orders': typeof HqOrdersRoute
+  '/_hq/org-chart': typeof HqOrgChartRoute
+  '/_hq/packaging': typeof HqPackagingRoute
+  '/_hq/partnerships': typeof HqPartnershipsRoute
+  '/_hq/payroll': typeof HqPayrollRoute
+  '/_hq/pcb': typeof HqPcbRoute
+  '/_hq/phone-logs': typeof HqPhoneLogsRoute
+  '/_hq/pipeline': typeof HqPipelineRoute
+  '/_hq/pnl': typeof HqPnlRoute
+  '/_hq/policies': typeof HqPoliciesRoute
+  '/_hq/press-releases': typeof HqPressReleasesRoute
+  '/_hq/pricing-admin': typeof HqPricingAdminRoute
+  '/_hq/product-catalog': typeof HqProductCatalogRoute
+  '/_hq/product-compatibility': typeof HqProductCompatibilityRoute
+  '/_hq/product-docs': typeof HqProductDocsRoute
+  '/_hq/product-features': typeof HqProductFeaturesRoute
+  '/_hq/product-lifecycle': typeof HqProductLifecycleRoute
+  '/_hq/product-releases': typeof HqProductReleasesRoute
+  '/_hq/production': typeof HqProductionRoute
+  '/_hq/profile': typeof HqProfileRoute
+  '/_hq/projects': typeof HqProjectsRoute
+  '/_hq/prototypes': typeof HqPrototypesRoute
+  '/_hq/purchase-history': typeof HqPurchaseHistoryRoute
+  '/_hq/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/_hq/purchasing': typeof HqPurchasingRoute
+  '/_hq/qc': typeof HqQcRoute
+  '/_hq/quotes': typeof HqQuotesRoute
+  '/_hq/rd-experiments': typeof HqRdExperimentsRoute
+  '/_hq/rd-ideas': typeof HqRdIdeasRoute
+  '/_hq/rd-materials': typeof HqRdMaterialsRoute
+  '/_hq/rd-papers': typeof HqRdPapersRoute
+  '/_hq/rd-patents': typeof HqRdPatentsRoute
+  '/_hq/rd-simulations': typeof HqRdSimulationsRoute
+  '/_hq/rd-test-data': typeof HqRdTestDataRoute
+  '/_hq/receiving': typeof HqReceivingRoute
+  '/_hq/repairs': typeof HqRepairsRoute
+  '/_hq/repos': typeof HqReposRoute
+  '/_hq/reviews': typeof HqReviewsRoute
+  '/_hq/rfqs': typeof HqRfqsRoute
+  '/_hq/rma': typeof HqRmaRoute
+  '/_hq/roadmap': typeof HqRoadmapRoute
+  '/_hq/sales-analytics': typeof HqSalesAnalyticsRoute
+  '/_hq/sales-contacts': typeof HqSalesContactsRoute
+  '/_hq/scheduled-jobs': typeof HqScheduledJobsRoute
+  '/_hq/search': typeof HqSearchRoute
+  '/_hq/serials': typeof HqSerialsRoute
+  '/_hq/settings': typeof HqSettingsRoute
+  '/_hq/shipping-prep': typeof HqShippingPrepRoute
+  '/_hq/shipping-tracking': typeof HqShippingTrackingRoute
+  '/_hq/social': typeof HqSocialRoute
+  '/_hq/strategy': typeof HqStrategyRoute
+  '/_hq/suppliers': typeof HqSuppliersRoute
+  '/_hq/support-faqs': typeof HqSupportFaqsRoute
+  '/_hq/tasks': typeof HqTasksRoute
+  '/_hq/taxes': typeof HqTaxesRoute
+  '/_hq/test-reports': typeof HqTestReportsRoute
+  '/_hq/tickets': typeof HqTicketsRoute
+  '/_hq/time-off': typeof HqTimeOffRoute
+  '/_hq/time-tracking': typeof HqTimeTrackingRoute
+  '/_hq/timeline': typeof HqTimelineRoute
+  '/_hq/training': typeof HqTrainingRoute
+  '/_hq/vendor-portal': typeof HqVendorPortalRoute
+  '/_hq/vendor-quotes': typeof HqVendorQuotesRoute
+  '/_hq/version-control': typeof HqVersionControlRoute
+  '/_hq/warehouse': typeof HqWarehouseRoute
+  '/_hq/warranty-claims': typeof HqWarrantyClaimsRoute
+  '/_hq/webhooks': typeof HqWebhooksRoute
+  '/_hq/work-orders': typeof HqWorkOrdersRoute
+  '/_hq/workflows': typeof HqWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -368,6 +2021,15 @@ export interface FileRoutesById {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/_hq/admin/branding': typeof HqAdminBrandingRoute
+  '/_hq/admin/company': typeof HqAdminCompanyRoute
+  '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
+  '/_hq/admin/domains': typeof HqAdminDomainsRoute
+  '/_hq/admin/permissions': typeof HqAdminPermissionsRoute
+  '/_hq/admin/roles': typeof HqAdminRolesRoute
+  '/_hq/admin/security': typeof HqAdminSecurityRoute
+  '/_hq/admin/users': typeof HqAdminUsersRoute
+  '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -386,6 +2048,7 @@ export interface FileRouteTypes {
     | '/get-involved'
     | '/help'
     | '/how-its-built'
+    | '/hq-login'
     | '/learn'
     | '/materials'
     | '/mission'
@@ -395,6 +2058,180 @@ export interface FileRouteTypes {
     | '/store'
     | '/support-us'
     | '/upgrades'
+    | '/accounting'
+    | '/accounts'
+    | '/ai-insights'
+    | '/analytics'
+    | '/analytics-customer'
+    | '/analytics-employee'
+    | '/analytics-finance'
+    | '/analytics-mfg'
+    | '/analytics-sales'
+    | '/announcements'
+    | '/api-builder'
+    | '/applicants'
+    | '/approvals'
+    | '/approved-vendors'
+    | '/assembly'
+    | '/assistant'
+    | '/balance-sheet'
+    | '/banking'
+    | '/benefits'
+    | '/bom'
+    | '/brand-assets'
+    | '/budgets'
+    | '/cad'
+    | '/cad-viewer'
+    | '/calendar'
+    | '/calibration'
+    | '/calls'
+    | '/channels'
+    | '/chat'
+    | '/cms'
+    | '/contacts'
+    | '/content-calendar'
+    | '/contracts'
+    | '/crm'
+    | '/csat'
+    | '/customer-timeline'
+    | '/dashboard'
+    | '/decision-log'
+    | '/design-reviews'
+    | '/diagnostics'
+    | '/digital-twin'
+    | '/discounts'
+    | '/dm'
+    | '/docs'
+    | '/eco'
+    | '/email-campaigns'
+    | '/email-support'
+    | '/employees'
+    | '/expenses'
+    | '/factory-live'
+    | '/feed'
+    | '/files'
+    | '/files-backup'
+    | '/files-permissions'
+    | '/files-shared'
+    | '/files-versions'
+    | '/financial-reports'
+    | '/firmware'
+    | '/forecasting'
+    | '/gantt'
+    | '/goals'
+    | '/hiring'
+    | '/interviews'
+    | '/inventory'
+    | '/investors'
+    | '/invoices'
+    | '/issues'
+    | '/it-api-keys'
+    | '/it-audit'
+    | '/it-backups'
+    | '/it-devices'
+    | '/it-integrations'
+    | '/it-logs'
+    | '/it-monitoring'
+    | '/it-network'
+    | '/it-security'
+    | '/it-servers'
+    | '/it-sso'
+    | '/kanban'
+    | '/kb'
+    | '/kpis'
+    | '/lab-notebook'
+    | '/launches'
+    | '/lead-times'
+    | '/leads'
+    | '/legal-docs'
+    | '/live-chat'
+    | '/machines'
+    | '/mail'
+    | '/mail-drafts'
+    | '/mail-rules'
+    | '/mail-sent'
+    | '/mail-shared'
+    | '/mail-templates'
+    | '/maintenance'
+    | '/marketing-analytics'
+    | '/marketing-blog'
+    | '/media-library'
+    | '/meeting-notes'
+    | '/meeting-summaries'
+    | '/meetings'
+    | '/milestones'
+    | '/notifications'
+    | '/okrs'
+    | '/onboarding'
+    | '/orders'
+    | '/org-chart'
+    | '/packaging'
+    | '/partnerships'
+    | '/payroll'
+    | '/pcb'
+    | '/phone-logs'
+    | '/pipeline'
+    | '/pnl'
+    | '/policies'
+    | '/press-releases'
+    | '/pricing-admin'
+    | '/product-catalog'
+    | '/product-compatibility'
+    | '/product-docs'
+    | '/product-features'
+    | '/product-lifecycle'
+    | '/product-releases'
+    | '/production'
+    | '/profile'
+    | '/projects'
+    | '/prototypes'
+    | '/purchase-history'
+    | '/purchase-orders'
+    | '/purchasing'
+    | '/qc'
+    | '/quotes'
+    | '/rd-experiments'
+    | '/rd-ideas'
+    | '/rd-materials'
+    | '/rd-papers'
+    | '/rd-patents'
+    | '/rd-simulations'
+    | '/rd-test-data'
+    | '/receiving'
+    | '/repairs'
+    | '/repos'
+    | '/reviews'
+    | '/rfqs'
+    | '/rma'
+    | '/roadmap'
+    | '/sales-analytics'
+    | '/sales-contacts'
+    | '/scheduled-jobs'
+    | '/search'
+    | '/serials'
+    | '/settings'
+    | '/shipping-prep'
+    | '/shipping-tracking'
+    | '/social'
+    | '/strategy'
+    | '/suppliers'
+    | '/support-faqs'
+    | '/tasks'
+    | '/taxes'
+    | '/test-reports'
+    | '/tickets'
+    | '/time-off'
+    | '/time-tracking'
+    | '/timeline'
+    | '/training'
+    | '/vendor-portal'
+    | '/vendor-quotes'
+    | '/version-control'
+    | '/warehouse'
+    | '/warranty-claims'
+    | '/webhooks'
+    | '/work-orders'
+    | '/workflows'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -411,6 +2248,15 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/admin/branding'
+    | '/admin/company'
+    | '/admin/departments'
+    | '/admin/domains'
+    | '/admin/permissions'
+    | '/admin/roles'
+    | '/admin/security'
+    | '/admin/users'
+    | '/api/hq/assistant'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -427,6 +2273,7 @@ export interface FileRouteTypes {
     | '/get-involved'
     | '/help'
     | '/how-its-built'
+    | '/hq-login'
     | '/learn'
     | '/materials'
     | '/mission'
@@ -436,6 +2283,180 @@ export interface FileRouteTypes {
     | '/store'
     | '/support-us'
     | '/upgrades'
+    | '/accounting'
+    | '/accounts'
+    | '/ai-insights'
+    | '/analytics'
+    | '/analytics-customer'
+    | '/analytics-employee'
+    | '/analytics-finance'
+    | '/analytics-mfg'
+    | '/analytics-sales'
+    | '/announcements'
+    | '/api-builder'
+    | '/applicants'
+    | '/approvals'
+    | '/approved-vendors'
+    | '/assembly'
+    | '/assistant'
+    | '/balance-sheet'
+    | '/banking'
+    | '/benefits'
+    | '/bom'
+    | '/brand-assets'
+    | '/budgets'
+    | '/cad'
+    | '/cad-viewer'
+    | '/calendar'
+    | '/calibration'
+    | '/calls'
+    | '/channels'
+    | '/chat'
+    | '/cms'
+    | '/contacts'
+    | '/content-calendar'
+    | '/contracts'
+    | '/crm'
+    | '/csat'
+    | '/customer-timeline'
+    | '/dashboard'
+    | '/decision-log'
+    | '/design-reviews'
+    | '/diagnostics'
+    | '/digital-twin'
+    | '/discounts'
+    | '/dm'
+    | '/docs'
+    | '/eco'
+    | '/email-campaigns'
+    | '/email-support'
+    | '/employees'
+    | '/expenses'
+    | '/factory-live'
+    | '/feed'
+    | '/files'
+    | '/files-backup'
+    | '/files-permissions'
+    | '/files-shared'
+    | '/files-versions'
+    | '/financial-reports'
+    | '/firmware'
+    | '/forecasting'
+    | '/gantt'
+    | '/goals'
+    | '/hiring'
+    | '/interviews'
+    | '/inventory'
+    | '/investors'
+    | '/invoices'
+    | '/issues'
+    | '/it-api-keys'
+    | '/it-audit'
+    | '/it-backups'
+    | '/it-devices'
+    | '/it-integrations'
+    | '/it-logs'
+    | '/it-monitoring'
+    | '/it-network'
+    | '/it-security'
+    | '/it-servers'
+    | '/it-sso'
+    | '/kanban'
+    | '/kb'
+    | '/kpis'
+    | '/lab-notebook'
+    | '/launches'
+    | '/lead-times'
+    | '/leads'
+    | '/legal-docs'
+    | '/live-chat'
+    | '/machines'
+    | '/mail'
+    | '/mail-drafts'
+    | '/mail-rules'
+    | '/mail-sent'
+    | '/mail-shared'
+    | '/mail-templates'
+    | '/maintenance'
+    | '/marketing-analytics'
+    | '/marketing-blog'
+    | '/media-library'
+    | '/meeting-notes'
+    | '/meeting-summaries'
+    | '/meetings'
+    | '/milestones'
+    | '/notifications'
+    | '/okrs'
+    | '/onboarding'
+    | '/orders'
+    | '/org-chart'
+    | '/packaging'
+    | '/partnerships'
+    | '/payroll'
+    | '/pcb'
+    | '/phone-logs'
+    | '/pipeline'
+    | '/pnl'
+    | '/policies'
+    | '/press-releases'
+    | '/pricing-admin'
+    | '/product-catalog'
+    | '/product-compatibility'
+    | '/product-docs'
+    | '/product-features'
+    | '/product-lifecycle'
+    | '/product-releases'
+    | '/production'
+    | '/profile'
+    | '/projects'
+    | '/prototypes'
+    | '/purchase-history'
+    | '/purchase-orders'
+    | '/purchasing'
+    | '/qc'
+    | '/quotes'
+    | '/rd-experiments'
+    | '/rd-ideas'
+    | '/rd-materials'
+    | '/rd-papers'
+    | '/rd-patents'
+    | '/rd-simulations'
+    | '/rd-test-data'
+    | '/receiving'
+    | '/repairs'
+    | '/repos'
+    | '/reviews'
+    | '/rfqs'
+    | '/rma'
+    | '/roadmap'
+    | '/sales-analytics'
+    | '/sales-contacts'
+    | '/scheduled-jobs'
+    | '/search'
+    | '/serials'
+    | '/settings'
+    | '/shipping-prep'
+    | '/shipping-tracking'
+    | '/social'
+    | '/strategy'
+    | '/suppliers'
+    | '/support-faqs'
+    | '/tasks'
+    | '/taxes'
+    | '/test-reports'
+    | '/tickets'
+    | '/time-off'
+    | '/time-tracking'
+    | '/timeline'
+    | '/training'
+    | '/vendor-portal'
+    | '/vendor-quotes'
+    | '/version-control'
+    | '/warehouse'
+    | '/warranty-claims'
+    | '/webhooks'
+    | '/work-orders'
+    | '/workflows'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -452,9 +2473,19 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/admin/branding'
+    | '/admin/company'
+    | '/admin/departments'
+    | '/admin/domains'
+    | '/admin/permissions'
+    | '/admin/roles'
+    | '/admin/security'
+    | '/admin/users'
+    | '/api/hq/assistant'
   id:
     | '__root__'
     | '/'
+    | '/_hq'
     | '/about'
     | '/accessories'
     | '/blog'
@@ -468,6 +2499,7 @@ export interface FileRouteTypes {
     | '/get-involved'
     | '/help'
     | '/how-its-built'
+    | '/hq-login'
     | '/learn'
     | '/materials'
     | '/mission'
@@ -477,6 +2509,180 @@ export interface FileRouteTypes {
     | '/store'
     | '/support-us'
     | '/upgrades'
+    | '/_hq/accounting'
+    | '/_hq/accounts'
+    | '/_hq/ai-insights'
+    | '/_hq/analytics'
+    | '/_hq/analytics-customer'
+    | '/_hq/analytics-employee'
+    | '/_hq/analytics-finance'
+    | '/_hq/analytics-mfg'
+    | '/_hq/analytics-sales'
+    | '/_hq/announcements'
+    | '/_hq/api-builder'
+    | '/_hq/applicants'
+    | '/_hq/approvals'
+    | '/_hq/approved-vendors'
+    | '/_hq/assembly'
+    | '/_hq/assistant'
+    | '/_hq/balance-sheet'
+    | '/_hq/banking'
+    | '/_hq/benefits'
+    | '/_hq/bom'
+    | '/_hq/brand-assets'
+    | '/_hq/budgets'
+    | '/_hq/cad'
+    | '/_hq/cad-viewer'
+    | '/_hq/calendar'
+    | '/_hq/calibration'
+    | '/_hq/calls'
+    | '/_hq/channels'
+    | '/_hq/chat'
+    | '/_hq/cms'
+    | '/_hq/contacts'
+    | '/_hq/content-calendar'
+    | '/_hq/contracts'
+    | '/_hq/crm'
+    | '/_hq/csat'
+    | '/_hq/customer-timeline'
+    | '/_hq/dashboard'
+    | '/_hq/decision-log'
+    | '/_hq/design-reviews'
+    | '/_hq/diagnostics'
+    | '/_hq/digital-twin'
+    | '/_hq/discounts'
+    | '/_hq/dm'
+    | '/_hq/docs'
+    | '/_hq/eco'
+    | '/_hq/email-campaigns'
+    | '/_hq/email-support'
+    | '/_hq/employees'
+    | '/_hq/expenses'
+    | '/_hq/factory-live'
+    | '/_hq/feed'
+    | '/_hq/files'
+    | '/_hq/files-backup'
+    | '/_hq/files-permissions'
+    | '/_hq/files-shared'
+    | '/_hq/files-versions'
+    | '/_hq/financial-reports'
+    | '/_hq/firmware'
+    | '/_hq/forecasting'
+    | '/_hq/gantt'
+    | '/_hq/goals'
+    | '/_hq/hiring'
+    | '/_hq/interviews'
+    | '/_hq/inventory'
+    | '/_hq/investors'
+    | '/_hq/invoices'
+    | '/_hq/issues'
+    | '/_hq/it-api-keys'
+    | '/_hq/it-audit'
+    | '/_hq/it-backups'
+    | '/_hq/it-devices'
+    | '/_hq/it-integrations'
+    | '/_hq/it-logs'
+    | '/_hq/it-monitoring'
+    | '/_hq/it-network'
+    | '/_hq/it-security'
+    | '/_hq/it-servers'
+    | '/_hq/it-sso'
+    | '/_hq/kanban'
+    | '/_hq/kb'
+    | '/_hq/kpis'
+    | '/_hq/lab-notebook'
+    | '/_hq/launches'
+    | '/_hq/lead-times'
+    | '/_hq/leads'
+    | '/_hq/legal-docs'
+    | '/_hq/live-chat'
+    | '/_hq/machines'
+    | '/_hq/mail'
+    | '/_hq/mail-drafts'
+    | '/_hq/mail-rules'
+    | '/_hq/mail-sent'
+    | '/_hq/mail-shared'
+    | '/_hq/mail-templates'
+    | '/_hq/maintenance'
+    | '/_hq/marketing-analytics'
+    | '/_hq/marketing-blog'
+    | '/_hq/media-library'
+    | '/_hq/meeting-notes'
+    | '/_hq/meeting-summaries'
+    | '/_hq/meetings'
+    | '/_hq/milestones'
+    | '/_hq/notifications'
+    | '/_hq/okrs'
+    | '/_hq/onboarding'
+    | '/_hq/orders'
+    | '/_hq/org-chart'
+    | '/_hq/packaging'
+    | '/_hq/partnerships'
+    | '/_hq/payroll'
+    | '/_hq/pcb'
+    | '/_hq/phone-logs'
+    | '/_hq/pipeline'
+    | '/_hq/pnl'
+    | '/_hq/policies'
+    | '/_hq/press-releases'
+    | '/_hq/pricing-admin'
+    | '/_hq/product-catalog'
+    | '/_hq/product-compatibility'
+    | '/_hq/product-docs'
+    | '/_hq/product-features'
+    | '/_hq/product-lifecycle'
+    | '/_hq/product-releases'
+    | '/_hq/production'
+    | '/_hq/profile'
+    | '/_hq/projects'
+    | '/_hq/prototypes'
+    | '/_hq/purchase-history'
+    | '/_hq/purchase-orders'
+    | '/_hq/purchasing'
+    | '/_hq/qc'
+    | '/_hq/quotes'
+    | '/_hq/rd-experiments'
+    | '/_hq/rd-ideas'
+    | '/_hq/rd-materials'
+    | '/_hq/rd-papers'
+    | '/_hq/rd-patents'
+    | '/_hq/rd-simulations'
+    | '/_hq/rd-test-data'
+    | '/_hq/receiving'
+    | '/_hq/repairs'
+    | '/_hq/repos'
+    | '/_hq/reviews'
+    | '/_hq/rfqs'
+    | '/_hq/rma'
+    | '/_hq/roadmap'
+    | '/_hq/sales-analytics'
+    | '/_hq/sales-contacts'
+    | '/_hq/scheduled-jobs'
+    | '/_hq/search'
+    | '/_hq/serials'
+    | '/_hq/settings'
+    | '/_hq/shipping-prep'
+    | '/_hq/shipping-tracking'
+    | '/_hq/social'
+    | '/_hq/strategy'
+    | '/_hq/suppliers'
+    | '/_hq/support-faqs'
+    | '/_hq/tasks'
+    | '/_hq/taxes'
+    | '/_hq/test-reports'
+    | '/_hq/tickets'
+    | '/_hq/time-off'
+    | '/_hq/time-tracking'
+    | '/_hq/timeline'
+    | '/_hq/training'
+    | '/_hq/vendor-portal'
+    | '/_hq/vendor-quotes'
+    | '/_hq/version-control'
+    | '/_hq/warehouse'
+    | '/_hq/warranty-claims'
+    | '/_hq/webhooks'
+    | '/_hq/work-orders'
+    | '/_hq/workflows'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -493,10 +2699,20 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/_hq/admin/branding'
+    | '/_hq/admin/company'
+    | '/_hq/admin/departments'
+    | '/_hq/admin/domains'
+    | '/_hq/admin/permissions'
+    | '/_hq/admin/roles'
+    | '/_hq/admin/security'
+    | '/_hq/admin/users'
+    | '/api/hq/assistant'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HqRoute: typeof HqRouteWithChildren
   AboutRoute: typeof AboutRoute
   AccessoriesRoute: typeof AccessoriesRoute
   BlogRoute: typeof BlogRouteWithChildren
@@ -510,6 +2726,7 @@ export interface RootRouteChildren {
   GetInvolvedRoute: typeof GetInvolvedRoute
   HelpRoute: typeof HelpRouteWithChildren
   HowItsBuiltRoute: typeof HowItsBuiltRoute
+  HqLoginRoute: typeof HqLoginRoute
   LearnRoute: typeof LearnRouteWithChildren
   MaterialsRoute: typeof MaterialsRouteWithChildren
   MissionRoute: typeof MissionRoute
@@ -524,6 +2741,7 @@ export interface RootRouteChildren {
   LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
   LegalTermsRoute: typeof LegalTermsRoute
   LegalWarrantyRoute: typeof LegalWarrantyRoute
+  ApiHqAssistantRoute: typeof ApiHqAssistantRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -589,6 +2807,13 @@ declare module '@tanstack/react-router' {
       path: '/learn'
       fullPath: '/learn'
       preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hq-login': {
+      id: '/hq-login'
+      path: '/hq-login'
+      fullPath: '/hq-login'
+      preLoaderRoute: typeof HqLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/how-its-built': {
@@ -680,6 +2905,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_hq': {
+      id: '/_hq'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof HqRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -801,8 +3033,1661 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
+    '/_hq/workflows': {
+      id: '/_hq/workflows'
+      path: '/workflows'
+      fullPath: '/workflows'
+      preLoaderRoute: typeof HqWorkflowsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/work-orders': {
+      id: '/_hq/work-orders'
+      path: '/work-orders'
+      fullPath: '/work-orders'
+      preLoaderRoute: typeof HqWorkOrdersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/webhooks': {
+      id: '/_hq/webhooks'
+      path: '/webhooks'
+      fullPath: '/webhooks'
+      preLoaderRoute: typeof HqWebhooksRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/warranty-claims': {
+      id: '/_hq/warranty-claims'
+      path: '/warranty-claims'
+      fullPath: '/warranty-claims'
+      preLoaderRoute: typeof HqWarrantyClaimsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/warehouse': {
+      id: '/_hq/warehouse'
+      path: '/warehouse'
+      fullPath: '/warehouse'
+      preLoaderRoute: typeof HqWarehouseRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/version-control': {
+      id: '/_hq/version-control'
+      path: '/version-control'
+      fullPath: '/version-control'
+      preLoaderRoute: typeof HqVersionControlRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/vendor-quotes': {
+      id: '/_hq/vendor-quotes'
+      path: '/vendor-quotes'
+      fullPath: '/vendor-quotes'
+      preLoaderRoute: typeof HqVendorQuotesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/vendor-portal': {
+      id: '/_hq/vendor-portal'
+      path: '/vendor-portal'
+      fullPath: '/vendor-portal'
+      preLoaderRoute: typeof HqVendorPortalRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/training': {
+      id: '/_hq/training'
+      path: '/training'
+      fullPath: '/training'
+      preLoaderRoute: typeof HqTrainingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/timeline': {
+      id: '/_hq/timeline'
+      path: '/timeline'
+      fullPath: '/timeline'
+      preLoaderRoute: typeof HqTimelineRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/time-tracking': {
+      id: '/_hq/time-tracking'
+      path: '/time-tracking'
+      fullPath: '/time-tracking'
+      preLoaderRoute: typeof HqTimeTrackingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/time-off': {
+      id: '/_hq/time-off'
+      path: '/time-off'
+      fullPath: '/time-off'
+      preLoaderRoute: typeof HqTimeOffRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/tickets': {
+      id: '/_hq/tickets'
+      path: '/tickets'
+      fullPath: '/tickets'
+      preLoaderRoute: typeof HqTicketsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/test-reports': {
+      id: '/_hq/test-reports'
+      path: '/test-reports'
+      fullPath: '/test-reports'
+      preLoaderRoute: typeof HqTestReportsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/taxes': {
+      id: '/_hq/taxes'
+      path: '/taxes'
+      fullPath: '/taxes'
+      preLoaderRoute: typeof HqTaxesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/tasks': {
+      id: '/_hq/tasks'
+      path: '/tasks'
+      fullPath: '/tasks'
+      preLoaderRoute: typeof HqTasksRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/support-faqs': {
+      id: '/_hq/support-faqs'
+      path: '/support-faqs'
+      fullPath: '/support-faqs'
+      preLoaderRoute: typeof HqSupportFaqsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/suppliers': {
+      id: '/_hq/suppliers'
+      path: '/suppliers'
+      fullPath: '/suppliers'
+      preLoaderRoute: typeof HqSuppliersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/strategy': {
+      id: '/_hq/strategy'
+      path: '/strategy'
+      fullPath: '/strategy'
+      preLoaderRoute: typeof HqStrategyRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/social': {
+      id: '/_hq/social'
+      path: '/social'
+      fullPath: '/social'
+      preLoaderRoute: typeof HqSocialRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/shipping-tracking': {
+      id: '/_hq/shipping-tracking'
+      path: '/shipping-tracking'
+      fullPath: '/shipping-tracking'
+      preLoaderRoute: typeof HqShippingTrackingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/shipping-prep': {
+      id: '/_hq/shipping-prep'
+      path: '/shipping-prep'
+      fullPath: '/shipping-prep'
+      preLoaderRoute: typeof HqShippingPrepRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/settings': {
+      id: '/_hq/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof HqSettingsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/serials': {
+      id: '/_hq/serials'
+      path: '/serials'
+      fullPath: '/serials'
+      preLoaderRoute: typeof HqSerialsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/search': {
+      id: '/_hq/search'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof HqSearchRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/scheduled-jobs': {
+      id: '/_hq/scheduled-jobs'
+      path: '/scheduled-jobs'
+      fullPath: '/scheduled-jobs'
+      preLoaderRoute: typeof HqScheduledJobsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/sales-contacts': {
+      id: '/_hq/sales-contacts'
+      path: '/sales-contacts'
+      fullPath: '/sales-contacts'
+      preLoaderRoute: typeof HqSalesContactsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/sales-analytics': {
+      id: '/_hq/sales-analytics'
+      path: '/sales-analytics'
+      fullPath: '/sales-analytics'
+      preLoaderRoute: typeof HqSalesAnalyticsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/roadmap': {
+      id: '/_hq/roadmap'
+      path: '/roadmap'
+      fullPath: '/roadmap'
+      preLoaderRoute: typeof HqRoadmapRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rma': {
+      id: '/_hq/rma'
+      path: '/rma'
+      fullPath: '/rma'
+      preLoaderRoute: typeof HqRmaRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rfqs': {
+      id: '/_hq/rfqs'
+      path: '/rfqs'
+      fullPath: '/rfqs'
+      preLoaderRoute: typeof HqRfqsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/reviews': {
+      id: '/_hq/reviews'
+      path: '/reviews'
+      fullPath: '/reviews'
+      preLoaderRoute: typeof HqReviewsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/repos': {
+      id: '/_hq/repos'
+      path: '/repos'
+      fullPath: '/repos'
+      preLoaderRoute: typeof HqReposRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/repairs': {
+      id: '/_hq/repairs'
+      path: '/repairs'
+      fullPath: '/repairs'
+      preLoaderRoute: typeof HqRepairsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/receiving': {
+      id: '/_hq/receiving'
+      path: '/receiving'
+      fullPath: '/receiving'
+      preLoaderRoute: typeof HqReceivingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-test-data': {
+      id: '/_hq/rd-test-data'
+      path: '/rd-test-data'
+      fullPath: '/rd-test-data'
+      preLoaderRoute: typeof HqRdTestDataRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-simulations': {
+      id: '/_hq/rd-simulations'
+      path: '/rd-simulations'
+      fullPath: '/rd-simulations'
+      preLoaderRoute: typeof HqRdSimulationsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-patents': {
+      id: '/_hq/rd-patents'
+      path: '/rd-patents'
+      fullPath: '/rd-patents'
+      preLoaderRoute: typeof HqRdPatentsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-papers': {
+      id: '/_hq/rd-papers'
+      path: '/rd-papers'
+      fullPath: '/rd-papers'
+      preLoaderRoute: typeof HqRdPapersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-materials': {
+      id: '/_hq/rd-materials'
+      path: '/rd-materials'
+      fullPath: '/rd-materials'
+      preLoaderRoute: typeof HqRdMaterialsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-ideas': {
+      id: '/_hq/rd-ideas'
+      path: '/rd-ideas'
+      fullPath: '/rd-ideas'
+      preLoaderRoute: typeof HqRdIdeasRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/rd-experiments': {
+      id: '/_hq/rd-experiments'
+      path: '/rd-experiments'
+      fullPath: '/rd-experiments'
+      preLoaderRoute: typeof HqRdExperimentsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/quotes': {
+      id: '/_hq/quotes'
+      path: '/quotes'
+      fullPath: '/quotes'
+      preLoaderRoute: typeof HqQuotesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/qc': {
+      id: '/_hq/qc'
+      path: '/qc'
+      fullPath: '/qc'
+      preLoaderRoute: typeof HqQcRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/purchasing': {
+      id: '/_hq/purchasing'
+      path: '/purchasing'
+      fullPath: '/purchasing'
+      preLoaderRoute: typeof HqPurchasingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/purchase-orders': {
+      id: '/_hq/purchase-orders'
+      path: '/purchase-orders'
+      fullPath: '/purchase-orders'
+      preLoaderRoute: typeof HqPurchaseOrdersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/purchase-history': {
+      id: '/_hq/purchase-history'
+      path: '/purchase-history'
+      fullPath: '/purchase-history'
+      preLoaderRoute: typeof HqPurchaseHistoryRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/prototypes': {
+      id: '/_hq/prototypes'
+      path: '/prototypes'
+      fullPath: '/prototypes'
+      preLoaderRoute: typeof HqPrototypesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/projects': {
+      id: '/_hq/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof HqProjectsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/profile': {
+      id: '/_hq/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof HqProfileRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/production': {
+      id: '/_hq/production'
+      path: '/production'
+      fullPath: '/production'
+      preLoaderRoute: typeof HqProductionRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/product-releases': {
+      id: '/_hq/product-releases'
+      path: '/product-releases'
+      fullPath: '/product-releases'
+      preLoaderRoute: typeof HqProductReleasesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/product-lifecycle': {
+      id: '/_hq/product-lifecycle'
+      path: '/product-lifecycle'
+      fullPath: '/product-lifecycle'
+      preLoaderRoute: typeof HqProductLifecycleRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/product-features': {
+      id: '/_hq/product-features'
+      path: '/product-features'
+      fullPath: '/product-features'
+      preLoaderRoute: typeof HqProductFeaturesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/product-docs': {
+      id: '/_hq/product-docs'
+      path: '/product-docs'
+      fullPath: '/product-docs'
+      preLoaderRoute: typeof HqProductDocsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/product-compatibility': {
+      id: '/_hq/product-compatibility'
+      path: '/product-compatibility'
+      fullPath: '/product-compatibility'
+      preLoaderRoute: typeof HqProductCompatibilityRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/product-catalog': {
+      id: '/_hq/product-catalog'
+      path: '/product-catalog'
+      fullPath: '/product-catalog'
+      preLoaderRoute: typeof HqProductCatalogRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/pricing-admin': {
+      id: '/_hq/pricing-admin'
+      path: '/pricing-admin'
+      fullPath: '/pricing-admin'
+      preLoaderRoute: typeof HqPricingAdminRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/press-releases': {
+      id: '/_hq/press-releases'
+      path: '/press-releases'
+      fullPath: '/press-releases'
+      preLoaderRoute: typeof HqPressReleasesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/policies': {
+      id: '/_hq/policies'
+      path: '/policies'
+      fullPath: '/policies'
+      preLoaderRoute: typeof HqPoliciesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/pnl': {
+      id: '/_hq/pnl'
+      path: '/pnl'
+      fullPath: '/pnl'
+      preLoaderRoute: typeof HqPnlRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/pipeline': {
+      id: '/_hq/pipeline'
+      path: '/pipeline'
+      fullPath: '/pipeline'
+      preLoaderRoute: typeof HqPipelineRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/phone-logs': {
+      id: '/_hq/phone-logs'
+      path: '/phone-logs'
+      fullPath: '/phone-logs'
+      preLoaderRoute: typeof HqPhoneLogsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/pcb': {
+      id: '/_hq/pcb'
+      path: '/pcb'
+      fullPath: '/pcb'
+      preLoaderRoute: typeof HqPcbRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/payroll': {
+      id: '/_hq/payroll'
+      path: '/payroll'
+      fullPath: '/payroll'
+      preLoaderRoute: typeof HqPayrollRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/partnerships': {
+      id: '/_hq/partnerships'
+      path: '/partnerships'
+      fullPath: '/partnerships'
+      preLoaderRoute: typeof HqPartnershipsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/packaging': {
+      id: '/_hq/packaging'
+      path: '/packaging'
+      fullPath: '/packaging'
+      preLoaderRoute: typeof HqPackagingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/org-chart': {
+      id: '/_hq/org-chart'
+      path: '/org-chart'
+      fullPath: '/org-chart'
+      preLoaderRoute: typeof HqOrgChartRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/orders': {
+      id: '/_hq/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof HqOrdersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/onboarding': {
+      id: '/_hq/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof HqOnboardingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/okrs': {
+      id: '/_hq/okrs'
+      path: '/okrs'
+      fullPath: '/okrs'
+      preLoaderRoute: typeof HqOkrsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/notifications': {
+      id: '/_hq/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof HqNotificationsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/milestones': {
+      id: '/_hq/milestones'
+      path: '/milestones'
+      fullPath: '/milestones'
+      preLoaderRoute: typeof HqMilestonesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/meetings': {
+      id: '/_hq/meetings'
+      path: '/meetings'
+      fullPath: '/meetings'
+      preLoaderRoute: typeof HqMeetingsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/meeting-summaries': {
+      id: '/_hq/meeting-summaries'
+      path: '/meeting-summaries'
+      fullPath: '/meeting-summaries'
+      preLoaderRoute: typeof HqMeetingSummariesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/meeting-notes': {
+      id: '/_hq/meeting-notes'
+      path: '/meeting-notes'
+      fullPath: '/meeting-notes'
+      preLoaderRoute: typeof HqMeetingNotesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/media-library': {
+      id: '/_hq/media-library'
+      path: '/media-library'
+      fullPath: '/media-library'
+      preLoaderRoute: typeof HqMediaLibraryRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/marketing-blog': {
+      id: '/_hq/marketing-blog'
+      path: '/marketing-blog'
+      fullPath: '/marketing-blog'
+      preLoaderRoute: typeof HqMarketingBlogRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/marketing-analytics': {
+      id: '/_hq/marketing-analytics'
+      path: '/marketing-analytics'
+      fullPath: '/marketing-analytics'
+      preLoaderRoute: typeof HqMarketingAnalyticsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/maintenance': {
+      id: '/_hq/maintenance'
+      path: '/maintenance'
+      fullPath: '/maintenance'
+      preLoaderRoute: typeof HqMaintenanceRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/mail-templates': {
+      id: '/_hq/mail-templates'
+      path: '/mail-templates'
+      fullPath: '/mail-templates'
+      preLoaderRoute: typeof HqMailTemplatesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/mail-shared': {
+      id: '/_hq/mail-shared'
+      path: '/mail-shared'
+      fullPath: '/mail-shared'
+      preLoaderRoute: typeof HqMailSharedRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/mail-sent': {
+      id: '/_hq/mail-sent'
+      path: '/mail-sent'
+      fullPath: '/mail-sent'
+      preLoaderRoute: typeof HqMailSentRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/mail-rules': {
+      id: '/_hq/mail-rules'
+      path: '/mail-rules'
+      fullPath: '/mail-rules'
+      preLoaderRoute: typeof HqMailRulesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/mail-drafts': {
+      id: '/_hq/mail-drafts'
+      path: '/mail-drafts'
+      fullPath: '/mail-drafts'
+      preLoaderRoute: typeof HqMailDraftsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/mail': {
+      id: '/_hq/mail'
+      path: '/mail'
+      fullPath: '/mail'
+      preLoaderRoute: typeof HqMailRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/machines': {
+      id: '/_hq/machines'
+      path: '/machines'
+      fullPath: '/machines'
+      preLoaderRoute: typeof HqMachinesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/live-chat': {
+      id: '/_hq/live-chat'
+      path: '/live-chat'
+      fullPath: '/live-chat'
+      preLoaderRoute: typeof HqLiveChatRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/legal-docs': {
+      id: '/_hq/legal-docs'
+      path: '/legal-docs'
+      fullPath: '/legal-docs'
+      preLoaderRoute: typeof HqLegalDocsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/leads': {
+      id: '/_hq/leads'
+      path: '/leads'
+      fullPath: '/leads'
+      preLoaderRoute: typeof HqLeadsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/lead-times': {
+      id: '/_hq/lead-times'
+      path: '/lead-times'
+      fullPath: '/lead-times'
+      preLoaderRoute: typeof HqLeadTimesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/launches': {
+      id: '/_hq/launches'
+      path: '/launches'
+      fullPath: '/launches'
+      preLoaderRoute: typeof HqLaunchesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/lab-notebook': {
+      id: '/_hq/lab-notebook'
+      path: '/lab-notebook'
+      fullPath: '/lab-notebook'
+      preLoaderRoute: typeof HqLabNotebookRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/kpis': {
+      id: '/_hq/kpis'
+      path: '/kpis'
+      fullPath: '/kpis'
+      preLoaderRoute: typeof HqKpisRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/kb': {
+      id: '/_hq/kb'
+      path: '/kb'
+      fullPath: '/kb'
+      preLoaderRoute: typeof HqKbRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/kanban': {
+      id: '/_hq/kanban'
+      path: '/kanban'
+      fullPath: '/kanban'
+      preLoaderRoute: typeof HqKanbanRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-sso': {
+      id: '/_hq/it-sso'
+      path: '/it-sso'
+      fullPath: '/it-sso'
+      preLoaderRoute: typeof HqItSsoRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-servers': {
+      id: '/_hq/it-servers'
+      path: '/it-servers'
+      fullPath: '/it-servers'
+      preLoaderRoute: typeof HqItServersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-security': {
+      id: '/_hq/it-security'
+      path: '/it-security'
+      fullPath: '/it-security'
+      preLoaderRoute: typeof HqItSecurityRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-network': {
+      id: '/_hq/it-network'
+      path: '/it-network'
+      fullPath: '/it-network'
+      preLoaderRoute: typeof HqItNetworkRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-monitoring': {
+      id: '/_hq/it-monitoring'
+      path: '/it-monitoring'
+      fullPath: '/it-monitoring'
+      preLoaderRoute: typeof HqItMonitoringRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-logs': {
+      id: '/_hq/it-logs'
+      path: '/it-logs'
+      fullPath: '/it-logs'
+      preLoaderRoute: typeof HqItLogsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-integrations': {
+      id: '/_hq/it-integrations'
+      path: '/it-integrations'
+      fullPath: '/it-integrations'
+      preLoaderRoute: typeof HqItIntegrationsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-devices': {
+      id: '/_hq/it-devices'
+      path: '/it-devices'
+      fullPath: '/it-devices'
+      preLoaderRoute: typeof HqItDevicesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-backups': {
+      id: '/_hq/it-backups'
+      path: '/it-backups'
+      fullPath: '/it-backups'
+      preLoaderRoute: typeof HqItBackupsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-audit': {
+      id: '/_hq/it-audit'
+      path: '/it-audit'
+      fullPath: '/it-audit'
+      preLoaderRoute: typeof HqItAuditRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/it-api-keys': {
+      id: '/_hq/it-api-keys'
+      path: '/it-api-keys'
+      fullPath: '/it-api-keys'
+      preLoaderRoute: typeof HqItApiKeysRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/issues': {
+      id: '/_hq/issues'
+      path: '/issues'
+      fullPath: '/issues'
+      preLoaderRoute: typeof HqIssuesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/invoices': {
+      id: '/_hq/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof HqInvoicesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/investors': {
+      id: '/_hq/investors'
+      path: '/investors'
+      fullPath: '/investors'
+      preLoaderRoute: typeof HqInvestorsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/inventory': {
+      id: '/_hq/inventory'
+      path: '/inventory'
+      fullPath: '/inventory'
+      preLoaderRoute: typeof HqInventoryRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/interviews': {
+      id: '/_hq/interviews'
+      path: '/interviews'
+      fullPath: '/interviews'
+      preLoaderRoute: typeof HqInterviewsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/hiring': {
+      id: '/_hq/hiring'
+      path: '/hiring'
+      fullPath: '/hiring'
+      preLoaderRoute: typeof HqHiringRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/goals': {
+      id: '/_hq/goals'
+      path: '/goals'
+      fullPath: '/goals'
+      preLoaderRoute: typeof HqGoalsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/gantt': {
+      id: '/_hq/gantt'
+      path: '/gantt'
+      fullPath: '/gantt'
+      preLoaderRoute: typeof HqGanttRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/forecasting': {
+      id: '/_hq/forecasting'
+      path: '/forecasting'
+      fullPath: '/forecasting'
+      preLoaderRoute: typeof HqForecastingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/firmware': {
+      id: '/_hq/firmware'
+      path: '/firmware'
+      fullPath: '/firmware'
+      preLoaderRoute: typeof HqFirmwareRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/financial-reports': {
+      id: '/_hq/financial-reports'
+      path: '/financial-reports'
+      fullPath: '/financial-reports'
+      preLoaderRoute: typeof HqFinancialReportsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/files-versions': {
+      id: '/_hq/files-versions'
+      path: '/files-versions'
+      fullPath: '/files-versions'
+      preLoaderRoute: typeof HqFilesVersionsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/files-shared': {
+      id: '/_hq/files-shared'
+      path: '/files-shared'
+      fullPath: '/files-shared'
+      preLoaderRoute: typeof HqFilesSharedRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/files-permissions': {
+      id: '/_hq/files-permissions'
+      path: '/files-permissions'
+      fullPath: '/files-permissions'
+      preLoaderRoute: typeof HqFilesPermissionsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/files-backup': {
+      id: '/_hq/files-backup'
+      path: '/files-backup'
+      fullPath: '/files-backup'
+      preLoaderRoute: typeof HqFilesBackupRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/files': {
+      id: '/_hq/files'
+      path: '/files'
+      fullPath: '/files'
+      preLoaderRoute: typeof HqFilesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/feed': {
+      id: '/_hq/feed'
+      path: '/feed'
+      fullPath: '/feed'
+      preLoaderRoute: typeof HqFeedRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/factory-live': {
+      id: '/_hq/factory-live'
+      path: '/factory-live'
+      fullPath: '/factory-live'
+      preLoaderRoute: typeof HqFactoryLiveRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/expenses': {
+      id: '/_hq/expenses'
+      path: '/expenses'
+      fullPath: '/expenses'
+      preLoaderRoute: typeof HqExpensesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/employees': {
+      id: '/_hq/employees'
+      path: '/employees'
+      fullPath: '/employees'
+      preLoaderRoute: typeof HqEmployeesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/email-support': {
+      id: '/_hq/email-support'
+      path: '/email-support'
+      fullPath: '/email-support'
+      preLoaderRoute: typeof HqEmailSupportRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/email-campaigns': {
+      id: '/_hq/email-campaigns'
+      path: '/email-campaigns'
+      fullPath: '/email-campaigns'
+      preLoaderRoute: typeof HqEmailCampaignsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/eco': {
+      id: '/_hq/eco'
+      path: '/eco'
+      fullPath: '/eco'
+      preLoaderRoute: typeof HqEcoRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/docs': {
+      id: '/_hq/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof HqDocsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/dm': {
+      id: '/_hq/dm'
+      path: '/dm'
+      fullPath: '/dm'
+      preLoaderRoute: typeof HqDmRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/discounts': {
+      id: '/_hq/discounts'
+      path: '/discounts'
+      fullPath: '/discounts'
+      preLoaderRoute: typeof HqDiscountsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/digital-twin': {
+      id: '/_hq/digital-twin'
+      path: '/digital-twin'
+      fullPath: '/digital-twin'
+      preLoaderRoute: typeof HqDigitalTwinRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/diagnostics': {
+      id: '/_hq/diagnostics'
+      path: '/diagnostics'
+      fullPath: '/diagnostics'
+      preLoaderRoute: typeof HqDiagnosticsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/design-reviews': {
+      id: '/_hq/design-reviews'
+      path: '/design-reviews'
+      fullPath: '/design-reviews'
+      preLoaderRoute: typeof HqDesignReviewsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/decision-log': {
+      id: '/_hq/decision-log'
+      path: '/decision-log'
+      fullPath: '/decision-log'
+      preLoaderRoute: typeof HqDecisionLogRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/dashboard': {
+      id: '/_hq/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof HqDashboardRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/customer-timeline': {
+      id: '/_hq/customer-timeline'
+      path: '/customer-timeline'
+      fullPath: '/customer-timeline'
+      preLoaderRoute: typeof HqCustomerTimelineRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/csat': {
+      id: '/_hq/csat'
+      path: '/csat'
+      fullPath: '/csat'
+      preLoaderRoute: typeof HqCsatRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/crm': {
+      id: '/_hq/crm'
+      path: '/crm'
+      fullPath: '/crm'
+      preLoaderRoute: typeof HqCrmRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/contracts': {
+      id: '/_hq/contracts'
+      path: '/contracts'
+      fullPath: '/contracts'
+      preLoaderRoute: typeof HqContractsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/content-calendar': {
+      id: '/_hq/content-calendar'
+      path: '/content-calendar'
+      fullPath: '/content-calendar'
+      preLoaderRoute: typeof HqContentCalendarRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/contacts': {
+      id: '/_hq/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof HqContactsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/cms': {
+      id: '/_hq/cms'
+      path: '/cms'
+      fullPath: '/cms'
+      preLoaderRoute: typeof HqCmsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/chat': {
+      id: '/_hq/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof HqChatRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/channels': {
+      id: '/_hq/channels'
+      path: '/channels'
+      fullPath: '/channels'
+      preLoaderRoute: typeof HqChannelsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/calls': {
+      id: '/_hq/calls'
+      path: '/calls'
+      fullPath: '/calls'
+      preLoaderRoute: typeof HqCallsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/calibration': {
+      id: '/_hq/calibration'
+      path: '/calibration'
+      fullPath: '/calibration'
+      preLoaderRoute: typeof HqCalibrationRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/calendar': {
+      id: '/_hq/calendar'
+      path: '/calendar'
+      fullPath: '/calendar'
+      preLoaderRoute: typeof HqCalendarRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/cad-viewer': {
+      id: '/_hq/cad-viewer'
+      path: '/cad-viewer'
+      fullPath: '/cad-viewer'
+      preLoaderRoute: typeof HqCadViewerRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/cad': {
+      id: '/_hq/cad'
+      path: '/cad'
+      fullPath: '/cad'
+      preLoaderRoute: typeof HqCadRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/budgets': {
+      id: '/_hq/budgets'
+      path: '/budgets'
+      fullPath: '/budgets'
+      preLoaderRoute: typeof HqBudgetsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/brand-assets': {
+      id: '/_hq/brand-assets'
+      path: '/brand-assets'
+      fullPath: '/brand-assets'
+      preLoaderRoute: typeof HqBrandAssetsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/bom': {
+      id: '/_hq/bom'
+      path: '/bom'
+      fullPath: '/bom'
+      preLoaderRoute: typeof HqBomRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/benefits': {
+      id: '/_hq/benefits'
+      path: '/benefits'
+      fullPath: '/benefits'
+      preLoaderRoute: typeof HqBenefitsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/banking': {
+      id: '/_hq/banking'
+      path: '/banking'
+      fullPath: '/banking'
+      preLoaderRoute: typeof HqBankingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/balance-sheet': {
+      id: '/_hq/balance-sheet'
+      path: '/balance-sheet'
+      fullPath: '/balance-sheet'
+      preLoaderRoute: typeof HqBalanceSheetRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/assistant': {
+      id: '/_hq/assistant'
+      path: '/assistant'
+      fullPath: '/assistant'
+      preLoaderRoute: typeof HqAssistantRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/assembly': {
+      id: '/_hq/assembly'
+      path: '/assembly'
+      fullPath: '/assembly'
+      preLoaderRoute: typeof HqAssemblyRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/approved-vendors': {
+      id: '/_hq/approved-vendors'
+      path: '/approved-vendors'
+      fullPath: '/approved-vendors'
+      preLoaderRoute: typeof HqApprovedVendorsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/approvals': {
+      id: '/_hq/approvals'
+      path: '/approvals'
+      fullPath: '/approvals'
+      preLoaderRoute: typeof HqApprovalsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/applicants': {
+      id: '/_hq/applicants'
+      path: '/applicants'
+      fullPath: '/applicants'
+      preLoaderRoute: typeof HqApplicantsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/api-builder': {
+      id: '/_hq/api-builder'
+      path: '/api-builder'
+      fullPath: '/api-builder'
+      preLoaderRoute: typeof HqApiBuilderRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/announcements': {
+      id: '/_hq/announcements'
+      path: '/announcements'
+      fullPath: '/announcements'
+      preLoaderRoute: typeof HqAnnouncementsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/analytics-sales': {
+      id: '/_hq/analytics-sales'
+      path: '/analytics-sales'
+      fullPath: '/analytics-sales'
+      preLoaderRoute: typeof HqAnalyticsSalesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/analytics-mfg': {
+      id: '/_hq/analytics-mfg'
+      path: '/analytics-mfg'
+      fullPath: '/analytics-mfg'
+      preLoaderRoute: typeof HqAnalyticsMfgRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/analytics-finance': {
+      id: '/_hq/analytics-finance'
+      path: '/analytics-finance'
+      fullPath: '/analytics-finance'
+      preLoaderRoute: typeof HqAnalyticsFinanceRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/analytics-employee': {
+      id: '/_hq/analytics-employee'
+      path: '/analytics-employee'
+      fullPath: '/analytics-employee'
+      preLoaderRoute: typeof HqAnalyticsEmployeeRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/analytics-customer': {
+      id: '/_hq/analytics-customer'
+      path: '/analytics-customer'
+      fullPath: '/analytics-customer'
+      preLoaderRoute: typeof HqAnalyticsCustomerRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/analytics': {
+      id: '/_hq/analytics'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof HqAnalyticsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/ai-insights': {
+      id: '/_hq/ai-insights'
+      path: '/ai-insights'
+      fullPath: '/ai-insights'
+      preLoaderRoute: typeof HqAiInsightsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/accounts': {
+      id: '/_hq/accounts'
+      path: '/accounts'
+      fullPath: '/accounts'
+      preLoaderRoute: typeof HqAccountsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/accounting': {
+      id: '/_hq/accounting'
+      path: '/accounting'
+      fullPath: '/accounting'
+      preLoaderRoute: typeof HqAccountingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/api/hq/assistant': {
+      id: '/api/hq/assistant'
+      path: '/api/hq/assistant'
+      fullPath: '/api/hq/assistant'
+      preLoaderRoute: typeof ApiHqAssistantRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_hq/admin/users': {
+      id: '/_hq/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof HqAdminUsersRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/security': {
+      id: '/_hq/admin/security'
+      path: '/admin/security'
+      fullPath: '/admin/security'
+      preLoaderRoute: typeof HqAdminSecurityRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/roles': {
+      id: '/_hq/admin/roles'
+      path: '/admin/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof HqAdminRolesRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/permissions': {
+      id: '/_hq/admin/permissions'
+      path: '/admin/permissions'
+      fullPath: '/admin/permissions'
+      preLoaderRoute: typeof HqAdminPermissionsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/domains': {
+      id: '/_hq/admin/domains'
+      path: '/admin/domains'
+      fullPath: '/admin/domains'
+      preLoaderRoute: typeof HqAdminDomainsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/departments': {
+      id: '/_hq/admin/departments'
+      path: '/admin/departments'
+      fullPath: '/admin/departments'
+      preLoaderRoute: typeof HqAdminDepartmentsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/company': {
+      id: '/_hq/admin/company'
+      path: '/admin/company'
+      fullPath: '/admin/company'
+      preLoaderRoute: typeof HqAdminCompanyRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/branding': {
+      id: '/_hq/admin/branding'
+      path: '/admin/branding'
+      fullPath: '/admin/branding'
+      preLoaderRoute: typeof HqAdminBrandingRouteImport
+      parentRoute: typeof HqRoute
+    }
   }
 }
+
+interface HqRouteChildren {
+  HqAccountingRoute: typeof HqAccountingRoute
+  HqAccountsRoute: typeof HqAccountsRoute
+  HqAiInsightsRoute: typeof HqAiInsightsRoute
+  HqAnalyticsRoute: typeof HqAnalyticsRoute
+  HqAnalyticsCustomerRoute: typeof HqAnalyticsCustomerRoute
+  HqAnalyticsEmployeeRoute: typeof HqAnalyticsEmployeeRoute
+  HqAnalyticsFinanceRoute: typeof HqAnalyticsFinanceRoute
+  HqAnalyticsMfgRoute: typeof HqAnalyticsMfgRoute
+  HqAnalyticsSalesRoute: typeof HqAnalyticsSalesRoute
+  HqAnnouncementsRoute: typeof HqAnnouncementsRoute
+  HqApiBuilderRoute: typeof HqApiBuilderRoute
+  HqApplicantsRoute: typeof HqApplicantsRoute
+  HqApprovalsRoute: typeof HqApprovalsRoute
+  HqApprovedVendorsRoute: typeof HqApprovedVendorsRoute
+  HqAssemblyRoute: typeof HqAssemblyRoute
+  HqAssistantRoute: typeof HqAssistantRoute
+  HqBalanceSheetRoute: typeof HqBalanceSheetRoute
+  HqBankingRoute: typeof HqBankingRoute
+  HqBenefitsRoute: typeof HqBenefitsRoute
+  HqBomRoute: typeof HqBomRoute
+  HqBrandAssetsRoute: typeof HqBrandAssetsRoute
+  HqBudgetsRoute: typeof HqBudgetsRoute
+  HqCadRoute: typeof HqCadRoute
+  HqCadViewerRoute: typeof HqCadViewerRoute
+  HqCalendarRoute: typeof HqCalendarRoute
+  HqCalibrationRoute: typeof HqCalibrationRoute
+  HqCallsRoute: typeof HqCallsRoute
+  HqChannelsRoute: typeof HqChannelsRoute
+  HqChatRoute: typeof HqChatRoute
+  HqCmsRoute: typeof HqCmsRoute
+  HqContactsRoute: typeof HqContactsRoute
+  HqContentCalendarRoute: typeof HqContentCalendarRoute
+  HqContractsRoute: typeof HqContractsRoute
+  HqCrmRoute: typeof HqCrmRoute
+  HqCsatRoute: typeof HqCsatRoute
+  HqCustomerTimelineRoute: typeof HqCustomerTimelineRoute
+  HqDashboardRoute: typeof HqDashboardRoute
+  HqDecisionLogRoute: typeof HqDecisionLogRoute
+  HqDesignReviewsRoute: typeof HqDesignReviewsRoute
+  HqDiagnosticsRoute: typeof HqDiagnosticsRoute
+  HqDigitalTwinRoute: typeof HqDigitalTwinRoute
+  HqDiscountsRoute: typeof HqDiscountsRoute
+  HqDmRoute: typeof HqDmRoute
+  HqDocsRoute: typeof HqDocsRoute
+  HqEcoRoute: typeof HqEcoRoute
+  HqEmailCampaignsRoute: typeof HqEmailCampaignsRoute
+  HqEmailSupportRoute: typeof HqEmailSupportRoute
+  HqEmployeesRoute: typeof HqEmployeesRoute
+  HqExpensesRoute: typeof HqExpensesRoute
+  HqFactoryLiveRoute: typeof HqFactoryLiveRoute
+  HqFeedRoute: typeof HqFeedRoute
+  HqFilesRoute: typeof HqFilesRoute
+  HqFilesBackupRoute: typeof HqFilesBackupRoute
+  HqFilesPermissionsRoute: typeof HqFilesPermissionsRoute
+  HqFilesSharedRoute: typeof HqFilesSharedRoute
+  HqFilesVersionsRoute: typeof HqFilesVersionsRoute
+  HqFinancialReportsRoute: typeof HqFinancialReportsRoute
+  HqFirmwareRoute: typeof HqFirmwareRoute
+  HqForecastingRoute: typeof HqForecastingRoute
+  HqGanttRoute: typeof HqGanttRoute
+  HqGoalsRoute: typeof HqGoalsRoute
+  HqHiringRoute: typeof HqHiringRoute
+  HqInterviewsRoute: typeof HqInterviewsRoute
+  HqInventoryRoute: typeof HqInventoryRoute
+  HqInvestorsRoute: typeof HqInvestorsRoute
+  HqInvoicesRoute: typeof HqInvoicesRoute
+  HqIssuesRoute: typeof HqIssuesRoute
+  HqItApiKeysRoute: typeof HqItApiKeysRoute
+  HqItAuditRoute: typeof HqItAuditRoute
+  HqItBackupsRoute: typeof HqItBackupsRoute
+  HqItDevicesRoute: typeof HqItDevicesRoute
+  HqItIntegrationsRoute: typeof HqItIntegrationsRoute
+  HqItLogsRoute: typeof HqItLogsRoute
+  HqItMonitoringRoute: typeof HqItMonitoringRoute
+  HqItNetworkRoute: typeof HqItNetworkRoute
+  HqItSecurityRoute: typeof HqItSecurityRoute
+  HqItServersRoute: typeof HqItServersRoute
+  HqItSsoRoute: typeof HqItSsoRoute
+  HqKanbanRoute: typeof HqKanbanRoute
+  HqKbRoute: typeof HqKbRoute
+  HqKpisRoute: typeof HqKpisRoute
+  HqLabNotebookRoute: typeof HqLabNotebookRoute
+  HqLaunchesRoute: typeof HqLaunchesRoute
+  HqLeadTimesRoute: typeof HqLeadTimesRoute
+  HqLeadsRoute: typeof HqLeadsRoute
+  HqLegalDocsRoute: typeof HqLegalDocsRoute
+  HqLiveChatRoute: typeof HqLiveChatRoute
+  HqMachinesRoute: typeof HqMachinesRoute
+  HqMailRoute: typeof HqMailRoute
+  HqMailDraftsRoute: typeof HqMailDraftsRoute
+  HqMailRulesRoute: typeof HqMailRulesRoute
+  HqMailSentRoute: typeof HqMailSentRoute
+  HqMailSharedRoute: typeof HqMailSharedRoute
+  HqMailTemplatesRoute: typeof HqMailTemplatesRoute
+  HqMaintenanceRoute: typeof HqMaintenanceRoute
+  HqMarketingAnalyticsRoute: typeof HqMarketingAnalyticsRoute
+  HqMarketingBlogRoute: typeof HqMarketingBlogRoute
+  HqMediaLibraryRoute: typeof HqMediaLibraryRoute
+  HqMeetingNotesRoute: typeof HqMeetingNotesRoute
+  HqMeetingSummariesRoute: typeof HqMeetingSummariesRoute
+  HqMeetingsRoute: typeof HqMeetingsRoute
+  HqMilestonesRoute: typeof HqMilestonesRoute
+  HqNotificationsRoute: typeof HqNotificationsRoute
+  HqOkrsRoute: typeof HqOkrsRoute
+  HqOnboardingRoute: typeof HqOnboardingRoute
+  HqOrdersRoute: typeof HqOrdersRoute
+  HqOrgChartRoute: typeof HqOrgChartRoute
+  HqPackagingRoute: typeof HqPackagingRoute
+  HqPartnershipsRoute: typeof HqPartnershipsRoute
+  HqPayrollRoute: typeof HqPayrollRoute
+  HqPcbRoute: typeof HqPcbRoute
+  HqPhoneLogsRoute: typeof HqPhoneLogsRoute
+  HqPipelineRoute: typeof HqPipelineRoute
+  HqPnlRoute: typeof HqPnlRoute
+  HqPoliciesRoute: typeof HqPoliciesRoute
+  HqPressReleasesRoute: typeof HqPressReleasesRoute
+  HqPricingAdminRoute: typeof HqPricingAdminRoute
+  HqProductCatalogRoute: typeof HqProductCatalogRoute
+  HqProductCompatibilityRoute: typeof HqProductCompatibilityRoute
+  HqProductDocsRoute: typeof HqProductDocsRoute
+  HqProductFeaturesRoute: typeof HqProductFeaturesRoute
+  HqProductLifecycleRoute: typeof HqProductLifecycleRoute
+  HqProductReleasesRoute: typeof HqProductReleasesRoute
+  HqProductionRoute: typeof HqProductionRoute
+  HqProfileRoute: typeof HqProfileRoute
+  HqProjectsRoute: typeof HqProjectsRoute
+  HqPrototypesRoute: typeof HqPrototypesRoute
+  HqPurchaseHistoryRoute: typeof HqPurchaseHistoryRoute
+  HqPurchaseOrdersRoute: typeof HqPurchaseOrdersRoute
+  HqPurchasingRoute: typeof HqPurchasingRoute
+  HqQcRoute: typeof HqQcRoute
+  HqQuotesRoute: typeof HqQuotesRoute
+  HqRdExperimentsRoute: typeof HqRdExperimentsRoute
+  HqRdIdeasRoute: typeof HqRdIdeasRoute
+  HqRdMaterialsRoute: typeof HqRdMaterialsRoute
+  HqRdPapersRoute: typeof HqRdPapersRoute
+  HqRdPatentsRoute: typeof HqRdPatentsRoute
+  HqRdSimulationsRoute: typeof HqRdSimulationsRoute
+  HqRdTestDataRoute: typeof HqRdTestDataRoute
+  HqReceivingRoute: typeof HqReceivingRoute
+  HqRepairsRoute: typeof HqRepairsRoute
+  HqReposRoute: typeof HqReposRoute
+  HqReviewsRoute: typeof HqReviewsRoute
+  HqRfqsRoute: typeof HqRfqsRoute
+  HqRmaRoute: typeof HqRmaRoute
+  HqRoadmapRoute: typeof HqRoadmapRoute
+  HqSalesAnalyticsRoute: typeof HqSalesAnalyticsRoute
+  HqSalesContactsRoute: typeof HqSalesContactsRoute
+  HqScheduledJobsRoute: typeof HqScheduledJobsRoute
+  HqSearchRoute: typeof HqSearchRoute
+  HqSerialsRoute: typeof HqSerialsRoute
+  HqSettingsRoute: typeof HqSettingsRoute
+  HqShippingPrepRoute: typeof HqShippingPrepRoute
+  HqShippingTrackingRoute: typeof HqShippingTrackingRoute
+  HqSocialRoute: typeof HqSocialRoute
+  HqStrategyRoute: typeof HqStrategyRoute
+  HqSuppliersRoute: typeof HqSuppliersRoute
+  HqSupportFaqsRoute: typeof HqSupportFaqsRoute
+  HqTasksRoute: typeof HqTasksRoute
+  HqTaxesRoute: typeof HqTaxesRoute
+  HqTestReportsRoute: typeof HqTestReportsRoute
+  HqTicketsRoute: typeof HqTicketsRoute
+  HqTimeOffRoute: typeof HqTimeOffRoute
+  HqTimeTrackingRoute: typeof HqTimeTrackingRoute
+  HqTimelineRoute: typeof HqTimelineRoute
+  HqTrainingRoute: typeof HqTrainingRoute
+  HqVendorPortalRoute: typeof HqVendorPortalRoute
+  HqVendorQuotesRoute: typeof HqVendorQuotesRoute
+  HqVersionControlRoute: typeof HqVersionControlRoute
+  HqWarehouseRoute: typeof HqWarehouseRoute
+  HqWarrantyClaimsRoute: typeof HqWarrantyClaimsRoute
+  HqWebhooksRoute: typeof HqWebhooksRoute
+  HqWorkOrdersRoute: typeof HqWorkOrdersRoute
+  HqWorkflowsRoute: typeof HqWorkflowsRoute
+  HqAdminBrandingRoute: typeof HqAdminBrandingRoute
+  HqAdminCompanyRoute: typeof HqAdminCompanyRoute
+  HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
+  HqAdminDomainsRoute: typeof HqAdminDomainsRoute
+  HqAdminPermissionsRoute: typeof HqAdminPermissionsRoute
+  HqAdminRolesRoute: typeof HqAdminRolesRoute
+  HqAdminSecurityRoute: typeof HqAdminSecurityRoute
+  HqAdminUsersRoute: typeof HqAdminUsersRoute
+}
+
+const HqRouteChildren: HqRouteChildren = {
+  HqAccountingRoute: HqAccountingRoute,
+  HqAccountsRoute: HqAccountsRoute,
+  HqAiInsightsRoute: HqAiInsightsRoute,
+  HqAnalyticsRoute: HqAnalyticsRoute,
+  HqAnalyticsCustomerRoute: HqAnalyticsCustomerRoute,
+  HqAnalyticsEmployeeRoute: HqAnalyticsEmployeeRoute,
+  HqAnalyticsFinanceRoute: HqAnalyticsFinanceRoute,
+  HqAnalyticsMfgRoute: HqAnalyticsMfgRoute,
+  HqAnalyticsSalesRoute: HqAnalyticsSalesRoute,
+  HqAnnouncementsRoute: HqAnnouncementsRoute,
+  HqApiBuilderRoute: HqApiBuilderRoute,
+  HqApplicantsRoute: HqApplicantsRoute,
+  HqApprovalsRoute: HqApprovalsRoute,
+  HqApprovedVendorsRoute: HqApprovedVendorsRoute,
+  HqAssemblyRoute: HqAssemblyRoute,
+  HqAssistantRoute: HqAssistantRoute,
+  HqBalanceSheetRoute: HqBalanceSheetRoute,
+  HqBankingRoute: HqBankingRoute,
+  HqBenefitsRoute: HqBenefitsRoute,
+  HqBomRoute: HqBomRoute,
+  HqBrandAssetsRoute: HqBrandAssetsRoute,
+  HqBudgetsRoute: HqBudgetsRoute,
+  HqCadRoute: HqCadRoute,
+  HqCadViewerRoute: HqCadViewerRoute,
+  HqCalendarRoute: HqCalendarRoute,
+  HqCalibrationRoute: HqCalibrationRoute,
+  HqCallsRoute: HqCallsRoute,
+  HqChannelsRoute: HqChannelsRoute,
+  HqChatRoute: HqChatRoute,
+  HqCmsRoute: HqCmsRoute,
+  HqContactsRoute: HqContactsRoute,
+  HqContentCalendarRoute: HqContentCalendarRoute,
+  HqContractsRoute: HqContractsRoute,
+  HqCrmRoute: HqCrmRoute,
+  HqCsatRoute: HqCsatRoute,
+  HqCustomerTimelineRoute: HqCustomerTimelineRoute,
+  HqDashboardRoute: HqDashboardRoute,
+  HqDecisionLogRoute: HqDecisionLogRoute,
+  HqDesignReviewsRoute: HqDesignReviewsRoute,
+  HqDiagnosticsRoute: HqDiagnosticsRoute,
+  HqDigitalTwinRoute: HqDigitalTwinRoute,
+  HqDiscountsRoute: HqDiscountsRoute,
+  HqDmRoute: HqDmRoute,
+  HqDocsRoute: HqDocsRoute,
+  HqEcoRoute: HqEcoRoute,
+  HqEmailCampaignsRoute: HqEmailCampaignsRoute,
+  HqEmailSupportRoute: HqEmailSupportRoute,
+  HqEmployeesRoute: HqEmployeesRoute,
+  HqExpensesRoute: HqExpensesRoute,
+  HqFactoryLiveRoute: HqFactoryLiveRoute,
+  HqFeedRoute: HqFeedRoute,
+  HqFilesRoute: HqFilesRoute,
+  HqFilesBackupRoute: HqFilesBackupRoute,
+  HqFilesPermissionsRoute: HqFilesPermissionsRoute,
+  HqFilesSharedRoute: HqFilesSharedRoute,
+  HqFilesVersionsRoute: HqFilesVersionsRoute,
+  HqFinancialReportsRoute: HqFinancialReportsRoute,
+  HqFirmwareRoute: HqFirmwareRoute,
+  HqForecastingRoute: HqForecastingRoute,
+  HqGanttRoute: HqGanttRoute,
+  HqGoalsRoute: HqGoalsRoute,
+  HqHiringRoute: HqHiringRoute,
+  HqInterviewsRoute: HqInterviewsRoute,
+  HqInventoryRoute: HqInventoryRoute,
+  HqInvestorsRoute: HqInvestorsRoute,
+  HqInvoicesRoute: HqInvoicesRoute,
+  HqIssuesRoute: HqIssuesRoute,
+  HqItApiKeysRoute: HqItApiKeysRoute,
+  HqItAuditRoute: HqItAuditRoute,
+  HqItBackupsRoute: HqItBackupsRoute,
+  HqItDevicesRoute: HqItDevicesRoute,
+  HqItIntegrationsRoute: HqItIntegrationsRoute,
+  HqItLogsRoute: HqItLogsRoute,
+  HqItMonitoringRoute: HqItMonitoringRoute,
+  HqItNetworkRoute: HqItNetworkRoute,
+  HqItSecurityRoute: HqItSecurityRoute,
+  HqItServersRoute: HqItServersRoute,
+  HqItSsoRoute: HqItSsoRoute,
+  HqKanbanRoute: HqKanbanRoute,
+  HqKbRoute: HqKbRoute,
+  HqKpisRoute: HqKpisRoute,
+  HqLabNotebookRoute: HqLabNotebookRoute,
+  HqLaunchesRoute: HqLaunchesRoute,
+  HqLeadTimesRoute: HqLeadTimesRoute,
+  HqLeadsRoute: HqLeadsRoute,
+  HqLegalDocsRoute: HqLegalDocsRoute,
+  HqLiveChatRoute: HqLiveChatRoute,
+  HqMachinesRoute: HqMachinesRoute,
+  HqMailRoute: HqMailRoute,
+  HqMailDraftsRoute: HqMailDraftsRoute,
+  HqMailRulesRoute: HqMailRulesRoute,
+  HqMailSentRoute: HqMailSentRoute,
+  HqMailSharedRoute: HqMailSharedRoute,
+  HqMailTemplatesRoute: HqMailTemplatesRoute,
+  HqMaintenanceRoute: HqMaintenanceRoute,
+  HqMarketingAnalyticsRoute: HqMarketingAnalyticsRoute,
+  HqMarketingBlogRoute: HqMarketingBlogRoute,
+  HqMediaLibraryRoute: HqMediaLibraryRoute,
+  HqMeetingNotesRoute: HqMeetingNotesRoute,
+  HqMeetingSummariesRoute: HqMeetingSummariesRoute,
+  HqMeetingsRoute: HqMeetingsRoute,
+  HqMilestonesRoute: HqMilestonesRoute,
+  HqNotificationsRoute: HqNotificationsRoute,
+  HqOkrsRoute: HqOkrsRoute,
+  HqOnboardingRoute: HqOnboardingRoute,
+  HqOrdersRoute: HqOrdersRoute,
+  HqOrgChartRoute: HqOrgChartRoute,
+  HqPackagingRoute: HqPackagingRoute,
+  HqPartnershipsRoute: HqPartnershipsRoute,
+  HqPayrollRoute: HqPayrollRoute,
+  HqPcbRoute: HqPcbRoute,
+  HqPhoneLogsRoute: HqPhoneLogsRoute,
+  HqPipelineRoute: HqPipelineRoute,
+  HqPnlRoute: HqPnlRoute,
+  HqPoliciesRoute: HqPoliciesRoute,
+  HqPressReleasesRoute: HqPressReleasesRoute,
+  HqPricingAdminRoute: HqPricingAdminRoute,
+  HqProductCatalogRoute: HqProductCatalogRoute,
+  HqProductCompatibilityRoute: HqProductCompatibilityRoute,
+  HqProductDocsRoute: HqProductDocsRoute,
+  HqProductFeaturesRoute: HqProductFeaturesRoute,
+  HqProductLifecycleRoute: HqProductLifecycleRoute,
+  HqProductReleasesRoute: HqProductReleasesRoute,
+  HqProductionRoute: HqProductionRoute,
+  HqProfileRoute: HqProfileRoute,
+  HqProjectsRoute: HqProjectsRoute,
+  HqPrototypesRoute: HqPrototypesRoute,
+  HqPurchaseHistoryRoute: HqPurchaseHistoryRoute,
+  HqPurchaseOrdersRoute: HqPurchaseOrdersRoute,
+  HqPurchasingRoute: HqPurchasingRoute,
+  HqQcRoute: HqQcRoute,
+  HqQuotesRoute: HqQuotesRoute,
+  HqRdExperimentsRoute: HqRdExperimentsRoute,
+  HqRdIdeasRoute: HqRdIdeasRoute,
+  HqRdMaterialsRoute: HqRdMaterialsRoute,
+  HqRdPapersRoute: HqRdPapersRoute,
+  HqRdPatentsRoute: HqRdPatentsRoute,
+  HqRdSimulationsRoute: HqRdSimulationsRoute,
+  HqRdTestDataRoute: HqRdTestDataRoute,
+  HqReceivingRoute: HqReceivingRoute,
+  HqRepairsRoute: HqRepairsRoute,
+  HqReposRoute: HqReposRoute,
+  HqReviewsRoute: HqReviewsRoute,
+  HqRfqsRoute: HqRfqsRoute,
+  HqRmaRoute: HqRmaRoute,
+  HqRoadmapRoute: HqRoadmapRoute,
+  HqSalesAnalyticsRoute: HqSalesAnalyticsRoute,
+  HqSalesContactsRoute: HqSalesContactsRoute,
+  HqScheduledJobsRoute: HqScheduledJobsRoute,
+  HqSearchRoute: HqSearchRoute,
+  HqSerialsRoute: HqSerialsRoute,
+  HqSettingsRoute: HqSettingsRoute,
+  HqShippingPrepRoute: HqShippingPrepRoute,
+  HqShippingTrackingRoute: HqShippingTrackingRoute,
+  HqSocialRoute: HqSocialRoute,
+  HqStrategyRoute: HqStrategyRoute,
+  HqSuppliersRoute: HqSuppliersRoute,
+  HqSupportFaqsRoute: HqSupportFaqsRoute,
+  HqTasksRoute: HqTasksRoute,
+  HqTaxesRoute: HqTaxesRoute,
+  HqTestReportsRoute: HqTestReportsRoute,
+  HqTicketsRoute: HqTicketsRoute,
+  HqTimeOffRoute: HqTimeOffRoute,
+  HqTimeTrackingRoute: HqTimeTrackingRoute,
+  HqTimelineRoute: HqTimelineRoute,
+  HqTrainingRoute: HqTrainingRoute,
+  HqVendorPortalRoute: HqVendorPortalRoute,
+  HqVendorQuotesRoute: HqVendorQuotesRoute,
+  HqVersionControlRoute: HqVersionControlRoute,
+  HqWarehouseRoute: HqWarehouseRoute,
+  HqWarrantyClaimsRoute: HqWarrantyClaimsRoute,
+  HqWebhooksRoute: HqWebhooksRoute,
+  HqWorkOrdersRoute: HqWorkOrdersRoute,
+  HqWorkflowsRoute: HqWorkflowsRoute,
+  HqAdminBrandingRoute: HqAdminBrandingRoute,
+  HqAdminCompanyRoute: HqAdminCompanyRoute,
+  HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,
+  HqAdminDomainsRoute: HqAdminDomainsRoute,
+  HqAdminPermissionsRoute: HqAdminPermissionsRoute,
+  HqAdminRolesRoute: HqAdminRolesRoute,
+  HqAdminSecurityRoute: HqAdminSecurityRoute,
+  HqAdminUsersRoute: HqAdminUsersRoute,
+}
+
+const HqRouteWithChildren = HqRoute._addFileChildren(HqRouteChildren)
 
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
@@ -880,6 +4765,7 @@ const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HqRoute: HqRouteWithChildren,
   AboutRoute: AboutRoute,
   AccessoriesRoute: AccessoriesRoute,
   BlogRoute: BlogRouteWithChildren,
@@ -893,6 +4779,7 @@ const rootRouteChildren: RootRouteChildren = {
   GetInvolvedRoute: GetInvolvedRoute,
   HelpRoute: HelpRouteWithChildren,
   HowItsBuiltRoute: HowItsBuiltRoute,
+  HqLoginRoute: HqLoginRoute,
   LearnRoute: LearnRouteWithChildren,
   MaterialsRoute: MaterialsRouteWithChildren,
   MissionRoute: MissionRoute,
@@ -907,17 +4794,8 @@ const rootRouteChildren: RootRouteChildren = {
   LegalShippingReturnsRoute: LegalShippingReturnsRoute,
   LegalTermsRoute: LegalTermsRoute,
   LegalWarrantyRoute: LegalWarrantyRoute,
+  ApiHqAssistantRoute: ApiHqAssistantRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

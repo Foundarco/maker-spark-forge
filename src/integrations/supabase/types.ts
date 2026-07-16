@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          metadata: Json
+          module: string
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json
+          module: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json
+          module?: string
+        }
+        Relationships: []
+      }
+      announcements: {
+        Row: {
+          author_id: string | null
+          body: string | null
+          created_at: string
+          id: string
+          published_at: string
+          title: string
+        }
+        Insert: {
+          author_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string
+          title: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string
+          title?: string
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author: string | null
@@ -152,6 +212,42 @@ export type Database = {
         }
         Relationships: []
       }
+      invites: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          department: string | null
+          email: string
+          expires_at: string
+          full_name: string | null
+          id: string
+          invited_by: string | null
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          expires_at?: string
+          full_name?: string | null
+          id?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          expires_at?: string
+          full_name?: string | null
+          id?: string
+          invited_by?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
       newsletter_signups: {
         Row: {
           created_at: string
@@ -170,6 +266,36 @@ export type Database = {
           email?: string
           id?: string
           source?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -263,15 +389,91 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          department: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_hq_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "super_admin"
+        | "admin"
+        | "manager"
+        | "employee"
+        | "engineering"
+        | "manufacturing"
+        | "sales"
+        | "finance"
+        | "hr"
+        | "it"
+        | "support"
+        | "marketing"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -398,6 +600,21 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "super_admin",
+        "admin",
+        "manager",
+        "employee",
+        "engineering",
+        "manufacturing",
+        "sales",
+        "finance",
+        "hr",
+        "it",
+        "support",
+        "marketing",
+      ],
+    },
   },
 } as const
