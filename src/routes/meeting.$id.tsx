@@ -156,7 +156,7 @@ function MeetingRoom() {
     channelRef.current = null;
   }, []);
 
-  const saveMeetingNote = useCallback(async () => {
+  const saveMeetingNote = useCallback(async (options?: { hostEnded?: boolean }) => {
     if (noteSavedRef.current) return;
     if (!meRef.current || meRef.current.external) return;
     const { data: existing } = await supabase.from("meeting_notes").select("id").eq("meeting_id", id).limit(1);
@@ -165,20 +165,58 @@ function MeetingRoom() {
       meRef.current.name,
       ...Object.values(peersRef.current).map((p) => p.name),
     ]));
-    const body = transcript.length
-      ? transcript.map((t) => `[${new Date(t.t).toLocaleTimeString()}] ${t.speaker}: ${t.text}`).join("\n")
-      : `Meeting ended ${new Date().toLocaleString()}.\n\nAttendees: ${attendeeNames.join(", ")}\n\n_No live transcript was captured. Add notes here._`;
+    const durationMs = Date.now() - startedAtRef.current;
+    const mins = Math.floor(durationMs / 60000);
+    const secs = Math.floor((durationMs % 60000) / 1000);
+    const durationStr = mins >= 1 ? `${mins} min ${secs}s` : `${secs}s`;
+    // Extract shared links from chat
+    const chatMsgs = chat.filter((m) => m.text.trim());
+    const links: string[] = [];
+    for (const m of chatMsgs) {
+      const found = m.text.match(/https?:\/\/[^\s]+/g);
+      if (found) links.push(...found);
+    }
+    const uniqueLinks = Array.from(new Set(links));
+    const md = [
+      `# ${meeting?.title ?? "Meeting"} — Notes`,
+      "",
+      `**Date:** ${new Date().toLocaleString([], { dateStyle: "full", timeStyle: "short" })}`,
+      `**Duration:** ${durationStr}`,
+      `**Ended by:** ${meRef.current.name}${options?.hostEnded ? " (host ended for everyone)" : ""}`,
+      "",
+      "## Attendees",
+      ...attendeeNames.map((n) => `- ${n}`),
+      "",
+      "## Summary",
+      transcript.length
+        ? "Auto-generated from live transcript. Review and edit as needed."
+        : "_No live transcript was captured. Add a summary here._",
+      "",
+      transcript.length ? "## Transcript" : "",
+      ...(transcript.length ? transcript.map((t) => `- **${t.speaker}** _(${new Date(t.t).toLocaleTimeString()})_: ${t.text}`) : []),
+      "",
+      chatMsgs.length ? "## Chat Highlights" : "",
+      ...(chatMsgs.length ? chatMsgs.slice(-20).map((m) => `- **${m.fromName}:** ${m.text}`) : []),
+      "",
+      uniqueLinks.length ? "## Links Shared" : "",
+      ...uniqueLinks.map((l) => `- ${l}`),
+      "",
+      "## Action Items",
+      "- _Add action items and owners here._",
+    ].filter((line, i, arr) => !(line === "" && arr[i - 1] === "")).join("\n");
+    const plain = md.replace(/[#*_]/g, "");
     await supabase.from("meeting_notes").insert({
       meeting_id: id,
       author_id: meRef.current.id,
       title: `${meeting?.title ?? "Meeting"} — Notes`,
-      body,
+      body: plain,
+      content_md: md,
       meeting_date: new Date().toISOString(),
       tags: transcript.length ? ["transcript", "auto"] : ["auto"],
       attendees: attendeeNames,
-    });
+    } as any);
     noteSavedRef.current = true;
-  }, [id, transcript, meeting?.title]);
+  }, [id, transcript, meeting?.title, chat]);
 
   useEffect(() => {
     let mounted = true;
