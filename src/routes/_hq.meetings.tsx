@@ -73,6 +73,7 @@ function MeetingsPage() {
   const filtered = useMemo(() => {
     const now = new Date();
     return meetings.filter((m) => {
+      if ((m as any).ended_at) return false; // hide meetings the host explicitly ended
       const end = new Date(m.ends_at);
       if (tab === "upcoming") return end >= now;
       if (tab === "past") return end < now;
