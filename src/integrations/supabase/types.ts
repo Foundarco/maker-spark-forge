@@ -906,7 +906,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_meeting_invite_by_token: {
+        Args: { _meeting_id: string; _token: string }
+        Returns: {
+          created_at: string
+          email: string
+          id: string
+          joined_at: string
+          meeting_id: string
+          name: string
+          token: string
+        }[]
+      }
+      mark_meeting_invite_joined: {
+        Args: { _name?: string; _token: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:
