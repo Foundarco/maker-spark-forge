@@ -203,7 +203,10 @@ function CalendarPage() {
                 <span className={`text-xs ${isToday ? "flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground" : "text-muted-foreground"}`}>{day.getDate()}</span>
                 <div className="flex w-full flex-col gap-0.5 overflow-hidden">
                   {es.slice(0, 3).map((e) => (
-                    <div key={e.id} className={`truncate rounded border px-1 py-0.5 text-[10px] ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>{e.title}</div>
+                    <div key={e.id} className={`flex items-center gap-1 truncate rounded border px-1 py-0.5 text-[10px] ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
+                      {e.meeting_id && <Video className="h-2.5 w-2.5 shrink-0" />}
+                      <span className="truncate">{!e.all_day && `${new Date(e.starts_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} `}{e.title}</span>
+                    </div>
                   ))}
                   {es.length > 3 && <span className="text-[10px] text-muted-foreground">+{es.length - 3} more</span>}
                 </div>
