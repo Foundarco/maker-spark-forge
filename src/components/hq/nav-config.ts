@@ -47,7 +47,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Messages", to: "/dm", icon: MessagesSquare },
       { label: "Channels", to: "/channels", icon: Hash },
-      { label: "Calls & Meetings", to: "/meetings", icon: Video },
+      { label: "Meetings", to: "/meetings", icon: Video },
       { label: "Meeting Notes", to: "/meeting-notes", icon: StickyNote },
       { label: "Calendar", to: "/calendar", icon: Calendar },
     ],

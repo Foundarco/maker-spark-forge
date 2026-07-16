@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Video, Plus, Calendar as CalIcon, MapPin, ExternalLink, X, Clock, Check, XCircle, HelpCircle, Trash2 } from "lucide-react";
+import { Video, Plus, Calendar as CalIcon, MapPin, X, Clock, Check, XCircle, HelpCircle, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/meetings")({
   head: () => ({ meta: [{ title: "Meetings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -153,10 +153,10 @@ function MeetingsPage() {
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    {m.join_url && !isPast && (
-                      <a href={m.join_url} target="_blank" rel="noreferrer" className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">
-                        Join <ExternalLink className="h-3 w-3" />
-                      </a>
+                    {!isPast && (
+                      <Link to="/meeting/$id" params={{ id: m.id }} className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">
+                        <Video className="h-3 w-3" /> Join room
+                      </Link>
                     )}
                     {!isPast && (
                       <div className="flex gap-1">
