@@ -33,6 +33,8 @@ function dayLabel(iso: string) {
 }
 
 function DMPage() {
+  const searchParams = Route.useSearch();
+  const navigate = Route.useNavigate();
   const [me, setMe] = useState<string | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [messages, setMessages] = useState<DM[]>([]);
