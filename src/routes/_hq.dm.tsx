@@ -233,9 +233,19 @@ function DMPage() {
                 const mine = m.sender_id === me;
                 const optimistic = m.id.startsWith("tmp-");
                 const isDeleted = !!m.deleted_at;
+                const parent = m.reply_to_id ? thread.find((x) => x.id === m.reply_to_id) : null;
+                const parentMine = parent ? parent.sender_id === me : false;
+                const parentName = parent ? (parentMine ? "you" : (activeProfile?.full_name || activeProfile?.email || "them")) : "";
                 return (
                   <div key={r.key} className={`group flex ${mine ? "justify-end" : "justify-start"}`}>
-                    <div className="max-w-[75%]">
+                    <div className="max-w-[75%]" ref={(el) => { msgRefs.current[m.id] = el; }}>
+                      {parent && (
+                        <button onClick={() => scrollToMessage(parent.id)} className={`mb-1 flex max-w-full items-center gap-1 truncate rounded-lg border border-border bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground hover:text-primary ${mine ? "ml-auto" : ""}`}>
+                          <CornerDownRight className="h-3 w-3 shrink-0" />
+                          <span className="font-semibold">{parentName}:</span>
+                          <span className="truncate">{parent.deleted_at ? "message deleted" : (parent.body || "attachment")}</span>
+                        </button>
+                      )}
                       <div className={`relative rounded-2xl px-4 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"} ${optimistic ? "opacity-70" : ""}`}>
                         {editingMsg?.id === m.id ? (
                           <div className="flex items-center gap-2">
@@ -251,10 +261,11 @@ function DMPage() {
                           <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                           {mine && !optimistic && (m.read_at ? <CheckCheck className="h-3 w-3" /> : <Check className="h-3 w-3" />)}
                         </p>
-                        {mine && !optimistic && !isDeleted && editingMsg?.id !== m.id && (
+                        {!optimistic && !isDeleted && editingMsg?.id !== m.id && (
                           <div className="absolute -top-3 right-2 hidden gap-1 rounded-md border border-border bg-card p-0.5 shadow-sm group-hover:flex">
-                            <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>
-                            <button onClick={() => softDelete(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>
+                            <button onClick={() => setReplyingTo(m)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Reply"><Reply className="h-3 w-3" /></button>
+                            {mine && <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>}
+                            {mine && <button onClick={() => softDelete(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>}
                           </div>
                         )}
                       </div>
@@ -268,7 +279,7 @@ function DMPage() {
                 );
               })}
             </div>
-            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message ${activeProfile?.full_name || "teammate"}…`} />}
+            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message ${activeProfile?.full_name || "teammate"}…`} replyTo={replyingTo ? { name: replyingTo.sender_id === me ? "yourself" : (activeProfile?.full_name || activeProfile?.email || "them"), body: replyingTo.body, deleted: !!replyingTo.deleted_at } : null} onCancelReply={() => setReplyingTo(null)} />}
           </>
         )}
       </section>
