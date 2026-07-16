@@ -1,7 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Video, Plus, Calendar as CalIcon, MapPin, ExternalLink, X, Clock, Check, XCircle, HelpCircle, Trash2 } from "lucide-react";
+import { Video, Plus, Calendar as CalIcon, MapPin, X, Clock, Check, XCircle, HelpCircle, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/meetings")({
   head: () => ({ meta: [{ title: "Meetings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
