@@ -120,18 +120,19 @@ function RootShell({ children }: { children: ReactNode }) {
 function isHQHost(): boolean {
   if (typeof window === "undefined") return false;
   const h = window.location.hostname;
-  return (
-    h === "hq.clovrlab.com" ||
-    h.startsWith("hq--") ||
-    h.startsWith("hq.") ||
-    window.location.pathname.startsWith("/hq-login") ||
-    window.location.pathname.startsWith("/hq")
-  );
+  return h === "hq.clovrlab.com" || h.startsWith("hq--") || h.startsWith("hq.");
 }
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const hq = isHQHost();
+  const hq = typeof window !== "undefined" && isHQHost();
+
+  useEffect(() => {
+    if (hq && window.location.pathname === "/") {
+      window.location.replace("/dashboard");
+    }
+  }, [hq]);
+
   return (
     <QueryClientProvider client={queryClient}>
       {hq ? (

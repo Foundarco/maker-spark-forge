@@ -21,7 +21,7 @@ function HQLogin() {
   useEffect(() => {
     (async () => {
       const { data } = await supabase.auth.getUser();
-      if (data.user) navigate({ to: "/" });
+      if (data.user) navigate({ to: "/dashboard" });
     })();
   }, [navigate]);
 
@@ -33,7 +33,7 @@ function HQLogin() {
       if (mode === "signin") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate({ to: "/" });
+        navigate({ to: "/dashboard" });
       } else {
         const { error } = await supabase.auth.signUp({
           email,

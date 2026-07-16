@@ -36,7 +36,7 @@ export const navGroups: NavGroup[] = [
   {
     label: "Core",
     items: [
-      { label: "Dashboard", to: "/", icon: LayoutDashboard },
+      { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Notifications", to: "/notifications", icon: Bell },
       { label: "Universal Search", to: "/search", icon: Search },
       { label: "AI Assistant", to: "/assistant", icon: Bot },

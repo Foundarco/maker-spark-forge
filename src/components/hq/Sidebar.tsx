@@ -40,7 +40,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             {!isCollapsed && (
               <div className="mt-0.5 space-y-0.5">
                 {group.items.map((item) => {
-                  const active = pathname === item.to;
+                  const active = pathname === item.to || (item.to === "/dashboard" && pathname === "/");
                   const Icon = item.icon;
                   return (
                     <Link
