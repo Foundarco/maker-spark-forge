@@ -426,8 +426,22 @@ function MeetingRoom() {
     setChatDraft("");
   };
 
-  const leave = async () => {
-    await saveMeetingNote();
+  const isHost = !!meeting && !!me && !me.external && meeting.host_id === me.id;
+
+  const handleLeaveClick = () => {
+    if (isHost) setShowLeaveConfirm(true);
+    else void doLeave(false);
+  };
+
+  const doLeave = async (endForAll: boolean) => {
+    setEnding(true);
+    await saveMeetingNote({ hostEnded: endForAll });
+    if (endForAll && isHost) {
+      // Notify remote peers to leave, then mark meeting ended + delete it.
+      channelRef.current?.send({ type: "broadcast", event: "end-meeting", payload: { from: meRef.current?.id } });
+      await supabase.from("calendar_events").delete().eq("meeting_id", id);
+      await supabase.from("meetings").delete().eq("id", id);
+    }
     channelRef.current?.send({ type: "broadcast", event: "leave", payload: { from: meRef.current?.id } });
     cleanupAll();
     if (meRef.current?.external) navigate({ to: "/" });
