@@ -14,7 +14,7 @@ import {
   Server, Cable, KeyRound, Plug, ShieldOff, Save, ScrollText as LogsIcon, MonitorCheck, Fingerprint, FileSearch,
   Store, DoorOpen, FileQuestion, Quote, ArchiveRestore, Clock3, CheckCircle2, MapPin,
   Lightbulb, LineChart as ChartLine,
-  Package as ProdIcon, Sparkles, Rocket as LaunchIcon, RefreshCw, Layers,
+  Package as ProdIcon, Sparkles, Layers,
   Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Webhook, Code2,
   Cog, ShieldPlus, Building, Palette as BrandIcon, Globe2, KeyRound as PolicyIcon,
   Sparkle, Cpu as TwinIcon, Radio, Waypoints, FileClock,
