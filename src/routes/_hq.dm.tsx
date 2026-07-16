@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { MessagesSquare, Search, Send, User as UserIcon, Check, CheckCheck } from "lucide-react";
+import { MessageReactions } from "@/components/hq/MessageReactions";
 
 export const Route = createFileRoute("/_hq/dm")({
   head: () => ({ meta: [{ title: "Messages — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
