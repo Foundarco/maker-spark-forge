@@ -113,6 +113,139 @@ export type Database = {
         }
         Relationships: []
       }
+      calendar_events: {
+        Row: {
+          all_day: boolean
+          color: string
+          created_at: string
+          description: string | null
+          ends_at: string
+          id: string
+          location: string | null
+          owner_id: string
+          starts_at: string
+          title: string
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          all_day?: boolean
+          color?: string
+          created_at?: string
+          description?: string | null
+          ends_at: string
+          id?: string
+          location?: string | null
+          owner_id: string
+          starts_at: string
+          title: string
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          all_day?: boolean
+          color?: string
+          created_at?: string
+          description?: string | null
+          ends_at?: string
+          id?: string
+          location?: string | null
+          owner_id?: string
+          starts_at?: string
+          title?: string
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      channel_members: {
+        Row: {
+          channel_id: string
+          joined_at: string
+          user_id: string
+        }
+        Insert: {
+          channel_id: string
+          joined_at?: string
+          user_id: string
+        }
+        Update: {
+          channel_id?: string
+          joined_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_members_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channel_messages: {
+        Row: {
+          author_id: string
+          body: string
+          channel_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          channel_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          channel_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_messages_channel_id_fkey"
+            columns: ["channel_id"]
+            isOneToOne: false
+            referencedRelation: "channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      channels: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          id: string
+          is_private: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          id?: string
+          is_private?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -140,6 +273,33 @@ export type Database = {
           name?: string
           path?: string
           subject?: string | null
+        }
+        Relationships: []
+      }
+      direct_messages: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          read_at: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          recipient_id?: string
+          sender_id?: string
         }
         Relationships: []
       }
@@ -287,6 +447,121 @@ export type Database = {
           id?: string
           invited_by?: string | null
           role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
+      meeting_notes: {
+        Row: {
+          attendees: string[]
+          author_id: string
+          body: string | null
+          created_at: string
+          id: string
+          meeting_date: string | null
+          meeting_id: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attendees?: string[]
+          author_id: string
+          body?: string | null
+          created_at?: string
+          id?: string
+          meeting_date?: string | null
+          meeting_id?: string | null
+          tags?: string[]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attendees?: string[]
+          author_id?: string
+          body?: string | null
+          created_at?: string
+          id?: string
+          meeting_date?: string | null
+          meeting_id?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_notes_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meeting_participants: {
+        Row: {
+          meeting_id: string
+          rsvp: string
+          user_id: string
+        }
+        Insert: {
+          meeting_id: string
+          rsvp?: string
+          user_id: string
+        }
+        Update: {
+          meeting_id?: string
+          rsvp?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "meeting_participants_meeting_id_fkey"
+            columns: ["meeting_id"]
+            isOneToOne: false
+            referencedRelation: "meetings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meetings: {
+        Row: {
+          created_at: string
+          description: string | null
+          ends_at: string
+          host_id: string
+          id: string
+          join_url: string | null
+          location: string | null
+          starts_at: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          ends_at: string
+          host_id: string
+          id?: string
+          join_url?: string | null
+          location?: string | null
+          starts_at: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          ends_at?: string
+          host_id?: string
+          id?: string
+          join_url?: string | null
+          location?: string | null
+          starts_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
