@@ -68,6 +68,7 @@ function MeetingRoom() {
   const [error, setError] = useState<string | null>(null);
   const [sidePanel, setSidePanel] = useState<"chat" | "transcript" | null>("chat");
   const [enlarged, setEnlarged] = useState<{ stream: MediaStream; label: string } | null>(null);
+  const [, forceTick] = useState(0);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -219,6 +220,7 @@ function MeetingRoom() {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         if (!mounted) { stream.getTracks().forEach((t) => t.stop()); return; }
         localStreamRef.current = stream;
+        forceTick((n) => n + 1);
         if (localVideoRef.current) localVideoRef.current.srcObject = stream;
       } catch (err: any) {
         setError("Camera/mic access denied. " + err.message);
@@ -391,6 +393,13 @@ function MeetingRoom() {
   const copyLink = async () => {
     const url = new URL(window.location.href);
     url.search = ""; // share the open link, without any guest token
+    // Preview hosts (id-preview--*.lovable.app) require Lovable auth. Swap to the
+    // public custom domain so guests can join without hitting the Lovable gate.
+    if (/(^|\.)lovable\.app$/i.test(url.hostname) && /^id-preview--/i.test(url.hostname)) {
+      url.protocol = "https:";
+      url.hostname = "hq.clovrlab.com";
+      url.port = "";
+    }
     await navigator.clipboard.writeText(url.toString());
     setCopied(true); setTimeout(() => setCopied(false), 1500);
   };
@@ -605,8 +614,10 @@ function Tile({
   const localRef = useRef<HTMLVideoElement>(null);
   const ref = videoRef ?? localRef;
   useEffect(() => {
-    if (ref.current && stream && !videoRef) ref.current.srcObject = stream;
-  }, [stream, ref, videoRef]);
+    if (ref.current && stream && ref.current.srcObject !== stream) {
+      ref.current.srcObject = stream;
+    }
+  }, [stream, ref]);
   return (
     <div
       className={`group relative overflow-hidden rounded-xl bg-black ${onEnlarge ? "cursor-zoom-in" : ""}`}
