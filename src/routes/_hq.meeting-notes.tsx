@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { StickyNote, Plus, Search, X, Trash2, Tag as TagIcon, Users } from "lucide-react";
+import { StickyNote, Plus, Search, X, Trash2, Tag as TagIcon, Users, Mic, Square } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/meeting-notes")({
   head: () => ({ meta: [{ title: "Meeting Notes — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
