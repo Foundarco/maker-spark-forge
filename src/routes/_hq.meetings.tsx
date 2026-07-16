@@ -5,6 +5,7 @@ import {
   Video, Plus, Calendar as CalIcon, MapPin, X, Clock, Check, XCircle, HelpCircle, Trash2,
   Users, Mail, Copy, Link as LinkIcon, UserPlus, Search,
 } from "lucide-react";
+import { UserMention } from "@/components/hq/UserMention";
 
 export const Route = createFileRoute("/_hq/meetings")({
   head: () => ({ meta: [{ title: "Meetings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
