@@ -9,6 +9,9 @@ import { ProfilePopover } from "@/components/hq/ProfilePopover";
 
 export const Route = createFileRoute("/_hq/dm")({
   head: () => ({ meta: [{ title: "Messages — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    user: typeof search.user === "string" ? search.user : undefined,
+  }),
   component: DMPage,
 });
 
