@@ -41,7 +41,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <Menu className="h-5 w-5" />
       </button>
 
-      <Link to="/" className="mr-2 flex items-center gap-2">
+      <Link to="/dashboard" className="mr-2 flex items-center gap-2">
         <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
           <span className="text-xs font-bold">HQ</span>
         </div>

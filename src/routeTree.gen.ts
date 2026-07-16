@@ -99,6 +99,7 @@ import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orde
 import { Route as HqPurchaseHistoryRouteImport } from './routes/_hq.purchase-history'
 import { Route as HqPrototypesRouteImport } from './routes/_hq.prototypes'
 import { Route as HqProjectsRouteImport } from './routes/_hq.projects'
+import { Route as HqProfileRouteImport } from './routes/_hq.profile'
 import { Route as HqProductionRouteImport } from './routes/_hq.production'
 import { Route as HqProductReleasesRouteImport } from './routes/_hq.product-releases'
 import { Route as HqProductLifecycleRouteImport } from './routes/_hq.product-lifecycle'
@@ -186,6 +187,7 @@ import { Route as HqDigitalTwinRouteImport } from './routes/_hq.digital-twin'
 import { Route as HqDiagnosticsRouteImport } from './routes/_hq.diagnostics'
 import { Route as HqDesignReviewsRouteImport } from './routes/_hq.design-reviews'
 import { Route as HqDecisionLogRouteImport } from './routes/_hq.decision-log'
+import { Route as HqDashboardRouteImport } from './routes/_hq.dashboard'
 import { Route as HqCustomerTimelineRouteImport } from './routes/_hq.customer-timeline'
 import { Route as HqCsatRouteImport } from './routes/_hq.csat'
 import { Route as HqCrmRouteImport } from './routes/_hq.crm'
@@ -212,6 +214,7 @@ import { Route as HqApprovedVendorsRouteImport } from './routes/_hq.approved-ven
 import { Route as HqApprovalsRouteImport } from './routes/_hq.approvals'
 import { Route as HqApplicantsRouteImport } from './routes/_hq.applicants'
 import { Route as HqApiBuilderRouteImport } from './routes/_hq.api-builder'
+import { Route as HqAnnouncementsRouteImport } from './routes/_hq.announcements'
 import { Route as HqAnalyticsSalesRouteImport } from './routes/_hq.analytics-sales'
 import { Route as HqAnalyticsMfgRouteImport } from './routes/_hq.analytics-mfg'
 import { Route as HqAnalyticsFinanceRouteImport } from './routes/_hq.analytics-finance'
@@ -222,7 +225,9 @@ import { Route as HqAiInsightsRouteImport } from './routes/_hq.ai-insights'
 import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
+import { Route as HqAdminUsersRouteImport } from './routes/_hq.admin.users'
 import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
+import { Route as HqAdminRolesRouteImport } from './routes/_hq.admin.roles'
 import { Route as HqAdminPermissionsRouteImport } from './routes/_hq.admin.permissions'
 import { Route as HqAdminDomainsRouteImport } from './routes/_hq.admin.domains'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
@@ -678,6 +683,11 @@ const HqProjectsRoute = HqProjectsRouteImport.update({
   path: '/projects',
   getParentRoute: () => HqRoute,
 } as any)
+const HqProfileRoute = HqProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqProductionRoute = HqProductionRouteImport.update({
   id: '/production',
   path: '/production',
@@ -1113,6 +1123,11 @@ const HqDecisionLogRoute = HqDecisionLogRouteImport.update({
   path: '/decision-log',
   getParentRoute: () => HqRoute,
 } as any)
+const HqDashboardRoute = HqDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqCustomerTimelineRoute = HqCustomerTimelineRouteImport.update({
   id: '/customer-timeline',
   path: '/customer-timeline',
@@ -1243,6 +1258,11 @@ const HqApiBuilderRoute = HqApiBuilderRouteImport.update({
   path: '/api-builder',
   getParentRoute: () => HqRoute,
 } as any)
+const HqAnnouncementsRoute = HqAnnouncementsRouteImport.update({
+  id: '/announcements',
+  path: '/announcements',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqAnalyticsSalesRoute = HqAnalyticsSalesRouteImport.update({
   id: '/analytics-sales',
   path: '/analytics-sales',
@@ -1293,9 +1313,19 @@ const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   path: '/api/hq/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HqAdminUsersRoute = HqAdminUsersRouteImport.update({
+  id: '/admin/users',
+  path: '/admin/users',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqAdminSecurityRoute = HqAdminSecurityRouteImport.update({
   id: '/admin/security',
   path: '/admin/security',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminRolesRoute = HqAdminRolesRouteImport.update({
+  id: '/admin/roles',
+  path: '/admin/roles',
   getParentRoute: () => HqRoute,
 } as any)
 const HqAdminPermissionsRoute = HqAdminPermissionsRouteImport.update({
@@ -1358,6 +1388,7 @@ export interface FileRoutesByFullPath {
   '/analytics-finance': typeof HqAnalyticsFinanceRoute
   '/analytics-mfg': typeof HqAnalyticsMfgRoute
   '/analytics-sales': typeof HqAnalyticsSalesRoute
+  '/announcements': typeof HqAnnouncementsRoute
   '/api-builder': typeof HqApiBuilderRoute
   '/applicants': typeof HqApplicantsRoute
   '/approvals': typeof HqApprovalsRoute
@@ -1384,6 +1415,7 @@ export interface FileRoutesByFullPath {
   '/crm': typeof HqCrmRoute
   '/csat': typeof HqCsatRoute
   '/customer-timeline': typeof HqCustomerTimelineRoute
+  '/dashboard': typeof HqDashboardRoute
   '/decision-log': typeof HqDecisionLogRoute
   '/design-reviews': typeof HqDesignReviewsRoute
   '/diagnostics': typeof HqDiagnosticsRoute
@@ -1471,6 +1503,7 @@ export interface FileRoutesByFullPath {
   '/product-lifecycle': typeof HqProductLifecycleRoute
   '/product-releases': typeof HqProductReleasesRoute
   '/production': typeof HqProductionRoute
+  '/profile': typeof HqProfileRoute
   '/projects': typeof HqProjectsRoute
   '/prototypes': typeof HqPrototypesRoute
   '/purchase-history': typeof HqPurchaseHistoryRoute
@@ -1541,7 +1574,9 @@ export interface FileRoutesByFullPath {
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/admin/domains': typeof HqAdminDomainsRoute
   '/admin/permissions': typeof HqAdminPermissionsRoute
+  '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
+  '/admin/users': typeof HqAdminUsersRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesByTo {
@@ -1578,6 +1613,7 @@ export interface FileRoutesByTo {
   '/analytics-finance': typeof HqAnalyticsFinanceRoute
   '/analytics-mfg': typeof HqAnalyticsMfgRoute
   '/analytics-sales': typeof HqAnalyticsSalesRoute
+  '/announcements': typeof HqAnnouncementsRoute
   '/api-builder': typeof HqApiBuilderRoute
   '/applicants': typeof HqApplicantsRoute
   '/approvals': typeof HqApprovalsRoute
@@ -1604,6 +1640,7 @@ export interface FileRoutesByTo {
   '/crm': typeof HqCrmRoute
   '/csat': typeof HqCsatRoute
   '/customer-timeline': typeof HqCustomerTimelineRoute
+  '/dashboard': typeof HqDashboardRoute
   '/decision-log': typeof HqDecisionLogRoute
   '/design-reviews': typeof HqDesignReviewsRoute
   '/diagnostics': typeof HqDiagnosticsRoute
@@ -1691,6 +1728,7 @@ export interface FileRoutesByTo {
   '/product-lifecycle': typeof HqProductLifecycleRoute
   '/product-releases': typeof HqProductReleasesRoute
   '/production': typeof HqProductionRoute
+  '/profile': typeof HqProfileRoute
   '/projects': typeof HqProjectsRoute
   '/prototypes': typeof HqPrototypesRoute
   '/purchase-history': typeof HqPurchaseHistoryRoute
@@ -1761,7 +1799,9 @@ export interface FileRoutesByTo {
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/admin/domains': typeof HqAdminDomainsRoute
   '/admin/permissions': typeof HqAdminPermissionsRoute
+  '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
+  '/admin/users': typeof HqAdminUsersRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesById {
@@ -1800,6 +1840,7 @@ export interface FileRoutesById {
   '/_hq/analytics-finance': typeof HqAnalyticsFinanceRoute
   '/_hq/analytics-mfg': typeof HqAnalyticsMfgRoute
   '/_hq/analytics-sales': typeof HqAnalyticsSalesRoute
+  '/_hq/announcements': typeof HqAnnouncementsRoute
   '/_hq/api-builder': typeof HqApiBuilderRoute
   '/_hq/applicants': typeof HqApplicantsRoute
   '/_hq/approvals': typeof HqApprovalsRoute
@@ -1826,6 +1867,7 @@ export interface FileRoutesById {
   '/_hq/crm': typeof HqCrmRoute
   '/_hq/csat': typeof HqCsatRoute
   '/_hq/customer-timeline': typeof HqCustomerTimelineRoute
+  '/_hq/dashboard': typeof HqDashboardRoute
   '/_hq/decision-log': typeof HqDecisionLogRoute
   '/_hq/design-reviews': typeof HqDesignReviewsRoute
   '/_hq/diagnostics': typeof HqDiagnosticsRoute
@@ -1913,6 +1955,7 @@ export interface FileRoutesById {
   '/_hq/product-lifecycle': typeof HqProductLifecycleRoute
   '/_hq/product-releases': typeof HqProductReleasesRoute
   '/_hq/production': typeof HqProductionRoute
+  '/_hq/profile': typeof HqProfileRoute
   '/_hq/projects': typeof HqProjectsRoute
   '/_hq/prototypes': typeof HqPrototypesRoute
   '/_hq/purchase-history': typeof HqPurchaseHistoryRoute
@@ -1983,7 +2026,9 @@ export interface FileRoutesById {
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
   '/_hq/admin/domains': typeof HqAdminDomainsRoute
   '/_hq/admin/permissions': typeof HqAdminPermissionsRoute
+  '/_hq/admin/roles': typeof HqAdminRolesRoute
   '/_hq/admin/security': typeof HqAdminSecurityRoute
+  '/_hq/admin/users': typeof HqAdminUsersRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRouteTypes {
@@ -2022,6 +2067,7 @@ export interface FileRouteTypes {
     | '/analytics-finance'
     | '/analytics-mfg'
     | '/analytics-sales'
+    | '/announcements'
     | '/api-builder'
     | '/applicants'
     | '/approvals'
@@ -2048,6 +2094,7 @@ export interface FileRouteTypes {
     | '/crm'
     | '/csat'
     | '/customer-timeline'
+    | '/dashboard'
     | '/decision-log'
     | '/design-reviews'
     | '/diagnostics'
@@ -2135,6 +2182,7 @@ export interface FileRouteTypes {
     | '/product-lifecycle'
     | '/product-releases'
     | '/production'
+    | '/profile'
     | '/projects'
     | '/prototypes'
     | '/purchase-history'
@@ -2205,7 +2253,9 @@ export interface FileRouteTypes {
     | '/admin/departments'
     | '/admin/domains'
     | '/admin/permissions'
+    | '/admin/roles'
     | '/admin/security'
+    | '/admin/users'
     | '/api/hq/assistant'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -2242,6 +2292,7 @@ export interface FileRouteTypes {
     | '/analytics-finance'
     | '/analytics-mfg'
     | '/analytics-sales'
+    | '/announcements'
     | '/api-builder'
     | '/applicants'
     | '/approvals'
@@ -2268,6 +2319,7 @@ export interface FileRouteTypes {
     | '/crm'
     | '/csat'
     | '/customer-timeline'
+    | '/dashboard'
     | '/decision-log'
     | '/design-reviews'
     | '/diagnostics'
@@ -2355,6 +2407,7 @@ export interface FileRouteTypes {
     | '/product-lifecycle'
     | '/product-releases'
     | '/production'
+    | '/profile'
     | '/projects'
     | '/prototypes'
     | '/purchase-history'
@@ -2425,7 +2478,9 @@ export interface FileRouteTypes {
     | '/admin/departments'
     | '/admin/domains'
     | '/admin/permissions'
+    | '/admin/roles'
     | '/admin/security'
+    | '/admin/users'
     | '/api/hq/assistant'
   id:
     | '__root__'
@@ -2463,6 +2518,7 @@ export interface FileRouteTypes {
     | '/_hq/analytics-finance'
     | '/_hq/analytics-mfg'
     | '/_hq/analytics-sales'
+    | '/_hq/announcements'
     | '/_hq/api-builder'
     | '/_hq/applicants'
     | '/_hq/approvals'
@@ -2489,6 +2545,7 @@ export interface FileRouteTypes {
     | '/_hq/crm'
     | '/_hq/csat'
     | '/_hq/customer-timeline'
+    | '/_hq/dashboard'
     | '/_hq/decision-log'
     | '/_hq/design-reviews'
     | '/_hq/diagnostics'
@@ -2576,6 +2633,7 @@ export interface FileRouteTypes {
     | '/_hq/product-lifecycle'
     | '/_hq/product-releases'
     | '/_hq/production'
+    | '/_hq/profile'
     | '/_hq/projects'
     | '/_hq/prototypes'
     | '/_hq/purchase-history'
@@ -2646,7 +2704,9 @@ export interface FileRouteTypes {
     | '/_hq/admin/departments'
     | '/_hq/admin/domains'
     | '/_hq/admin/permissions'
+    | '/_hq/admin/roles'
     | '/_hq/admin/security'
+    | '/_hq/admin/users'
     | '/api/hq/assistant'
   fileRoutesById: FileRoutesById
 }
@@ -3316,6 +3376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqProjectsRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/profile': {
+      id: '/_hq/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof HqProfileRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/production': {
       id: '/_hq/production'
       path: '/production'
@@ -3925,6 +3992,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqDecisionLogRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/dashboard': {
+      id: '/_hq/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof HqDashboardRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/customer-timeline': {
       id: '/_hq/customer-timeline'
       path: '/customer-timeline'
@@ -4107,6 +4181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqApiBuilderRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/announcements': {
+      id: '/_hq/announcements'
+      path: '/announcements'
+      fullPath: '/announcements'
+      preLoaderRoute: typeof HqAnnouncementsRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/analytics-sales': {
       id: '/_hq/analytics-sales'
       path: '/analytics-sales'
@@ -4177,11 +4258,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHqAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_hq/admin/users': {
+      id: '/_hq/admin/users'
+      path: '/admin/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof HqAdminUsersRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/admin/security': {
       id: '/_hq/admin/security'
       path: '/admin/security'
       fullPath: '/admin/security'
       preLoaderRoute: typeof HqAdminSecurityRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/roles': {
+      id: '/_hq/admin/roles'
+      path: '/admin/roles'
+      fullPath: '/admin/roles'
+      preLoaderRoute: typeof HqAdminRolesRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/admin/permissions': {
@@ -4232,6 +4327,7 @@ interface HqRouteChildren {
   HqAnalyticsFinanceRoute: typeof HqAnalyticsFinanceRoute
   HqAnalyticsMfgRoute: typeof HqAnalyticsMfgRoute
   HqAnalyticsSalesRoute: typeof HqAnalyticsSalesRoute
+  HqAnnouncementsRoute: typeof HqAnnouncementsRoute
   HqApiBuilderRoute: typeof HqApiBuilderRoute
   HqApplicantsRoute: typeof HqApplicantsRoute
   HqApprovalsRoute: typeof HqApprovalsRoute
@@ -4258,6 +4354,7 @@ interface HqRouteChildren {
   HqCrmRoute: typeof HqCrmRoute
   HqCsatRoute: typeof HqCsatRoute
   HqCustomerTimelineRoute: typeof HqCustomerTimelineRoute
+  HqDashboardRoute: typeof HqDashboardRoute
   HqDecisionLogRoute: typeof HqDecisionLogRoute
   HqDesignReviewsRoute: typeof HqDesignReviewsRoute
   HqDiagnosticsRoute: typeof HqDiagnosticsRoute
@@ -4345,6 +4442,7 @@ interface HqRouteChildren {
   HqProductLifecycleRoute: typeof HqProductLifecycleRoute
   HqProductReleasesRoute: typeof HqProductReleasesRoute
   HqProductionRoute: typeof HqProductionRoute
+  HqProfileRoute: typeof HqProfileRoute
   HqProjectsRoute: typeof HqProjectsRoute
   HqPrototypesRoute: typeof HqPrototypesRoute
   HqPurchaseHistoryRoute: typeof HqPurchaseHistoryRoute
@@ -4399,7 +4497,9 @@ interface HqRouteChildren {
   HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
   HqAdminDomainsRoute: typeof HqAdminDomainsRoute
   HqAdminPermissionsRoute: typeof HqAdminPermissionsRoute
+  HqAdminRolesRoute: typeof HqAdminRolesRoute
   HqAdminSecurityRoute: typeof HqAdminSecurityRoute
+  HqAdminUsersRoute: typeof HqAdminUsersRoute
 }
 
 const HqRouteChildren: HqRouteChildren = {
@@ -4412,6 +4512,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqAnalyticsFinanceRoute: HqAnalyticsFinanceRoute,
   HqAnalyticsMfgRoute: HqAnalyticsMfgRoute,
   HqAnalyticsSalesRoute: HqAnalyticsSalesRoute,
+  HqAnnouncementsRoute: HqAnnouncementsRoute,
   HqApiBuilderRoute: HqApiBuilderRoute,
   HqApplicantsRoute: HqApplicantsRoute,
   HqApprovalsRoute: HqApprovalsRoute,
@@ -4438,6 +4539,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqCrmRoute: HqCrmRoute,
   HqCsatRoute: HqCsatRoute,
   HqCustomerTimelineRoute: HqCustomerTimelineRoute,
+  HqDashboardRoute: HqDashboardRoute,
   HqDecisionLogRoute: HqDecisionLogRoute,
   HqDesignReviewsRoute: HqDesignReviewsRoute,
   HqDiagnosticsRoute: HqDiagnosticsRoute,
@@ -4525,6 +4627,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqProductLifecycleRoute: HqProductLifecycleRoute,
   HqProductReleasesRoute: HqProductReleasesRoute,
   HqProductionRoute: HqProductionRoute,
+  HqProfileRoute: HqProfileRoute,
   HqProjectsRoute: HqProjectsRoute,
   HqPrototypesRoute: HqPrototypesRoute,
   HqPurchaseHistoryRoute: HqPurchaseHistoryRoute,
@@ -4579,7 +4682,9 @@ const HqRouteChildren: HqRouteChildren = {
   HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,
   HqAdminDomainsRoute: HqAdminDomainsRoute,
   HqAdminPermissionsRoute: HqAdminPermissionsRoute,
+  HqAdminRolesRoute: HqAdminRolesRoute,
   HqAdminSecurityRoute: HqAdminSecurityRoute,
+  HqAdminUsersRoute: HqAdminUsersRoute,
 }
 
 const HqRouteWithChildren = HqRoute._addFileChildren(HqRouteChildren)
