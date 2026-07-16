@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { X, Mail, Building2 } from "lucide-react";
+import { X, Mail, Building2, MessageSquare, User as UserIcon } from "lucide-react";
 
 type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
 type Role = { id: string; name: string; color: string; position: number };
@@ -34,9 +35,15 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
   }, [onClose]);
 
   const name = profile?.full_name || profile?.email || "Loading…";
+  const navigate = useNavigate();
   const style: React.CSSProperties = anchor
     ? { position: "fixed", top: anchor.y, left: anchor.x, zIndex: 60 }
     : { position: "fixed", top: "20%", left: "50%", transform: "translateX(-50%)", zIndex: 60 };
+
+  const openDM = () => {
+    onClose();
+    navigate({ to: "/dm", search: { user: userId } as any });
+  };
 
   return (
     <div ref={boxRef} style={style} className="w-72 rounded-xl border border-border bg-card p-4 shadow-2xl">
@@ -50,11 +57,26 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
         </div>
         <button onClick={onClose} className="rounded p-1 hover:bg-muted" aria-label="Close"><X className="h-4 w-4" /></button>
       </div>
+
+      <div className="grid grid-cols-2 gap-1.5">
+        <button onClick={openDM} disabled={!profile} className="flex items-center justify-center gap-1 rounded-lg bg-primary px-2 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-50">
+          <MessageSquare className="h-3 w-3" /> Message
+        </button>
+        {profile?.email ? (
+          <a href={`mailto:${profile.email}`} className="flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs hover:bg-muted">
+            <Mail className="h-3 w-3" /> Email
+          </a>
+        ) : (
+          <button disabled className="flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs opacity-50">
+            <Mail className="h-3 w-3" /> Email
+          </button>
+        )}
+      </div>
+
       {profile?.email && (
-        <a href={`mailto:${profile.email}`} className="flex items-center gap-1.5 rounded border border-border px-2 py-1.5 text-xs hover:bg-muted">
-          <Mail className="h-3 w-3" />{profile.email}
-        </a>
+        <p className="mt-2 flex items-center gap-1 truncate text-[11px] text-muted-foreground"><UserIcon className="h-3 w-3" />{profile.email}</p>
       )}
+
       {roles.length > 0 && (
         <div className="mt-3">
           <p className="mb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Roles</p>

@@ -9,6 +9,9 @@ import { ProfilePopover } from "@/components/hq/ProfilePopover";
 
 export const Route = createFileRoute("/_hq/dm")({
   head: () => ({ meta: [{ title: "Messages — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
+  validateSearch: (search: Record<string, unknown>) => ({
+    user: typeof search.user === "string" ? search.user : undefined,
+  }),
   component: DMPage,
 });
 
@@ -30,6 +33,8 @@ function dayLabel(iso: string) {
 }
 
 function DMPage() {
+  const searchParams = Route.useSearch();
+  const navigate = Route.useNavigate();
   const [me, setMe] = useState<string | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [messages, setMessages] = useState<DM[]>([]);
@@ -52,6 +57,15 @@ function DMPage() {
       setMessages((dms ?? []) as any as DM[]);
     })();
   }, []);
+
+  // Deep-link: open a DM with ?user=<id>
+  useEffect(() => {
+    if (searchParams.user && searchParams.user !== me) {
+      setActive(searchParams.user);
+      // Clear the param so refresh/back doesn't re-force it
+      navigate({ search: { user: undefined } as any, replace: true });
+    }
+  }, [searchParams.user, me, navigate]);
 
   useEffect(() => {
     if (!me) return;

@@ -5,6 +5,7 @@ import {
   Video, Plus, Calendar as CalIcon, MapPin, X, Clock, Check, XCircle, HelpCircle, Trash2,
   Users, Mail, Copy, Link as LinkIcon, UserPlus, Search,
 } from "lucide-react";
+import { UserMention } from "@/components/hq/UserMention";
 
 export const Route = createFileRoute("/_hq/meetings")({
   head: () => ({ meta: [{ title: "Meetings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -261,7 +262,7 @@ function MeetingsPage() {
             return (
               <li key={m.id} className="rounded-xl border border-border bg-card p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3">
-                  <button onClick={() => setDetailOpen(m)} className="min-w-0 flex-1 text-left">
+                  <div role="button" tabIndex={0} onClick={() => setDetailOpen(m)} onKeyDown={(e) => { if (e.key === "Enter") setDetailOpen(m); }} className="min-w-0 flex-1 cursor-pointer text-left">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <CalIcon className="h-3.5 w-3.5" />
                       {start.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" })}
@@ -271,27 +272,21 @@ function MeetingsPage() {
                     <h3 className="mt-1 text-lg font-semibold">{m.title}</h3>
                     {m.description && <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{m.description}</p>}
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                      <span>Hosted by {host}</span>
+                      <span className="inline-flex items-center gap-1">Hosted by <UserMention userId={m.host_id} name={host} /></span>
                       {m.location && <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {m.location}</span>}
                       <span className="flex items-center gap-1"><Users className="h-3 w-3" />{attendees.length} teammate{attendees.length === 1 ? "" : "s"}</span>
                       {externals.length > 0 && <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{externals.length} guest{externals.length === 1 ? "" : "s"}</span>}
                     </div>
                     {(attendees.length > 0 || externals.length > 0) && (
-                      <div className="mt-2 flex flex-wrap gap-1">
+                      <div className="mt-2 flex flex-wrap gap-1" onClick={(e) => e.stopPropagation()}>
                         {attendees.slice(0, 8).map((p) => {
                           const prof = profiles[p.user_id];
                           const name = prof?.full_name || prof?.email || "Unknown";
-                          const initial = name.charAt(0).toUpperCase();
-                          const tone = p.rsvp === "yes" ? "border-green-500/40 bg-green-500/10 text-green-600 dark:text-green-400"
-                            : p.rsvp === "no" ? "border-destructive/40 bg-destructive/10 text-destructive"
-                            : p.rsvp === "maybe" ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
-                            : "border-border bg-muted/50 text-muted-foreground";
-                          return (
-                            <span key={p.user_id} className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] ${tone}`} title={`${name} · ${p.rsvp}`}>
-                              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-background text-[9px] font-semibold">{initial}</span>
-                              {name}
-                            </span>
-                          );
+                          const tone = p.rsvp === "yes" ? "border-green-500/40 bg-green-500/10 text-green-600 dark:text-green-400 hover:bg-green-500/20"
+                            : p.rsvp === "no" ? "border-destructive/40 bg-destructive/10 text-destructive hover:bg-destructive/20"
+                            : p.rsvp === "maybe" ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-500/20"
+                            : "border-border bg-muted/50 text-muted-foreground hover:bg-muted";
+                          return <UserMention key={p.user_id} userId={p.user_id} name={name} tone={tone} />;
                         })}
                         {attendees.length > 8 && <span className="text-[11px] text-muted-foreground">+{attendees.length - 8} more</span>}
                         {externals.slice(0, 4).map((x) => (
@@ -301,7 +296,7 @@ function MeetingsPage() {
                         ))}
                       </div>
                     )}
-                  </button>
+                  </div>
                   <div className="flex flex-col items-end gap-2">
                     {!isPast && (
                       <Link to="/meeting/$id" params={{ id: m.id }} className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground">
@@ -354,12 +349,15 @@ function MeetingsPage() {
                 <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Teammates</p>
                 {attendees.length === 0 ? <p className="text-xs text-muted-foreground">Just the host.</p> : (
                   <ul className="space-y-1">
-                    {attendees.map((p) => (
-                      <li key={p.user_id} className="flex items-center justify-between text-sm">
-                        <span>{profiles[p.user_id]?.full_name || profiles[p.user_id]?.email || "Unknown"}</span>
-                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.rsvp}</span>
-                      </li>
-                    ))}
+                    {attendees.map((p) => {
+                      const nm = profiles[p.user_id]?.full_name || profiles[p.user_id]?.email || "Unknown";
+                      return (
+                        <li key={p.user_id} className="flex items-center justify-between text-sm">
+                          <UserMention userId={p.user_id} name={nm} />
+                          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{p.rsvp}</span>
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
