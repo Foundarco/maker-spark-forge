@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Calendar as CalIcon, ChevronLeft, ChevronRight, Plus, X, MapPin, Clock, Trash2 } from "lucide-react";
+import { Calendar as CalIcon, ChevronLeft, ChevronRight, Plus, X, MapPin, Clock, Trash2, Users, User as UserIcon, StickyNote, Video } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/calendar")({
   head: () => ({ meta: [{ title: "Calendar — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -19,6 +19,15 @@ type Event = {
   location: string | null;
   color: string;
   visibility: string;
+  meeting_id?: string | null;
+};
+
+type MeetingMeta = {
+  id: string;
+  host_id: string;
+  host_name: string | null;
+  attendee_count: number;
+  note_preview: string | null;
 };
 
 const COLORS = ["orange", "blue", "green", "purple", "pink", "red"];
@@ -41,9 +50,21 @@ function startOfMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth(), 
 function daysInMonth(d: Date) { return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); }
 function sameDay(a: Date, b: Date) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); }
 
+function formatDuration(startIso: string, endIso: string, allDay: boolean) {
+  if (allDay) return "All day";
+  const ms = new Date(endIso).getTime() - new Date(startIso).getTime();
+  if (ms <= 0) return "";
+  const mins = Math.round(ms / 60000);
+  if (mins < 60) return `${mins} min`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m ? `${h}h ${m}m` : `${h}h`;
+}
+
 function CalendarPage() {
   const [me, setMe] = useState<string | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+  const [meetingsMeta, setMeetingsMeta] = useState<Record<string, MeetingMeta>>({});
   const [cursor, setCursor] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -53,9 +74,44 @@ function CalendarPage() {
     const { data: u } = await supabase.auth.getUser();
     setMe(u.user?.id ?? null);
     const { data } = await supabase.from("calendar_events").select("*").order("starts_at", { ascending: true });
-    setEvents((data ?? []) as Event[]);
+    const evs = (data ?? []) as Event[];
+    setEvents(evs);
+    const mIds = Array.from(new Set(evs.map((e) => e.meeting_id).filter(Boolean))) as string[];
+    if (mIds.length) {
+      const [{ data: mts }, { data: parts }, { data: notes }] = await Promise.all([
+        supabase.from("meetings").select("id, host_id").in("id", mIds),
+        supabase.from("meeting_participants").select("meeting_id, user_id").in("meeting_id", mIds),
+        supabase.from("meeting_notes").select("meeting_id, body, content_md").in("meeting_id", mIds),
+      ]);
+      const hostIds = Array.from(new Set(((mts ?? []) as any[]).map((m) => m.host_id)));
+      const { data: hosts } = hostIds.length
+        ? await supabase.from("profiles").select("id, full_name, email").in("id", hostIds)
+        : { data: [] as any[] };
+      const hostMap = new Map<string, string>();
+      (hosts ?? []).forEach((h: any) => hostMap.set(h.id, h.full_name || h.email || "Someone"));
+      const counts = new Map<string, number>();
+      ((parts ?? []) as any[]).forEach((p) => counts.set(p.meeting_id, (counts.get(p.meeting_id) ?? 0) + 1));
+      const noteMap = new Map<string, string>();
+      ((notes ?? []) as any[]).forEach((n) => {
+        const src = (n.content_md || n.body || "") as string;
+        const preview = src.replace(/[#*_>`\-]/g, "").split("\n").map((l: string) => l.trim()).filter(Boolean).slice(0, 3).join(" · ");
+        noteMap.set(n.meeting_id, preview.slice(0, 220));
+      });
+      const meta: Record<string, MeetingMeta> = {};
+      ((mts ?? []) as any[]).forEach((m) => {
+        meta[m.id] = {
+          id: m.id,
+          host_id: m.host_id,
+          host_name: hostMap.get(m.host_id) ?? null,
+          attendee_count: counts.get(m.id) ?? 0,
+          note_preview: noteMap.get(m.id) ?? null,
+        };
+      });
+      setMeetingsMeta(meta);
+    }
   };
   useEffect(() => { load(); }, []);
+
 
   const monthStart = startOfMonth(cursor);
   const monthDays = daysInMonth(cursor);
@@ -147,7 +203,10 @@ function CalendarPage() {
                 <span className={`text-xs ${isToday ? "flex h-5 w-5 items-center justify-center rounded-full bg-primary font-bold text-primary-foreground" : "text-muted-foreground"}`}>{day.getDate()}</span>
                 <div className="flex w-full flex-col gap-0.5 overflow-hidden">
                   {es.slice(0, 3).map((e) => (
-                    <div key={e.id} className={`truncate rounded border px-1 py-0.5 text-[10px] ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>{e.title}</div>
+                    <div key={e.id} className={`flex items-center gap-1 truncate rounded border px-1 py-0.5 text-[10px] ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
+                      {e.meeting_id && <Video className="h-2.5 w-2.5 shrink-0" />}
+                      <span className="truncate">{!e.all_day && `${new Date(e.starts_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} `}{e.title}</span>
+                    </div>
                   ))}
                   {es.length > 3 && <span className="text-[10px] text-muted-foreground">+{es.length - 3} more</span>}
                 </div>
@@ -165,17 +224,39 @@ function CalendarPage() {
           <p className="mt-1 text-xs text-muted-foreground">{selectedDay ? "Events on this day" : "Next 5 events"}</p>
         </header>
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
-          {(selectedDay ? dayEvents : events.filter((e) => new Date(e.ends_at) >= today).slice(0, 5)).map((e) => (
-            <button key={e.id} onClick={() => { setDraft(e); setShowForm(true); }} className={`block w-full rounded-lg border p-3 text-left transition hover:shadow ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
-              <p className="text-sm font-semibold">{e.title}</p>
-              <p className="mt-1 flex items-center gap-1 text-xs opacity-80">
-                <Clock className="h-3 w-3" />
-                {e.all_day ? "All day" : `${new Date(e.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}–${new Date(e.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
-              </p>
-              {e.location && <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><MapPin className="h-3 w-3" /> {e.location}</p>}
-              {e.visibility === "team" && <p className="mt-1 text-[10px] uppercase tracking-wider opacity-70">Team-wide</p>}
-            </button>
-          ))}
+          {(selectedDay ? dayEvents : events.filter((e) => new Date(e.ends_at) >= today).slice(0, 8)).map((e) => {
+            const meta = e.meeting_id ? meetingsMeta[e.meeting_id] : null;
+            return (
+              <button key={e.id} onClick={() => { setDraft(e); setShowForm(true); }} className={`block w-full rounded-lg border p-3 text-left transition hover:shadow ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
+                <div className="flex items-center gap-1.5">
+                  {e.meeting_id && <Video className="h-3 w-3 shrink-0" />}
+                  <p className="text-sm font-semibold">{e.title}</p>
+                </div>
+                <p className="mt-1 flex items-center gap-1 text-xs opacity-80">
+                  <Clock className="h-3 w-3" />
+                  {e.all_day ? "All day" : `${new Date(e.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}–${new Date(e.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
+                  <span className="text-[10px] opacity-70">· {formatDuration(e.starts_at, e.ends_at, e.all_day)}</span>
+                </p>
+                {meta?.host_name && (
+                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><UserIcon className="h-3 w-3" /> Host: {meta.host_name}</p>
+                )}
+                {meta && meta.attendee_count > 0 && (
+                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
+                )}
+                {e.location && <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><MapPin className="h-3 w-3" /> {e.location}</p>}
+                {e.description && !meta?.note_preview && (
+                  <p className="mt-1 line-clamp-2 text-xs opacity-70">{e.description}</p>
+                )}
+                {meta?.note_preview && (
+                  <div className="mt-2 rounded-md border border-current/20 bg-background/40 p-2 text-[11px] opacity-90">
+                    <p className="mb-0.5 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider opacity-70"><StickyNote className="h-2.5 w-2.5" /> Notes preview</p>
+                    <p className="line-clamp-3">{meta.note_preview}</p>
+                  </div>
+                )}
+                {e.visibility === "team" && <p className="mt-1 text-[10px] uppercase tracking-wider opacity-70">Team-wide</p>}
+              </button>
+            );
+          })}
           {(selectedDay ? dayEvents : events).length === 0 && (
             <p className="text-xs text-muted-foreground">No events. Click a date or "Event" to create one.</p>
           )}

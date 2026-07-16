@@ -1,22 +1,26 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Send, Paperclip, X, Loader2 } from "lucide-react";
+import { Send, Paperclip, X, Loader2, Reply } from "lucide-react";
 import { EmojiPickerButton } from "./EmojiPickerButton";
 
 export type Attachment = { path: string; url: string; name: string; type: string; size: number };
 
 export function MessageComposer({
-  onSend, placeholder, userId,
+  onSend, placeholder, userId, replyTo, onCancelReply,
 }: {
   onSend: (body: string, attachments: Attachment[]) => Promise<void> | void;
   placeholder?: string;
   userId: string;
+  replyTo?: { name: string; body: string; deleted?: boolean } | null;
+  onCancelReply?: () => void;
 }) {
   const [text, setText] = useState("");
   const [attaching, setAttaching] = useState<Attachment[]>([]);
   const [uploading, setUploading] = useState(false);
   const taRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { if (replyTo) taRef.current?.focus(); }, [replyTo]);
 
   const insertEmoji = (e: string) => {
     const ta = taRef.current;
@@ -56,6 +60,16 @@ export function MessageComposer({
 
   return (
     <form onSubmit={submit} className="border-t border-border p-3">
+      {replyTo && (
+        <div className="mb-2 flex items-start gap-2 rounded-lg border border-border bg-muted/30 px-3 py-1.5 text-xs">
+          <Reply className="mt-0.5 h-3 w-3 text-primary" />
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-primary">Replying to {replyTo.name}</p>
+            <p className="truncate text-muted-foreground">{replyTo.deleted ? "Message deleted" : (replyTo.body || "attachment")}</p>
+          </div>
+          <button type="button" onClick={onCancelReply} className="rounded p-0.5 hover:bg-background" aria-label="Cancel reply"><X className="h-3 w-3" /></button>
+        </div>
+      )}
       {attaching.length > 0 && (
         <div className="mb-2 flex flex-wrap gap-2">
           {attaching.map((a, i) => (
@@ -80,7 +94,7 @@ export function MessageComposer({
           ref={taRef}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void submit(); } }}
+          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void submit(); } if (e.key === "Escape" && replyTo) onCancelReply?.(); }}
           rows={1}
           placeholder={placeholder ?? "Type a message…"}
           className="max-h-32 flex-1 resize-none bg-transparent px-1 text-sm outline-none placeholder:text-muted-foreground"

@@ -72,6 +72,7 @@ function MeetingRoom() {
   const [speakingKeys, setSpeakingKeys] = useState<Record<string, boolean>>({});
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [ending, setEnding] = useState(false);
+  const [notesDraft, setNotesDraft] = useState<string | null>(null);
 
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -156,20 +157,15 @@ function MeetingRoom() {
     channelRef.current = null;
   }, []);
 
-  const saveMeetingNote = useCallback(async (options?: { hostEnded?: boolean }) => {
-    if (noteSavedRef.current) return;
-    if (!meRef.current || meRef.current.external) return;
-    const { data: existing } = await supabase.from("meeting_notes").select("id").eq("meeting_id", id).limit(1);
-    if (existing && existing.length > 0) { noteSavedRef.current = true; return; }
+  const buildAutoNotes = useCallback((options?: { hostEnded?: boolean }): { md: string; attendees: string[] } => {
     const attendeeNames = Array.from(new Set([
-      meRef.current.name,
+      meRef.current?.name ?? "Me",
       ...Object.values(peersRef.current).map((p) => p.name),
     ]));
     const durationMs = Date.now() - startedAtRef.current;
     const mins = Math.floor(durationMs / 60000);
     const secs = Math.floor((durationMs % 60000) / 1000);
     const durationStr = mins >= 1 ? `${mins} min ${secs}s` : `${secs}s`;
-    // Extract shared links from chat
     const chatMsgs = chat.filter((m) => m.text.trim());
     const links: string[] = [];
     for (const m of chatMsgs) {
@@ -177,34 +173,45 @@ function MeetingRoom() {
       if (found) links.push(...found);
     }
     const uniqueLinks = Array.from(new Set(links));
+    // Extract candidate discussion bullets from transcript (long-ish sentences), keep it concise.
+    const topics = transcript
+      .map((t) => t.text.trim())
+      .filter((t) => t.length > 20)
+      .slice(0, 6);
     const md = [
       `# ${meeting?.title ?? "Meeting"} — Notes`,
       "",
-      `**Date:** ${new Date().toLocaleString([], { dateStyle: "full", timeStyle: "short" })}`,
-      `**Duration:** ${durationStr}`,
-      `**Ended by:** ${meRef.current.name}${options?.hostEnded ? " (host ended for everyone)" : ""}`,
+      `_${new Date().toLocaleString([], { dateStyle: "full", timeStyle: "short" })} · ${durationStr}${options?.hostEnded ? " · host ended for everyone" : ""}_`,
+      "",
+      "## Summary",
+      "_Write a 2-3 sentence summary of what was covered._",
+      "",
+      "## Key Discussion Points",
+      ...(topics.length ? topics.map((t) => `- ${t}`) : ["- _Add the main topics discussed._"]),
+      "",
+      "## Decisions",
+      "- _What was decided?_",
+      "",
+      "## Action Items",
+      "- [ ] _Owner — action — due date_",
       "",
       "## Attendees",
       ...attendeeNames.map((n) => `- ${n}`),
-      "",
-      "## Summary",
-      transcript.length
-        ? "Auto-generated from live transcript. Review and edit as needed."
-        : "_No live transcript was captured. Add a summary here._",
-      "",
-      transcript.length ? "## Transcript" : "",
-      ...(transcript.length ? transcript.map((t) => `- **${t.speaker}** _(${new Date(t.t).toLocaleTimeString()})_: ${t.text}`) : []),
-      "",
-      chatMsgs.length ? "## Chat Highlights" : "",
-      ...(chatMsgs.length ? chatMsgs.slice(-20).map((m) => `- **${m.fromName}:** ${m.text}`) : []),
-      "",
-      uniqueLinks.length ? "## Links Shared" : "",
-      ...uniqueLinks.map((l) => `- ${l}`),
-      "",
-      "## Action Items",
-      "- _Add action items and owners here._",
+      ...(uniqueLinks.length ? ["", "## Links shared", ...uniqueLinks.map((l) => `- ${l}`)] : []),
+      ...(chatMsgs.length ? ["", "## Chat highlights", ...chatMsgs.slice(-10).map((m) => `- **${m.fromName}:** ${m.text}`)] : []),
+      ...(transcript.length ? ["", "<details><summary>Raw transcript</summary>", "", ...transcript.map((t) => `- **${t.speaker}** _(${new Date(t.t).toLocaleTimeString()})_: ${t.text}`), "", "</details>"] : []),
     ].filter((line, i, arr) => !(line === "" && arr[i - 1] === "")).join("\n");
-    const plain = md.replace(/[#*_]/g, "");
+    return { md, attendees: attendeeNames };
+  }, [chat, transcript, meeting?.title]);
+
+  const saveMeetingNote = useCallback(async (options?: { hostEnded?: boolean; overrideMd?: string }) => {
+    if (noteSavedRef.current) return;
+    if (!meRef.current || meRef.current.external) return;
+    const { data: existing } = await supabase.from("meeting_notes").select("id").eq("meeting_id", id).limit(1);
+    if (existing && existing.length > 0) { noteSavedRef.current = true; return; }
+    const { md: autoMd, attendees } = buildAutoNotes(options);
+    const md = options?.overrideMd ?? autoMd;
+    const plain = md.replace(/[#*_>`]/g, "");
     await supabase.from("meeting_notes").insert({
       meeting_id: id,
       author_id: meRef.current.id,
@@ -212,11 +219,11 @@ function MeetingRoom() {
       body: plain,
       content_md: md,
       meeting_date: new Date().toISOString(),
-      tags: transcript.length ? ["transcript", "auto"] : ["auto"],
-      attendees: attendeeNames,
+      tags: options?.overrideMd ? ["edited", "auto"] : ["auto"],
+      attendees,
     } as any);
     noteSavedRef.current = true;
-  }, [id, transcript, meeting?.title, chat]);
+  }, [id, meeting?.title, buildAutoNotes]);
 
   useEffect(() => {
     let mounted = true;
@@ -496,9 +503,9 @@ function MeetingRoom() {
     else void doLeave(false);
   };
 
-  const doLeave = async (endForAll: boolean) => {
+  const doLeave = async (endForAll: boolean, overrideMd?: string) => {
     setEnding(true);
-    await saveMeetingNote({ hostEnded: endForAll });
+    await saveMeetingNote({ hostEnded: endForAll, overrideMd });
     if (endForAll && isHost) {
       // Notify remote peers to leave, then mark meeting ended + delete it.
       channelRef.current?.send({ type: "broadcast", event: "end-meeting", payload: { from: meRef.current?.id } });
@@ -509,6 +516,12 @@ function MeetingRoom() {
     cleanupAll();
     if (meRef.current?.external) navigate({ to: "/" });
     else navigate({ to: "/meetings" });
+  };
+
+  const openEndWithNotesEditor = () => {
+    const { md } = buildAutoNotes({ hostEnded: true });
+    setNotesDraft(md);
+    setShowLeaveConfirm(false);
   };
 
   const copyLink = async () => {
@@ -736,11 +749,11 @@ function MeetingRoom() {
           <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-semibold">Leaving as host</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              You're the host of this meeting. End it for everyone (this generates polished meeting notes and removes it from schedules), or just leave and let the meeting continue.
+              You're the host of this meeting. End it for everyone (you'll review and edit the meeting notes before saving), or just leave and let the meeting continue.
             </p>
             <div className="mt-5 flex flex-col gap-2">
-              <button disabled={ending} onClick={() => doLeave(true)} className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50">
-                End meeting for everyone
+              <button disabled={ending} onClick={openEndWithNotesEditor} className="rounded-lg bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground disabled:opacity-50">
+                Review notes & end for everyone
               </button>
               <button disabled={ending} onClick={() => doLeave(false)} className="rounded-lg border border-border bg-background px-4 py-2 text-sm">
                 Just leave (others stay)
@@ -748,6 +761,41 @@ function MeetingRoom() {
               <button disabled={ending} onClick={() => setShowLeaveConfirm(false)} className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:bg-muted">
                 Cancel
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {notesDraft !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setNotesDraft(null)}>
+          <div className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
+            <div className="flex items-start justify-between border-b border-border p-5">
+              <div>
+                <h3 className="text-lg font-semibold">Meeting notes</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Edit before saving. These notes will be visible to everyone with access to the meeting.</p>
+              </div>
+              <button disabled={ending} onClick={() => setNotesDraft(null)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
+            </div>
+            <textarea
+              value={notesDraft}
+              onChange={(e) => setNotesDraft(e.target.value)}
+              rows={20}
+              className="flex-1 resize-none border-0 bg-background px-5 py-4 font-mono text-xs leading-relaxed outline-none"
+            />
+            <div className="flex items-center justify-between gap-2 border-t border-border p-4">
+              <button
+                disabled={ending}
+                onClick={() => setNotesDraft(buildAutoNotes({ hostEnded: true }).md)}
+                className="rounded-lg border border-border px-3 py-2 text-xs hover:bg-muted"
+              >
+                Reset to auto
+              </button>
+              <div className="flex gap-2">
+                <button disabled={ending} onClick={() => setNotesDraft(null)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
+                <button disabled={ending} onClick={() => doLeave(true, notesDraft)} className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground disabled:opacity-50">
+                  {ending ? "Ending…" : "Save notes & end meeting"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

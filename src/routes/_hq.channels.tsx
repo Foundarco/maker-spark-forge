@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check } from "lucide-react";
+import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
 import { ProfilePopover } from "@/components/hq/ProfilePopover";
+import { ChannelAccessDialog } from "@/components/hq/ChannelAccessDialog";
 import { loadMyPermissions, type Permissions } from "@/lib/hq/permissions";
 
 export const Route = createFileRoute("/_hq/channels")({
@@ -48,7 +49,10 @@ function ChannelsPage() {
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [editingMsg, setEditingMsg] = useState<{ id: string; body: string } | null>(null);
   const [openProfile, setOpenProfile] = useState<{ userId: string; x: number; y: number } | null>(null);
+  const [replyingTo, setReplyingTo] = useState<ChannelMessage | null>(null);
+  const [showAccess, setShowAccess] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const msgRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     (async () => {
@@ -121,12 +125,22 @@ function ChannelsPage() {
   const send = async (body: string, attachments: Attachment[]) => {
     if ((!body && attachments.length === 0) || !me || !active) return;
     const tempId = `tmp-${crypto.randomUUID()}`;
-    const optimistic: ChannelMessage = { id: tempId, channel_id: active, author_id: me, body, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: null };
+    const replyId = replyingTo?.id && !replyingTo.id.startsWith("tmp-") ? replyingTo.id : null;
+    const optimistic: ChannelMessage = { id: tempId, channel_id: active, author_id: me, body, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: replyId };
     setMessages((prev) => [...prev, optimistic]);
+    setReplyingTo(null);
     await ensureProfile(me);
-    const { data, error } = await supabase.from("channel_messages").insert({ channel_id: active, author_id: me, body, attachments: attachments as any } as any).select().single();
+    const { data, error } = await supabase.from("channel_messages").insert({ channel_id: active, author_id: me, body, attachments: attachments as any, reply_to_id: replyId } as any).select().single();
     if (error) { setMessages((prev) => prev.filter((m) => m.id !== tempId)); alert(error.message); return; }
     if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as ChannelMessage) : m));
+  };
+
+  const scrollToMessage = (mid: string) => {
+    const el = msgRefs.current[mid];
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("ring-2", "ring-primary");
+    setTimeout(() => el.classList.remove("ring-2", "ring-primary"), 1200);
   };
 
   const softDeleteMsg = async (id: string) => {
@@ -287,6 +301,11 @@ function ChannelsPage() {
                 </div>
                 {activeChannel.description && <p className="mt-0.5 text-xs text-muted-foreground">{activeChannel.description}</p>}
               </div>
+              {perms.manage_channels && activeChannel.is_private && (
+                <button onClick={() => setShowAccess(true)} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted" title="Manage access">
+                  <Settings className="h-3.5 w-3.5" /> Access
+                </button>
+              )}
             </header>
             <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto px-5 py-4">
               {messages.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet in #{activeChannel.name}.</p>}
@@ -305,14 +324,24 @@ function ChannelsPage() {
                 const canDelete = m.author_id === me || perms.manage_messages;
                 const optimistic = m.id.startsWith("tmp-");
                 const isDeleted = !!m.deleted_at;
+                const parent = m.reply_to_id ? messages.find((x) => x.id === m.reply_to_id) : null;
+                const parentAuthor = parent ? profiles[parent.author_id] : null;
+                const parentName = parentAuthor?.full_name || parentAuthor?.email || "Someone";
                 return (
-                  <div key={r.key} className={`group relative flex gap-3 rounded px-2 py-0.5 hover:bg-muted/30 ${r.showHeader ? "mt-3" : ""}`}>
+                  <div key={r.key} ref={(el) => { msgRefs.current[m.id] = el; }} className={`group relative flex gap-3 rounded px-2 py-0.5 transition hover:bg-muted/30 ${r.showHeader ? "mt-3" : ""}`}>
                     {r.showHeader ? (
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">{initials(name)}</div>
                     ) : (
                       <div className="w-8 shrink-0 pt-1 text-right text-[9px] text-transparent group-hover:text-muted-foreground">{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
                     )}
                     <div className="min-w-0 flex-1">
+                      {parent && (
+                        <button onClick={() => scrollToMessage(parent.id)} className="mb-0.5 flex max-w-full items-center gap-1 truncate text-[11px] text-muted-foreground hover:text-primary">
+                          <CornerDownRight className="h-3 w-3 shrink-0" />
+                          <span className="font-semibold">{parentName}</span>
+                          <span className="truncate">{parent.deleted_at ? "message deleted" : (parent.body || "attachment")}</span>
+                        </button>
+                      )}
                       {r.showHeader && (
                         <div className="flex items-baseline gap-2">
                           <button onClick={(e) => setOpenProfile({ userId: m.author_id, x: e.clientX, y: e.clientY })} className="text-sm font-semibold hover:underline">{name}</button>
@@ -339,6 +368,7 @@ function ChannelsPage() {
                     </div>
                     {!optimistic && !isDeleted && editingMsg?.id !== m.id && (
                       <div className="absolute right-2 top-0 hidden gap-1 rounded-md border border-border bg-card p-0.5 shadow-sm group-hover:flex">
+                        <button onClick={() => setReplyingTo(m)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Reply"><Reply className="h-3 w-3" /></button>
                         {canEdit && <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>}
                         {canDelete && <button onClick={() => softDeleteMsg(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>}
                       </div>
@@ -347,7 +377,7 @@ function ChannelsPage() {
                 );
               })}
             </div>
-            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message #${activeChannel.name}…`} />}
+            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message #${activeChannel.name}…`} replyTo={replyingTo ? { name: profiles[replyingTo.author_id]?.full_name || profiles[replyingTo.author_id]?.email || "Someone", body: replyingTo.body, deleted: !!replyingTo.deleted_at } : null} onCancelReply={() => setReplyingTo(null)} />}
           </>
         )}
       </section>
@@ -405,6 +435,7 @@ function ChannelsPage() {
       )}
 
       {openProfile && <ProfilePopover userId={openProfile.userId} anchor={{ x: openProfile.x, y: openProfile.y }} onClose={() => setOpenProfile(null)} />}
+      {showAccess && activeChannel && <ChannelAccessDialog channelId={activeChannel.id} channelName={activeChannel.name} onClose={() => setShowAccess(false)} />}
     </div>
   );
 }

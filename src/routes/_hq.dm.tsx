@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X } from "lucide-react";
+import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
@@ -37,7 +37,9 @@ function DMPage() {
   const [search, setSearch] = useState("");
   const [editingMsg, setEditingMsg] = useState<{ id: string; body: string } | null>(null);
   const [openProfile, setOpenProfile] = useState<{ userId: string; x: number; y: number } | null>(null);
+  const [replyingTo, setReplyingTo] = useState<DM | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const msgRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   useEffect(() => {
     (async () => {
@@ -129,11 +131,21 @@ function DMPage() {
   const send = async (body: string, attachments: Attachment[]) => {
     if ((!body && attachments.length === 0) || !me || !active) return;
     const tempId = `tmp-${crypto.randomUUID()}`;
-    const optimistic: DM = { id: tempId, sender_id: me, recipient_id: active, body, read_at: null, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: null };
+    const replyId = replyingTo?.id && !replyingTo.id.startsWith("tmp-") ? replyingTo.id : null;
+    const optimistic: DM = { id: tempId, sender_id: me, recipient_id: active, body, read_at: null, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: replyId };
     setMessages((prev) => [...prev, optimistic]);
-    const { data, error } = await supabase.from("direct_messages").insert({ sender_id: me, recipient_id: active, body, attachments: attachments as any } as any).select().single();
+    setReplyingTo(null);
+    const { data, error } = await supabase.from("direct_messages").insert({ sender_id: me, recipient_id: active, body, attachments: attachments as any, reply_to_id: replyId } as any).select().single();
     if (error) { setMessages((prev) => prev.filter((m) => m.id !== tempId)); alert(error.message); return; }
     if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as DM) : m));
+  };
+
+  const scrollToMessage = (mid: string) => {
+    const el = msgRefs.current[mid];
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    el.classList.add("ring-2", "ring-primary");
+    setTimeout(() => el.classList.remove("ring-2", "ring-primary"), 1200);
   };
 
   const softDelete = async (id: string) => {
@@ -221,9 +233,19 @@ function DMPage() {
                 const mine = m.sender_id === me;
                 const optimistic = m.id.startsWith("tmp-");
                 const isDeleted = !!m.deleted_at;
+                const parent = m.reply_to_id ? thread.find((x) => x.id === m.reply_to_id) : null;
+                const parentMine = parent ? parent.sender_id === me : false;
+                const parentName = parent ? (parentMine ? "you" : (activeProfile?.full_name || activeProfile?.email || "them")) : "";
                 return (
                   <div key={r.key} className={`group flex ${mine ? "justify-end" : "justify-start"}`}>
-                    <div className="max-w-[75%]">
+                    <div className="max-w-[75%]" ref={(el) => { msgRefs.current[m.id] = el; }}>
+                      {parent && (
+                        <button onClick={() => scrollToMessage(parent.id)} className={`mb-1 flex max-w-full items-center gap-1 truncate rounded-lg border border-border bg-muted/40 px-2 py-1 text-[11px] text-muted-foreground hover:text-primary ${mine ? "ml-auto" : ""}`}>
+                          <CornerDownRight className="h-3 w-3 shrink-0" />
+                          <span className="font-semibold">{parentName}:</span>
+                          <span className="truncate">{parent.deleted_at ? "message deleted" : (parent.body || "attachment")}</span>
+                        </button>
+                      )}
                       <div className={`relative rounded-2xl px-4 py-2 text-sm ${mine ? "bg-primary text-primary-foreground" : "bg-muted"} ${optimistic ? "opacity-70" : ""}`}>
                         {editingMsg?.id === m.id ? (
                           <div className="flex items-center gap-2">
@@ -239,10 +261,11 @@ function DMPage() {
                           <span>{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                           {mine && !optimistic && (m.read_at ? <CheckCheck className="h-3 w-3" /> : <Check className="h-3 w-3" />)}
                         </p>
-                        {mine && !optimistic && !isDeleted && editingMsg?.id !== m.id && (
+                        {!optimistic && !isDeleted && editingMsg?.id !== m.id && (
                           <div className="absolute -top-3 right-2 hidden gap-1 rounded-md border border-border bg-card p-0.5 shadow-sm group-hover:flex">
-                            <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>
-                            <button onClick={() => softDelete(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>
+                            <button onClick={() => setReplyingTo(m)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Reply"><Reply className="h-3 w-3" /></button>
+                            {mine && <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>}
+                            {mine && <button onClick={() => softDelete(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>}
                           </div>
                         )}
                       </div>
@@ -256,7 +279,7 @@ function DMPage() {
                 );
               })}
             </div>
-            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message ${activeProfile?.full_name || "teammate"}…`} />}
+            {me && <MessageComposer userId={me} onSend={send} placeholder={`Message ${activeProfile?.full_name || "teammate"}…`} replyTo={replyingTo ? { name: replyingTo.sender_id === me ? "yourself" : (activeProfile?.full_name || activeProfile?.email || "them"), body: replyingTo.body, deleted: !!replyingTo.deleted_at } : null} onCancelReply={() => setReplyingTo(null)} />}
           </>
         )}
       </section>
