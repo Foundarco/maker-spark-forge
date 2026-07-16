@@ -27,6 +27,7 @@ type MeetingMeta = {
   host_id: string;
   host_name: string | null;
   attendee_count: number;
+  attendee_names: string[];
   note_preview: string | null;
 };
 
