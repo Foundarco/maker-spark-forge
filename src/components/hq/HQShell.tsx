@@ -26,7 +26,7 @@ export function HQShell() {
 
         {mobileOpen && (
           <div className="fixed inset-0 z-30 flex lg:hidden" onClick={() => setMobileOpen(false)}>
-            <div className="w-64" onClick={(e) => e.stopPropagation()}>
+            <div className="h-full w-64" onClick={(e) => e.stopPropagation()}>
               <Sidebar onNavigate={() => setMobileOpen(false)} />
             </div>
             <div className="flex-1 bg-black/40 backdrop-blur-sm" />
