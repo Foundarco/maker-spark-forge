@@ -1,0 +1,34 @@
+import { Outlet } from "@tanstack/react-router";
+import { useState } from "react";
+import { Sidebar } from "./Sidebar";
+import { Topbar } from "./Topbar";
+import { AIAssistant } from "./AIAssistant";
+
+export function HQShell() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  return (
+    <div className="flex min-h-dvh flex-col bg-background">
+      <Topbar onMenuClick={() => setMobileOpen(true)} />
+      <div className="flex flex-1 min-h-0">
+        <aside className="hidden w-64 flex-shrink-0 lg:block">
+          <Sidebar />
+        </aside>
+
+        {mobileOpen && (
+          <div className="fixed inset-0 z-30 flex lg:hidden" onClick={() => setMobileOpen(false)}>
+            <div className="w-64" onClick={(e) => e.stopPropagation()}>
+              <Sidebar onNavigate={() => setMobileOpen(false)} />
+            </div>
+            <div className="flex-1 bg-black/40 backdrop-blur-sm" />
+          </div>
+        )}
+
+        <main className="flex-1 overflow-x-hidden">
+          <Outlet />
+        </main>
+      </div>
+      <AIAssistant />
+    </div>
+  );
+}
