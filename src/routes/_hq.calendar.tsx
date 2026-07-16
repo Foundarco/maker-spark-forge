@@ -221,17 +221,39 @@ function CalendarPage() {
           <p className="mt-1 text-xs text-muted-foreground">{selectedDay ? "Events on this day" : "Next 5 events"}</p>
         </header>
         <div className="flex-1 space-y-2 overflow-y-auto p-4">
-          {(selectedDay ? dayEvents : events.filter((e) => new Date(e.ends_at) >= today).slice(0, 5)).map((e) => (
-            <button key={e.id} onClick={() => { setDraft(e); setShowForm(true); }} className={`block w-full rounded-lg border p-3 text-left transition hover:shadow ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
-              <p className="text-sm font-semibold">{e.title}</p>
-              <p className="mt-1 flex items-center gap-1 text-xs opacity-80">
-                <Clock className="h-3 w-3" />
-                {e.all_day ? "All day" : `${new Date(e.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}–${new Date(e.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
-              </p>
-              {e.location && <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><MapPin className="h-3 w-3" /> {e.location}</p>}
-              {e.visibility === "team" && <p className="mt-1 text-[10px] uppercase tracking-wider opacity-70">Team-wide</p>}
-            </button>
-          ))}
+          {(selectedDay ? dayEvents : events.filter((e) => new Date(e.ends_at) >= today).slice(0, 8)).map((e) => {
+            const meta = e.meeting_id ? meetingsMeta[e.meeting_id] : null;
+            return (
+              <button key={e.id} onClick={() => { setDraft(e); setShowForm(true); }} className={`block w-full rounded-lg border p-3 text-left transition hover:shadow ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
+                <div className="flex items-center gap-1.5">
+                  {e.meeting_id && <Video className="h-3 w-3 shrink-0" />}
+                  <p className="text-sm font-semibold">{e.title}</p>
+                </div>
+                <p className="mt-1 flex items-center gap-1 text-xs opacity-80">
+                  <Clock className="h-3 w-3" />
+                  {e.all_day ? "All day" : `${new Date(e.starts_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}–${new Date(e.ends_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
+                  <span className="text-[10px] opacity-70">· {formatDuration(e.starts_at, e.ends_at, e.all_day)}</span>
+                </p>
+                {meta?.host_name && (
+                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><UserIcon className="h-3 w-3" /> Host: {meta.host_name}</p>
+                )}
+                {meta && meta.attendee_count > 0 && (
+                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
+                )}
+                {e.location && <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><MapPin className="h-3 w-3" /> {e.location}</p>}
+                {e.description && !meta?.note_preview && (
+                  <p className="mt-1 line-clamp-2 text-xs opacity-70">{e.description}</p>
+                )}
+                {meta?.note_preview && (
+                  <div className="mt-2 rounded-md border border-current/20 bg-background/40 p-2 text-[11px] opacity-90">
+                    <p className="mb-0.5 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider opacity-70"><StickyNote className="h-2.5 w-2.5" /> Notes preview</p>
+                    <p className="line-clamp-3">{meta.note_preview}</p>
+                  </div>
+                )}
+                {e.visibility === "team" && <p className="mt-1 text-[10px] uppercase tracking-wider opacity-70">Team-wide</p>}
+              </button>
+            );
+          })}
           {(selectedDay ? dayEvents : events).length === 0 && (
             <p className="text-xs text-muted-foreground">No events. Click a date or "Event" to create one.</p>
           )}
