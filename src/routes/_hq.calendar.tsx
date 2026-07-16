@@ -273,7 +273,7 @@ function CalendarPage() {
                   </div>
                 )}
                 {e.visibility === "team" && <p className="mt-1 text-[10px] uppercase tracking-wider opacity-70">Team-wide</p>}
-              </button>
+              </div>
             );
           })}
           {(selectedDay ? dayEvents : events).length === 0 && (
