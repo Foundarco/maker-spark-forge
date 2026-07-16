@@ -119,11 +119,8 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
-function isHQHost(): boolean {
-  if (typeof window === "undefined") return false;
-  const h = window.location.hostname;
-  return h === "hq.clovrlab.com" || h.startsWith("hq--") || h.startsWith("hq.");
-}
+
+
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
