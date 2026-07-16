@@ -17,7 +17,7 @@ import {
   Package as ProdIcon, Sparkles, Layers,
   Zap, Workflow, GitPullRequestArrow, ClipboardCheck as ApprovalIcon, Clock as ScheduleIcon, Bell as NotifyIcon, Code2,
   Cog, ShieldPlus, Building, Palette as BrandIcon, Globe2, KeyRound as PolicyIcon,
-  Sparkle, Cpu as TwinIcon, Radio, Waypoints, FileClock,
+  Sparkle,
 } from "lucide-react";
 
 export type NavItem = {
