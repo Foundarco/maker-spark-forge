@@ -69,6 +69,7 @@ export const navGroups: NavGroup[] = [
   {
     label: "Manufacturing",
     items: [
+      { label: "Assembly Floor · Live", to: "/factory-live", icon: Activity },
       { label: "Production", to: "/production", icon: Factory },
       { label: "Work Orders", to: "/work-orders", icon: ClipboardList },
       { label: "Inventory", to: "/inventory", icon: Boxes },
