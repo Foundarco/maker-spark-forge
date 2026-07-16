@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { StickyNote, Plus, Search, X, Trash2, Tag as TagIcon, Users, Mic, Square } from "lucide-react";
 
