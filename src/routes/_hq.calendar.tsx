@@ -28,7 +28,7 @@ type MeetingMeta = {
   host_id: string;
   host_name: string | null;
   attendee_count: number;
-  attendee_names: string[];
+  attendees: { id: string; name: string }[];
   note_preview: string | null;
 };
 
@@ -94,11 +94,11 @@ function CalendarPage() {
       const nameMap = new Map<string, string>();
       (profs ?? []).forEach((h: any) => nameMap.set(h.id, h.full_name || h.email || "Someone"));
       const counts = new Map<string, number>();
-      const names = new Map<string, string[]>();
+      const names = new Map<string, { id: string; name: string }[]>();
       ((parts ?? []) as any[]).forEach((p) => {
         counts.set(p.meeting_id, (counts.get(p.meeting_id) ?? 0) + 1);
         const arr = names.get(p.meeting_id) ?? [];
-        arr.push(nameMap.get(p.user_id) ?? "Someone");
+        arr.push({ id: p.user_id, name: nameMap.get(p.user_id) ?? "Someone" });
         names.set(p.meeting_id, arr);
       });
       const noteMap = new Map<string, string>();
@@ -114,7 +114,7 @@ function CalendarPage() {
           host_id: m.host_id,
           host_name: nameMap.get(m.host_id) ?? null,
           attendee_count: counts.get(m.id) ?? 0,
-          attendee_names: names.get(m.id) ?? [],
+          attendees: names.get(m.id) ?? [],
           note_preview: noteMap.get(m.id) ?? null,
         };
       });
@@ -249,16 +249,16 @@ function CalendarPage() {
                   <span className="text-[10px] opacity-70">· {formatDuration(e.starts_at, e.ends_at, e.all_day)}</span>
                 </p>
                 {meta?.host_name && (
-                  <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><UserIcon className="h-3 w-3" /> Host: {meta.host_name}</p>
+                  <p className="mt-1 flex flex-wrap items-center gap-1 text-xs opacity-80"><UserIcon className="h-3 w-3" /> Host: <UserMention userId={meta.host_id} name={meta.host_name} /></p>
                 )}
                 {meta && meta.attendee_count > 0 && (
                   <>
                     <p className="mt-1 flex items-center gap-1 text-xs opacity-80"><Users className="h-3 w-3" /> {meta.attendee_count} attendee{meta.attendee_count === 1 ? "" : "s"}</p>
-                    <div className="mt-1 flex flex-wrap gap-1">
-                      {meta.attendee_names.slice(0, 6).map((n, idx) => (
-                        <span key={idx} className="rounded-full border border-current/30 bg-background/50 px-1.5 py-0.5 text-[10px]">{n}</span>
+                    <div className="mt-1 flex flex-wrap gap-1" onClick={(e) => e.stopPropagation()}>
+                      {meta.attendees.slice(0, 6).map((a) => (
+                        <UserMention key={a.id} userId={a.id} name={a.name} size="xs" />
                       ))}
-                      {meta.attendee_names.length > 6 && <span className="text-[10px] opacity-70">+{meta.attendee_names.length - 6}</span>}
+                      {meta.attendees.length > 6 && <span className="text-[10px] opacity-70">+{meta.attendees.length - 6}</span>}
                     </div>
                   </>
                 )}
