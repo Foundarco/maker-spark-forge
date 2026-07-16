@@ -393,6 +393,13 @@ function MeetingRoom() {
   const copyLink = async () => {
     const url = new URL(window.location.href);
     url.search = ""; // share the open link, without any guest token
+    // Preview hosts (id-preview--*.lovable.app) require Lovable auth. Swap to the
+    // public custom domain so guests can join without hitting the Lovable gate.
+    if (/(^|\.)lovable\.app$/i.test(url.hostname) && /^id-preview--/i.test(url.hostname)) {
+      url.protocol = "https:";
+      url.hostname = "hq.clovrlab.com";
+      url.port = "";
+    }
     await navigator.clipboard.writeText(url.toString());
     setCopied(true); setTimeout(() => setCopied(false), 1500);
   };
