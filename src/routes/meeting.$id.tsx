@@ -735,7 +735,7 @@ function MeetingRoom() {
 }
 
 function Tile({
-  label, stream, muted, showAvatar, avatarLetter, onEnlarge, videoRef,
+  label, stream, muted, showAvatar, avatarLetter, onEnlarge, videoRef, speaking,
 }: {
   label: string;
   stream: MediaStream | null;
@@ -744,6 +744,7 @@ function Tile({
   avatarLetter: string;
   onEnlarge?: () => void;
   videoRef?: React.RefObject<HTMLVideoElement | null>;
+  speaking?: boolean;
 }) {
   const localRef = useRef<HTMLVideoElement>(null);
   const ref = videoRef ?? localRef;
@@ -754,7 +755,7 @@ function Tile({
   }, [stream, ref]);
   return (
     <div
-      className={`group relative overflow-hidden rounded-xl bg-black ${onEnlarge ? "cursor-zoom-in" : ""}`}
+      className={`group relative overflow-hidden rounded-xl bg-black transition-all duration-150 ${onEnlarge ? "cursor-zoom-in" : ""} ${speaking ? "ring-4 ring-primary shadow-[0_0_24px_hsl(var(--primary)/0.6)] scale-[1.01]" : "ring-1 ring-transparent"}`}
       onClick={onEnlarge}
     >
       <video ref={ref} autoPlay muted={muted} playsInline className="h-full w-full object-cover" />
@@ -765,7 +766,10 @@ function Tile({
           </div>
         </div>
       )}
-      <div className="absolute bottom-2 left-2 rounded bg-black/60 px-2 py-0.5 text-xs text-white">{label}</div>
+      <div className={`absolute bottom-2 left-2 rounded px-2 py-0.5 text-xs text-white transition ${speaking ? "bg-primary font-semibold" : "bg-black/60"}`}>
+        {speaking && <span className="mr-1 inline-block h-2 w-2 rounded-full bg-white animate-pulse" />}
+        {label}
+      </div>
       {onEnlarge && (
         <div className="absolute right-2 top-2 hidden rounded bg-black/60 p-1.5 text-white group-hover:block">
           <Maximize2 className="h-3.5 w-3.5" />
