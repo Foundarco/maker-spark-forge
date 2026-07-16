@@ -262,10 +262,51 @@ function NoteEditor({ draft, setDraft, onSave, onCancel }: { draft: Partial<Note
           </div>
         </div>
         <div>
-          <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Notes</label>
+          <div className="mb-1 flex items-center justify-between">
+            <label className="block text-xs uppercase tracking-wider text-muted-foreground">Notes</label>
+            <TranscribeButton onText={(t) => setDraft({ ...draft, body: `${draft.body ?? ""}${draft.body ? "\n" : ""}${t}` })} />
+          </div>
           <textarea value={draft.body ?? ""} onChange={(e) => setDraft({ ...draft, body: e.target.value })} rows={16} placeholder={`# Agenda\n- \n\n# Decisions\n- \n\n# Action items\n- [ ] `} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary" />
         </div>
       </div>
     </div>
+  );
+}
+
+function TranscribeButton({ onText }: { onText: (t: string) => void }) {
+  const [rec, setRec] = useState(false);
+  const recRef = useRef<any>(null);
+
+  const toggle = () => {
+    const SR: any = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) { alert("Live transcription isn't supported in this browser. Try Chrome or Edge."); return; }
+    if (rec) {
+      try { recRef.current?.stop(); } catch {}
+      recRef.current = null;
+      setRec(false);
+      return;
+    }
+    const r = new SR();
+    r.continuous = true;
+    r.interimResults = false;
+    r.lang = "en-US";
+    r.onresult = (e: any) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) {
+          const text = e.results[i][0].transcript.trim();
+          if (text) onText(text);
+        }
+      }
+    };
+    r.onend = () => { if (recRef.current === r) { try { r.start(); } catch {} } };
+    r.onerror = () => {};
+    recRef.current = r;
+    try { r.start(); setRec(true); } catch (err: any) { alert(err.message); }
+  };
+
+  return (
+    <button type="button" onClick={toggle} className={`flex items-center gap-1 rounded-lg border px-2 py-1 text-xs transition ${rec ? "border-destructive bg-destructive/10 text-destructive" : "border-border hover:bg-muted"}`}>
+      {rec ? <><Square className="h-3 w-3" /> Stop</> : <><Mic className="h-3 w-3" /> Record & transcribe</>}
+    </button>
   );
 }
