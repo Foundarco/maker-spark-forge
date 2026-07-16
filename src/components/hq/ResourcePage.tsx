@@ -83,15 +83,12 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
       .order(orderCol, { ascending });
     setRows((data ?? []) as T[]);
 
-    const promises: Promise<any>[] = [];
-    if (needs.profiles) promises.push(supabase.from("profiles").select("id, full_name, email").order("full_name"));
-    else promises.push(Promise.resolve({ data: [] }));
-    if (needs.projects) promises.push((supabase.from("eng_projects") as any).select("id, name, code").order("name"));
-    else promises.push(Promise.resolve({ data: [] }));
-    if (needs.suppliers) promises.push((supabase.from("mfg_suppliers") as any).select("id, name").order("name"));
-    else promises.push(Promise.resolve({ data: [] }));
-    if (needs.workorders) promises.push((supabase.from("mfg_work_orders") as any).select("id, order_number, product_name").order("created_at", { ascending: false }));
-    else promises.push(Promise.resolve({ data: [] }));
+    const promises: Array<Promise<{ data: any }>> = [
+      needs.profiles ? (supabase.from("profiles").select("id, full_name, email").order("full_name") as any) : Promise.resolve({ data: [] }),
+      needs.projects ? ((supabase.from("eng_projects") as any).select("id, name, code").order("name") as any) : Promise.resolve({ data: [] }),
+      needs.suppliers ? ((supabase.from("mfg_suppliers") as any).select("id, name").order("name") as any) : Promise.resolve({ data: [] }),
+      needs.workorders ? ((supabase.from("mfg_work_orders") as any).select("id, order_number, product_name").order("created_at", { ascending: false }) as any) : Promise.resolve({ data: [] }),
+    ];
     const [p, pr, su, wo] = await Promise.all(promises);
     setCtx({
       profiles: (p.data ?? []) as Profile[],
