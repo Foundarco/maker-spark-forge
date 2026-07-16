@@ -238,7 +238,7 @@ function CalendarPage() {
           {(selectedDay ? dayEvents : events.filter((e) => new Date(e.ends_at) >= today).slice(0, 8)).map((e) => {
             const meta = e.meeting_id ? meetingsMeta[e.meeting_id] : null;
             return (
-              <button key={e.id} onClick={() => { setDraft(e); setShowForm(true); }} className={`block w-full rounded-lg border p-3 text-left transition hover:shadow ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
+              <div key={e.id} role="button" tabIndex={0} onClick={() => { setDraft(e); setShowForm(true); }} onKeyDown={(ev) => { if (ev.key === "Enter") { setDraft(e); setShowForm(true); } }} className={`block w-full cursor-pointer rounded-lg border p-3 text-left transition hover:shadow ${COLOR_STYLES[e.color] ?? COLOR_STYLES.orange}`}>
                 <div className="flex items-center gap-1.5">
                   {e.meeting_id && <Video className="h-3 w-3 shrink-0" />}
                   <p className="text-sm font-semibold">{e.title}</p>
