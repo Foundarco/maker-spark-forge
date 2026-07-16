@@ -305,6 +305,12 @@ function MeetingRoom() {
         if (payload.from === meRef.current?.id) return;
         setChat((prev) => [...prev, payload as ChatMsg]);
       });
+      ch.on("broadcast", { event: "end-meeting" }, () => {
+        // Host ended the meeting — guest/attendee auto-leaves.
+        cleanupAll();
+        if (meRef.current?.external) navigate({ to: "/" });
+        else navigate({ to: "/meetings" });
+      });
       ch.on("presence", { event: "sync" }, () => {
         const state = ch.presenceState() as Record<string, Array<{ name?: string }>>;
         Object.keys(state).forEach((uid) => {
