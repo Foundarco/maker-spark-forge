@@ -236,7 +236,7 @@ function ResourceDialog<T extends { id: string }>({ config, ctx, row, onClose, o
       else if (f.type === "bool") base[f.key] = false;
       else base[f.key] = "";
     }
-    return { ...base, ...(config.defaults ?? {}) };
+    return { ...base, ...(config.defaults ?? {}), ...(config.baseFilter ?? {}) };
   });
   const [saving, setSaving] = useState(false);
   const isEdit = !!row;
