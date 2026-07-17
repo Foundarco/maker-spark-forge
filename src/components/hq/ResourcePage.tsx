@@ -62,7 +62,7 @@ type Ctx = { profiles: Profile[]; projects: Project[]; suppliers: Supplier[]; wo
 export function ResourcePage<T extends { id: string }>({ config }: { config: ResourceConfig<T> }) {
   const [rows, setRows] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
-  const [ctx, setCtx] = useState<Ctx>({ profiles: [], projects: [], suppliers: [], workorders: [] });
+  const [ctx, setCtx] = useState<Ctx>({ profiles: [], projects: [], suppliers: [], workorders: [], accounts: [] });
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<T | null>(null);
   const [creating, setCreating] = useState(false);
@@ -74,6 +74,7 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
       projects: s.has("project"),
       suppliers: s.has("supplier"),
       workorders: s.has("workorder"),
+      accounts: s.has("account"),
     };
   }, [config.fields]);
 
@@ -93,13 +94,15 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
       needs.projects ? ((supabase.from("eng_projects") as any).select("id, name, code").order("name") as any) : Promise.resolve({ data: [] }),
       needs.suppliers ? ((supabase.from("mfg_suppliers") as any).select("id, name").order("name") as any) : Promise.resolve({ data: [] }),
       needs.workorders ? ((supabase.from("mfg_work_orders") as any).select("id, order_number, product_name").order("created_at", { ascending: false }) as any) : Promise.resolve({ data: [] }),
+      needs.accounts ? ((supabase.from("fin_accounts") as any).select("id, name, code, type").order("code") as any) : Promise.resolve({ data: [] }),
     ];
-    const [p, pr, su, wo] = await Promise.all(promises);
+    const [p, pr, su, wo, ac] = await Promise.all(promises);
     setCtx({
       profiles: (p.data ?? []) as Profile[],
       projects: (pr.data ?? []) as Project[],
       suppliers: (su.data ?? []) as Supplier[],
       workorders: (wo.data ?? []) as WorkOrder[],
+      accounts: (ac.data ?? []) as FinAccount[],
     });
     setLoading(false);
   };
