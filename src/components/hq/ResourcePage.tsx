@@ -394,6 +394,13 @@ export function SupplierCell({ supplierId, suppliers }: { supplierId: string | n
   return <span className="text-sm">{s?.name ?? "—"}</span>;
 }
 
+export function AccountCell({ accountId, accounts }: { accountId: string | null; accounts: FinAccount[] }) {
+  if (!accountId) return <span className="text-muted-foreground text-xs">—</span>;
+  const a = accounts.find((x) => x.id === accountId);
+  if (!a) return <span className="text-muted-foreground text-xs">—</span>;
+  return <span className="text-sm font-mono text-xs">{a.code ? `${a.code} ${a.name}` : a.name}</span>;
+}
+
 export function DateCell({ date }: { date: string | null }) {
   if (!date) return <span className="text-muted-foreground text-xs">—</span>;
   const d = new Date(date);
