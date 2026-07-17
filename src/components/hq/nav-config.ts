@@ -37,6 +37,7 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Assistant", to: "/assistant", icon: Bot },
+      { label: "Cloud Storage", to: "/files", icon: FolderOpen },
       { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
       { label: "Settings", to: "/settings", icon: Settings },
     ],
@@ -48,15 +49,6 @@ export const navGroups: NavGroup[] = [
       { label: "Sent & Drafts", to: "/mail-sent", icon: SendHorizontal },
       { label: "Shared Mailboxes", to: "/mail-shared", icon: UsersAlt },
       { label: "Rules & Templates", to: "/mail-rules", icon: FilterAlt },
-    ],
-  },
-  {
-    label: "Files",
-    items: [
-      { label: "Cloud Storage", to: "/files", icon: FolderOpen },
-      { label: "Shared & Versions", to: "/files-shared", icon: Share },
-      { label: "Permissions & Backup", to: "/files-permissions", icon: Lock },
-      { label: "CAD Viewer", to: "/cad-viewer", icon: FileCode },
     ],
   },
 
