@@ -357,6 +357,14 @@ function FieldInput({ field, value, onChange, ctx }: { field: FieldDef; value: a
       </select>
     );
   }
+  if (field.type === "account") {
+    return (
+      <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={base}>
+        <option value="">—</option>
+        {ctx.accounts.map((a) => <option key={a.id} value={a.id}>{a.code ? `${a.code} · ${a.name}` : a.name}</option>)}
+      </select>
+    );
+  }
   return <input type="text" value={value ?? ""} onChange={(e) => onChange(e.target.value)} placeholder={field.placeholder} className={base} />;
 }
 
