@@ -51,7 +51,6 @@ import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as LearnTrackRouteImport } from './routes/learn.$track'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
-import { Route as HqWorkflowsRouteImport } from './routes/_hq.workflows'
 import { Route as HqWorkOrdersRouteImport } from './routes/_hq.work-orders'
 import { Route as HqWebhooksRouteImport } from './routes/_hq.webhooks'
 import { Route as HqWarrantyClaimsRouteImport } from './routes/_hq.warranty-claims'
@@ -70,13 +69,13 @@ import { Route as HqTasksRouteImport } from './routes/_hq.tasks'
 import { Route as HqSupportFaqsRouteImport } from './routes/_hq.support-faqs'
 import { Route as HqSuppliersRouteImport } from './routes/_hq.suppliers'
 import { Route as HqStrategyRouteImport } from './routes/_hq.strategy'
+import { Route as HqSoftwareApisRouteImport } from './routes/_hq.software-apis'
 import { Route as HqSocialRouteImport } from './routes/_hq.social'
 import { Route as HqShippingTrackingRouteImport } from './routes/_hq.shipping-tracking'
 import { Route as HqShippingPrepRouteImport } from './routes/_hq.shipping-prep'
 import { Route as HqSettingsRouteImport } from './routes/_hq.settings'
 import { Route as HqSerialsRouteImport } from './routes/_hq.serials'
 import { Route as HqSearchRouteImport } from './routes/_hq.search'
-import { Route as HqScheduledJobsRouteImport } from './routes/_hq.scheduled-jobs'
 import { Route as HqSalesContactsRouteImport } from './routes/_hq.sales-contacts'
 import { Route as HqSalesAnalyticsRouteImport } from './routes/_hq.sales-analytics'
 import { Route as HqRoadmapRouteImport } from './routes/_hq.roadmap'
@@ -144,7 +143,6 @@ import { Route as HqLeadsRouteImport } from './routes/_hq.leads'
 import { Route as HqLeadTimesRouteImport } from './routes/_hq.lead-times'
 import { Route as HqLaunchesRouteImport } from './routes/_hq.launches'
 import { Route as HqLabNotebookRouteImport } from './routes/_hq.lab-notebook'
-import { Route as HqKpisRouteImport } from './routes/_hq.kpis'
 import { Route as HqKbRouteImport } from './routes/_hq.kb'
 import { Route as HqKanbanRouteImport } from './routes/_hq.kanban'
 import { Route as HqItSsoRouteImport } from './routes/_hq.it-sso'
@@ -212,7 +210,6 @@ import { Route as HqBalanceSheetRouteImport } from './routes/_hq.balance-sheet'
 import { Route as HqAssistantRouteImport } from './routes/_hq.assistant'
 import { Route as HqAssemblyRouteImport } from './routes/_hq.assembly'
 import { Route as HqApprovedVendorsRouteImport } from './routes/_hq.approved-vendors'
-import { Route as HqApprovalsRouteImport } from './routes/_hq.approvals'
 import { Route as HqApplicantsRouteImport } from './routes/_hq.applicants'
 import { Route as HqApiBuilderRouteImport } from './routes/_hq.api-builder'
 import { Route as HqAnnouncementsRouteImport } from './routes/_hq.announcements'
@@ -222,7 +219,6 @@ import { Route as HqAnalyticsFinanceRouteImport } from './routes/_hq.analytics-f
 import { Route as HqAnalyticsEmployeeRouteImport } from './routes/_hq.analytics-employee'
 import { Route as HqAnalyticsCustomerRouteImport } from './routes/_hq.analytics-customer'
 import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
-import { Route as HqAiInsightsRouteImport } from './routes/_hq.ai-insights'
 import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
@@ -444,11 +440,6 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => BlogRoute,
 } as any)
-const HqWorkflowsRoute = HqWorkflowsRouteImport.update({
-  id: '/workflows',
-  path: '/workflows',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqWorkOrdersRoute = HqWorkOrdersRouteImport.update({
   id: '/work-orders',
   path: '/work-orders',
@@ -539,6 +530,11 @@ const HqStrategyRoute = HqStrategyRouteImport.update({
   path: '/strategy',
   getParentRoute: () => HqRoute,
 } as any)
+const HqSoftwareApisRoute = HqSoftwareApisRouteImport.update({
+  id: '/software-apis',
+  path: '/software-apis',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqSocialRoute = HqSocialRouteImport.update({
   id: '/social',
   path: '/social',
@@ -567,11 +563,6 @@ const HqSerialsRoute = HqSerialsRouteImport.update({
 const HqSearchRoute = HqSearchRouteImport.update({
   id: '/search',
   path: '/search',
-  getParentRoute: () => HqRoute,
-} as any)
-const HqScheduledJobsRoute = HqScheduledJobsRouteImport.update({
-  id: '/scheduled-jobs',
-  path: '/scheduled-jobs',
   getParentRoute: () => HqRoute,
 } as any)
 const HqSalesContactsRoute = HqSalesContactsRouteImport.update({
@@ -909,11 +900,6 @@ const HqLabNotebookRoute = HqLabNotebookRouteImport.update({
   path: '/lab-notebook',
   getParentRoute: () => HqRoute,
 } as any)
-const HqKpisRoute = HqKpisRouteImport.update({
-  id: '/kpis',
-  path: '/kpis',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqKbRoute = HqKbRouteImport.update({
   id: '/kb',
   path: '/kb',
@@ -1249,11 +1235,6 @@ const HqApprovedVendorsRoute = HqApprovedVendorsRouteImport.update({
   path: '/approved-vendors',
   getParentRoute: () => HqRoute,
 } as any)
-const HqApprovalsRoute = HqApprovalsRouteImport.update({
-  id: '/approvals',
-  path: '/approvals',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqApplicantsRoute = HqApplicantsRouteImport.update({
   id: '/applicants',
   path: '/applicants',
@@ -1297,11 +1278,6 @@ const HqAnalyticsCustomerRoute = HqAnalyticsCustomerRouteImport.update({
 const HqAnalyticsRoute = HqAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
-  getParentRoute: () => HqRoute,
-} as any)
-const HqAiInsightsRoute = HqAiInsightsRouteImport.update({
-  id: '/ai-insights',
-  path: '/ai-insights',
   getParentRoute: () => HqRoute,
 } as any)
 const HqAccountsRoute = HqAccountsRouteImport.update({
@@ -1387,7 +1363,6 @@ export interface FileRoutesByFullPath {
   '/upgrades': typeof UpgradesRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
-  '/ai-insights': typeof HqAiInsightsRoute
   '/analytics': typeof HqAnalyticsRoute
   '/analytics-customer': typeof HqAnalyticsCustomerRoute
   '/analytics-employee': typeof HqAnalyticsEmployeeRoute
@@ -1397,7 +1372,6 @@ export interface FileRoutesByFullPath {
   '/announcements': typeof HqAnnouncementsRoute
   '/api-builder': typeof HqApiBuilderRoute
   '/applicants': typeof HqApplicantsRoute
-  '/approvals': typeof HqApprovalsRoute
   '/approved-vendors': typeof HqApprovedVendorsRoute
   '/assembly': typeof HqAssemblyRoute
   '/assistant': typeof HqAssistantRoute
@@ -1465,7 +1439,6 @@ export interface FileRoutesByFullPath {
   '/it-sso': typeof HqItSsoRoute
   '/kanban': typeof HqKanbanRoute
   '/kb': typeof HqKbRoute
-  '/kpis': typeof HqKpisRoute
   '/lab-notebook': typeof HqLabNotebookRoute
   '/launches': typeof HqLaunchesRoute
   '/lead-times': typeof HqLeadTimesRoute
@@ -1533,13 +1506,13 @@ export interface FileRoutesByFullPath {
   '/roadmap': typeof HqRoadmapRoute
   '/sales-analytics': typeof HqSalesAnalyticsRoute
   '/sales-contacts': typeof HqSalesContactsRoute
-  '/scheduled-jobs': typeof HqScheduledJobsRoute
   '/search': typeof HqSearchRoute
   '/serials': typeof HqSerialsRoute
   '/settings': typeof HqSettingsRoute
   '/shipping-prep': typeof HqShippingPrepRoute
   '/shipping-tracking': typeof HqShippingTrackingRoute
   '/social': typeof HqSocialRoute
+  '/software-apis': typeof HqSoftwareApisRoute
   '/strategy': typeof HqStrategyRoute
   '/suppliers': typeof HqSuppliersRoute
   '/support-faqs': typeof HqSupportFaqsRoute
@@ -1558,7 +1531,6 @@ export interface FileRoutesByFullPath {
   '/warranty-claims': typeof HqWarrantyClaimsRoute
   '/webhooks': typeof HqWebhooksRoute
   '/work-orders': typeof HqWorkOrdersRoute
-  '/workflows': typeof HqWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -1613,7 +1585,6 @@ export interface FileRoutesByTo {
   '/upgrades': typeof UpgradesRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
-  '/ai-insights': typeof HqAiInsightsRoute
   '/analytics': typeof HqAnalyticsRoute
   '/analytics-customer': typeof HqAnalyticsCustomerRoute
   '/analytics-employee': typeof HqAnalyticsEmployeeRoute
@@ -1623,7 +1594,6 @@ export interface FileRoutesByTo {
   '/announcements': typeof HqAnnouncementsRoute
   '/api-builder': typeof HqApiBuilderRoute
   '/applicants': typeof HqApplicantsRoute
-  '/approvals': typeof HqApprovalsRoute
   '/approved-vendors': typeof HqApprovedVendorsRoute
   '/assembly': typeof HqAssemblyRoute
   '/assistant': typeof HqAssistantRoute
@@ -1691,7 +1661,6 @@ export interface FileRoutesByTo {
   '/it-sso': typeof HqItSsoRoute
   '/kanban': typeof HqKanbanRoute
   '/kb': typeof HqKbRoute
-  '/kpis': typeof HqKpisRoute
   '/lab-notebook': typeof HqLabNotebookRoute
   '/launches': typeof HqLaunchesRoute
   '/lead-times': typeof HqLeadTimesRoute
@@ -1759,13 +1728,13 @@ export interface FileRoutesByTo {
   '/roadmap': typeof HqRoadmapRoute
   '/sales-analytics': typeof HqSalesAnalyticsRoute
   '/sales-contacts': typeof HqSalesContactsRoute
-  '/scheduled-jobs': typeof HqScheduledJobsRoute
   '/search': typeof HqSearchRoute
   '/serials': typeof HqSerialsRoute
   '/settings': typeof HqSettingsRoute
   '/shipping-prep': typeof HqShippingPrepRoute
   '/shipping-tracking': typeof HqShippingTrackingRoute
   '/social': typeof HqSocialRoute
+  '/software-apis': typeof HqSoftwareApisRoute
   '/strategy': typeof HqStrategyRoute
   '/suppliers': typeof HqSuppliersRoute
   '/support-faqs': typeof HqSupportFaqsRoute
@@ -1784,7 +1753,6 @@ export interface FileRoutesByTo {
   '/warranty-claims': typeof HqWarrantyClaimsRoute
   '/webhooks': typeof HqWebhooksRoute
   '/work-orders': typeof HqWorkOrdersRoute
-  '/workflows': typeof HqWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -1841,7 +1809,6 @@ export interface FileRoutesById {
   '/upgrades': typeof UpgradesRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/accounts': typeof HqAccountsRoute
-  '/_hq/ai-insights': typeof HqAiInsightsRoute
   '/_hq/analytics': typeof HqAnalyticsRoute
   '/_hq/analytics-customer': typeof HqAnalyticsCustomerRoute
   '/_hq/analytics-employee': typeof HqAnalyticsEmployeeRoute
@@ -1851,7 +1818,6 @@ export interface FileRoutesById {
   '/_hq/announcements': typeof HqAnnouncementsRoute
   '/_hq/api-builder': typeof HqApiBuilderRoute
   '/_hq/applicants': typeof HqApplicantsRoute
-  '/_hq/approvals': typeof HqApprovalsRoute
   '/_hq/approved-vendors': typeof HqApprovedVendorsRoute
   '/_hq/assembly': typeof HqAssemblyRoute
   '/_hq/assistant': typeof HqAssistantRoute
@@ -1919,7 +1885,6 @@ export interface FileRoutesById {
   '/_hq/it-sso': typeof HqItSsoRoute
   '/_hq/kanban': typeof HqKanbanRoute
   '/_hq/kb': typeof HqKbRoute
-  '/_hq/kpis': typeof HqKpisRoute
   '/_hq/lab-notebook': typeof HqLabNotebookRoute
   '/_hq/launches': typeof HqLaunchesRoute
   '/_hq/lead-times': typeof HqLeadTimesRoute
@@ -1987,13 +1952,13 @@ export interface FileRoutesById {
   '/_hq/roadmap': typeof HqRoadmapRoute
   '/_hq/sales-analytics': typeof HqSalesAnalyticsRoute
   '/_hq/sales-contacts': typeof HqSalesContactsRoute
-  '/_hq/scheduled-jobs': typeof HqScheduledJobsRoute
   '/_hq/search': typeof HqSearchRoute
   '/_hq/serials': typeof HqSerialsRoute
   '/_hq/settings': typeof HqSettingsRoute
   '/_hq/shipping-prep': typeof HqShippingPrepRoute
   '/_hq/shipping-tracking': typeof HqShippingTrackingRoute
   '/_hq/social': typeof HqSocialRoute
+  '/_hq/software-apis': typeof HqSoftwareApisRoute
   '/_hq/strategy': typeof HqStrategyRoute
   '/_hq/suppliers': typeof HqSuppliersRoute
   '/_hq/support-faqs': typeof HqSupportFaqsRoute
@@ -2012,7 +1977,6 @@ export interface FileRoutesById {
   '/_hq/warranty-claims': typeof HqWarrantyClaimsRoute
   '/_hq/webhooks': typeof HqWebhooksRoute
   '/_hq/work-orders': typeof HqWorkOrdersRoute
-  '/_hq/workflows': typeof HqWorkflowsRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/learn/$track': typeof LearnTrackRoute
@@ -2069,7 +2033,6 @@ export interface FileRouteTypes {
     | '/upgrades'
     | '/accounting'
     | '/accounts'
-    | '/ai-insights'
     | '/analytics'
     | '/analytics-customer'
     | '/analytics-employee'
@@ -2079,7 +2042,6 @@ export interface FileRouteTypes {
     | '/announcements'
     | '/api-builder'
     | '/applicants'
-    | '/approvals'
     | '/approved-vendors'
     | '/assembly'
     | '/assistant'
@@ -2147,7 +2109,6 @@ export interface FileRouteTypes {
     | '/it-sso'
     | '/kanban'
     | '/kb'
-    | '/kpis'
     | '/lab-notebook'
     | '/launches'
     | '/lead-times'
@@ -2215,13 +2176,13 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/sales-analytics'
     | '/sales-contacts'
-    | '/scheduled-jobs'
     | '/search'
     | '/serials'
     | '/settings'
     | '/shipping-prep'
     | '/shipping-tracking'
     | '/social'
+    | '/software-apis'
     | '/strategy'
     | '/suppliers'
     | '/support-faqs'
@@ -2240,7 +2201,6 @@ export interface FileRouteTypes {
     | '/warranty-claims'
     | '/webhooks'
     | '/work-orders'
-    | '/workflows'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -2295,7 +2255,6 @@ export interface FileRouteTypes {
     | '/upgrades'
     | '/accounting'
     | '/accounts'
-    | '/ai-insights'
     | '/analytics'
     | '/analytics-customer'
     | '/analytics-employee'
@@ -2305,7 +2264,6 @@ export interface FileRouteTypes {
     | '/announcements'
     | '/api-builder'
     | '/applicants'
-    | '/approvals'
     | '/approved-vendors'
     | '/assembly'
     | '/assistant'
@@ -2373,7 +2331,6 @@ export interface FileRouteTypes {
     | '/it-sso'
     | '/kanban'
     | '/kb'
-    | '/kpis'
     | '/lab-notebook'
     | '/launches'
     | '/lead-times'
@@ -2441,13 +2398,13 @@ export interface FileRouteTypes {
     | '/roadmap'
     | '/sales-analytics'
     | '/sales-contacts'
-    | '/scheduled-jobs'
     | '/search'
     | '/serials'
     | '/settings'
     | '/shipping-prep'
     | '/shipping-tracking'
     | '/social'
+    | '/software-apis'
     | '/strategy'
     | '/suppliers'
     | '/support-faqs'
@@ -2466,7 +2423,6 @@ export interface FileRouteTypes {
     | '/warranty-claims'
     | '/webhooks'
     | '/work-orders'
-    | '/workflows'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -2522,7 +2478,6 @@ export interface FileRouteTypes {
     | '/upgrades'
     | '/_hq/accounting'
     | '/_hq/accounts'
-    | '/_hq/ai-insights'
     | '/_hq/analytics'
     | '/_hq/analytics-customer'
     | '/_hq/analytics-employee'
@@ -2532,7 +2487,6 @@ export interface FileRouteTypes {
     | '/_hq/announcements'
     | '/_hq/api-builder'
     | '/_hq/applicants'
-    | '/_hq/approvals'
     | '/_hq/approved-vendors'
     | '/_hq/assembly'
     | '/_hq/assistant'
@@ -2600,7 +2554,6 @@ export interface FileRouteTypes {
     | '/_hq/it-sso'
     | '/_hq/kanban'
     | '/_hq/kb'
-    | '/_hq/kpis'
     | '/_hq/lab-notebook'
     | '/_hq/launches'
     | '/_hq/lead-times'
@@ -2668,13 +2621,13 @@ export interface FileRouteTypes {
     | '/_hq/roadmap'
     | '/_hq/sales-analytics'
     | '/_hq/sales-contacts'
-    | '/_hq/scheduled-jobs'
     | '/_hq/search'
     | '/_hq/serials'
     | '/_hq/settings'
     | '/_hq/shipping-prep'
     | '/_hq/shipping-tracking'
     | '/_hq/social'
+    | '/_hq/software-apis'
     | '/_hq/strategy'
     | '/_hq/suppliers'
     | '/_hq/support-faqs'
@@ -2693,7 +2646,6 @@ export interface FileRouteTypes {
     | '/_hq/warranty-claims'
     | '/_hq/webhooks'
     | '/_hq/work-orders'
-    | '/_hq/workflows'
     | '/blog/$slug'
     | '/help/$slug'
     | '/learn/$track'
@@ -3053,13 +3005,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof BlogRoute
     }
-    '/_hq/workflows': {
-      id: '/_hq/workflows'
-      path: '/workflows'
-      fullPath: '/workflows'
-      preLoaderRoute: typeof HqWorkflowsRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/work-orders': {
       id: '/_hq/work-orders'
       path: '/work-orders'
@@ -3186,6 +3131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqStrategyRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/software-apis': {
+      id: '/_hq/software-apis'
+      path: '/software-apis'
+      fullPath: '/software-apis'
+      preLoaderRoute: typeof HqSoftwareApisRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/social': {
       id: '/_hq/social'
       path: '/social'
@@ -3226,13 +3178,6 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof HqSearchRouteImport
-      parentRoute: typeof HqRoute
-    }
-    '/_hq/scheduled-jobs': {
-      id: '/_hq/scheduled-jobs'
-      path: '/scheduled-jobs'
-      fullPath: '/scheduled-jobs'
-      preLoaderRoute: typeof HqScheduledJobsRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/sales-contacts': {
@@ -3704,13 +3649,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqLabNotebookRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/kpis': {
-      id: '/_hq/kpis'
-      path: '/kpis'
-      fullPath: '/kpis'
-      preLoaderRoute: typeof HqKpisRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/kb': {
       id: '/_hq/kb'
       path: '/kb'
@@ -4180,13 +4118,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqApprovedVendorsRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/approvals': {
-      id: '/_hq/approvals'
-      path: '/approvals'
-      fullPath: '/approvals'
-      preLoaderRoute: typeof HqApprovalsRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/applicants': {
       id: '/_hq/applicants'
       path: '/applicants'
@@ -4248,13 +4179,6 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/analytics'
       preLoaderRoute: typeof HqAnalyticsRouteImport
-      parentRoute: typeof HqRoute
-    }
-    '/_hq/ai-insights': {
-      id: '/_hq/ai-insights'
-      path: '/ai-insights'
-      fullPath: '/ai-insights'
-      preLoaderRoute: typeof HqAiInsightsRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/accounts': {
@@ -4340,7 +4264,6 @@ declare module '@tanstack/react-router' {
 interface HqRouteChildren {
   HqAccountingRoute: typeof HqAccountingRoute
   HqAccountsRoute: typeof HqAccountsRoute
-  HqAiInsightsRoute: typeof HqAiInsightsRoute
   HqAnalyticsRoute: typeof HqAnalyticsRoute
   HqAnalyticsCustomerRoute: typeof HqAnalyticsCustomerRoute
   HqAnalyticsEmployeeRoute: typeof HqAnalyticsEmployeeRoute
@@ -4350,7 +4273,6 @@ interface HqRouteChildren {
   HqAnnouncementsRoute: typeof HqAnnouncementsRoute
   HqApiBuilderRoute: typeof HqApiBuilderRoute
   HqApplicantsRoute: typeof HqApplicantsRoute
-  HqApprovalsRoute: typeof HqApprovalsRoute
   HqApprovedVendorsRoute: typeof HqApprovedVendorsRoute
   HqAssemblyRoute: typeof HqAssemblyRoute
   HqAssistantRoute: typeof HqAssistantRoute
@@ -4418,7 +4340,6 @@ interface HqRouteChildren {
   HqItSsoRoute: typeof HqItSsoRoute
   HqKanbanRoute: typeof HqKanbanRoute
   HqKbRoute: typeof HqKbRoute
-  HqKpisRoute: typeof HqKpisRoute
   HqLabNotebookRoute: typeof HqLabNotebookRoute
   HqLaunchesRoute: typeof HqLaunchesRoute
   HqLeadTimesRoute: typeof HqLeadTimesRoute
@@ -4486,13 +4407,13 @@ interface HqRouteChildren {
   HqRoadmapRoute: typeof HqRoadmapRoute
   HqSalesAnalyticsRoute: typeof HqSalesAnalyticsRoute
   HqSalesContactsRoute: typeof HqSalesContactsRoute
-  HqScheduledJobsRoute: typeof HqScheduledJobsRoute
   HqSearchRoute: typeof HqSearchRoute
   HqSerialsRoute: typeof HqSerialsRoute
   HqSettingsRoute: typeof HqSettingsRoute
   HqShippingPrepRoute: typeof HqShippingPrepRoute
   HqShippingTrackingRoute: typeof HqShippingTrackingRoute
   HqSocialRoute: typeof HqSocialRoute
+  HqSoftwareApisRoute: typeof HqSoftwareApisRoute
   HqStrategyRoute: typeof HqStrategyRoute
   HqSuppliersRoute: typeof HqSuppliersRoute
   HqSupportFaqsRoute: typeof HqSupportFaqsRoute
@@ -4511,7 +4432,6 @@ interface HqRouteChildren {
   HqWarrantyClaimsRoute: typeof HqWarrantyClaimsRoute
   HqWebhooksRoute: typeof HqWebhooksRoute
   HqWorkOrdersRoute: typeof HqWorkOrdersRoute
-  HqWorkflowsRoute: typeof HqWorkflowsRoute
   HqAdminBrandingRoute: typeof HqAdminBrandingRoute
   HqAdminCompanyRoute: typeof HqAdminCompanyRoute
   HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
@@ -4525,7 +4445,6 @@ interface HqRouteChildren {
 const HqRouteChildren: HqRouteChildren = {
   HqAccountingRoute: HqAccountingRoute,
   HqAccountsRoute: HqAccountsRoute,
-  HqAiInsightsRoute: HqAiInsightsRoute,
   HqAnalyticsRoute: HqAnalyticsRoute,
   HqAnalyticsCustomerRoute: HqAnalyticsCustomerRoute,
   HqAnalyticsEmployeeRoute: HqAnalyticsEmployeeRoute,
@@ -4535,7 +4454,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqAnnouncementsRoute: HqAnnouncementsRoute,
   HqApiBuilderRoute: HqApiBuilderRoute,
   HqApplicantsRoute: HqApplicantsRoute,
-  HqApprovalsRoute: HqApprovalsRoute,
   HqApprovedVendorsRoute: HqApprovedVendorsRoute,
   HqAssemblyRoute: HqAssemblyRoute,
   HqAssistantRoute: HqAssistantRoute,
@@ -4603,7 +4521,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqItSsoRoute: HqItSsoRoute,
   HqKanbanRoute: HqKanbanRoute,
   HqKbRoute: HqKbRoute,
-  HqKpisRoute: HqKpisRoute,
   HqLabNotebookRoute: HqLabNotebookRoute,
   HqLaunchesRoute: HqLaunchesRoute,
   HqLeadTimesRoute: HqLeadTimesRoute,
@@ -4671,13 +4588,13 @@ const HqRouteChildren: HqRouteChildren = {
   HqRoadmapRoute: HqRoadmapRoute,
   HqSalesAnalyticsRoute: HqSalesAnalyticsRoute,
   HqSalesContactsRoute: HqSalesContactsRoute,
-  HqScheduledJobsRoute: HqScheduledJobsRoute,
   HqSearchRoute: HqSearchRoute,
   HqSerialsRoute: HqSerialsRoute,
   HqSettingsRoute: HqSettingsRoute,
   HqShippingPrepRoute: HqShippingPrepRoute,
   HqShippingTrackingRoute: HqShippingTrackingRoute,
   HqSocialRoute: HqSocialRoute,
+  HqSoftwareApisRoute: HqSoftwareApisRoute,
   HqStrategyRoute: HqStrategyRoute,
   HqSuppliersRoute: HqSuppliersRoute,
   HqSupportFaqsRoute: HqSupportFaqsRoute,
@@ -4696,7 +4613,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqWarrantyClaimsRoute: HqWarrantyClaimsRoute,
   HqWebhooksRoute: HqWebhooksRoute,
   HqWorkOrdersRoute: HqWorkOrdersRoute,
-  HqWorkflowsRoute: HqWorkflowsRoute,
   HqAdminBrandingRoute: HqAdminBrandingRoute,
   HqAdminCompanyRoute: HqAdminCompanyRoute,
   HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,

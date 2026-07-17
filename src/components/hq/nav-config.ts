@@ -72,7 +72,11 @@ export const navGroups: NavGroup[] = [
       { label: "Firmware & Repos", to: "/firmware", icon: Cpu },
       { label: "BOM & Changes", to: "/bom", icon: ListTree },
       { label: "Reviews & Testing", to: "/design-reviews", icon: Eye },
+      { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
+      { label: "Features & Releases", to: "/product-features", icon: Sparkles },
+      { label: "Compatibility", to: "/product-compatibility", icon: Layers },
       { label: "Documentation", to: "/docs", icon: BookText },
+      { label: "Product Docs", to: "/product-docs", icon: BookText },
       { label: "Issues", to: "/issues", icon: Bug },
     ],
   },
@@ -102,7 +106,6 @@ export const navGroups: NavGroup[] = [
       { label: "Customer Insights", to: "/customer-timeline", icon: Timer },
     ],
   },
-
   {
     label: "Growth",
     items: [
@@ -127,6 +130,7 @@ export const navGroups: NavGroup[] = [
       { label: "Time & Attendance", to: "/time-tracking", icon: Clock },
       { label: "Performance & Benefits", to: "/reviews", icon: Star },
       { label: "Org Chart", to: "/org-chart", icon: Network },
+      { label: "Dashboards", to: "/analytics", icon: BarChart3 },
       { label: "Admin Center", to: "/admin/users", icon: Users, badge: "Admin" },
     ],
   },
@@ -134,35 +138,10 @@ export const navGroups: NavGroup[] = [
     label: "Development",
     items: [
       { label: "Code & Repos", to: "/repos", icon: GitBranch },
-      { label: "Software & APIs", to: "/software", icon: Terminal },
+      { label: "Software & APIs", to: "/software-apis", icon: Terminal },
       { label: "Integrations", to: "/it-integrations", icon: Plug },
       { label: "Infrastructure & Monitoring", to: "/it-servers", icon: Server },
       { label: "Security & Logs", to: "/it-security", icon: Shield },
-    ],
-  },
-  {
-    label: "Product",
-    items: [
-      { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
-      { label: "Features & Releases", to: "/product-features", icon: Sparkles },
-      { label: "Compatibility", to: "/product-compatibility", icon: Layers },
-      { label: "Docs", to: "/product-docs", icon: BookText },
-    ],
-  },
-  {
-    label: "Analytics",
-    items: [
-      { label: "Dashboards", to: "/analytics", icon: BarChart3 },
-      { label: "KPIs", to: "/kpis", icon: Target },
-      { label: "AI Insights", to: "/ai-insights", icon: Sparkle },
-    ],
-  },
-  {
-    label: "Automation",
-    items: [
-      { label: "Workflows", to: "/workflows", icon: Workflow },
-      { label: "Approvals", to: "/approvals", icon: ApprovalIcon },
-      { label: "Scheduled Jobs & Webhooks", to: "/scheduled-jobs", icon: ScheduleIcon },
     ],
   },
 ];
