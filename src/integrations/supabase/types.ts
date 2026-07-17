@@ -2410,6 +2410,39 @@ export type Database = {
           },
         ]
       }
+      hr_onboarding_templates: {
+        Row: {
+          category: string | null
+          created_at: string
+          days_offset: number
+          department: string | null
+          id: string
+          sort_order: number
+          task: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          days_offset?: number
+          department?: string | null
+          id?: string
+          sort_order?: number
+          task: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          days_offset?: number
+          department?: string | null
+          id?: string
+          sort_order?: number
+          task?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hr_policies: {
         Row: {
           active: boolean
@@ -2504,6 +2537,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hr_suspensions: {
+        Row: {
+          active: boolean
+          created_at: string
+          created_by: string | null
+          ends_at: string | null
+          id: string
+          reason: string | null
+          starts_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          reason?: string | null
+          starts_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          reason?: string | null
+          starts_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       hr_time_entries: {
         Row: {
@@ -3376,6 +3445,35 @@ export type Database = {
         }
         Relationships: []
       }
+      role_route_access: {
+        Row: {
+          created_at: string
+          id: string
+          role_id: string
+          route: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role_id: string
+          route: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role_id?: string
+          route?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_route_access_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "custom_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sales_contacts: {
         Row: {
           company: string | null
@@ -3717,6 +3815,11 @@ export type Database = {
         Args: { _permission: string; _user_id: string }
         Returns: boolean
       }
+      has_route_access: {
+        Args: { _route: string; _user_id: string }
+        Returns: boolean
+      }
+      is_suspended: { Args: { _user_id: string }; Returns: boolean }
       mark_meeting_invite_joined: {
         Args: { _name?: string; _token: string }
         Returns: undefined
