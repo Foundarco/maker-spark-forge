@@ -1604,6 +1604,238 @@ export type Database = {
         }
         Relationships: []
       }
+      hq_email_rules: {
+        Row: {
+          action: string
+          action_value: string | null
+          active: boolean
+          created_at: string
+          created_by: string | null
+          id: string
+          match_field: string
+          match_value: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          action?: string
+          action_value?: string | null
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          match_field?: string
+          match_value: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          action?: string
+          action_value?: string | null
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          match_field?: string
+          match_value?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hq_email_templates: {
+        Row: {
+          body: string | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          name: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          name?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hq_emails: {
+        Row: {
+          bcc: string | null
+          body: string | null
+          cc: string | null
+          created_at: string
+          created_by: string | null
+          folder: string
+          from_addr: string | null
+          id: string
+          is_read: boolean
+          mailbox: string
+          owner_id: string | null
+          sent_at: string | null
+          status: string | null
+          subject: string
+          to_addr: string | null
+          updated_at: string
+        }
+        Insert: {
+          bcc?: string | null
+          body?: string | null
+          cc?: string | null
+          created_at?: string
+          created_by?: string | null
+          folder?: string
+          from_addr?: string | null
+          id?: string
+          is_read?: boolean
+          mailbox?: string
+          owner_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject: string
+          to_addr?: string | null
+          updated_at?: string
+        }
+        Update: {
+          bcc?: string | null
+          body?: string | null
+          cc?: string | null
+          created_at?: string
+          created_by?: string | null
+          folder?: string
+          from_addr?: string | null
+          id?: string
+          is_read?: boolean
+          mailbox?: string
+          owner_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string
+          to_addr?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hq_file_permissions: {
+        Row: {
+          access_level: string
+          created_at: string
+          created_by: string | null
+          file_id: string | null
+          id: string
+          notes: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          access_level?: string
+          created_at?: string
+          created_by?: string | null
+          file_id?: string | null
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          access_level?: string
+          created_at?: string
+          created_by?: string | null
+          file_id?: string | null
+          id?: string
+          notes?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hq_file_permissions_file_id_fkey"
+            columns: ["file_id"]
+            isOneToOne: false
+            referencedRelation: "hq_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hq_files: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          folder: string | null
+          id: string
+          is_shared: boolean
+          mime_type: string | null
+          name: string
+          owner_id: string | null
+          parent_id: string | null
+          path: string | null
+          size_bytes: number | null
+          tags: string[] | null
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          folder?: string | null
+          id?: string
+          is_shared?: boolean
+          mime_type?: string | null
+          name: string
+          owner_id?: string | null
+          parent_id?: string | null
+          path?: string | null
+          size_bytes?: number | null
+          tags?: string[] | null
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          folder?: string | null
+          id?: string
+          is_shared?: boolean
+          mime_type?: string | null
+          name?: string
+          owner_id?: string | null
+          parent_id?: string | null
+          path?: string | null
+          size_bytes?: number | null
+          tags?: string[] | null
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hq_files_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "hq_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       idea_comments: {
         Row: {
           author_id: string
