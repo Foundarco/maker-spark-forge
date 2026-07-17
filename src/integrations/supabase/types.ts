@@ -383,6 +383,323 @@ export type Database = {
         }
         Relationships: []
       }
+      cs_csat_responses: {
+        Row: {
+          comment: string | null
+          created_at: string
+          created_by: string | null
+          customer_email: string | null
+          customer_name: string | null
+          id: string
+          nps: number | null
+          score: number
+          source: string | null
+          ticket_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          nps?: number | null
+          score: number
+          source?: string | null
+          ticket_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          nps?: number | null
+          score?: number
+          source?: string | null
+          ticket_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cs_csat_responses_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "cs_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cs_kb_articles: {
+        Row: {
+          audience: string
+          body: string | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          published: boolean
+          tags: string[] | null
+          title: string
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          audience?: string
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          published?: boolean
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          audience?: string
+          body?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          published?: boolean
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
+      cs_repairs: {
+        Row: {
+          cost: number | null
+          created_at: string
+          created_by: string | null
+          customer_email: string | null
+          customer_name: string | null
+          id: string
+          issue: string | null
+          notes: string | null
+          product_name: string
+          received_at: string | null
+          repair_number: string | null
+          serial_number: string | null
+          shipped_back_at: string | null
+          status: string
+          technician_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          issue?: string | null
+          notes?: string | null
+          product_name: string
+          received_at?: string | null
+          repair_number?: string | null
+          serial_number?: string | null
+          shipped_back_at?: string | null
+          status?: string
+          technician_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          issue?: string | null
+          notes?: string | null
+          product_name?: string
+          received_at?: string | null
+          repair_number?: string | null
+          serial_number?: string | null
+          shipped_back_at?: string | null
+          status?: string
+          technician_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cs_rmas: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          customer_email: string | null
+          customer_name: string | null
+          id: string
+          notes: string | null
+          order_reference: string | null
+          product_name: string | null
+          reason: string | null
+          received_at: string | null
+          refund_amount: number | null
+          resolved_at: string | null
+          rma_number: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          notes?: string | null
+          order_reference?: string | null
+          product_name?: string | null
+          reason?: string | null
+          received_at?: string | null
+          refund_amount?: number | null
+          resolved_at?: string | null
+          rma_number?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          notes?: string | null
+          order_reference?: string | null
+          product_name?: string | null
+          reason?: string | null
+          received_at?: string | null
+          refund_amount?: number | null
+          resolved_at?: string | null
+          rma_number?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cs_tickets: {
+        Row: {
+          assignee_id: string | null
+          channel: string
+          created_at: string
+          created_by: string | null
+          customer_email: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          description: string | null
+          id: string
+          priority: string
+          status: string
+          subject: string
+          tags: string[] | null
+          ticket_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          description?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          subject: string
+          tags?: string[] | null
+          ticket_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          channel?: string
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          description?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          subject?: string
+          tags?: string[] | null
+          ticket_number?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cs_warranty_claims: {
+        Row: {
+          assignee_id: string | null
+          claim_number: string | null
+          created_at: string
+          created_by: string | null
+          customer_email: string | null
+          customer_name: string | null
+          id: string
+          issue: string | null
+          notes: string | null
+          product_name: string
+          purchase_date: string | null
+          resolution: string | null
+          resolved_at: string | null
+          serial_number: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          claim_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          issue?: string | null
+          notes?: string | null
+          product_name: string
+          purchase_date?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          serial_number?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          claim_number?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_email?: string | null
+          customer_name?: string | null
+          id?: string
+          issue?: string | null
+          notes?: string | null
+          product_name?: string
+          purchase_date?: string | null
+          resolution?: string | null
+          resolved_at?: string | null
+          serial_number?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       custom_roles: {
         Row: {
           color: string

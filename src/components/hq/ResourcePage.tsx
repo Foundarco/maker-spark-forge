@@ -48,6 +48,7 @@ export type ResourceConfig<T = any> = {
   kpis?: (rows: T[]) => KPI[];
   searchable?: string[]; // column keys to include in text search
   defaults?: Record<string, any>;
+  baseFilter?: Record<string, any>; // eq filter applied to load + merged into new-row defaults
 };
 
 type Profile = { id: string; full_name: string | null; email: string | null };
@@ -78,9 +79,11 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
     setLoading(true);
     const orderCol = config.orderBy?.column ?? "created_at";
     const ascending = config.orderBy?.ascending ?? false;
-    const { data } = await (supabase.from(config.table as any) as any)
-      .select("*")
-      .order(orderCol, { ascending });
+    let q = (supabase.from(config.table as any) as any).select("*").order(orderCol, { ascending });
+    if (config.baseFilter) {
+      for (const [k, v] of Object.entries(config.baseFilter)) q = q.eq(k, v);
+    }
+    const { data } = await q;
     setRows((data ?? []) as T[]);
 
     const promises: Array<Promise<{ data: any }>> = [
@@ -233,7 +236,7 @@ function ResourceDialog<T extends { id: string }>({ config, ctx, row, onClose, o
       else if (f.type === "bool") base[f.key] = false;
       else base[f.key] = "";
     }
-    return { ...base, ...(config.defaults ?? {}) };
+    return { ...base, ...(config.defaults ?? {}), ...(config.baseFilter ?? {}) };
   });
   const [saving, setSaving] = useState(false);
   const isEdit = !!row;
@@ -254,6 +257,7 @@ function ResourceDialog<T extends { id: string }>({ config, ctx, row, onClose, o
       payload[f.key] = v;
     }
     if (!isEdit && user) payload.created_by = user.id;
+    if (!isEdit && config.baseFilter) Object.assign(payload, config.baseFilter);
     let error: any = null;
     if (isEdit) {
       ({ error } = await (supabase.from(config.table as any) as any).update(payload).eq("id", (row as any).id));
