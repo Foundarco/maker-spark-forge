@@ -98,25 +98,15 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Pipeline & CRM", to: "/pipeline", icon: Filter },
       { label: "Orders & Contracts", to: "/orders", icon: Receipt },
-      { label: "Pricing & Discounts", to: "/pricing-admin", icon: Tag },
       { label: "Invoices & Payments", to: "/invoices", icon: FileSpreadsheet },
       { label: "Accounting & Expenses", to: "/accounting", icon: Landmark },
-      { label: "Purchasing & Payroll", to: "/purchasing", icon: ShoppingBag },
       { label: "Taxes & Reports", to: "/financial-reports", icon: FileBarChart },
-      { label: "Website & Content", to: "/cms", icon: Globe },
-      { label: "Campaigns & Social", to: "/email-campaigns", icon: Send },
+      { label: "Website & Campaigns", to: "/cms", icon: Globe },
       { label: "Brand & Launches", to: "/brand-assets", icon: Palette },
       { label: "Growth Analytics", to: "/sales-analytics", icon: LineChart },
-    ],
-  },
-  {
-    label: "Business",
-    items: [
-      { label: "Goals & OKRs", to: "/goals", icon: Target },
-      { label: "Roadmap", to: "/roadmap", icon: Map },
+      { label: "Goals & Roadmap", to: "/goals", icon: Target },
       { label: "Partnerships & Investors", to: "/partnerships", icon: Handshake },
-      { label: "Legal & Policies", to: "/legal-docs", icon: Gavel },
-      { label: "Strategy & Decision Log", to: "/strategy", icon: Compass },
+      { label: "Legal & Strategy", to: "/legal-docs", icon: Gavel },
     ],
   },
   {
