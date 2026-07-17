@@ -222,7 +222,6 @@ import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
 import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
-import { Route as HqAdminRolesRouteImport } from './routes/_hq.admin.roles'
 import { Route as HqAdminPermissionsRouteImport } from './routes/_hq.admin.permissions'
 import { Route as HqAdminDomainsRouteImport } from './routes/_hq.admin.domains'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
@@ -1294,11 +1293,6 @@ const HqAdminSecurityRoute = HqAdminSecurityRouteImport.update({
   path: '/admin/security',
   getParentRoute: () => HqRoute,
 } as any)
-const HqAdminRolesRoute = HqAdminRolesRouteImport.update({
-  id: '/admin/roles',
-  path: '/admin/roles',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqAdminPermissionsRoute = HqAdminPermissionsRouteImport.update({
   id: '/admin/permissions',
   path: '/admin/permissions',
@@ -1547,7 +1541,6 @@ export interface FileRoutesByFullPath {
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/admin/domains': typeof HqAdminDomainsRoute
   '/admin/permissions': typeof HqAdminPermissionsRoute
-  '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
@@ -1768,7 +1761,6 @@ export interface FileRoutesByTo {
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/admin/domains': typeof HqAdminDomainsRoute
   '/admin/permissions': typeof HqAdminPermissionsRoute
-  '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
@@ -1991,7 +1983,6 @@ export interface FileRoutesById {
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
   '/_hq/admin/domains': typeof HqAdminDomainsRoute
   '/_hq/admin/permissions': typeof HqAdminPermissionsRoute
-  '/_hq/admin/roles': typeof HqAdminRolesRoute
   '/_hq/admin/security': typeof HqAdminSecurityRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
@@ -2214,7 +2205,6 @@ export interface FileRouteTypes {
     | '/admin/departments'
     | '/admin/domains'
     | '/admin/permissions'
-    | '/admin/roles'
     | '/admin/security'
     | '/api/hq/assistant'
   fileRoutesByTo: FileRoutesByTo
@@ -2435,7 +2425,6 @@ export interface FileRouteTypes {
     | '/admin/departments'
     | '/admin/domains'
     | '/admin/permissions'
-    | '/admin/roles'
     | '/admin/security'
     | '/api/hq/assistant'
   id:
@@ -2657,7 +2646,6 @@ export interface FileRouteTypes {
     | '/_hq/admin/departments'
     | '/_hq/admin/domains'
     | '/_hq/admin/permissions'
-    | '/_hq/admin/roles'
     | '/_hq/admin/security'
     | '/api/hq/assistant'
   fileRoutesById: FileRoutesById
@@ -4190,13 +4178,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqAdminSecurityRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/admin/roles': {
-      id: '/_hq/admin/roles'
-      path: '/admin/roles'
-      fullPath: '/admin/roles'
-      preLoaderRoute: typeof HqAdminRolesRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/admin/permissions': {
       id: '/_hq/admin/permissions'
       path: '/admin/permissions'
@@ -4418,7 +4399,6 @@ interface HqRouteChildren {
   HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
   HqAdminDomainsRoute: typeof HqAdminDomainsRoute
   HqAdminPermissionsRoute: typeof HqAdminPermissionsRoute
-  HqAdminRolesRoute: typeof HqAdminRolesRoute
   HqAdminSecurityRoute: typeof HqAdminSecurityRoute
 }
 
@@ -4598,7 +4578,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,
   HqAdminDomainsRoute: HqAdminDomainsRoute,
   HqAdminPermissionsRoute: HqAdminPermissionsRoute,
-  HqAdminRolesRoute: HqAdminRolesRoute,
   HqAdminSecurityRoute: HqAdminSecurityRoute,
 }
 

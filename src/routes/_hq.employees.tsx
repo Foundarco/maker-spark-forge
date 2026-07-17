@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { IdCard, Users, UserCheck, Mail, Trash2, Ban, Plus, Shield, Building2, ClipboardCheck, Search, X, Check } from "lucide-react";
+import { IdCard, Users, UserCheck, Mail, Trash2, Ban, Plus, Building2, ClipboardCheck, Search, X, Check } from "lucide-react";
 import { UserMention } from "@/components/hq/UserMention";
+import { sendInvite as sendInviteFn } from "@/lib/hq/invite.functions";
 
 export const Route = createFileRoute("/_hq/employees")({
   head: () => ({ meta: [{ title: "People — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -256,17 +258,30 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
   };
   useEffect(() => { reload(); }, []);
 
+  const invite = useServerFn(sendInviteFn);
+  const [sending, setSending] = useState(false);
   const sendInvite = async () => {
     if (!inv.email.trim()) return;
     setMsg(null);
-    const { error } = await supabase.from("invites").insert({
-      email: inv.email.trim().toLowerCase(), role: inv.role as any,
-      department: inv.department || null, full_name: inv.full_name || null, invited_by: me?.id,
-    });
-    if (error) { setMsg(error.message); return; }
-    setInv({ email: "", role: "employee", department: "", full_name: "" });
-    setShowInvite(false);
-    reload();
+    setSending(true);
+    try {
+      const res: any = await invite({
+        data: {
+          email: inv.email.trim().toLowerCase(),
+          role: inv.role,
+          department: inv.department || null,
+          full_name: inv.full_name || null,
+        },
+      });
+      if (res?.warning) setMsg(`Invite saved. Email: ${res.warning}`);
+      setInv({ email: "", role: "employee", department: "", full_name: "" });
+      setShowInvite(false);
+      reload();
+    } catch (e: any) {
+      setMsg(e?.message ?? "Failed to send invite");
+    } finally {
+      setSending(false);
+    }
   };
 
   const revoke = async (id: string) => { await supabase.from("invites").delete().eq("id", id); reload(); };
@@ -379,7 +394,7 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
             {msg && <p className="mt-2 text-xs text-destructive">{msg}</p>}
             <div className="mt-4 flex justify-end gap-2">
               <button onClick={() => setShowInvite(false)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
-              <button onClick={sendInvite} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Send invite</button>
+              <button onClick={sendInvite} disabled={sending} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">{sending ? "Sending…" : "Send invite & email"}</button>
             </div>
           </div>
         </div>
