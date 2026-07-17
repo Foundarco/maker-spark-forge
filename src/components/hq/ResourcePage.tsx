@@ -48,6 +48,7 @@ export type ResourceConfig<T = any> = {
   kpis?: (rows: T[]) => KPI[];
   searchable?: string[]; // column keys to include in text search
   defaults?: Record<string, any>;
+  baseFilter?: Record<string, any>; // eq filter applied to load + merged into new-row defaults
 };
 
 type Profile = { id: string; full_name: string | null; email: string | null };
