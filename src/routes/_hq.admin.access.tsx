@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Shield, Check, Plus, Trash2, ClipboardCheck } from "lucide-react";
+import { Shield, Check } from "lucide-react";
 import { navGroups } from "@/components/hq/nav-config";
 
 export const Route = createFileRoute("/_hq/admin/access")({
@@ -18,12 +18,8 @@ export const Route = createFileRoute("/_hq/admin/access")({
 
 type CustomRole = { id: string; name: string; color: string; permissions: any };
 type RouteAccess = { role_id: string; route: string };
-type Template = { id: string; department: string | null; task: string; category: string | null; days_offset: number; sort_order: number };
-
-const DEPARTMENTS = ["Engineering","Manufacturing","Sales","Marketing","Finance","HR","IT","Support","Operations","Executive"];
 
 function AccessPage() {
-  const [tab, setTab] = useState<"routes"|"onboarding">("routes");
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-8">
       <div className="mb-6 flex items-center gap-3">
@@ -31,16 +27,10 @@ function AccessPage() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Admin</p>
           <h1 className="text-3xl font-semibold tracking-tight">Access & Permissions</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Control which tabs each role can see. Create roles in <a href="/admin/company" className="text-primary hover:underline">Company Settings → Roles & Permissions</a>.</p>
         </div>
       </div>
-      <div className="mb-6 flex flex-wrap gap-1 border-b border-border">
-        {([["routes","Route access",Shield],["onboarding","Onboarding templates",ClipboardCheck]] as const).map(([k,label,Icon]) => (
-          <button key={k} onClick={() => setTab(k)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px ${tab===k?"border-primary text-primary":"border-transparent text-muted-foreground hover:text-foreground"}`}>
-            <Icon className="h-4 w-4" /> {label}
-          </button>
-        ))}
-      </div>
-      {tab === "routes" ? <RouteAccessMatrix /> : <TemplatesEditor />}
+      <RouteAccessMatrix />
     </div>
   );
 }
@@ -92,9 +82,9 @@ function RouteAccessMatrix() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
       <aside className="lg:col-span-1 rounded-xl border border-border bg-card p-3">
-        <h3 className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Custom roles</h3>
+        <h3 className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Roles</h3>
         {roles.length === 0 ? (
-          <p className="p-3 text-xs text-muted-foreground">Create a role in <a href="/admin/roles" className="text-primary hover:underline">Admin → Roles</a> first.</p>
+          <p className="p-3 text-xs text-muted-foreground">Create a role in <a href="/admin/company" className="text-primary hover:underline">Company Settings</a> first.</p>
         ) : roles.map((r) => (
           <button key={r.id} onClick={() => setSelectedRole(r.id)} className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm ${selectedRole===r.id?"bg-primary/10":"hover:bg-muted"}`}>
             <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: r.color }} />
@@ -111,7 +101,7 @@ function RouteAccessMatrix() {
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="text-sm text-muted-foreground">Check the routes members of <b style={{ color: role.color }}>{role.name}</b> can see. Core pages (Dashboard, Assistant, Settings) are always visible.</p>
+            <p className="text-sm text-muted-foreground">Check the tabs members of <b style={{ color: role.color }}>{role.name}</b> can see. Core pages (Dashboard, Assistant, Settings) are always visible.</p>
             {navGroups.map((g) => {
               const groupRoutes = g.items.map((i) => i.to);
               const allSelected = groupRoutes.every((r) => currentAccess.has(r));
@@ -147,70 +137,3 @@ function RouteAccessMatrix() {
     </div>
   );
 }
-
-function TemplatesEditor() {
-  const [rows, setRows] = useState<Template[]>([]);
-  const [form, setForm] = useState<Partial<Template>>({ department: "", task: "", category: "", days_offset: 0, sort_order: 0 });
-
-  const reload = async () => {
-    const { data } = await supabase.from("hr_onboarding_templates").select("*").order("department", { nullsFirst: true } as any).order("sort_order");
-    setRows((data ?? []) as Template[]);
-  };
-  useEffect(() => { reload(); }, []);
-
-  const add = async () => {
-    if (!form.task) return;
-    await supabase.from("hr_onboarding_templates").insert({
-      department: form.department || null, task: form.task, category: form.category || null,
-      days_offset: Number(form.days_offset ?? 0), sort_order: Number(form.sort_order ?? 0),
-    });
-    setForm({ department: "", task: "", category: "", days_offset: 0, sort_order: 0 });
-    reload();
-  };
-  const del = async (id: string) => { await supabase.from("hr_onboarding_templates").delete().eq("id", id); reload(); };
-  const update = async (id: string, patch: Partial<Template>) => { await supabase.from("hr_onboarding_templates").update(patch).eq("id", id); reload(); };
-
-  return (
-    <div>
-      <div className="mb-6 rounded-xl border border-border bg-card p-5">
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Add template task</h3>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
-          <select value={form.department ?? ""} onChange={(e) => setForm({ ...form, department: e.target.value })} className={inputCls}>
-            <option value="">Global (all)</option>
-            {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
-          </select>
-          <input placeholder="Task" value={form.task ?? ""} onChange={(e) => setForm({ ...form, task: e.target.value })} className={`${inputCls} sm:col-span-2`} />
-          <input placeholder="Category" value={form.category ?? ""} onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputCls} />
-          <input type="number" placeholder="Days" value={form.days_offset ?? 0} onChange={(e) => setForm({ ...form, days_offset: Number(e.target.value) })} className={inputCls} />
-        </div>
-        <div className="mt-3">
-          <button onClick={add} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
-            <Plus className="h-4 w-4" /> Add task
-          </button>
-        </div>
-      </div>
-
-      <div className="overflow-hidden rounded-xl border border-border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
-            <tr><th className="px-4 py-2 text-left">Department</th><th className="px-4 py-2 text-left">Task</th><th className="px-4 py-2 text-left">Category</th><th className="px-4 py-2 text-left">Days after start</th><th className="px-4 py-2"></th></tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className="border-t border-border">
-                <td className="px-4 py-2">{r.department ?? <span className="text-muted-foreground">Global</span>}</td>
-                <td className="px-4 py-2"><input defaultValue={r.task} onBlur={(e) => e.target.value !== r.task && update(r.id, { task: e.target.value })} className="w-full bg-transparent" /></td>
-                <td className="px-4 py-2"><input defaultValue={r.category ?? ""} onBlur={(e) => update(r.id, { category: e.target.value || null })} className="w-full bg-transparent" /></td>
-                <td className="px-4 py-2"><input type="number" defaultValue={r.days_offset} onBlur={(e) => update(r.id, { days_offset: Number(e.target.value) })} className="w-16 bg-transparent" /></td>
-                <td className="px-4 py-2 text-right"><button onClick={() => del(r.id)} className="text-xs text-destructive hover:underline"><Trash2 className="inline h-3 w-3" /></button></td>
-              </tr>
-            ))}
-            {rows.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-sm text-muted-foreground">No templates yet.</td></tr>}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-const inputCls = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary";
