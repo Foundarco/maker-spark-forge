@@ -56,7 +56,8 @@ type Profile = { id: string; full_name: string | null; email: string | null };
 type Project = { id: string; name: string; code: string | null };
 type Supplier = { id: string; name: string };
 type WorkOrder = { id: string; order_number: string; product_name: string };
-type Ctx = { profiles: Profile[]; projects: Project[]; suppliers: Supplier[]; workorders: WorkOrder[] };
+type FinAccount = { id: string; name: string; code: string | null; type: string };
+type Ctx = { profiles: Profile[]; projects: Project[]; suppliers: Supplier[]; workorders: WorkOrder[]; accounts: FinAccount[] };
 
 export function ResourcePage<T extends { id: string }>({ config }: { config: ResourceConfig<T> }) {
   const [rows, setRows] = useState<T[]>([]);
