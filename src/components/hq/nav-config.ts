@@ -94,36 +94,19 @@ export const navGroups: NavGroup[] = [
   },
 
   {
-    label: "Sales",
+    label: "Growth",
     items: [
-      { label: "Sales Pipeline", to: "/pipeline", icon: Filter },
-      { label: "CRM & Contacts", to: "/crm", icon: Users2 },
-      { label: "Orders", to: "/orders", icon: Receipt },
-      { label: "Contracts", to: "/contracts", icon: ScrollText },
+      { label: "Pipeline & CRM", to: "/pipeline", icon: Filter },
+      { label: "Orders & Contracts", to: "/orders", icon: Receipt },
       { label: "Pricing & Discounts", to: "/pricing-admin", icon: Tag },
-      { label: "Sales Analytics", to: "/sales-analytics", icon: LineChart },
-    ],
-  },
-  {
-    label: "Finance",
-    items: [
-      { label: "Accounting", to: "/accounting", icon: Landmark },
       { label: "Invoices & Payments", to: "/invoices", icon: FileSpreadsheet },
-      { label: "Expenses & Budgets", to: "/expenses", icon: Receipt },
-      { label: "Payroll & Purchasing", to: "/purchasing", icon: ShoppingBag },
-      { label: "Taxes", to: "/taxes", icon: Calculator },
-      { label: "Reports & Forecasting", to: "/financial-reports", icon: FileBarChart },
-    ],
-  },
-  {
-    label: "Marketing",
-    items: [
-      { label: "Website & Blog", to: "/cms", icon: Globe },
-      { label: "Email Campaigns", to: "/email-campaigns", icon: Send },
-      { label: "Social & Content", to: "/social", icon: Share2 },
-      { label: "Brand & Media", to: "/brand-assets", icon: Palette },
-      { label: "Analytics & Press", to: "/marketing-analytics", icon: BarChart3 },
-      { label: "Product Launches", to: "/launches", icon: Rocket },
+      { label: "Accounting & Expenses", to: "/accounting", icon: Landmark },
+      { label: "Purchasing & Payroll", to: "/purchasing", icon: ShoppingBag },
+      { label: "Taxes & Reports", to: "/financial-reports", icon: FileBarChart },
+      { label: "Website & Content", to: "/cms", icon: Globe },
+      { label: "Campaigns & Social", to: "/email-campaigns", icon: Send },
+      { label: "Brand & Launches", to: "/brand-assets", icon: Palette },
+      { label: "Growth Analytics", to: "/sales-analytics", icon: LineChart },
     ],
   },
   {
