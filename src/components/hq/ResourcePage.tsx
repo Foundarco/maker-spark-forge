@@ -79,9 +79,11 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
     setLoading(true);
     const orderCol = config.orderBy?.column ?? "created_at";
     const ascending = config.orderBy?.ascending ?? false;
-    const { data } = await (supabase.from(config.table as any) as any)
-      .select("*")
-      .order(orderCol, { ascending });
+    let q = (supabase.from(config.table as any) as any).select("*").order(orderCol, { ascending });
+    if (config.baseFilter) {
+      for (const [k, v] of Object.entries(config.baseFilter)) q = q.eq(k, v);
+    }
+    const { data } = await q;
     setRows((data ?? []) as T[]);
 
     const promises: Array<Promise<{ data: any }>> = [
