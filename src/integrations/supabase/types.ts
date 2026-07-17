@@ -835,6 +835,216 @@ export type Database = {
         }
         Relationships: []
       }
+      dev_infrastructure: {
+        Row: {
+          created_at: string
+          environment: string | null
+          id: string
+          kind: string | null
+          name: string
+          notes: string | null
+          owner_id: string | null
+          provider: string | null
+          region: string | null
+          status: string | null
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          environment?: string | null
+          id?: string
+          kind?: string | null
+          name: string
+          notes?: string | null
+          owner_id?: string | null
+          provider?: string | null
+          region?: string | null
+          status?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          environment?: string | null
+          id?: string
+          kind?: string | null
+          name?: string
+          notes?: string | null
+          owner_id?: string | null
+          provider?: string | null
+          region?: string | null
+          status?: string | null
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
+      }
+      dev_integrations: {
+        Row: {
+          category: string | null
+          connected_at: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          owner_id: string | null
+          status: string | null
+          updated_at: string
+          vendor: string | null
+        }
+        Insert: {
+          category?: string | null
+          connected_at?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          owner_id?: string | null
+          status?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Update: {
+          category?: string | null
+          connected_at?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          owner_id?: string | null
+          status?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Relationships: []
+      }
+      dev_repos: {
+        Row: {
+          created_at: string
+          default_branch: string | null
+          description: string | null
+          id: string
+          language: string | null
+          name: string
+          owner_id: string | null
+          provider: string | null
+          status: string | null
+          updated_at: string
+          url: string | null
+          visibility: string | null
+        }
+        Insert: {
+          created_at?: string
+          default_branch?: string | null
+          description?: string | null
+          id?: string
+          language?: string | null
+          name: string
+          owner_id?: string | null
+          provider?: string | null
+          status?: string | null
+          updated_at?: string
+          url?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          created_at?: string
+          default_branch?: string | null
+          description?: string | null
+          id?: string
+          language?: string | null
+          name?: string
+          owner_id?: string | null
+          provider?: string | null
+          status?: string | null
+          updated_at?: string
+          url?: string | null
+          visibility?: string | null
+        }
+        Relationships: []
+      }
+      dev_security_logs: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          details: string | null
+          event: string
+          id: string
+          occurred_at: string | null
+          severity: string | null
+          source: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          details?: string | null
+          event: string
+          id?: string
+          occurred_at?: string | null
+          severity?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          details?: string | null
+          event?: string
+          id?: string
+          occurred_at?: string | null
+          severity?: string | null
+          source?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      dev_software: {
+        Row: {
+          created_at: string
+          description: string | null
+          environment: string | null
+          id: string
+          kind: string | null
+          name: string
+          owner_id: string | null
+          status: string | null
+          updated_at: string
+          url: string | null
+          version: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          environment?: string | null
+          id?: string
+          kind?: string | null
+          name: string
+          owner_id?: string | null
+          status?: string | null
+          updated_at?: string
+          url?: string | null
+          version?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          environment?: string | null
+          id?: string
+          kind?: string | null
+          name?: string
+          owner_id?: string | null
+          status?: string | null
+          updated_at?: string
+          url?: string | null
+          version?: string | null
+        }
+        Relationships: []
+      }
       direct_messages: {
         Row: {
           attachments: Json
