@@ -119,7 +119,6 @@ import { Route as HqPartnershipsRouteImport } from './routes/_hq.partnerships'
 import { Route as HqPackagingRouteImport } from './routes/_hq.packaging'
 import { Route as HqOrgChartRouteImport } from './routes/_hq.org-chart'
 import { Route as HqOrdersRouteImport } from './routes/_hq.orders'
-import { Route as HqOnboardingRouteImport } from './routes/_hq.onboarding'
 import { Route as HqOkrsRouteImport } from './routes/_hq.okrs'
 import { Route as HqNotificationsRouteImport } from './routes/_hq.notifications'
 import { Route as HqMilestonesRouteImport } from './routes/_hq.milestones'
@@ -222,7 +221,6 @@ import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
 import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
-import { Route as HqAdminUsersRouteImport } from './routes/_hq.admin.users'
 import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
 import { Route as HqAdminRolesRouteImport } from './routes/_hq.admin.roles'
 import { Route as HqAdminPermissionsRouteImport } from './routes/_hq.admin.permissions'
@@ -230,6 +228,7 @@ import { Route as HqAdminDomainsRouteImport } from './routes/_hq.admin.domains'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
 import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 import { Route as HqAdminBrandingRouteImport } from './routes/_hq.admin.branding'
+import { Route as HqAdminAccessRouteImport } from './routes/_hq.admin.access'
 
 const UpgradesRoute = UpgradesRouteImport.update({
   id: '/upgrades',
@@ -780,11 +779,6 @@ const HqOrdersRoute = HqOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => HqRoute,
 } as any)
-const HqOnboardingRoute = HqOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqOkrsRoute = HqOkrsRouteImport.update({
   id: '/okrs',
   path: '/okrs',
@@ -1295,11 +1289,6 @@ const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   path: '/api/hq/assistant',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HqAdminUsersRoute = HqAdminUsersRouteImport.update({
-  id: '/admin/users',
-  path: '/admin/users',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqAdminSecurityRoute = HqAdminSecurityRouteImport.update({
   id: '/admin/security',
   path: '/admin/security',
@@ -1333,6 +1322,11 @@ const HqAdminCompanyRoute = HqAdminCompanyRouteImport.update({
 const HqAdminBrandingRoute = HqAdminBrandingRouteImport.update({
   id: '/admin/branding',
   path: '/admin/branding',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqAdminAccessRoute = HqAdminAccessRouteImport.update({
+  id: '/admin/access',
+  path: '/admin/access',
   getParentRoute: () => HqRoute,
 } as any)
 
@@ -1462,7 +1456,6 @@ export interface FileRoutesByFullPath {
   '/milestones': typeof HqMilestonesRoute
   '/notifications': typeof HqNotificationsRoute
   '/okrs': typeof HqOkrsRoute
-  '/onboarding': typeof HqOnboardingRoute
   '/orders': typeof HqOrdersRoute
   '/org-chart': typeof HqOrgChartRoute
   '/packaging': typeof HqPackagingRoute
@@ -1548,6 +1541,7 @@ export interface FileRoutesByFullPath {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
@@ -1555,7 +1549,6 @@ export interface FileRoutesByFullPath {
   '/admin/permissions': typeof HqAdminPermissionsRoute
   '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
-  '/admin/users': typeof HqAdminUsersRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesByTo {
@@ -1684,7 +1677,6 @@ export interface FileRoutesByTo {
   '/milestones': typeof HqMilestonesRoute
   '/notifications': typeof HqNotificationsRoute
   '/okrs': typeof HqOkrsRoute
-  '/onboarding': typeof HqOnboardingRoute
   '/orders': typeof HqOrdersRoute
   '/org-chart': typeof HqOrgChartRoute
   '/packaging': typeof HqPackagingRoute
@@ -1770,6 +1762,7 @@ export interface FileRoutesByTo {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
@@ -1777,7 +1770,6 @@ export interface FileRoutesByTo {
   '/admin/permissions': typeof HqAdminPermissionsRoute
   '/admin/roles': typeof HqAdminRolesRoute
   '/admin/security': typeof HqAdminSecurityRoute
-  '/admin/users': typeof HqAdminUsersRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRoutesById {
@@ -1908,7 +1900,6 @@ export interface FileRoutesById {
   '/_hq/milestones': typeof HqMilestonesRoute
   '/_hq/notifications': typeof HqNotificationsRoute
   '/_hq/okrs': typeof HqOkrsRoute
-  '/_hq/onboarding': typeof HqOnboardingRoute
   '/_hq/orders': typeof HqOrdersRoute
   '/_hq/org-chart': typeof HqOrgChartRoute
   '/_hq/packaging': typeof HqPackagingRoute
@@ -1994,6 +1985,7 @@ export interface FileRoutesById {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/_hq/admin/access': typeof HqAdminAccessRoute
   '/_hq/admin/branding': typeof HqAdminBrandingRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
@@ -2001,7 +1993,6 @@ export interface FileRoutesById {
   '/_hq/admin/permissions': typeof HqAdminPermissionsRoute
   '/_hq/admin/roles': typeof HqAdminRolesRoute
   '/_hq/admin/security': typeof HqAdminSecurityRoute
-  '/_hq/admin/users': typeof HqAdminUsersRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
 }
 export interface FileRouteTypes {
@@ -2132,7 +2123,6 @@ export interface FileRouteTypes {
     | '/milestones'
     | '/notifications'
     | '/okrs'
-    | '/onboarding'
     | '/orders'
     | '/org-chart'
     | '/packaging'
@@ -2218,6 +2208,7 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
     | '/admin/departments'
@@ -2225,7 +2216,6 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/roles'
     | '/admin/security'
-    | '/admin/users'
     | '/api/hq/assistant'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -2354,7 +2344,6 @@ export interface FileRouteTypes {
     | '/milestones'
     | '/notifications'
     | '/okrs'
-    | '/onboarding'
     | '/orders'
     | '/org-chart'
     | '/packaging'
@@ -2440,6 +2429,7 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
     | '/admin/departments'
@@ -2447,7 +2437,6 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/roles'
     | '/admin/security'
-    | '/admin/users'
     | '/api/hq/assistant'
   id:
     | '__root__'
@@ -2577,7 +2566,6 @@ export interface FileRouteTypes {
     | '/_hq/milestones'
     | '/_hq/notifications'
     | '/_hq/okrs'
-    | '/_hq/onboarding'
     | '/_hq/orders'
     | '/_hq/org-chart'
     | '/_hq/packaging'
@@ -2663,6 +2651,7 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/_hq/admin/access'
     | '/_hq/admin/branding'
     | '/_hq/admin/company'
     | '/_hq/admin/departments'
@@ -2670,7 +2659,6 @@ export interface FileRouteTypes {
     | '/_hq/admin/permissions'
     | '/_hq/admin/roles'
     | '/_hq/admin/security'
-    | '/_hq/admin/users'
     | '/api/hq/assistant'
   fileRoutesById: FileRoutesById
 }
@@ -3481,13 +3469,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqOrdersRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/onboarding': {
-      id: '/_hq/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof HqOnboardingRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/okrs': {
       id: '/_hq/okrs'
       path: '/okrs'
@@ -4202,13 +4183,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHqAssistantRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_hq/admin/users': {
-      id: '/_hq/admin/users'
-      path: '/admin/users'
-      fullPath: '/admin/users'
-      preLoaderRoute: typeof HqAdminUsersRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/admin/security': {
       id: '/_hq/admin/security'
       path: '/admin/security'
@@ -4256,6 +4230,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/branding'
       fullPath: '/admin/branding'
       preLoaderRoute: typeof HqAdminBrandingRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/admin/access': {
+      id: '/_hq/admin/access'
+      path: '/admin/access'
+      fullPath: '/admin/access'
+      preLoaderRoute: typeof HqAdminAccessRouteImport
       parentRoute: typeof HqRoute
     }
   }
@@ -4363,7 +4344,6 @@ interface HqRouteChildren {
   HqMilestonesRoute: typeof HqMilestonesRoute
   HqNotificationsRoute: typeof HqNotificationsRoute
   HqOkrsRoute: typeof HqOkrsRoute
-  HqOnboardingRoute: typeof HqOnboardingRoute
   HqOrdersRoute: typeof HqOrdersRoute
   HqOrgChartRoute: typeof HqOrgChartRoute
   HqPackagingRoute: typeof HqPackagingRoute
@@ -4432,6 +4412,7 @@ interface HqRouteChildren {
   HqWarrantyClaimsRoute: typeof HqWarrantyClaimsRoute
   HqWebhooksRoute: typeof HqWebhooksRoute
   HqWorkOrdersRoute: typeof HqWorkOrdersRoute
+  HqAdminAccessRoute: typeof HqAdminAccessRoute
   HqAdminBrandingRoute: typeof HqAdminBrandingRoute
   HqAdminCompanyRoute: typeof HqAdminCompanyRoute
   HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
@@ -4439,7 +4420,6 @@ interface HqRouteChildren {
   HqAdminPermissionsRoute: typeof HqAdminPermissionsRoute
   HqAdminRolesRoute: typeof HqAdminRolesRoute
   HqAdminSecurityRoute: typeof HqAdminSecurityRoute
-  HqAdminUsersRoute: typeof HqAdminUsersRoute
 }
 
 const HqRouteChildren: HqRouteChildren = {
@@ -4544,7 +4524,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqMilestonesRoute: HqMilestonesRoute,
   HqNotificationsRoute: HqNotificationsRoute,
   HqOkrsRoute: HqOkrsRoute,
-  HqOnboardingRoute: HqOnboardingRoute,
   HqOrdersRoute: HqOrdersRoute,
   HqOrgChartRoute: HqOrgChartRoute,
   HqPackagingRoute: HqPackagingRoute,
@@ -4613,6 +4592,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqWarrantyClaimsRoute: HqWarrantyClaimsRoute,
   HqWebhooksRoute: HqWebhooksRoute,
   HqWorkOrdersRoute: HqWorkOrdersRoute,
+  HqAdminAccessRoute: HqAdminAccessRoute,
   HqAdminBrandingRoute: HqAdminBrandingRoute,
   HqAdminCompanyRoute: HqAdminCompanyRoute,
   HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,
@@ -4620,7 +4600,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqAdminPermissionsRoute: HqAdminPermissionsRoute,
   HqAdminRolesRoute: HqAdminRolesRoute,
   HqAdminSecurityRoute: HqAdminSecurityRoute,
-  HqAdminUsersRoute: HqAdminUsersRoute,
 }
 
 const HqRouteWithChildren = HqRoute._addFileChildren(HqRouteChildren)
@@ -4736,13 +4715,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

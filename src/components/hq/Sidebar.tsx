@@ -1,13 +1,27 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { navGroups } from "./nav-config";
+import { useRouteAccess } from "@/lib/hq/route-access";
 
 const STORAGE_KEY = "hq.sidebar.collapsed";
+
+// Routes that are always visible (core navigation + user's own pages)
+const ALWAYS_VISIBLE = new Set<string>([
+  "/dashboard", "/assistant", "/settings", "/profile", "/notifications", "/search",
+]);
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
+  const access = useRouteAccess();
+
+  const filteredGroups = useMemo(() => {
+    if (access.isAdmin || access.allowed === null) return navGroups;
+    return navGroups
+      .map((g) => ({ ...g, items: g.items.filter((i) => ALWAYS_VISIBLE.has(i.to) || access.allowed!.has(i.to)) }))
+      .filter((g) => g.items.length > 0);
+  }, [access]);
 
   useEffect(() => {
     try {
@@ -26,7 +40,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <nav className="flex h-full flex-col overflow-y-auto border-r border-border bg-card/30 px-3 py-4">
-      {navGroups.map((group) => {
+      {filteredGroups.map((group) => {
         const isCollapsed = collapsed[group.label];
         return (
           <div key={group.label} className="mb-1">

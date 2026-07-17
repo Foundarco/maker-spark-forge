@@ -126,12 +126,13 @@ export const navGroups: NavGroup[] = [
     label: "HR & Administration",
     items: [
       { label: "People", to: "/employees", icon: IdCard },
-      { label: "Hiring & Onboarding", to: "/hiring", icon: UserSearch },
+      { label: "Hiring", to: "/hiring", icon: UserSearch },
       { label: "Time & Attendance", to: "/time-tracking", icon: Clock },
       { label: "Performance & Benefits", to: "/reviews", icon: Star },
       { label: "Org Chart", to: "/org-chart", icon: Network },
       { label: "Dashboards", to: "/analytics", icon: BarChart3 },
-      { label: "Admin Center", to: "/admin/users", icon: Users, badge: "Admin" },
+      { label: "Access & Permissions", to: "/admin/access", icon: Shield, badge: "Admin" },
+      { label: "Company Settings", to: "/admin/company", icon: Settings, badge: "Admin" },
     ],
   },
   {
