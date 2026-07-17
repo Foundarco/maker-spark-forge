@@ -41,6 +41,24 @@ export const navGroups: NavGroup[] = [
       { label: "Settings", to: "/settings", icon: Settings },
     ],
   },
+  {
+    label: "Email",
+    items: [
+      { label: "Inbox", to: "/mail", icon: Inbox },
+      { label: "Sent & Drafts", to: "/mail-sent", icon: SendHorizontal },
+      { label: "Shared Mailboxes", to: "/mail-shared", icon: UsersAlt },
+      { label: "Rules & Templates", to: "/mail-rules", icon: FilterAlt },
+    ],
+  },
+  {
+    label: "Files",
+    items: [
+      { label: "Cloud Storage", to: "/files", icon: FolderOpen },
+      { label: "Shared & Versions", to: "/files-shared", icon: Share },
+      { label: "Permissions & Backup", to: "/files-permissions", icon: Lock },
+      { label: "CAD Viewer", to: "/cad-viewer", icon: FileCode },
+    ],
+  },
 
   {
     label: "Communication",
@@ -118,24 +136,6 @@ export const navGroups: NavGroup[] = [
       { label: "Performance & Benefits", to: "/reviews", icon: Star },
       { label: "Org Chart", to: "/org-chart", icon: Network },
       { label: "Admin Center", to: "/admin/users", icon: Users, badge: "Admin" },
-    ],
-  },
-  {
-    label: "Files",
-    items: [
-      { label: "Cloud Storage", to: "/files", icon: FolderOpen },
-      { label: "Shared & Versions", to: "/files-shared", icon: Share },
-      { label: "Permissions & Backup", to: "/files-permissions", icon: Lock },
-      { label: "CAD Viewer", to: "/cad-viewer", icon: FileCode },
-    ],
-  },
-  {
-    label: "Email",
-    items: [
-      { label: "Inbox", to: "/mail", icon: Inbox },
-      { label: "Sent & Drafts", to: "/mail-sent", icon: SendHorizontal },
-      { label: "Shared Mailboxes", to: "/mail-shared", icon: UsersAlt },
-      { label: "Rules & Templates", to: "/mail-rules", icon: FilterAlt },
     ],
   },
   {
