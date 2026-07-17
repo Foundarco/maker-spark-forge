@@ -135,14 +135,4 @@ export const navGroups: NavGroup[] = [
       { label: "Company Settings", to: "/admin/company", icon: Settings, badge: "Admin" },
     ],
   },
-  {
-    label: "Development",
-    items: [
-      { label: "Code & Repos", to: "/repos", icon: GitBranch },
-      { label: "Software & APIs", to: "/software-apis", icon: Terminal },
-      { label: "Integrations", to: "/it-integrations", icon: Plug },
-      { label: "Infrastructure & Monitoring", to: "/it-servers", icon: Server },
-      { label: "Security & Logs", to: "/it-security", icon: Shield },
-    ],
-  },
 ];
