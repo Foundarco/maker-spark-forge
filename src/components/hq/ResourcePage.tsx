@@ -14,6 +14,7 @@ export type FieldType =
   | "project"
   | "supplier"
   | "workorder"
+  | "account"
   | "tags"
   | "bool";
 
