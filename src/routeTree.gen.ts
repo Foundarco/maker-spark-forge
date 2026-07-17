@@ -69,6 +69,7 @@ import { Route as HqTasksRouteImport } from './routes/_hq.tasks'
 import { Route as HqSupportFaqsRouteImport } from './routes/_hq.support-faqs'
 import { Route as HqSuppliersRouteImport } from './routes/_hq.suppliers'
 import { Route as HqStrategyRouteImport } from './routes/_hq.strategy'
+import { Route as HqSoftwareApisRouteImport } from './routes/_hq.software-apis'
 import { Route as HqSocialRouteImport } from './routes/_hq.social'
 import { Route as HqShippingTrackingRouteImport } from './routes/_hq.shipping-tracking'
 import { Route as HqShippingPrepRouteImport } from './routes/_hq.shipping-prep'
@@ -527,6 +528,11 @@ const HqSuppliersRoute = HqSuppliersRouteImport.update({
 const HqStrategyRoute = HqStrategyRouteImport.update({
   id: '/strategy',
   path: '/strategy',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSoftwareApisRoute = HqSoftwareApisRouteImport.update({
+  id: '/software-apis',
+  path: '/software-apis',
   getParentRoute: () => HqRoute,
 } as any)
 const HqSocialRoute = HqSocialRouteImport.update({
@@ -1506,6 +1512,7 @@ export interface FileRoutesByFullPath {
   '/shipping-prep': typeof HqShippingPrepRoute
   '/shipping-tracking': typeof HqShippingTrackingRoute
   '/social': typeof HqSocialRoute
+  '/software-apis': typeof HqSoftwareApisRoute
   '/strategy': typeof HqStrategyRoute
   '/suppliers': typeof HqSuppliersRoute
   '/support-faqs': typeof HqSupportFaqsRoute
@@ -1727,6 +1734,7 @@ export interface FileRoutesByTo {
   '/shipping-prep': typeof HqShippingPrepRoute
   '/shipping-tracking': typeof HqShippingTrackingRoute
   '/social': typeof HqSocialRoute
+  '/software-apis': typeof HqSoftwareApisRoute
   '/strategy': typeof HqStrategyRoute
   '/suppliers': typeof HqSuppliersRoute
   '/support-faqs': typeof HqSupportFaqsRoute
@@ -1950,6 +1958,7 @@ export interface FileRoutesById {
   '/_hq/shipping-prep': typeof HqShippingPrepRoute
   '/_hq/shipping-tracking': typeof HqShippingTrackingRoute
   '/_hq/social': typeof HqSocialRoute
+  '/_hq/software-apis': typeof HqSoftwareApisRoute
   '/_hq/strategy': typeof HqStrategyRoute
   '/_hq/suppliers': typeof HqSuppliersRoute
   '/_hq/support-faqs': typeof HqSupportFaqsRoute
@@ -2173,6 +2182,7 @@ export interface FileRouteTypes {
     | '/shipping-prep'
     | '/shipping-tracking'
     | '/social'
+    | '/software-apis'
     | '/strategy'
     | '/suppliers'
     | '/support-faqs'
@@ -2394,6 +2404,7 @@ export interface FileRouteTypes {
     | '/shipping-prep'
     | '/shipping-tracking'
     | '/social'
+    | '/software-apis'
     | '/strategy'
     | '/suppliers'
     | '/support-faqs'
@@ -2616,6 +2627,7 @@ export interface FileRouteTypes {
     | '/_hq/shipping-prep'
     | '/_hq/shipping-tracking'
     | '/_hq/social'
+    | '/_hq/software-apis'
     | '/_hq/strategy'
     | '/_hq/suppliers'
     | '/_hq/support-faqs'
@@ -3117,6 +3129,13 @@ declare module '@tanstack/react-router' {
       path: '/strategy'
       fullPath: '/strategy'
       preLoaderRoute: typeof HqStrategyRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/software-apis': {
+      id: '/_hq/software-apis'
+      path: '/software-apis'
+      fullPath: '/software-apis'
+      preLoaderRoute: typeof HqSoftwareApisRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/social': {
@@ -4394,6 +4413,7 @@ interface HqRouteChildren {
   HqShippingPrepRoute: typeof HqShippingPrepRoute
   HqShippingTrackingRoute: typeof HqShippingTrackingRoute
   HqSocialRoute: typeof HqSocialRoute
+  HqSoftwareApisRoute: typeof HqSoftwareApisRoute
   HqStrategyRoute: typeof HqStrategyRoute
   HqSuppliersRoute: typeof HqSuppliersRoute
   HqSupportFaqsRoute: typeof HqSupportFaqsRoute
@@ -4574,6 +4594,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqShippingPrepRoute: HqShippingPrepRoute,
   HqShippingTrackingRoute: HqShippingTrackingRoute,
   HqSocialRoute: HqSocialRoute,
+  HqSoftwareApisRoute: HqSoftwareApisRoute,
   HqStrategyRoute: HqStrategyRoute,
   HqSuppliersRoute: HqSuppliersRoute,
   HqSupportFaqsRoute: HqSupportFaqsRoute,
