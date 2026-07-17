@@ -47,6 +47,108 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_domains: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          domain: string
+          id: string
+          notes: string | null
+          purpose: string | null
+          ssl_active: boolean | null
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          domain: string
+          id?: string
+          notes?: string | null
+          purpose?: string | null
+          ssl_active?: boolean | null
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          domain?: string
+          id?: string
+          notes?: string | null
+          purpose?: string | null
+          ssl_active?: boolean | null
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      admin_permission_overrides: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          granted: boolean
+          id: string
+          notes: string | null
+          permission: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          granted?: boolean
+          id?: string
+          notes?: string | null
+          permission: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          granted?: boolean
+          id?: string
+          notes?: string | null
+          permission?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      admin_settings: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
       announcements: {
         Row: {
           author_id: string | null
@@ -1835,6 +1937,450 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hr_applicants: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          department: string | null
+          email: string | null
+          id: string
+          interview_date: string | null
+          interviewer_id: string | null
+          linkedin_url: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          rating: number | null
+          resume_url: string | null
+          role: string | null
+          source: string | null
+          stage: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          email?: string | null
+          id?: string
+          interview_date?: string | null
+          interviewer_id?: string | null
+          linkedin_url?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          rating?: number | null
+          resume_url?: string | null
+          role?: string | null
+          source?: string | null
+          stage?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          email?: string | null
+          id?: string
+          interview_date?: string | null
+          interviewer_id?: string | null
+          linkedin_url?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          rating?: number | null
+          resume_url?: string | null
+          role?: string | null
+          source?: string | null
+          stage?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hr_benefits: {
+        Row: {
+          active: boolean
+          created_at: string
+          created_by: string | null
+          description: string | null
+          employer_contribution: number | null
+          enrollment_deadline: string | null
+          id: string
+          monthly_cost: number | null
+          name: string
+          provider: string | null
+          type: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          employer_contribution?: number | null
+          enrollment_deadline?: string | null
+          id?: string
+          monthly_cost?: number | null
+          name: string
+          provider?: string | null
+          type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          employer_contribution?: number | null
+          enrollment_deadline?: string | null
+          id?: string
+          monthly_cost?: number | null
+          name?: string
+          provider?: string | null
+          type?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hr_departments: {
+        Row: {
+          budget: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          headcount: number | null
+          id: string
+          lead_id: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          budget?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          headcount?: number | null
+          id?: string
+          lead_id?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          budget?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          headcount?: number | null
+          id?: string
+          lead_id?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      hr_employees: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          department: string | null
+          email: string | null
+          employment_type: string | null
+          end_date: string | null
+          full_name: string
+          id: string
+          location: string | null
+          manager_id: string | null
+          notes: string | null
+          phone: string | null
+          salary: number | null
+          start_date: string | null
+          status: string | null
+          title: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          email?: string | null
+          employment_type?: string | null
+          end_date?: string | null
+          full_name: string
+          id?: string
+          location?: string | null
+          manager_id?: string | null
+          notes?: string | null
+          phone?: string | null
+          salary?: number | null
+          start_date?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          email?: string | null
+          employment_type?: string | null
+          end_date?: string | null
+          full_name?: string
+          id?: string
+          location?: string | null
+          manager_id?: string | null
+          notes?: string | null
+          phone?: string | null
+          salary?: number | null
+          start_date?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_employees_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_onboarding: {
+        Row: {
+          assignee_id: string | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          due_date: string | null
+          employee_id: string | null
+          id: string
+          notes: string | null
+          status: string | null
+          task: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          employee_id?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          task: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_date?: string | null
+          employee_id?: string | null
+          id?: string
+          notes?: string | null
+          status?: string | null
+          task?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_onboarding_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_policies: {
+        Row: {
+          active: boolean
+          category: string | null
+          content: string | null
+          created_at: string
+          created_by: string | null
+          effective_date: string | null
+          id: string
+          title: string
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          active?: boolean
+          category?: string | null
+          content?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          active?: boolean
+          category?: string | null
+          content?: string | null
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
+      hr_reviews: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          employee_id: string | null
+          goals: string | null
+          growth_areas: string | null
+          id: string
+          period: string | null
+          rating: number | null
+          review_date: string | null
+          reviewer_id: string | null
+          status: string | null
+          strengths: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          employee_id?: string | null
+          goals?: string | null
+          growth_areas?: string | null
+          id?: string
+          period?: string | null
+          rating?: number | null
+          review_date?: string | null
+          reviewer_id?: string | null
+          status?: string | null
+          strengths?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          employee_id?: string | null
+          goals?: string | null
+          growth_areas?: string | null
+          id?: string
+          period?: string | null
+          rating?: number | null
+          review_date?: string | null
+          reviewer_id?: string | null
+          status?: string | null
+          strengths?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_reviews_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hr_time_entries: {
+        Row: {
+          billable: boolean | null
+          created_at: string
+          created_by: string | null
+          entry_date: string
+          hours: number
+          id: string
+          notes: string | null
+          project: string | null
+          task: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          billable?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          entry_date?: string
+          hours?: number
+          id?: string
+          notes?: string | null
+          project?: string | null
+          task?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          billable?: boolean | null
+          created_at?: string
+          created_by?: string | null
+          entry_date?: string
+          hours?: number
+          id?: string
+          notes?: string | null
+          project?: string | null
+          task?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      hr_time_off: {
+        Row: {
+          approver_id: string | null
+          created_at: string
+          created_by: string | null
+          days: number | null
+          end_date: string
+          id: string
+          reason: string | null
+          start_date: string
+          status: string | null
+          type: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          approver_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          days?: number | null
+          end_date: string
+          id?: string
+          reason?: string | null
+          start_date: string
+          status?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          approver_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          days?: number | null
+          end_date?: string
+          id?: string
+          reason?: string | null
+          start_date?: string
+          status?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       idea_comments: {
         Row: {
