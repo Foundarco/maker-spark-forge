@@ -394,7 +394,7 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
             {msg && <p className="mt-2 text-xs text-destructive">{msg}</p>}
             <div className="mt-4 flex justify-end gap-2">
               <button onClick={() => setShowInvite(false)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>
-              <button onClick={sendInvite} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">Send invite</button>
+              <button onClick={sendInvite} disabled={sending} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">{sending ? "Sending…" : "Send invite & email"}</button>
             </div>
           </div>
         </div>
