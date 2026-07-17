@@ -63,38 +63,38 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Engineering",
+    label: "Product Team",
     items: [
+      // Engineering
       { label: "Projects", to: "/projects", icon: FolderKanban },
       { label: "Tasks & Boards", to: "/tasks", icon: CheckSquare },
-      { label: "Milestones", to: "/milestones", icon: Flag },
-      { label: "Design Library", to: "/cad", icon: FileBox },
+      { label: "Milestones & Roadmap", to: "/milestones", icon: Flag },
+      { label: "Design & CAD Library", to: "/cad", icon: FileBox },
       { label: "Firmware & Repos", to: "/firmware", icon: Cpu },
-      { label: "BOM & Changes", to: "/bom", icon: ListTree },
+      { label: "BOM & Change Orders", to: "/bom", icon: ListTree },
       { label: "Reviews & Testing", to: "/design-reviews", icon: Eye },
-      { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
-      { label: "Features & Releases", to: "/product-features", icon: Sparkles },
-      { label: "Compatibility", to: "/product-compatibility", icon: Layers },
-      { label: "Documentation", to: "/docs", icon: BookText },
-      { label: "Product Docs", to: "/product-docs", icon: BookText },
       { label: "Issues", to: "/issues", icon: Bug },
-    ],
-  },
-  {
-    label: "Manufacturing",
-    items: [
+      // Product catalog
+      { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
+      { label: "Features & Compatibility", to: "/product-features", icon: Sparkles },
+      { label: "Documentation", to: "/docs", icon: BookText },
+      // Manufacturing
       { label: "Assembly Floor · Live", to: "/factory-live", icon: Activity },
-      { label: "Production", to: "/production", icon: Factory },
-      { label: "Work Orders", to: "/work-orders", icon: ClipboardList },
-      { label: "Inventory", to: "/inventory", icon: Boxes },
-      { label: "Quality & Calibration", to: "/qc", icon: ShieldCheck },
-      { label: "Machines & Maintenance", to: "/machines", icon: Activity },
+      { label: "Production & Work Orders", to: "/production", icon: Factory },
+      { label: "Inventory & Warehouse", to: "/inventory", icon: Boxes },
+      { label: "Quality & Machines", to: "/qc", icon: ShieldCheck },
       { label: "Packaging & Shipping", to: "/packaging", icon: Package },
-      { label: "Suppliers & Vendors", to: "/suppliers", icon: Store },
-      { label: "Purchasing & RFQs", to: "/purchase-orders", icon: ShoppingCart },
+      { label: "Suppliers & Purchasing", to: "/suppliers", icon: Store },
       { label: "Shipping Tracking", to: "/shipping-tracking", icon: MapPin },
+      // Development
+      { label: "Code & Repos", to: "/repos", icon: GitBranch },
+      { label: "Software & APIs", to: "/software-apis", icon: Terminal },
+      { label: "Integrations", to: "/it-integrations", icon: Plug },
+      { label: "Infrastructure & Monitoring", to: "/it-servers", icon: Server },
+      { label: "Security & Logs", to: "/it-security", icon: Shield },
     ],
   },
+
   {
     label: "Customer Service",
     items: [
