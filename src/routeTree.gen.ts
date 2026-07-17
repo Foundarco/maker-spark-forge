@@ -230,6 +230,7 @@ import { Route as HqAdminDomainsRouteImport } from './routes/_hq.admin.domains'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
 import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 import { Route as HqAdminBrandingRouteImport } from './routes/_hq.admin.branding'
+import { Route as HqAdminAccessRouteImport } from './routes/_hq.admin.access'
 
 const UpgradesRoute = UpgradesRouteImport.update({
   id: '/upgrades',
@@ -1335,6 +1336,11 @@ const HqAdminBrandingRoute = HqAdminBrandingRouteImport.update({
   path: '/admin/branding',
   getParentRoute: () => HqRoute,
 } as any)
+const HqAdminAccessRoute = HqAdminAccessRouteImport.update({
+  id: '/admin/access',
+  path: '/admin/access',
+  getParentRoute: () => HqRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -1548,6 +1554,7 @@ export interface FileRoutesByFullPath {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
@@ -1770,6 +1777,7 @@ export interface FileRoutesByTo {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
@@ -1994,6 +2002,7 @@ export interface FileRoutesById {
   '/software/firmware': typeof SoftwareFirmwareRoute
   '/software/slicer': typeof SoftwareSlicerRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/_hq/admin/access': typeof HqAdminAccessRoute
   '/_hq/admin/branding': typeof HqAdminBrandingRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
@@ -2218,6 +2227,7 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
     | '/admin/departments'
@@ -2440,6 +2450,7 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
     | '/admin/departments'
@@ -2663,6 +2674,7 @@ export interface FileRouteTypes {
     | '/software/firmware'
     | '/software/slicer'
     | '/store/$slug'
+    | '/_hq/admin/access'
     | '/_hq/admin/branding'
     | '/_hq/admin/company'
     | '/_hq/admin/departments'
@@ -4258,6 +4270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqAdminBrandingRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/admin/access': {
+      id: '/_hq/admin/access'
+      path: '/admin/access'
+      fullPath: '/admin/access'
+      preLoaderRoute: typeof HqAdminAccessRouteImport
+      parentRoute: typeof HqRoute
+    }
   }
 }
 
@@ -4432,6 +4451,7 @@ interface HqRouteChildren {
   HqWarrantyClaimsRoute: typeof HqWarrantyClaimsRoute
   HqWebhooksRoute: typeof HqWebhooksRoute
   HqWorkOrdersRoute: typeof HqWorkOrdersRoute
+  HqAdminAccessRoute: typeof HqAdminAccessRoute
   HqAdminBrandingRoute: typeof HqAdminBrandingRoute
   HqAdminCompanyRoute: typeof HqAdminCompanyRoute
   HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
@@ -4613,6 +4633,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqWarrantyClaimsRoute: HqWarrantyClaimsRoute,
   HqWebhooksRoute: HqWebhooksRoute,
   HqWorkOrdersRoute: HqWorkOrdersRoute,
+  HqAdminAccessRoute: HqAdminAccessRoute,
   HqAdminBrandingRoute: HqAdminBrandingRoute,
   HqAdminCompanyRoute: HqAdminCompanyRoute,
   HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,
