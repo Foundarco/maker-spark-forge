@@ -257,6 +257,7 @@ function ResourceDialog<T extends { id: string }>({ config, ctx, row, onClose, o
       payload[f.key] = v;
     }
     if (!isEdit && user) payload.created_by = user.id;
+    if (!isEdit && config.baseFilter) Object.assign(payload, config.baseFilter);
     let error: any = null;
     if (isEdit) {
       ({ error } = await (supabase.from(config.table as any) as any).update(payload).eq("id", (row as any).id));
