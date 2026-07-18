@@ -161,6 +161,7 @@ import { Route as HqInvestorsRouteImport } from './routes/_hq.investors'
 import { Route as HqInventoryRouteImport } from './routes/_hq.inventory'
 import { Route as HqInterviewsRouteImport } from './routes/_hq.interviews'
 import { Route as HqHiringRouteImport } from './routes/_hq.hiring'
+import { Route as HqHelpRouteImport } from './routes/_hq.help'
 import { Route as HqGoalsRouteImport } from './routes/_hq.goals'
 import { Route as HqGanttRouteImport } from './routes/_hq.gantt'
 import { Route as HqForecastingRouteImport } from './routes/_hq.forecasting'
@@ -988,6 +989,11 @@ const HqHiringRoute = HqHiringRouteImport.update({
   path: '/hiring',
   getParentRoute: () => HqRoute,
 } as any)
+const HqHelpRoute = HqHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqGoalsRoute = HqGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -1337,7 +1343,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/get-involved': typeof GetInvolvedRoute
-  '/help': typeof HelpRouteWithChildren
+  '/help': typeof HqHelpRoute
   '/how-its-built': typeof HowItsBuiltRoute
   '/hq-login': typeof HqLoginRoute
   '/learn': typeof LearnRouteWithChildren
@@ -1557,7 +1563,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/get-involved': typeof GetInvolvedRoute
-  '/help': typeof HelpRouteWithChildren
+  '/help': typeof HqHelpRoute
   '/how-its-built': typeof HowItsBuiltRoute
   '/hq-login': typeof HqLoginRoute
   '/learn': typeof LearnRouteWithChildren
@@ -1850,6 +1856,7 @@ export interface FileRoutesById {
   '/_hq/forecasting': typeof HqForecastingRoute
   '/_hq/gantt': typeof HqGanttRoute
   '/_hq/goals': typeof HqGoalsRoute
+  '/_hq/help': typeof HqHelpRoute
   '/_hq/hiring': typeof HqHiringRoute
   '/_hq/interviews': typeof HqInterviewsRoute
   '/_hq/inventory': typeof HqInventoryRoute
@@ -2513,6 +2520,7 @@ export interface FileRouteTypes {
     | '/_hq/forecasting'
     | '/_hq/gantt'
     | '/_hq/goals'
+    | '/_hq/help'
     | '/_hq/hiring'
     | '/_hq/interviews'
     | '/_hq/inventory'
@@ -3751,6 +3759,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqHiringRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/help': {
+      id: '/_hq/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HqHelpRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/goals': {
       id: '/_hq/goals'
       path: '/goals'
@@ -4283,6 +4298,7 @@ interface HqRouteChildren {
   HqForecastingRoute: typeof HqForecastingRoute
   HqGanttRoute: typeof HqGanttRoute
   HqGoalsRoute: typeof HqGoalsRoute
+  HqHelpRoute: typeof HqHelpRoute
   HqHiringRoute: typeof HqHiringRoute
   HqInterviewsRoute: typeof HqInterviewsRoute
   HqInventoryRoute: typeof HqInventoryRoute
@@ -4462,6 +4478,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqForecastingRoute: HqForecastingRoute,
   HqGanttRoute: HqGanttRoute,
   HqGoalsRoute: HqGoalsRoute,
+  HqHelpRoute: HqHelpRoute,
   HqHiringRoute: HqHiringRoute,
   HqInterviewsRoute: HqInterviewsRoute,
   HqInventoryRoute: HqInventoryRoute,
