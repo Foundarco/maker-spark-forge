@@ -221,6 +221,7 @@ import { Route as HqAnalyticsCustomerRouteImport } from './routes/_hq.analytics-
 import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
 import { Route as HqAccountsRouteImport } from './routes/_hq.accounts'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
+import { Route as ApiPublicResendInboundRouteImport } from './routes/api/public/resend-inbound'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
 import { Route as HqAdminSecurityRouteImport } from './routes/_hq.admin.security'
 import { Route as HqAdminPermissionsRouteImport } from './routes/_hq.admin.permissions'
@@ -1289,6 +1290,11 @@ const HqAccountingRoute = HqAccountingRouteImport.update({
   path: '/accounting',
   getParentRoute: () => HqRoute,
 } as any)
+const ApiPublicResendInboundRoute = ApiPublicResendInboundRouteImport.update({
+  id: '/api/public/resend-inbound',
+  path: '/api/public/resend-inbound',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   id: '/api/hq/assistant',
   path: '/api/hq/assistant',
@@ -1549,6 +1555,7 @@ export interface FileRoutesByFullPath {
   '/admin/permissions': typeof HqAdminPermissionsRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
+  '/api/public/resend-inbound': typeof ApiPublicResendInboundRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -1769,6 +1776,7 @@ export interface FileRoutesByTo {
   '/admin/permissions': typeof HqAdminPermissionsRoute
   '/admin/security': typeof HqAdminSecurityRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
+  '/api/public/resend-inbound': typeof ApiPublicResendInboundRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1992,6 +2000,7 @@ export interface FileRoutesById {
   '/_hq/admin/permissions': typeof HqAdminPermissionsRoute
   '/_hq/admin/security': typeof HqAdminSecurityRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
+  '/api/public/resend-inbound': typeof ApiPublicResendInboundRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -2214,6 +2223,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/security'
     | '/api/hq/assistant'
+    | '/api/public/resend-inbound'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -2434,6 +2444,7 @@ export interface FileRouteTypes {
     | '/admin/permissions'
     | '/admin/security'
     | '/api/hq/assistant'
+    | '/api/public/resend-inbound'
   id:
     | '__root__'
     | '/'
@@ -2656,6 +2667,7 @@ export interface FileRouteTypes {
     | '/_hq/admin/permissions'
     | '/_hq/admin/security'
     | '/api/hq/assistant'
+    | '/api/public/resend-inbound'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2691,6 +2703,7 @@ export interface RootRouteChildren {
   LegalWarrantyRoute: typeof LegalWarrantyRoute
   MeetingIdRoute: typeof MeetingIdRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
+  ApiPublicResendInboundRoute: typeof ApiPublicResendInboundRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -4179,6 +4192,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqAccountingRouteImport
       parentRoute: typeof HqRoute
     }
+    '/api/public/resend-inbound': {
+      id: '/api/public/resend-inbound'
+      path: '/api/public/resend-inbound'
+      fullPath: '/api/public/resend-inbound'
+      preLoaderRoute: typeof ApiPublicResendInboundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/hq/assistant': {
       id: '/api/hq/assistant'
       path: '/api/hq/assistant'
@@ -4707,6 +4727,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalWarrantyRoute: LegalWarrantyRoute,
   MeetingIdRoute: MeetingIdRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
+  ApiPublicResendInboundRoute: ApiPublicResendInboundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
