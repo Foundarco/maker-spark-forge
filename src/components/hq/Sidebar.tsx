@@ -112,7 +112,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
       </form>
 
       {/* Groups */}
-      <div className="flex-1 overflow-y-auto px-2 py-4">
+      <div className="flex-1 overflow-y-auto px-2 py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {filteredGroups.map((group) => {
           const isCollapsed = collapsed[group.label];
           return (
