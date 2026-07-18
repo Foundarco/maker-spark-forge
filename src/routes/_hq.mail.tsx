@@ -157,27 +157,65 @@ function MailClient() {
 
   const sendCompose = async (asDraft: boolean) => {
     if (!compose) return;
-    const { data: u } = await supabase.auth.getUser();
-    const row = {
-      folder: asDraft ? "drafts" : "sent",
-      mailbox: compose.mailbox,
-      subject: compose.subject || "(no subject)",
-      from_addr: u.user?.email ?? "me",
-      to_addr: compose.to,
-      cc: compose.cc || null,
-      body: compose.body || null,
-      status: asDraft ? "draft" : "sent",
-      is_read: true,
-      sent_at: asDraft ? null : new Date().toISOString(),
-      owner_id: u.user?.id,
-      created_by: u.user?.id,
-    };
-    const { data, error } = await supabase.from("hq_emails").insert(row as any).select().single();
-    if (error) { alert(error.message); return; }
-    if (data) setEmails((prev) => [data as Email, ...prev]);
-    setCompose(null);
-    setActive({ kind: "folder", folder: asDraft ? "drafts" : "sent", label: asDraft ? "Drafts" : "Sent" });
+    if (sending) return;
+    setSending(true);
+    try {
+      const { data: u } = await supabase.auth.getUser();
+      const fromAddr = MAILBOX_FROM[compose.mailbox] ?? MAILBOX_FROM.personal;
+      const row = {
+        folder: asDraft ? "drafts" : "sent",
+        mailbox: compose.mailbox,
+        subject: compose.subject || "(no subject)",
+        from_addr: asDraft ? (u.user?.email ?? fromAddr) : fromAddr,
+        to_addr: compose.to,
+        cc: compose.cc || null,
+        body: compose.body || null,
+        status: asDraft ? "draft" : "sent",
+        is_read: true,
+        direction: "outbound",
+        in_reply_to: compose.inReplyTo ?? null,
+        sent_at: asDraft ? null : new Date().toISOString(),
+        owner_id: u.user?.id,
+        created_by: u.user?.id,
+      };
+      const { data, error } = await supabase.from("hq_emails").insert(row as any).select().single();
+      if (error) { alert(error.message); return; }
+      const inserted = data as Email;
+
+      if (!asDraft) {
+        try {
+          const bodyText = compose.body || "";
+          const html = `<div style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap;">${escapeHtml(bodyText)}</div>`;
+          await sendFn({
+            data: {
+              from: fromAddr,
+              to: compose.to,
+              cc: compose.cc || null,
+              subject: compose.subject || "(no subject)",
+              html,
+              text: bodyText,
+              inReplyTo: compose.inReplyTo ?? null,
+              emailRowId: inserted.id,
+            },
+          });
+        } catch (err: any) {
+          console.error(err);
+          alert(`Saved to Sent, but delivery failed: ${err?.message ?? err}`);
+        }
+      }
+
+      if (inserted) setEmails((prev) => [inserted, ...prev]);
+      setCompose(null);
+      setActive({ kind: "folder", folder: asDraft ? "drafts" : "sent", label: asDraft ? "Drafts" : "Sent" });
+    } finally {
+      setSending(false);
+    }
   };
+
+  function escapeHtml(s: string) {
+    return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
+  }
+
 
   const setFlag = async (id: string, status: string) => {
     await supabase.from("hq_emails").update({ status }).eq("id", id);
