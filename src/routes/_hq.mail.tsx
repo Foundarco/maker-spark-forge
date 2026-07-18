@@ -72,7 +72,9 @@ function MailClient() {
   const [active, setActive] = useState<FolderKey>({ kind: "folder", folder: "inbox", mailbox: "personal", label: "Inbox" });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [compose, setCompose] = useState<{ to: string; cc: string; subject: string; body: string; mailbox: string } | null>(null);
+  const [compose, setCompose] = useState<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo?: string | null } | null>(null);
+  const [sending, setSending] = useState(false);
+  const sendFn = useServerFn(sendEmailViaResend);
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
