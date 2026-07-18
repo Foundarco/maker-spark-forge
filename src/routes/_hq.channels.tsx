@@ -306,12 +306,33 @@ function ChannelsPage() {
                 </div>
                 {activeChannel.description && <p className="mt-0.5 text-xs text-muted-foreground">{activeChannel.description}</p>}
               </div>
-              {perms.manage_channels && activeChannel.is_private && (
-                <button onClick={() => setShowAccess(true)} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted" title="Manage access">
-                  <Settings className="h-3.5 w-3.5" /> Access
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => { if (!activeCall) startCall(activeChannel.id, `#${activeChannel.name}`, "channel"); }}
+                  disabled={!!activeCall}
+                  title="Start channel call"
+                  className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
+                >
+                  <Phone className="h-3 w-3" /> Call
                 </button>
-              )}
-            </header>
+                <button
+                  onClick={async () => {
+                    const { data: mem } = await supabase.from("channel_members").select("user_id").eq("channel_id", activeChannel.id);
+                    const ids = (mem ?? []).map((x: any) => x.user_id);
+                    const id = await createInstantMeeting(`#${activeChannel.name} meeting`, ids);
+                    if (id) navigate({ to: "/meeting/$id", params: { id } });
+                  }}
+                  title="Start meeting"
+                  className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted"
+                >
+                  <Video className="h-3 w-3" /> Meeting
+                </button>
+                {perms.manage_channels && activeChannel.is_private && (
+                  <button onClick={() => setShowAccess(true)} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted" title="Manage access">
+                    <Settings className="h-3.5 w-3.5" /> Access
+                  </button>
+                )}
+              </div>
             <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto px-5 py-4">
               {messages.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet in #{activeChannel.name}.</p>}
               {rendered.map((r) => {
