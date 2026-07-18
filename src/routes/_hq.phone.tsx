@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Phone, PhoneIncoming, PhoneOutgoing, PhoneOff, Search, User as UserIcon, Mic, MicOff } from "lucide-react";
+import { Phone, PhoneIncoming, PhoneOutgoing, PhoneOff, Search, Mic, MicOff, StickyNote } from "lucide-react";
 import { usePhone, formatDuration } from "@/lib/hq/phone";
 
 export const Route = createFileRoute("/_hq/phone")({
@@ -16,7 +16,7 @@ function initials(n: string) {
 }
 
 function PhonePage() {
-  const { active, history, startCall, endCall, toggleMute, updateNotes } = usePhone();
+  const { active, history, startCall, endCall, toggleMute, updateNotes, autoNotesEnabled, setAutoNotesEnabled } = usePhone();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [q, setQ] = useState("");
   const [, tick] = useState(0);
@@ -109,18 +109,22 @@ function PhonePage() {
                   </button>
                 </div>
               </div>
-              <div>
-                <div className="mb-1.5 flex items-center justify-between">
-                  <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Auto-notes</label>
-                  <span className="text-[10px] text-muted-foreground">Saved with call history</span>
+              {autoNotesEnabled && (
+                <div>
+                  <div className="mb-1.5 flex items-center justify-between">
+                    <label className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      <StickyNote className="h-3 w-3" /> Auto-notes
+                    </label>
+                    <span className="text-[10px] text-muted-foreground">Saved to Meeting Notes when call ends</span>
+                  </div>
+                  <textarea
+                    value={active.notes}
+                    onChange={(e) => updateNotes(e.target.value)}
+                    placeholder="Jot notes during the call — action items, decisions, follow-ups…"
+                    className="h-28 w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                  />
                 </div>
-                <textarea
-                  value={active.notes}
-                  onChange={(e) => updateNotes(e.target.value)}
-                  placeholder="Jot notes during the call — action items, decisions, follow-ups…"
-                  className="h-28 w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
-                />
-              </div>
+              )}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-10 text-center text-muted-foreground">
@@ -128,6 +132,25 @@ function PhonePage() {
               <p className="text-sm">No active call. Select a contact to start.</p>
             </div>
           )}
+        </div>
+
+        {/* Settings row */}
+        <div className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3">
+          <div className="flex items-center gap-2">
+            <StickyNote className="h-4 w-4 text-muted-foreground" />
+            <div>
+              <p className="text-sm font-medium">Auto-notes during calls</p>
+              <p className="text-[11px] text-muted-foreground">Off by default. When on, a notes field appears during calls and saves to Meeting Notes on end.</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setAutoNotesEnabled(!autoNotesEnabled)}
+            className={`relative h-6 w-11 flex-shrink-0 rounded-full transition ${autoNotesEnabled ? "bg-primary" : "bg-muted"}`}
+            aria-pressed={autoNotesEnabled}
+            aria-label="Toggle auto-notes"
+          >
+            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${autoNotesEnabled ? "left-5" : "left-0.5"}`} />
+          </button>
         </div>
 
         {/* History */}
