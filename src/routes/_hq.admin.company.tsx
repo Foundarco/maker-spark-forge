@@ -343,24 +343,42 @@ const SETTING_FIELDS: SettingField[] = [
   { group: "Company", key: "website", label: "Website", placeholder: "https://clovrlab.com" },
   { group: "Company", key: "support_email", label: "Support email", placeholder: "support@clovrlab.com" },
   { group: "Company", key: "hq_address", label: "HQ address", type: "textarea" },
+  { group: "Company", key: "phone", label: "Main phone", placeholder: "+1 555 555 5555" },
+  { group: "Company", key: "fiscal_year_start", label: "Fiscal year start (MM-DD)", placeholder: "01-01" },
 
   { group: "Locale", key: "timezone", label: "Default timezone", type: "select", options: ["UTC","America/New_York","America/Chicago","America/Denver","America/Los_Angeles","Europe/London","Europe/Berlin","Asia/Tokyo","Asia/Singapore","Australia/Sydney"] },
   { group: "Locale", key: "currency", label: "Default currency", type: "select", options: ["USD","EUR","GBP","CAD","AUD","JPY"] },
   { group: "Locale", key: "week_starts_on", label: "Week starts on", type: "select", options: ["Sunday","Monday"] },
   { group: "Locale", key: "date_format", label: "Date format", type: "select", options: ["MM/DD/YYYY","DD/MM/YYYY","YYYY-MM-DD"] },
+  { group: "Locale", key: "measurement_system", label: "Measurement system", type: "select", options: ["metric","imperial"] },
 
   { group: "Work", key: "work_hours_start", label: "Work day start", placeholder: "09:00" },
   { group: "Work", key: "work_hours_end", label: "Work day end", placeholder: "17:00" },
   { group: "Work", key: "work_days", label: "Working days", placeholder: "Mon,Tue,Wed,Thu,Fri" },
   { group: "Work", key: "pto_days_per_year", label: "Default PTO days / yr", type: "number", placeholder: "15" },
   { group: "Work", key: "sick_days_per_year", label: "Default sick days / yr", type: "number", placeholder: "10" },
+  { group: "Work", key: "overtime_threshold_hours", label: "Overtime threshold (hrs/wk)", type: "number", placeholder: "40" },
 
   { group: "People", key: "default_role", label: "Default role for new hires", type: "select", options: ["employee","manager","engineering","manufacturing","sales","finance","marketing","support","it","hr"] },
   { group: "People", key: "invite_expires_days", label: "Invite expiry (days)", type: "number", placeholder: "7" },
   { group: "People", key: "require_manager_approval", label: "Require manager approval for time off", type: "select", options: ["yes","no"] },
+  { group: "People", key: "auto_seed_onboarding", label: "Auto-seed onboarding on invite accept", type: "select", options: ["yes","no"] },
+  { group: "People", key: "org_directory_visibility", label: "Directory visibility", type: "select", options: ["everyone","managers","admins"] },
 
   { group: "Meetings", key: "default_meeting_length", label: "Default meeting length (min)", type: "number", placeholder: "30" },
   { group: "Meetings", key: "auto_log_meeting_time", label: "Auto-log meeting time", type: "select", options: ["yes","no"] },
+  { group: "Meetings", key: "meeting_reminder_minutes", label: "Meeting reminder (min before)", type: "number", placeholder: "10" },
+  { group: "Meetings", key: "record_meetings_default", label: "Record meetings by default", type: "select", options: ["yes","no"] },
+
+  { group: "Security", key: "session_timeout_hours", label: "Session timeout (hours)", type: "number", placeholder: "24" },
+  { group: "Security", key: "require_mfa", label: "Require MFA for admins", type: "select", options: ["yes","no"] },
+  { group: "Security", key: "password_min_length", label: "Minimum password length", type: "number", placeholder: "10" },
+  { group: "Security", key: "allowed_email_domains", label: "Allowed sign-up domains (comma-sep)", placeholder: "clovrlab.com" },
+  { group: "Security", key: "ip_allowlist", label: "IP allowlist (comma-sep, empty = any)", type: "textarea" },
+
+  { group: "Notifications", key: "notify_new_hire", label: "Notify company on new hire", type: "select", options: ["yes","no"] },
+  { group: "Notifications", key: "notify_dm_email", label: "Send DM email digest when offline", type: "select", options: ["yes","no"] },
+  { group: "Notifications", key: "daily_digest_time", label: "Daily digest time", placeholder: "08:00" },
 ];
 
 const DEFAULTS: Record<string, string> = {
@@ -368,16 +386,30 @@ const DEFAULTS: Record<string, string> = {
   currency: "USD",
   week_starts_on: "Monday",
   date_format: "MM/DD/YYYY",
+  measurement_system: "metric",
   work_hours_start: "09:00",
   work_hours_end: "17:00",
   work_days: "Mon,Tue,Wed,Thu,Fri",
   pto_days_per_year: "15",
   sick_days_per_year: "10",
+  overtime_threshold_hours: "40",
   default_role: "employee",
   invite_expires_days: "7",
   require_manager_approval: "yes",
+  auto_seed_onboarding: "yes",
+  org_directory_visibility: "everyone",
   default_meeting_length: "30",
   auto_log_meeting_time: "yes",
+  meeting_reminder_minutes: "10",
+  record_meetings_default: "no",
+  session_timeout_hours: "24",
+  require_mfa: "no",
+  password_min_length: "10",
+  allowed_email_domains: "clovrlab.com",
+  fiscal_year_start: "01-01",
+  notify_new_hire: "yes",
+  notify_dm_email: "yes",
+  daily_digest_time: "08:00",
 };
 
 function GeneralSettings() {
@@ -628,7 +660,7 @@ function RolesManager() {
                   </label>
                 ))}
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">Configure which tabs this role can access in <a className="text-primary hover:underline" href="/admin/access">Access & Permissions</a>.</p>
+              <p className="mt-3 text-xs text-muted-foreground">Configure which tabs this role can access in the <b>Tab Access</b> tab above.</p>
             </div>
 
             <div>
