@@ -1,7 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail } from "lucide-react";
+import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail, KeyRound, Layers } from "lucide-react";
+import { navGroups } from "@/components/hq/nav-config";
 
 export const Route = createFileRoute("/_hq/admin/company")({
   head: () => ({ meta: [{ title: "Company Settings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -15,10 +16,20 @@ export const Route = createFileRoute("/_hq/admin/company")({
   component: CompanyPage,
 });
 
-type Tab = "general" | "roles" | "onboarding" | "email";
+type Tab = "general" | "roles" | "access" | "overrides" | "onboarding" | "email";
+
+const TAB_LIST: Array<[Tab, string, any]> = [
+  ["general", "General", SettingsIcon],
+  ["roles", "Roles", Shield],
+  ["access", "Tab Access", Layers],
+  ["overrides", "Overrides", KeyRound],
+  ["onboarding", "Onboarding", ClipboardCheck],
+  ["email", "Email", Mail],
+];
 
 function CompanyPage() {
-  const [tab, setTab] = useState<Tab>("general");
+  const initial = typeof window !== "undefined" ? (new URLSearchParams(window.location.search).get("tab") as Tab | null) : null;
+  const [tab, setTab] = useState<Tab>(initial && TAB_LIST.some(([k]) => k === initial) ? initial : "general");
   return (
     <div className="mx-auto w-full max-w-7xl px-6 py-8">
       <div className="mb-6 flex items-center gap-3">
@@ -26,15 +37,11 @@ function CompanyPage() {
         <div>
           <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Administration</p>
           <h1 className="text-3xl font-semibold tracking-tight">Company Settings</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Company profile, roles, tab access, overrides, onboarding, and email — all in one place.</p>
         </div>
       </div>
       <div className="mb-6 flex flex-wrap gap-1 border-b border-border">
-        {([
-          ["general", "General", SettingsIcon],
-          ["roles", "Roles & Permissions", Shield],
-          ["onboarding", "Onboarding Templates", ClipboardCheck],
-          ["email", "Email", Mail],
-        ] as const).map(([k, label, Icon]) => (
+        {TAB_LIST.map(([k, label, Icon]) => (
           <button key={k} onClick={() => setTab(k)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px ${tab === k ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
             <Icon className="h-4 w-4" /> {label}
           </button>
@@ -42,8 +49,199 @@ function CompanyPage() {
       </div>
       {tab === "general" && <GeneralSettings />}
       {tab === "roles" && <RolesManager />}
+      {tab === "access" && <RouteAccessMatrix />}
+      {tab === "overrides" && <PermissionOverrides />}
       {tab === "onboarding" && <OnboardingTemplates />}
       {tab === "email" && <EmailSettings />}
+    </div>
+  );
+}
+
+/* ─────────────────────── Route (Tab) Access Matrix ─────────────────────── */
+
+type AccessRole = { id: string; name: string; color: string; permissions: any };
+type RouteAccessRow = { role_id: string; route: string };
+
+function RouteAccessMatrix() {
+  const [roles, setRoles] = useState<AccessRole[]>([]);
+  const [access, setAccess] = useState<RouteAccessRow[]>([]);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+
+  const reload = async () => {
+    const [r, a] = await Promise.all([
+      supabase.from("custom_roles").select("id, name, color, permissions").order("position", { ascending: false }),
+      supabase.from("role_route_access").select("role_id, route"),
+    ]);
+    setRoles((r.data ?? []) as AccessRole[]);
+    setAccess((a.data ?? []) as RouteAccessRow[]);
+    if (!selectedRole && r.data && r.data.length) setSelectedRole((r.data[0] as any).id);
+  };
+  useEffect(() => { reload(); }, []);
+
+  const currentAccess = useMemo(() => new Set(access.filter((a) => a.role_id === selectedRole).map((a) => a.route)), [access, selectedRole]);
+
+  const toggle = async (route: string) => {
+    if (!selectedRole) return;
+    const has = currentAccess.has(route);
+    if (has) {
+      await supabase.from("role_route_access").delete().eq("role_id", selectedRole).eq("route", route);
+      setAccess((prev) => prev.filter((a) => !(a.role_id === selectedRole && a.route === route)));
+    } else {
+      await supabase.from("role_route_access").insert({ role_id: selectedRole, route });
+      setAccess((prev) => [...prev, { role_id: selectedRole, route }]);
+    }
+  };
+
+  const toggleGroup = async (routes: string[], grant: boolean) => {
+    if (!selectedRole) return;
+    if (grant) {
+      const toAdd = routes.filter((r) => !currentAccess.has(r));
+      if (toAdd.length === 0) return;
+      await supabase.from("role_route_access").insert(toAdd.map((r) => ({ role_id: selectedRole, route: r })));
+    } else {
+      await supabase.from("role_route_access").delete().eq("role_id", selectedRole).in("route", routes);
+    }
+    reload();
+  };
+
+  const role = roles.find((r) => r.id === selectedRole);
+
+  return (
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+      <aside className="lg:col-span-1 rounded-xl border border-border bg-card p-3">
+        <h3 className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Roles</h3>
+        {roles.length === 0 ? (
+          <p className="p-3 text-xs text-muted-foreground">Create a role in the <b>Roles</b> tab first.</p>
+        ) : roles.map((r) => (
+          <button key={r.id} onClick={() => setSelectedRole(r.id)} className={`flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm ${selectedRole===r.id?"bg-primary/10":"hover:bg-muted"}`}>
+            <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: r.color }} />
+            <span style={{ color: r.color }}>{r.name}</span>
+            {r.permissions?.admin && <span className="ml-auto rounded bg-primary/20 px-1.5 py-0.5 text-[9px] uppercase text-primary">All</span>}
+          </button>
+        ))}
+      </aside>
+
+      <section className="lg:col-span-3">
+        {!role ? <p className="rounded-xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">Select a role to configure tab access.</p> : role.permissions?.admin ? (
+          <div className="rounded-xl border border-border bg-card p-6 text-center">
+            <p className="text-sm">This role has <b>Administrator</b> permission — it has access to every tab automatically.</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">Check the tabs members of <b style={{ color: role.color }}>{role.name}</b> can see. Core pages (Dashboard, Assistant) are always visible.</p>
+            {navGroups.map((g) => {
+              const groupRoutes = g.items.map((i) => i.to);
+              const allSelected = groupRoutes.every((r) => currentAccess.has(r));
+              const someSelected = groupRoutes.some((r) => currentAccess.has(r));
+              return (
+                <div key={g.label} className="rounded-xl border border-border bg-card p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{g.label}</h4>
+                    <button onClick={() => toggleGroup(groupRoutes, !allSelected)} className="text-xs text-primary hover:underline">
+                      {allSelected ? "Clear all" : "Select all"}{someSelected && !allSelected ? ` (${groupRoutes.filter((r) => currentAccess.has(r)).length}/${groupRoutes.length})` : ""}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                    {g.items.map((i) => {
+                      const has = currentAccess.has(i.to);
+                      return (
+                        <button key={i.to} onClick={() => toggle(i.to)} className={`flex items-center gap-2 rounded-md border px-2 py-1.5 text-left text-sm ${has ? "border-primary/40 bg-primary/5" : "border-border hover:bg-muted/30"}`}>
+                          <div className={`flex h-4 w-4 items-center justify-center rounded border ${has ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground"}`}>
+                            {has && <Check className="h-3 w-3" />}
+                          </div>
+                          <i.icon className="h-3.5 w-3.5 text-muted-foreground" />
+                          <span className="flex-1">{i.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+/* ─────────────────────── Permission Overrides ─────────────────────── */
+
+type OverrideRow = { id: string; user_id: string; permission: string; granted: boolean; notes: string | null; created_at: string };
+type ProfileMini = { id: string; full_name: string | null; email: string | null };
+
+const PERMISSIONS = ["manage_channels","manage_roles","manage_messages","manage_users","manage_billing","manage_domains","view_financials","export_data","admin"];
+
+function PermissionOverrides() {
+  const [rows, setRows] = useState<OverrideRow[]>([]);
+  const [profiles, setProfiles] = useState<ProfileMini[]>([]);
+  const [form, setForm] = useState<{ user_id: string; permission: string; granted: boolean; notes: string }>({ user_id: "", permission: PERMISSIONS[0], granted: true, notes: "" });
+
+  const reload = async () => {
+    const [{ data: o }, { data: p }] = await Promise.all([
+      supabase.from("admin_permission_overrides").select("id, user_id, permission, granted, notes, created_at").order("created_at", { ascending: false }),
+      supabase.from("profiles").select("id, full_name, email").order("full_name"),
+    ]);
+    setRows((o ?? []) as OverrideRow[]);
+    setProfiles((p ?? []) as ProfileMini[]);
+    if (!form.user_id && p && p.length) setForm((f) => ({ ...f, user_id: (p[0] as any).id }));
+  };
+  useEffect(() => { reload(); }, []);
+
+  const add = async () => {
+    if (!form.user_id || !form.permission) return;
+    await supabase.from("admin_permission_overrides").insert({ user_id: form.user_id, permission: form.permission, granted: form.granted, notes: form.notes || null } as any);
+    setForm({ ...form, notes: "" });
+    reload();
+  };
+  const del = async (id: string) => { await supabase.from("admin_permission_overrides").delete().eq("id", id); reload(); };
+
+  const profileLabel = (id: string) => {
+    const p = profiles.find((x) => x.id === id);
+    return p?.full_name || p?.email || id.slice(0, 8);
+  };
+
+  const inputCls = "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary";
+
+  return (
+    <div>
+      <p className="mb-4 text-sm text-muted-foreground">Grant or deny a specific permission to a single user — overrides their role's default. Use sparingly.</p>
+      <div className="mb-6 rounded-xl border border-border bg-card p-5">
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">Add override</h3>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-5">
+          <select value={form.user_id} onChange={(e) => setForm({ ...form, user_id: e.target.value })} className={inputCls}>
+            {profiles.map((p) => <option key={p.id} value={p.id}>{p.full_name || p.email}</option>)}
+          </select>
+          <select value={form.permission} onChange={(e) => setForm({ ...form, permission: e.target.value })} className={inputCls}>
+            {PERMISSIONS.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
+          <select value={form.granted ? "grant" : "deny"} onChange={(e) => setForm({ ...form, granted: e.target.value === "grant" })} className={inputCls}>
+            <option value="grant">Grant</option>
+            <option value="deny">Deny</option>
+          </select>
+          <input placeholder="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className={`${inputCls} sm:col-span-2`} />
+        </div>
+        <div className="mt-3"><button onClick={add} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"><Plus className="h-4 w-4" /> Add override</button></div>
+      </div>
+      <div className="overflow-hidden rounded-xl border border-border">
+        <table className="w-full text-sm">
+          <thead className="bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
+            <tr><th className="px-4 py-2 text-left">User</th><th className="px-4 py-2 text-left">Permission</th><th className="px-4 py-2 text-left">Effect</th><th className="px-4 py-2 text-left">Notes</th><th className="px-4 py-2"></th></tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id} className="border-t border-border">
+                <td className="px-4 py-2">{profileLabel(r.user_id)}</td>
+                <td className="px-4 py-2 font-mono text-xs">{r.permission}</td>
+                <td className="px-4 py-2">{r.granted ? <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-700">Granted</span> : <span className="rounded bg-destructive/10 px-2 py-0.5 text-xs text-destructive">Denied</span>}</td>
+                <td className="px-4 py-2 text-muted-foreground">{r.notes}</td>
+                <td className="px-4 py-2 text-right"><button onClick={() => del(r.id)} className="text-xs text-destructive hover:underline"><Trash2 className="inline h-3 w-3" /></button></td>
+              </tr>
+            ))}
+            {rows.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-sm text-muted-foreground">No overrides — role permissions apply as-is.</td></tr>}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
