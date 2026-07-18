@@ -421,12 +421,66 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   }, [active?.status, autoNotesEnabled, startRecognition, stopRecognition]);
 
 
+  // -------------------- Channel call (multi-user presence room) --------------------
+  // Presence-based only in this iteration: participants show up as "in call"
+  // in the channel header for everyone. Actual audio is 1:1 via DM/user calls.
+  const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean) => {
+    if (!meIdRef.current) return;
+    if (channelCallChRef.current) {
+      try { await channelCallChRef.current.untrack(); } catch {}
+      supabase.removeChannel(channelCallChRef.current);
+      channelCallChRef.current = null;
+    }
+    const ch = supabase.channel(`channel-call:${channelId}`, {
+      config: { presence: { key: meIdRef.current } },
+    });
+    ch.subscribe(async (status) => {
+      if (status === "SUBSCRIBED") {
+        await ch.track({ user_id: meIdRef.current, joined_at: new Date().toISOString() });
+      }
+    });
+    channelCallChRef.current = ch;
+    setChannelCallState({ channelId, channelName, isHost });
+  }, []);
+
+  const startChannelCall = useCallback(async (channelId: string, channelName: string) => {
+    if (channelCall || !meIdRef.current) return;
+    // Announce in the channel
+    try {
+      await supabase.from("channel_messages").insert({
+        channel_id: channelId,
+        author_id: meIdRef.current,
+        body: `📞 Started a call — click Join in the header to hop in.`,
+        attachments: [{ type: "call_announcement", channelId, host_id: meIdRef.current }] as any,
+      } as any);
+    } catch {}
+    await joinChannelCallPresence(channelId, channelName, true);
+    playSound("call-connect");
+  }, [channelCall, joinChannelCallPresence]);
+
+  const joinChannelCall = useCallback(async (channelId: string, channelName: string) => {
+    if (channelCall) return;
+    await joinChannelCallPresence(channelId, channelName, false);
+    playSound("call-connect");
+  }, [channelCall, joinChannelCallPresence]);
+
+  const leaveChannelCall = useCallback(async () => {
+    if (channelCallChRef.current) {
+      try { await channelCallChRef.current.untrack(); } catch {}
+      supabase.removeChannel(channelCallChRef.current);
+      channelCallChRef.current = null;
+    }
+    setChannelCallState(null);
+    playSound("call-end");
+  }, []);
+
   return (
     <Ctx.Provider value={{
       active, history, incoming,
       autoNotesEnabled, setAutoNotesEnabled,
       startCall, acceptIncoming, declineIncoming, endCall, toggleMute, updateNotes,
       remoteAudioRef,
+      channelCall, startChannelCall, joinChannelCall, leaveChannelCall,
     }}>
       {children}
       {/* Hidden audio element for remote stream */}
