@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save } from "lucide-react";
+import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/admin/company")({
   head: () => ({ meta: [{ title: "Company Settings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_hq/admin/company")({
   component: CompanyPage,
 });
 
-type Tab = "general" | "roles" | "onboarding";
+type Tab = "general" | "roles" | "onboarding" | "email";
 
 function CompanyPage() {
   const [tab, setTab] = useState<Tab>("general");
@@ -33,6 +33,7 @@ function CompanyPage() {
           ["general", "General", SettingsIcon],
           ["roles", "Roles & Permissions", Shield],
           ["onboarding", "Onboarding Templates", ClipboardCheck],
+          ["email", "Email", Mail],
         ] as const).map(([k, label, Icon]) => (
           <button key={k} onClick={() => setTab(k)} className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 -mb-px ${tab === k ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}>
             <Icon className="h-4 w-4" /> {label}
@@ -42,6 +43,85 @@ function CompanyPage() {
       {tab === "general" && <GeneralSettings />}
       {tab === "roles" && <RolesManager />}
       {tab === "onboarding" && <OnboardingTemplates />}
+      {tab === "email" && <EmailSettings />}
+    </div>
+  );
+}
+
+function EmailSettings() {
+  const [s, setS] = useState<{ from_name: string; reply_to: string; sender_domain: string; default_footer: string; track_opens: boolean; track_clicks: boolean }>({
+    from_name: "", reply_to: "", sender_domain: "clovrlab.com", default_footer: "", track_opens: true, track_clicks: true,
+  });
+  const [rowId, setRowId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await supabase.from("company_email_settings").select("*").limit(1).maybeSingle();
+      if (data) {
+        setRowId(data.id);
+        setS({
+          from_name: data.from_name ?? "",
+          reply_to: data.reply_to ?? "",
+          sender_domain: data.sender_domain ?? "clovrlab.com",
+          default_footer: data.default_footer ?? "",
+          track_opens: data.track_opens ?? true,
+          track_clicks: data.track_clicks ?? true,
+        });
+      }
+    })();
+  }, []);
+
+  const save = async () => {
+    setSaving(true);
+    const { data: u } = await supabase.auth.getUser();
+    const payload = { ...s, updated_by: u.user?.id, updated_at: new Date().toISOString() };
+    if (rowId) {
+      await supabase.from("company_email_settings").update(payload).eq("id", rowId);
+    } else {
+      const { data } = await supabase.from("company_email_settings").insert(payload as any).select().single();
+      if (data) setRowId(data.id);
+    }
+    setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000);
+  };
+
+  const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+    <label className="grid grid-cols-1 md:grid-cols-[220px_1fr] items-start gap-3 border-b border-border py-4">
+      <span className="text-sm font-medium text-foreground/90">{label}</span>
+      <div>{children}</div>
+    </label>
+  );
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-6">
+      <h2 className="mb-1 text-lg font-semibold">Company email defaults</h2>
+      <p className="mb-4 text-sm text-muted-foreground">Applied to outbound email from shared mailboxes and system notifications.</p>
+      <Field label="Default from name">
+        <input value={s.from_name} onChange={(e) => setS({ ...s, from_name: e.target.value })} placeholder="Clovr Lab" className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+      </Field>
+      <Field label="Reply-to address">
+        <input value={s.reply_to} onChange={(e) => setS({ ...s, reply_to: e.target.value })} placeholder="hello@clovrlab.com" className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+      </Field>
+      <Field label="Sender domain">
+        <input value={s.sender_domain} onChange={(e) => setS({ ...s, sender_domain: e.target.value })} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+        <p className="mt-1 text-xs text-muted-foreground">Verified in Resend. Shared mailboxes (support@, sales@, etc.) send from this domain.</p>
+      </Field>
+      <Field label="Default footer">
+        <textarea value={s.default_footer} onChange={(e) => setS({ ...s, default_footer: e.target.value })} rows={4} placeholder="Appended to outbound company email." className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+      </Field>
+      <Field label="Tracking">
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={s.track_opens} onChange={(e) => setS({ ...s, track_opens: e.target.checked })} /> Track email opens</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={s.track_clicks} onChange={(e) => setS({ ...s, track_clicks: e.target.checked })} /> Track link clicks</label>
+        </div>
+      </Field>
+      <div className="mt-4 flex items-center justify-end gap-3">
+        {saved && <span className="text-xs text-emerald-600">Saved</span>}
+        <button disabled={saving} onClick={save} className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60">
+          <Save className="h-4 w-4" /> {saving ? "Saving…" : "Save"}
+        </button>
+      </div>
     </div>
   );
 }

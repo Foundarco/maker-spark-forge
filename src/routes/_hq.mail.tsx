@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Inbox, Send, FileEdit, Archive, Flag, Trash2, Users, Filter, FileText,
-  Search, Plus, Reply, ReplyAll, Forward, Star, Paperclip, X, ChevronRight, MailOpen, Circle,
+  Search, Plus, Reply, ReplyAll, Forward, Star, Paperclip, X, ChevronRight, MailOpen, Circle, Settings as SettingsIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -76,6 +76,35 @@ function MailClient() {
   const [sending, setSending] = useState(false);
   const sendFn = useServerFn(sendEmailViaResend);
   const [loading, setLoading] = useState(true);
+  const [userSettings, setUserSettings] = useState<{ signature: string; auto_reply_enabled: boolean; auto_reply_subject: string; auto_reply_body: string; notify_on_new: boolean; notify_on_mention: boolean; digest_frequency: string; display_name: string }>({
+    signature: "", auto_reply_enabled: false, auto_reply_subject: "", auto_reply_body: "", notify_on_new: true, notify_on_mention: true, digest_frequency: "off", display_name: "",
+  });
+  const [showSettings, setShowSettings] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return;
+      const { data } = await supabase.from("user_email_settings").select("*").eq("user_id", u.user.id).maybeSingle();
+      if (data) setUserSettings({
+        signature: data.signature ?? "",
+        auto_reply_enabled: !!data.auto_reply_enabled,
+        auto_reply_subject: data.auto_reply_subject ?? "",
+        auto_reply_body: data.auto_reply_body ?? "",
+        notify_on_new: data.notify_on_new ?? true,
+        notify_on_mention: data.notify_on_mention ?? true,
+        digest_frequency: data.digest_frequency ?? "off",
+        display_name: data.display_name ?? "",
+      });
+    })();
+  }, []);
+
+  const saveUserSettings = async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return;
+    await supabase.from("user_email_settings").upsert({ user_id: u.user.id, ...userSettings, updated_at: new Date().toISOString() } as any);
+    setShowSettings(false);
+  };
 
   const refresh = async () => {
     setLoading(true);
@@ -146,11 +175,13 @@ function MailClient() {
   }, [selected?.id]);
 
   const openCompose = (init?: Partial<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo: string | null }>) => {
+    const sig = userSettings.signature ? `\n\n${userSettings.signature}` : "";
+    const baseBody = init?.body ?? "";
     setCompose({
       to: init?.to ?? "",
       cc: init?.cc ?? "",
       subject: init?.subject ?? "",
-      body: init?.body ?? "",
+      body: baseBody + (baseBody.includes(userSettings.signature) || !sig ? "" : sig),
       mailbox: init?.mailbox ?? "personal",
       inReplyTo: init?.inReplyTo ?? null,
     });
@@ -287,9 +318,61 @@ function MailClient() {
             <p className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Manage</p>
             <NavItem icon={Filter} label="Rules" count={rules.filter((r) => r.active).length} isActive={active.kind === "manage" && active.view === "rules"} onClick={() => setActive({ kind: "manage", view: "rules", label: "Rules" })} />
             <NavItem icon={FileText} label="Templates" count={templates.length} isActive={active.kind === "manage" && active.view === "templates"} onClick={() => setActive({ kind: "manage", view: "templates", label: "Templates" })} />
+            <NavItem icon={SettingsIcon} label="Settings" isActive={false} onClick={() => setShowSettings(true)} />
           </div>
         </div>
       </aside>
+
+      {showSettings && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-6" onClick={() => setShowSettings(false)}>
+          <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <header className="flex items-center justify-between border-b border-border px-5 py-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Mail</p>
+                <h2 className="text-lg font-semibold">Your email settings</h2>
+              </div>
+              <button onClick={() => setShowSettings(false)} className="rounded p-1.5 hover:bg-muted"><X className="h-4 w-4" /></button>
+            </header>
+            <div className="max-h-[70vh] space-y-5 overflow-y-auto p-5 text-sm">
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-muted-foreground">Display name</label>
+                <input value={userSettings.display_name} onChange={(e) => setUserSettings({ ...userSettings, display_name: e.target.value })} placeholder="Jane Doe" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-muted-foreground">Signature</label>
+                <textarea value={userSettings.signature} onChange={(e) => setUserSettings({ ...userSettings, signature: e.target.value })} rows={5} placeholder="— Jane Doe&#10;Engineering, Clovr Lab" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
+                <p className="mt-1 text-[11px] text-muted-foreground">Automatically appended when composing new email.</p>
+              </div>
+              <div className="rounded-lg border border-border bg-muted/30 p-4">
+                <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={userSettings.auto_reply_enabled} onChange={(e) => setUserSettings({ ...userSettings, auto_reply_enabled: e.target.checked })} /> Auto-reply / vacation responder</label>
+                {userSettings.auto_reply_enabled && (
+                  <div className="mt-3 space-y-2">
+                    <input value={userSettings.auto_reply_subject} onChange={(e) => setUserSettings({ ...userSettings, auto_reply_subject: e.target.value })} placeholder="Subject (e.g. Out of office)" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
+                    <textarea value={userSettings.auto_reply_body} onChange={(e) => setUserSettings({ ...userSettings, auto_reply_body: e.target.value })} rows={4} placeholder="I'm currently away and will reply when I'm back…" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
+                  </div>
+                )}
+              </div>
+              <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Notifications</p>
+                <label className="flex items-center gap-2"><input type="checkbox" checked={userSettings.notify_on_new} onChange={(e) => setUserSettings({ ...userSettings, notify_on_new: e.target.checked })} /> Notify me for new email</label>
+                <label className="flex items-center gap-2"><input type="checkbox" checked={userSettings.notify_on_mention} onChange={(e) => setUserSettings({ ...userSettings, notify_on_mention: e.target.checked })} /> Notify me when I'm @-mentioned in email</label>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-muted-foreground">Digest frequency</label>
+                <select value={userSettings.digest_frequency} onChange={(e) => setUserSettings({ ...userSettings, digest_frequency: e.target.value })} className="rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary">
+                  <option value="off">Off</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+            </div>
+            <footer className="flex items-center justify-end gap-2 border-t border-border bg-muted/30 px-5 py-3">
+              <button onClick={() => setShowSettings(false)} className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted">Cancel</button>
+              <button onClick={saveUserSettings} className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90">Save settings</button>
+            </footer>
+          </div>
+        </div>
+      )}
 
       {/* Middle: list OR manage view */}
       {active.kind !== "manage" ? (
