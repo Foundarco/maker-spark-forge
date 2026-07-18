@@ -437,6 +437,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean) => {
     if (!meIdRef.current) return;
     if (channelCallChRef.current) {
+      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current } }); } catch {}
       try { await channelCallChRef.current.untrack(); } catch {}
       supabase.removeChannel(channelCallChRef.current);
       channelCallChRef.current = null;
@@ -444,9 +445,15 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     const ch = supabase.channel(`channel-call:${channelId}`, {
       config: { presence: { key: meIdRef.current } },
     });
+    // Broadcast fallback: reply to any "who" ping with our user_id so
+    // viewers see participants even if presence sync is delayed.
+    ch.on("broadcast", { event: "who" }, () => {
+      ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current } });
+    });
     ch.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
         await ch.track({ user_id: meIdRef.current, joined_at: new Date().toISOString() });
+        await ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current } });
       }
     });
     channelCallChRef.current = ch;
@@ -476,6 +483,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
 
   const leaveChannelCall = useCallback(async () => {
     if (channelCallChRef.current) {
+      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current } }); } catch {}
       try { await channelCallChRef.current.untrack(); } catch {}
       supabase.removeChannel(channelCallChRef.current);
       channelCallChRef.current = null;
