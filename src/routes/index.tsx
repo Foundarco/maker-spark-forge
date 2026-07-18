@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Section, Eyebrow } from "@/components/site/Section";
 import { Card } from "@/components/site/Card";
@@ -11,7 +11,26 @@ import materials from "@/assets/materials.jpg.asset.json";
 import community from "@/assets/community.jpg.asset.json";
 import detail from "@/assets/detail.jpg.asset.json";
 
+function isHqHost(host: string): boolean {
+  const h = host.toLowerCase().split(":")[0];
+  return h === "hq.clovrlab.com" || h.startsWith("hq.") || h.startsWith("hq--");
+}
+
 export const Route = createFileRoute("/")({
+  beforeLoad: async () => {
+    let host = "";
+    if (typeof window === "undefined") {
+      try {
+        const { getRequestHost } = await import("@tanstack/react-start/server");
+        host = getRequestHost() ?? "";
+      } catch { /* not in a request context */ }
+    } else {
+      host = window.location.hostname;
+    }
+    if (host && isHqHost(host)) {
+      throw redirect({ to: "/hq-login" });
+    }
+  },
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(productsQuery);
     context.queryClient.ensureQueryData(postsQuery);
