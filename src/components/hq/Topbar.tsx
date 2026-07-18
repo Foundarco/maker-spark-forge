@@ -14,9 +14,9 @@ type Notification = {
 };
 
 export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
-  const navigate = useNavigate();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [unread, setUnread] = useState(0);
+  const [eventsToday, setEventsToday] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifs, setNotifs] = useState<Notification[]>([]);
