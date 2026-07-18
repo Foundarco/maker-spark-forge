@@ -4,6 +4,7 @@ import { DefaultChatTransport, type UIMessage } from "ai";
 import { Bot, Send, Sparkles, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_hq/assistant")({
   head: () => ({ meta: [{ title: "AI Assistant — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
