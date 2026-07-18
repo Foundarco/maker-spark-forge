@@ -1,98 +1,67 @@
+# Big update — 5 workstreams
 
-## Goals
+Shipping in this order so each phase leaves the app usable.
 
-1. Ship a light-first UI matching the Looplet reference while keeping a working dark toggle.
-2. Slate → blue gradient sidebar that can fully hide and re-open via a floating trigger.
-3. Reusable 3-pane "record" layout (left profile rail + center canvas + right activity/journey rail) applied to CS, CRM, and People.
-4. New internal `/help` page linked from the sidebar footer.
-5. Tighten the sidebar header (drop "Clovr HQ", keep the workspace card only) and wire everything so it actually functions.
+## 1. @Mentions + notification sounds (small, high value)
 
----
+- Channel & DM composer: `@` triggers a user picker (searches `profiles`). Mentions stored as `@[Name](user_id)` markdown, rendered via `UserMention`.
+- On send: parse mentions → insert rows into `notifications` (`title`, `body`, `link` to the channel/DM).
+- `SoundNotifier` already plays site-wide sounds on `notifications` inserts and DM inserts — extend to detect if the current user is `@mentioned` in a `channel_messages` row and play the higher-priority "ping" sound + browser Notification (with permission prompt on first mention).
+- Add unread badge counts in the sidebar for Communication.
 
-## 1. Theme — light default, dark toggle preserved
+## 2. Google Drive-style Drive
 
-- `src/lib/hq/theme.ts`: change `getStoredTheme()` fallback from `"dark"` to `"light"`; keep `system` + `dark` options.
-- `src/components/hq/HQShell.tsx`: remove the forced `dark` cleanup on unmount; just `applyTheme(getStoredTheme())`.
-- `src/styles.css`:
-  - Rework `:root` (light) tokens to match the reference:
-    - `--background`: near-white `oklch(0.99 0.003 260)`
-    - `--surface`: soft blue-tinted panel `oklch(0.975 0.006 250)`
-    - `--card`: pure white
-    - `--primary`: reference blue `oklch(0.58 0.19 260)`
-    - `--success`: reference green `oklch(0.68 0.16 155)`
-    - `--muted-foreground`, borders, rings tuned for airy light UI.
-  - Keep `.dark` block intact.
-  - Confirm `Sidebar` is uncoupled from light/dark (its tokens are always the navy gradient — see §2).
+- Rename nav entry "Cloud Storage" → "Drive". Rebuild `_hq.files.tsx`.
+- New table `drive_items` (folder or file, `parent_id`, `owner_id`, `starred`, `trashed`, `mime_type`, `size_bytes`, `storage_path`).
+- New table `drive_shares` (`item_id`, `user_id | role_id`, `permission: view|comment|edit`).
+- Storage bucket `drive` (private) — real uploads via `supabase.storage.from('drive').upload()`.
+- UI: left nav (My Drive / Shared with me / Starred / Recent / Trash), breadcrumb, folder tree, grid/list toggle, drag-and-drop upload, right-click menu (rename, move, share, star, download, delete), share dialog picking users/roles + permission level.
+- Previews: images + PDFs inline; other types show icon + download.
 
-## 2. Sidebar — slate → blue gradient + floating collapse
+## 3. Role-aware Dashboard
 
-- Update `--sidebar-*` tokens in `src/styles.css`:
-  - Introduce `--sidebar-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 45%, #1e3a5f 80%, #2563eb 140%)`.
-  - `--sidebar-accent` stays the reference blue for active pills.
-- `src/components/hq/Sidebar.tsx`:
-  - Remove the top "Clovr HQ + Sparkles" brand row entirely; the workspace card ("Clovr Lab / Internal Workspace") becomes the top element with a small collapse chevron on its right.
-  - Apply `background: var(--sidebar-gradient)` on the nav root.
-  - "Help & Support" footer link → `to="/help"` (currently points at `/settings`).
-- `src/components/hq/HQShell.tsx`:
-  - Add persistent collapsed state (`hq.sidebar.hidden` in localStorage) with a `useSidebarVisibility()` helper.
-  - When hidden, the `<aside>` slides offscreen (`-translate-x-full`) with a transition; render a floating pill button `fixed left-3 top-3 z-40` with a chevron-right icon to re-open. When visible, put a chevron-left button inside the sidebar (top-right of workspace card) to hide.
-  - Mobile drawer behavior unchanged.
+- Rebuild `_hq.dashboard.tsx` as a 3-column layout.
+- Detects user's roles (`user_roles` + `user_custom_roles`) and renders relevant KPI cards:
+  - Growth: open deals, pipeline value, MRR, new leads this week, invoices due.
+  - Product: open issues, active work orders, tasks in progress, inventory low-stock.
+  - Operations: pending onboarding, time-off requests, open tickets.
+  - Everyone: my tasks, my meetings today, my unread mentions.
+- Right rail: Today's meetings (with RSVPs), unread channels/DMs, mentions & pings feed.
+- All data fetched via `useSuspenseQuery` per-section so partial failures don't break the page.
 
-## 3. Reusable 3-pane RecordLayout
+## 4. AI Assistant that actually knows the workspace
 
-New file `src/components/hq/RecordLayout.tsx`:
+- Give the assistant tools (AI SDK `tool()` calls) — server-side, running under `requireSupabaseAuth` so every query respects RLS:
+  - `search_people(query)` → profiles/employees
+  - `search_channels(query)` → recent channel messages
+  - `list_my_meetings(range)` → upcoming meetings
+  - `list_my_tasks()` → open tasks/issues assigned to me
+  - `search_deals(query)`, `search_tickets(query)`, `search_files(query)`
+  - `draft_email({to, subject, purpose})` → returns markdown draft, does NOT send
+  - `draft_announcement`, `draft_meeting_notes`
+- System prompt loaded with: current user profile, their roles, current module, current date.
+- Streaming preserved; multi-step reasoning up to 8 tool calls.
 
-```text
-┌─────────────┬───────────────────────────┬────────────────┐
-│ ProfileRail │ Main (children)           │ ActivityRail   │
-│  ~320px     │  flex-1                   │  ~320px        │
-└─────────────┴───────────────────────────┴────────────────┘
-```
+## 5. Email system finish
 
-- Props: `profile: ReactNode`, `activity?: ReactNode`, `header?: ReactNode`, `children`.
-- Rails collapsible via chevron toggles; state stored per-module in localStorage (`hq.record.<module>.left|right`).
-- On < 1280px the activity rail auto-hides; < 1024px both rails become sheets.
-- Ships two building-block components:
-  - `<ProfileCard>` — avatar, name, tags, contact block, quick-action grid (Call / Message / Email / Schedule), mini KPI list.
-  - `<ActivityRail>` — tabbed (Journey / Pipeline / Timeline) with a scrollable event feed; feeds accept `{ icon, title, meta, timestamp }[]`.
+- Resend inbound webhook: already wired; verify signature check and expand event handling (already handles 11 event types — audit).
+- **Per-user email settings** (new tab on `/profile`):
+  - display_name, signature (markdown), auto-reply on/off + text, notification prefs (per-thread, mentions only, digest).
+- **Company admin email settings** (new tab on `/admin/company`):
+  - sender_domain, from_name, default footer, click/open tracking toggles, default reply-to.
+- **Templates management** (`/admin/email-templates`): CRUD on `hq_email_templates` with variable placeholders (`{{name}}`, `{{company}}`), preview pane, test-send.
+- **Suppression list** (`/admin/email-suppression`): view bounced/complained/unsubscribed; call `email_domain--check_email_suppression` + button to resubscribe (removes from local suppression cache; Lovable still enforces global rules).
 
-## 4. Apply RecordLayout to the requested modules
+## Technical notes (per file)
 
-Add a lightweight `useRecord(id)` hook per module that fetches the record + related activity via Supabase, then wrap the existing detail views:
+- Migration bundling: one migration for `drive_items`, `drive_shares`, storage bucket policies, `user_email_settings`, `company_email_settings`, plus RLS + GRANTs.
+- Assistant tools live in `src/routes/api/hq/assistant.ts` using `experimental_tool` from AI SDK, with each tool's `execute` doing a Supabase query using the request's bearer token.
+- Mention parser: shared util `src/lib/hq/mentions.ts` (parse + render + notify).
+- Sidebar badges use a lightweight `useUnreadCounts()` hook subscribing to realtime.
+- No new third-party packages required.
 
-- **Customer Service** — `_hq.tickets.tsx`, `_hq.live-chat.tsx`, `_hq.rma.tsx`, `_hq.repairs.tsx`, `_hq.warranty-claims.tsx`, `_hq.customer-timeline.tsx`:
-  - Left rail = contact card (from `contacts` / `hr_employees` link) with quick-action buttons; center = existing ResourcePage detail; right rail = ticket/comment history + status changes.
-- **CRM** — `_hq.leads.tsx`, `_hq.pipeline.tsx`, `_hq.crm.tsx`:
-  - Left rail = lead/deal card with stage badge, owner (via `<UserMention>`), value; right rail = pipeline history + notes.
-- **People** — `_hq.employees.tsx` employee detail:
-  - Left rail = employee profile (avatar, department, manager via `<UserMention>`, start date); right rail = onboarding progress + recent time entries + reviews.
-- ResourcePage gets an optional `renderDetail?: (row) => { profile, activity, main }` prop; when set, opening a row renders inside `<RecordLayout>` instead of the current side sheet.
+## Delivery order this turn
 
-## 5. Help & Support page
+I'll do **Phase 1 (mentions + sounds) + Phase 2 (Drive) + start Phase 3 (dashboard skeleton)** in this turn. Phases 4 (assistant tools) and 5 (email settings + templates) in a follow-up turn — they each add ~15–20 files and I'd rather ship each one solid than half of everything.
 
-New file `src/routes/_hq.help.tsx`:
-- Head: title "Help & Support — Clovr HQ", robots noindex.
-- Sections:
-  1. **Quick self-serve** — cards: Reset password (links to `/hq-login?reset=1`), Update profile (`/profile`), Change theme (`/settings`), Manage notifications (`/notifications`).
-  2. **Internal docs** — searchable list backed by existing `hr_policies` + a new `kind = 'internal_doc'` filter on `cs_kb_articles` (no new table). Seed a handful of starter docs via migration: "How to use HQ", "Reset your password", "Book a meeting", "Request time off", "Report an outage".
-  3. **Contact Operations** — form (`support_tickets` new row w/ `category = 'ops_support'`) with subject, priority, description, urgency; submit calls a new `createServerFn` `submitOpsSupport` that inserts the row and DMs the on-call ops user (config: `admin_settings.ops_support_user_id`). Shows current on-call `<UserMention>` if set.
-- Sidebar footer "Help & Support" link updated to `to="/help"`.
-
-## 6. Wiring / polish
-
-- Topbar: verify search + quick add still work in light mode; adjust border/ring colors that assumed dark bg.
-- Any `text-white`/`bg-black` regressions from earlier iterations are replaced with semantic tokens.
-- Save a memory rule: "HQ default theme is light; sidebar is always the navy→blue gradient regardless of theme."
-
-## Technical notes
-
-- No schema changes required beyond:
-  - `admin_settings` row `ops_support_user_id uuid`.
-  - Optional seed inserts into `cs_kb_articles` for internal docs.
-- All new server work uses `createServerFn` under `src/lib/hq/*.functions.ts` with `requireSupabaseAuth`.
-- RecordLayout is presentation-only; data still flows through existing Supabase queries so no RLS changes needed.
-
-## Out of scope (call out for a follow-up)
-
-- Migrating every ResourcePage to the 3-pane layout — only the modules listed in §4 in this pass.
-- Rebuilding the composer/messaging pane to look pixel-identical to Looplet (chat bubbles keep current styling).
+Sound good?
