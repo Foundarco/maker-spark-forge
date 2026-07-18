@@ -37,7 +37,7 @@ type PhoneCtx = {
   endCall: () => Promise<void>;
   toggleMute: () => void;
   updateNotes: (notes: string) => void;
-  remoteAudioRef: React.RefObject<HTMLAudioElement>;
+  remoteAudioRef: React.RefObject<HTMLAudioElement | null>;
 };
 
 const Ctx = createContext<PhoneCtx | null>(null);
