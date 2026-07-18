@@ -140,17 +140,24 @@ function PhonePage() {
               <p className="p-6 text-center text-xs text-muted-foreground">No call history yet.</p>
             )}
             {history.map((c) => (
-              <div key={c.id} className="flex items-center gap-3 px-5 py-3">
-                <div className={`flex h-8 w-8 items-center justify-center rounded-full ${c.direction === "outbound" ? "bg-emerald-500/10 text-emerald-600" : "bg-blue-500/10 text-blue-600"}`}>
-                  {c.direction === "outbound" ? <PhoneOutgoing className="h-3.5 w-3.5" /> : <PhoneIncoming className="h-3.5 w-3.5" />}
+              <div key={c.id} className="px-5 py-3">
+                <div className="flex items-center gap-3">
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-full ${c.direction === "outbound" ? "bg-emerald-500/10 text-emerald-600" : "bg-blue-500/10 text-blue-600"}`}>
+                    {c.direction === "outbound" ? <PhoneOutgoing className="h-3.5 w-3.5" /> : <PhoneIncoming className="h-3.5 w-3.5" />}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">{c.peerName}</p>
+                    <p className="text-xs text-muted-foreground">{new Date(c.startedAt).toLocaleString()} · {formatDuration(c.startedAt, c.endedAt)}</p>
+                  </div>
+                  <button onClick={() => startCall(c.peerId, c.peerName, c.kind)} disabled={!!active} className="rounded-full bg-emerald-500 p-1.5 text-white hover:bg-emerald-600 disabled:opacity-40" aria-label="Call back">
+                    <Phone className="h-3 w-3" />
+                  </button>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{c.peerName}</p>
-                  <p className="text-xs text-muted-foreground">{new Date(c.startedAt).toLocaleString()} · {formatDuration(c.startedAt, c.endedAt)}</p>
-                </div>
-                <button onClick={() => startCall(c.peerId, c.peerName)} disabled={!!active} className="rounded-full bg-emerald-500 p-1.5 text-white hover:bg-emerald-600 disabled:opacity-40" aria-label="Call back">
-                  <Phone className="h-3 w-3" />
-                </button>
+                {c.notes?.trim() && (
+                  <div className="ml-11 mt-2 whitespace-pre-wrap rounded-md border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+                    {c.notes}
+                  </div>
+                )}
               </div>
             ))}
           </div>
