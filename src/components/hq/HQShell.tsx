@@ -50,6 +50,7 @@ export function HQShell() {
     <PhoneProvider>
     <RecordTabsProvider>
       <TabAutoOpener />
+      <SoundNotifier />
       <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
         <aside
           className={`hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block ${
