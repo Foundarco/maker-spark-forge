@@ -5,6 +5,17 @@ import {
   Search, Plus, Reply, ReplyAll, Forward, Star, Paperclip, X, ChevronRight, MailOpen, Circle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { sendEmailViaResend } from "@/lib/hq/mail.functions";
+
+const DEFAULT_FROM_DOMAIN = "clovrlab.com";
+const MAILBOX_FROM: Record<string, string> = {
+  personal: `hq@${DEFAULT_FROM_DOMAIN}`,
+  support: `support@${DEFAULT_FROM_DOMAIN}`,
+  sales: `sales@${DEFAULT_FROM_DOMAIN}`,
+  info: `info@${DEFAULT_FROM_DOMAIN}`,
+  billing: `billing@${DEFAULT_FROM_DOMAIN}`,
+};
 
 export const Route = createFileRoute("/_hq/mail")({
   head: () => ({ meta: [{ title: "Mail — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -61,7 +72,9 @@ function MailClient() {
   const [active, setActive] = useState<FolderKey>({ kind: "folder", folder: "inbox", mailbox: "personal", label: "Inbox" });
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [compose, setCompose] = useState<{ to: string; cc: string; subject: string; body: string; mailbox: string } | null>(null);
+  const [compose, setCompose] = useState<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo?: string | null } | null>(null);
+  const [sending, setSending] = useState(false);
+  const sendFn = useServerFn(sendEmailViaResend);
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
@@ -132,39 +145,78 @@ function MailClient() {
     }
   }, [selected?.id]);
 
-  const openCompose = (init?: Partial<{ to: string; cc: string; subject: string; body: string; mailbox: string }>) => {
+  const openCompose = (init?: Partial<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo: string | null }>) => {
     setCompose({
       to: init?.to ?? "",
       cc: init?.cc ?? "",
       subject: init?.subject ?? "",
       body: init?.body ?? "",
       mailbox: init?.mailbox ?? "personal",
+      inReplyTo: init?.inReplyTo ?? null,
     });
   };
 
   const sendCompose = async (asDraft: boolean) => {
     if (!compose) return;
-    const { data: u } = await supabase.auth.getUser();
-    const row = {
-      folder: asDraft ? "drafts" : "sent",
-      mailbox: compose.mailbox,
-      subject: compose.subject || "(no subject)",
-      from_addr: u.user?.email ?? "me",
-      to_addr: compose.to,
-      cc: compose.cc || null,
-      body: compose.body || null,
-      status: asDraft ? "draft" : "sent",
-      is_read: true,
-      sent_at: asDraft ? null : new Date().toISOString(),
-      owner_id: u.user?.id,
-      created_by: u.user?.id,
-    };
-    const { data, error } = await supabase.from("hq_emails").insert(row as any).select().single();
-    if (error) { alert(error.message); return; }
-    if (data) setEmails((prev) => [data as Email, ...prev]);
-    setCompose(null);
-    setActive({ kind: "folder", folder: asDraft ? "drafts" : "sent", label: asDraft ? "Drafts" : "Sent" });
+    if (sending) return;
+    setSending(true);
+    try {
+      const { data: u } = await supabase.auth.getUser();
+      const fromAddr = MAILBOX_FROM[compose.mailbox] ?? MAILBOX_FROM.personal;
+      const row = {
+        folder: asDraft ? "drafts" : "sent",
+        mailbox: compose.mailbox,
+        subject: compose.subject || "(no subject)",
+        from_addr: asDraft ? (u.user?.email ?? fromAddr) : fromAddr,
+        to_addr: compose.to,
+        cc: compose.cc || null,
+        body: compose.body || null,
+        status: asDraft ? "draft" : "sent",
+        is_read: true,
+        direction: "outbound",
+        in_reply_to: compose.inReplyTo ?? null,
+        sent_at: asDraft ? null : new Date().toISOString(),
+        owner_id: u.user?.id,
+        created_by: u.user?.id,
+      };
+      const { data, error } = await supabase.from("hq_emails").insert(row as any).select().single();
+      if (error) { alert(error.message); return; }
+      const inserted = data as Email;
+
+      if (!asDraft) {
+        try {
+          const bodyText = compose.body || "";
+          const html = `<div style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap;">${escapeHtml(bodyText)}</div>`;
+          await sendFn({
+            data: {
+              from: fromAddr,
+              to: compose.to,
+              cc: compose.cc || null,
+              subject: compose.subject || "(no subject)",
+              html,
+              text: bodyText,
+              inReplyTo: compose.inReplyTo ?? null,
+              emailRowId: inserted.id,
+            },
+          });
+        } catch (err: any) {
+          console.error(err);
+          alert(`Saved to Sent, but delivery failed: ${err?.message ?? err}`);
+        }
+      }
+
+      if (inserted) setEmails((prev) => [inserted, ...prev]);
+      setCompose(null);
+      setActive({ kind: "folder", folder: asDraft ? "drafts" : "sent", label: asDraft ? "Drafts" : "Sent" });
+    } finally {
+      setSending(false);
+    }
   };
+
+  function escapeHtml(s: string) {
+    return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
+  }
+
 
   const setFlag = async (id: string, status: string) => {
     await supabase.from("hq_emails").update({ status }).eq("id", id);
@@ -291,8 +343,8 @@ function MailClient() {
           <>
             <header className="border-b border-border px-6 py-4">
               <div className="mb-3 flex items-center gap-2">
-                <button onClick={() => openCompose({ to: selected.from_addr ?? "", subject: `Re: ${selected.subject ?? ""}`, body: `\n\n---\n${selected.body ?? ""}` })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><Reply className="h-3 w-3" /> Reply</button>
-                <button onClick={() => openCompose({ to: selected.from_addr ?? "", cc: selected.cc ?? "", subject: `Re: ${selected.subject ?? ""}`, body: `\n\n---\n${selected.body ?? ""}` })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><ReplyAll className="h-3 w-3" /> Reply all</button>
+                <button onClick={() => openCompose({ to: selected.from_addr ?? "", subject: `Re: ${selected.subject ?? ""}`, body: `\n\n---\n${selected.body ?? ""}`, inReplyTo: (selected as any).message_id ?? null })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><Reply className="h-3 w-3" /> Reply</button>
+                <button onClick={() => openCompose({ to: selected.from_addr ?? "", cc: selected.cc ?? "", subject: `Re: ${selected.subject ?? ""}`, body: `\n\n---\n${selected.body ?? ""}`, inReplyTo: (selected as any).message_id ?? null })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><ReplyAll className="h-3 w-3" /> Reply all</button>
                 <button onClick={() => openCompose({ subject: `Fwd: ${selected.subject ?? ""}`, body: `\n\n---\nFrom: ${selected.from_addr}\n${selected.body ?? ""}` })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><Forward className="h-3 w-3" /> Forward</button>
                 <div className="ml-auto flex items-center gap-1">
                   <button onClick={() => setFlag(selected.id, selected.status === "flagged" ? "read" : "flagged")} className="rounded-md p-1.5 hover:bg-muted" title="Flag"><Star className={`h-3.5 w-3.5 ${selected.status === "flagged" ? "fill-amber-400 text-amber-500" : ""}`} /></button>
@@ -350,7 +402,7 @@ function MailClient() {
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={() => sendCompose(true)} className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted">Save draft</button>
-                <button onClick={() => sendCompose(false)} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90"><Send className="h-3 w-3" /> Send</button>
+                <button disabled={sending} onClick={() => sendCompose(false)} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"><Send className="h-3 w-3" /> {sending ? "Sending…" : "Send"}</button>
               </div>
             </footer>
           </div>
