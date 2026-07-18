@@ -92,6 +92,14 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const [channelCall, setChannelCallState] = useState<ChannelCallState | null>(null);
   const channelCallChRef = useRef<any>(null);
   const channelCallSessionIdRef = useRef<string | null>(null);
+  const channelPeerConnectionsRef = useRef<Map<string, RTCPeerConnection>>(new Map());
+  const channelRemoteAudiosRef = useRef<Map<string, HTMLAudioElement>>(new Map());
+  const channelPendingIceRef = useRef<Map<string, RTCIceCandidateInit[]>>(new Map());
+  const channelCallRef = useRef<ChannelCallState | null>(null);
+
+  useEffect(() => {
+    channelCallRef.current = channelCall;
+  }, [channelCall]);
 
   // Append a transcribed chunk to the active call's notes
   const appendNotes = useCallback((text: string) => {
@@ -196,11 +204,24 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     peerChannelsRef.current.clear();
   };
 
+  const cleanupChannelMesh = () => {
+    for (const pc of channelPeerConnectionsRef.current.values()) {
+      try { pc.close(); } catch {}
+    }
+    channelPeerConnectionsRef.current.clear();
+    for (const audio of channelRemoteAudiosRef.current.values()) {
+      try { audio.pause(); audio.srcObject = null; audio.remove(); } catch {}
+    }
+    channelRemoteAudiosRef.current.clear();
+    channelPendingIceRef.current.clear();
+  };
+
   const cleanupMedia = () => {
     if (pcRef.current) {
       try { pcRef.current.close(); } catch {}
       pcRef.current = null;
     }
+    cleanupChannelMesh();
     if (localStreamRef.current) {
       localStreamRef.current.getTracks().forEach((t) => t.stop());
       localStreamRef.current = null;
@@ -235,9 +256,15 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     return pc;
   }, [sendToPeer]);
 
-  const attachLocalMedia = async (pc: RTCPeerConnection) => {
+  const ensureLocalStream = useCallback(async () => {
+    if (localStreamRef.current) return localStreamRef.current;
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
     localStreamRef.current = stream;
+    return stream;
+  }, []);
+
+  const attachLocalMedia = async (pc: RTCPeerConnection) => {
+    const stream = await ensureLocalStream();
     stream.getTracks().forEach((t) => pc.addTrack(t, stream));
     return stream;
   };
@@ -382,13 +409,31 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     setIncoming(null);
   }, [incoming, sendToPeer]);
 
+  const disconnectChannelPresence = useCallback(async () => {
+    if (channelCallChRef.current) {
+      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current, session_id: channelCallSessionIdRef.current } }); } catch {}
+      try { await channelCallChRef.current.untrack(); } catch {}
+      supabase.removeChannel(channelCallChRef.current);
+      channelCallChRef.current = null;
+    }
+    channelCallSessionIdRef.current = null;
+    channelCallRef.current = null;
+    setChannelCallState(null);
+    cleanupChannelMesh();
+  }, []);
+
   const endCall = useCallback(async () => {
     const cur = active;
+    if (cur?.kind === "channel") {
+      await disconnectChannelPresence();
+      finishCall();
+      return;
+    }
     if (cur && meIdRef.current) {
       try { await sendToPeer(cur.peerId, "end", { callId: cur.id, from: meIdRef.current }); } catch {}
     }
     finishCall();
-  }, [active, sendToPeer, finishCall]);
+  }, [active, sendToPeer, finishCall, disconnectChannelPresence]);
 
   const toggleMute = useCallback(() => {
     setActive((cur) => {
@@ -434,37 +479,140 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
 
 
   // -------------------- Channel call (multi-user presence room) --------------------
-  // Presence-based only in this iteration: participants show up as "in call"
-  // in the channel header for everyone. Actual audio is 1:1 via DM/user calls.
+  const getOrCreateChannelPeer = useCallback(async (remoteId: string, sessionId: string, ch: any) => {
+    if (!meIdRef.current || remoteId === meIdRef.current) return null;
+    const existing = channelPeerConnectionsRef.current.get(remoteId);
+    if (existing) return existing;
+
+    const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+    pc.onicecandidate = (e) => {
+      if (e.candidate) {
+        ch.send({ type: "broadcast", event: "mesh-ice", payload: { session_id: sessionId, from: meIdRef.current, to: remoteId, candidate: e.candidate.toJSON() } });
+      }
+    };
+    pc.ontrack = (e) => {
+      let audio = channelRemoteAudiosRef.current.get(remoteId);
+      if (!audio) {
+        audio = new Audio();
+        audio.autoplay = true;
+        audio.setAttribute("playsinline", "true");
+        audio.className = "hidden";
+        document.body.appendChild(audio);
+        channelRemoteAudiosRef.current.set(remoteId, audio);
+      }
+      audio.srcObject = e.streams[0];
+      audio.play().catch(() => {});
+    };
+    pc.onconnectionstatechange = () => {
+      if (pc.connectionState === "failed" || pc.connectionState === "closed") {
+        try { pc.close(); } catch {}
+        channelPeerConnectionsRef.current.delete(remoteId);
+        const audio = channelRemoteAudiosRef.current.get(remoteId);
+        if (audio) { try { audio.pause(); audio.srcObject = null; audio.remove(); } catch {} }
+        channelRemoteAudiosRef.current.delete(remoteId);
+      }
+    };
+
+    const stream = await ensureLocalStream();
+    stream.getTracks().forEach((track) => pc.addTrack(track, stream));
+    channelPeerConnectionsRef.current.set(remoteId, pc);
+    return pc;
+  }, [ensureLocalStream]);
+
+  const makeChannelOffer = useCallback(async (remoteId: string, sessionId: string, ch: any) => {
+    const pc = await getOrCreateChannelPeer(remoteId, sessionId, ch);
+    if (!pc || pc.signalingState !== "stable") return;
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    await ch.send({ type: "broadcast", event: "mesh-offer", payload: { session_id: sessionId, from: meIdRef.current, to: remoteId, offer: { type: offer.type, sdp: offer.sdp } } });
+  }, [getOrCreateChannelPeer]);
+
   const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean, sessionId: string = crypto.randomUUID()) => {
     if (!meIdRef.current) return;
-    if (channelCallChRef.current) {
-      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current, session_id: channelCallSessionIdRef.current } }); } catch {}
-      try { await channelCallChRef.current.untrack(); } catch {}
-      supabase.removeChannel(channelCallChRef.current);
-      channelCallChRef.current = null;
-    }
+    if (channelCallChRef.current) await disconnectChannelPresence();
+    await ensureLocalStream();
+    const startedAt = new Date().toISOString();
+    const callId = `channel:${sessionId}:${meIdRef.current}`;
+    callIdRef.current = callId;
+    setActive({
+      id: callId,
+      peerId: channelId,
+      peerName: `#${channelName}`,
+      kind: "channel",
+      direction: isHost ? "outbound" : "inbound",
+      status: "active",
+      startedAt,
+      endedAt: null,
+      muted: false,
+      notes: "",
+    });
     channelCallSessionIdRef.current = sessionId;
     const ch = supabase.channel(`channel-call:${channelId}`, {
       config: { presence: { key: meIdRef.current } },
     });
-    // Broadcast fallback: reply to any "who" ping with our user_id so
-    // viewers see participants even if presence sync is delayed.
     ch.on("broadcast", { event: "who" }, () => {
-      ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current, session_id: sessionId } });
+      ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current, session_id: sessionId, fresh: false } });
+    });
+    ch.on("broadcast", { event: "hello" }, ({ payload }: any) => {
+      const uid = payload?.user_id;
+      if (!uid || uid === meIdRef.current || payload?.session_id !== sessionId) return;
+      if (payload?.fresh === true || (meIdRef.current && meIdRef.current > uid && !channelPeerConnectionsRef.current.has(uid))) {
+        void makeChannelOffer(uid, sessionId, ch);
+      }
+    });
+    ch.on("broadcast", { event: "mesh-offer" }, async ({ payload }: any) => {
+      if (payload?.session_id !== sessionId || payload?.to !== meIdRef.current || !payload?.from || !payload?.offer) return;
+      try {
+        const pc = await getOrCreateChannelPeer(payload.from, sessionId, ch);
+        if (!pc) return;
+        await pc.setRemoteDescription(new RTCSessionDescription(payload.offer));
+        const pending = channelPendingIceRef.current.get(payload.from) ?? [];
+        for (const c of pending) { try { await pc.addIceCandidate(c); } catch {} }
+        channelPendingIceRef.current.delete(payload.from);
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        await ch.send({ type: "broadcast", event: "mesh-answer", payload: { session_id: sessionId, from: meIdRef.current, to: payload.from, answer: { type: answer.type, sdp: answer.sdp } } });
+      } catch (err) {
+        console.error("channel offer failed", err);
+      }
+    });
+    ch.on("broadcast", { event: "mesh-answer" }, async ({ payload }: any) => {
+      if (payload?.session_id !== sessionId || payload?.to !== meIdRef.current || !payload?.from || !payload?.answer) return;
+      const pc = channelPeerConnectionsRef.current.get(payload.from);
+      if (!pc) return;
+      try {
+        await pc.setRemoteDescription(new RTCSessionDescription(payload.answer));
+        const pending = channelPendingIceRef.current.get(payload.from) ?? [];
+        for (const c of pending) { try { await pc.addIceCandidate(c); } catch {} }
+        channelPendingIceRef.current.delete(payload.from);
+      } catch (err) {
+        console.error("channel answer failed", err);
+      }
+    });
+    ch.on("broadcast", { event: "mesh-ice" }, async ({ payload }: any) => {
+      if (payload?.session_id !== sessionId || payload?.to !== meIdRef.current || !payload?.from || !payload?.candidate) return;
+      const pc = channelPeerConnectionsRef.current.get(payload.from);
+      if (pc?.remoteDescription) {
+        try { await pc.addIceCandidate(payload.candidate); } catch {}
+      } else {
+        const pending = channelPendingIceRef.current.get(payload.from) ?? [];
+        pending.push(payload.candidate);
+        channelPendingIceRef.current.set(payload.from, pending);
+      }
     });
     ch.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
         await ch.track({ user_id: meIdRef.current, session_id: sessionId, joined_at: new Date().toISOString() });
-        await ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current, session_id: sessionId } });
+        await ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current, session_id: sessionId, fresh: true } });
+        await ch.send({ type: "broadcast", event: "who", payload: { session_id: sessionId } });
       }
     });
     channelCallChRef.current = ch;
     setChannelCallState({ channelId, channelName, sessionId, isHost });
-  }, []);
+  }, [disconnectChannelPresence, ensureLocalStream, getOrCreateChannelPeer, makeChannelOffer]);
 
   const startChannelCall = useCallback(async (channelId: string, channelName: string) => {
-    if (channelCall || !meIdRef.current) return;
+    if (active || channelCall || !meIdRef.current) return;
     const sessionId = crypto.randomUUID();
     // Announce in the channel
     try {
@@ -477,25 +625,19 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     } catch {}
     await joinChannelCallPresence(channelId, channelName, true, sessionId);
     playSound("call-connect");
-  }, [channelCall, joinChannelCallPresence]);
+  }, [active, channelCall, joinChannelCallPresence]);
 
   const joinChannelCall = useCallback(async (channelId: string, channelName: string, sessionId?: string) => {
-    if (channelCall) return;
+    if (active || channelCall) return;
     await joinChannelCallPresence(channelId, channelName, false, sessionId);
     playSound("call-connect");
-  }, [channelCall, joinChannelCallPresence]);
+  }, [active, channelCall, joinChannelCallPresence]);
 
   const leaveChannelCall = useCallback(async () => {
-    if (channelCallChRef.current) {
-      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current, session_id: channelCallSessionIdRef.current } }); } catch {}
-      try { await channelCallChRef.current.untrack(); } catch {}
-      supabase.removeChannel(channelCallChRef.current);
-      channelCallChRef.current = null;
-    }
-    channelCallSessionIdRef.current = null;
-    setChannelCallState(null);
+    await disconnectChannelPresence();
+    finishCall();
     playSound("call-end");
-  }, []);
+  }, [disconnectChannelPresence, finishCall]);
 
   return (
     <Ctx.Provider value={{
