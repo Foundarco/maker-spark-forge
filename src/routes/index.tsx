@@ -17,17 +17,8 @@ function isHqHost(host: string): boolean {
 }
 
 export const Route = createFileRoute("/")({
-  beforeLoad: async () => {
-    let host = "";
-    if (typeof window === "undefined") {
-      try {
-        const { getRequestHost } = await import("@tanstack/react-start/server");
-        host = getRequestHost() ?? "";
-      } catch { /* not in a request context */ }
-    } else {
-      host = window.location.hostname;
-    }
-    if (host && isHqHost(host)) {
+  beforeLoad: () => {
+    if (typeof window !== "undefined" && isHqHost(window.location.hostname)) {
       throw redirect({ to: "/hq-login" });
     }
   },
