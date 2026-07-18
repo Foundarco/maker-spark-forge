@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { PanelLeftOpen } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { CommunicationSubNav } from "./CommunicationSubNav";
 import { RecordTabsProvider, useRecordTabs } from "@/lib/hq/record-tabs";
 import { navGroups } from "./nav-config";
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
@@ -77,6 +78,7 @@ export function HQShell() {
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden py-2 pr-2 pl-2">
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
             <Topbar onMenuClick={() => setMobileOpen(true)} />
+            <CommunicationSubNav />
             <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background">
               <Outlet />
             </main>
