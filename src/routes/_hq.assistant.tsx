@@ -27,6 +27,12 @@ function AssistantPage() {
     transport: new DefaultChatTransport({
       api: "/api/hq/assistant",
       body: () => ({ module: "/assistant" }),
+      fetch: (async (url, init) => {
+        const { data } = await supabase.auth.getSession();
+        const headers = new Headers(init?.headers);
+        if (data.session) headers.set("Authorization", `Bearer ${data.session.access_token}`);
+        return fetch(url, { ...init, headers });
+      }) as typeof fetch,
     }),
   });
 
