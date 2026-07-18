@@ -39,6 +39,16 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         .select("*", { count: "exact", head: true })
         .is("read_at", null);
       if (mounted && count !== null) setUnread(count);
+      if (mounted && count !== null) setUnread(count);
+
+      const start = new Date(); start.setHours(0,0,0,0);
+      const end = new Date(); end.setHours(23,59,59,999);
+      const { count: ec } = await supabase
+        .from("calendar_events")
+        .select("*", { count: "exact", head: true })
+        .gte("starts_at", start.toISOString())
+        .lte("starts_at", end.toISOString());
+      if (mounted && ec !== null) setEventsToday(ec);
     })();
     return () => { mounted = false; };
   }, []);
