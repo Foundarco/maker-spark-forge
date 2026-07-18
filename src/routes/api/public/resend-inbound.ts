@@ -10,7 +10,10 @@ import { createHmac, timingSafeEqual } from "crypto";
 // email.failed, email.scheduled, email.suppressed).
 async function verifySignature(request: Request, rawBody: string): Promise<boolean> {
   const secret = process.env.RESEND_WEBHOOK_SECRET;
-  if (!secret) return true; // dev fallback
+  if (!secret) {
+    console.error("[Resend] RESEND_WEBHOOK_SECRET is not set — rejecting webhook request");
+    return false;
+  }
   const svixId = request.headers.get("svix-id") ?? request.headers.get("webhook-id");
   const svixTs = request.headers.get("svix-timestamp") ?? request.headers.get("webhook-timestamp");
   const svixSig = request.headers.get("svix-signature") ?? request.headers.get("webhook-signature");

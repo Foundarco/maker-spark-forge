@@ -4,6 +4,7 @@ import { DefaultChatTransport, type UIMessage } from "ai";
 import { Bot, Send, Sparkles, Zap } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_hq/assistant")({
   head: () => ({ meta: [{ title: "AI Assistant — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -26,6 +27,12 @@ function AssistantPage() {
     transport: new DefaultChatTransport({
       api: "/api/hq/assistant",
       body: () => ({ module: "/assistant" }),
+      fetch: (async (url, init) => {
+        const { data } = await supabase.auth.getSession();
+        const headers = new Headers(init?.headers);
+        if (data.session) headers.set("Authorization", `Bearer ${data.session.access_token}`);
+        return fetch(url, { ...init, headers });
+      }) as typeof fetch,
     }),
   });
 

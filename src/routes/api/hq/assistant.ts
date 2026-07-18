@@ -18,12 +18,24 @@ export const Route = createFileRoute("/api/hq/assistant")({
         const key = process.env.LOVABLE_API_KEY;
         if (!key) return new Response("Missing LOVABLE_API_KEY", { status: 500 });
 
-        // Authenticate the caller so the assistant only sees what they can see (RLS).
+        // Require a valid Supabase session — reject unauthenticated callers so the
+        // AI endpoint can't be scraped by anyone on the internet.
         const authHeader = request.headers.get("Authorization") ?? "";
+        if (!authHeader.startsWith("Bearer ")) {
+          return new Response("Unauthorized", { status: 401 });
+        }
+        const token = authHeader.slice("Bearer ".length);
+        if (!token || token.split(".").length !== 3) {
+          return new Response("Unauthorized", { status: 401 });
+        }
         const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_PUBLISHABLE_KEY!, {
           auth: { persistSession: false, autoRefreshToken: false },
-          global: { headers: authHeader ? { Authorization: authHeader } : {} },
+          global: { headers: { Authorization: authHeader } },
         });
+        const { data: claimsData, error: claimsErr } = await supabase.auth.getClaims(token);
+        if (claimsErr || !claimsData?.claims?.sub) {
+          return new Response("Unauthorized", { status: 401 });
+        }
 
         // Best-effort workspace snapshot for grounding. RLS applies.
         const snapshot: Record<string, unknown> = {};

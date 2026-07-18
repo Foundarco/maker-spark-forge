@@ -4,6 +4,7 @@ import { Bot, Send, X, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
 import ReactMarkdown from "react-markdown";
+import { supabase } from "@/integrations/supabase/client";
 
 export function AIAssistant() {
   const [open, setOpen] = useState(false);
@@ -15,6 +16,12 @@ export function AIAssistant() {
     transport: new DefaultChatTransport({
       api: "/api/hq/assistant",
       body: () => ({ module: pathname }),
+      fetch: (async (url, init) => {
+        const { data } = await supabase.auth.getSession();
+        const headers = new Headers(init?.headers);
+        if (data.session) headers.set("Authorization", `Bearer ${data.session.access_token}`);
+        return fetch(url, { ...init, headers });
+      }) as typeof fetch,
     }),
   });
 
