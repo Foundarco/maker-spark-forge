@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight } from "lucide-react";
+import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight, Phone, Video } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
 import { ProfilePopover } from "@/components/hq/ProfilePopover";
 import { ChannelAccessDialog } from "@/components/hq/ChannelAccessDialog";
 import { loadMyPermissions, type Permissions } from "@/lib/hq/permissions";
+import { usePhone } from "@/lib/hq/phone";
+import { createInstantMeeting } from "@/lib/hq/instant-meeting";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_hq/channels")({
   head: () => ({ meta: [{ title: "Channels — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -34,6 +37,8 @@ function dayLabel(iso: string) {
 }
 
 function ChannelsPage() {
+  const { startCall, active: activeCall } = usePhone();
+  const navigate = useNavigate();
   const [me, setMe] = useState<string | null>(null);
   const [perms, setPerms] = useState<Permissions>({ manage_channels: false, manage_roles: false, manage_messages: false, admin: false });
   const [categories, setCategories] = useState<Category[]>([]);
@@ -301,11 +306,33 @@ function ChannelsPage() {
                 </div>
                 {activeChannel.description && <p className="mt-0.5 text-xs text-muted-foreground">{activeChannel.description}</p>}
               </div>
-              {perms.manage_channels && activeChannel.is_private && (
-                <button onClick={() => setShowAccess(true)} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted" title="Manage access">
-                  <Settings className="h-3.5 w-3.5" /> Access
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => { if (!activeCall) startCall(activeChannel.id, `#${activeChannel.name}`, "channel"); }}
+                  disabled={!!activeCall}
+                  title="Start channel call"
+                  className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
+                >
+                  <Phone className="h-3 w-3" /> Call
                 </button>
-              )}
+                <button
+                  onClick={async () => {
+                    const { data: mem } = await supabase.from("channel_members").select("user_id").eq("channel_id", activeChannel.id);
+                    const ids = (mem ?? []).map((x: any) => x.user_id);
+                    const id = await createInstantMeeting(`#${activeChannel.name} meeting`, ids);
+                    if (id) navigate({ to: "/meeting/$id", params: { id } });
+                  }}
+                  title="Start meeting"
+                  className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted"
+                >
+                  <Video className="h-3 w-3" /> Meeting
+                </button>
+                {perms.manage_channels && activeChannel.is_private && (
+                  <button onClick={() => setShowAccess(true)} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted" title="Manage access">
+                    <Settings className="h-3.5 w-3.5" /> Access
+                  </button>
+                )}
+              </div>
             </header>
             <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto px-5 py-4">
               {messages.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet in #{activeChannel.name}.</p>}

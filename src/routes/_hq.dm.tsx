@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight, Phone, Video, StickyNote } from "lucide-react";
+import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight, Phone, Video } from "lucide-react";
+import { createInstantMeeting } from "@/lib/hq/instant-meeting";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
@@ -302,7 +303,12 @@ function DMHeader({ active, activeProfile, onOpenProfile }: { active: string | n
   const { startCall, active: activeCall } = usePhone();
   const navigate = useNavigate();
   const name = activeProfile?.full_name || activeProfile?.email || "";
-  const call = () => { if (active && !activeCall) { startCall(active, name); navigate({ to: "/phone" }); } };
+  const call = () => { if (active && !activeCall) startCall(active, name, "user"); };
+  const meet = async () => {
+    if (!active) return;
+    const id = await createInstantMeeting(`Meeting with ${name}`, [active]);
+    if (id) navigate({ to: "/meeting/$id", params: { id } });
+  };
   return (
     <header className="flex items-center gap-3 border-b border-border px-5 py-3">
       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
@@ -316,11 +322,8 @@ function DMHeader({ active, activeProfile, onOpenProfile }: { active: string | n
         <button onClick={call} disabled={!!activeCall} title="Start voice call" className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
           <Phone className="h-3 w-3" /> Call
         </button>
-        <button onClick={() => navigate({ to: "/meetings" })} title="Start meeting" className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
+        <button onClick={meet} title="Start meeting" className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
           <Video className="h-3 w-3" /> Meeting
-        </button>
-        <button onClick={() => navigate({ to: "/meeting-notes" })} title="Notes" className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
-          <StickyNote className="h-3 w-3" /> Notes
         </button>
       </div>
     </header>
