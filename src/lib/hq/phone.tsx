@@ -151,7 +151,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     return () => {
       mounted = false;
       if (inboxChannelRef.current) supabase.removeChannel(inboxChannelRef.current);
-      if (peerChannelRef.current) supabase.removeChannel(peerChannelRef.current);
+      // cleanupMedia below also drops any peer channels
       cleanupMedia();
     };
   }, []);
