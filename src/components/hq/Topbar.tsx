@@ -82,26 +82,20 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         <Menu className="h-5 w-5" />
       </button>
 
-      <Link to="/dashboard" className="mr-2 flex items-center gap-2">
-        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-primary text-primary-foreground">
-          <span className="text-xs font-bold">HQ</span>
-        </div>
-        <span className="hidden text-sm font-semibold sm:inline">Clovr HQ</span>
-      </Link>
-
-      <form onSubmit={submitSearch} className="flex flex-1 items-center justify-center">
-        <div className="flex w-full max-w-lg items-center gap-2 rounded-lg border border-border bg-card/50 px-3 py-1.5 focus-within:border-foreground/30">
+      <form onSubmit={submitSearch} className="flex flex-1 items-center">
+        <div className="flex w-full max-w-xl items-center gap-2 rounded-full border border-border bg-card px-4 py-2 shadow-sm focus-within:border-primary/40 focus-within:shadow-md">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
             ref={searchRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search anything — customer, order, part, person… (Enter to open full search)"
+            placeholder="Search anything — customer, order, part, person…"
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
           />
           <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-mono text-muted-foreground">⌘K</span>
         </div>
       </form>
+
 
       <div className="relative">
         <button
