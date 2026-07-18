@@ -171,25 +171,21 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
 
       {/* User footer */}
       <div className="border-t border-sidebar-border p-3">
-        <Link
-          to="/profile"
-          onClick={onNavigate}
-          className="flex items-center gap-3 rounded-xl p-2 hover:bg-sidebar-hover"
-        >
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-accent text-xs font-bold text-sidebar-accent-foreground">
-            {initials}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-[13px] font-medium text-sidebar-foreground">{profile?.full_name || "Staff"}</p>
-            <p className="truncate text-[11px] text-sidebar-muted">{profile?.department || profile?.email || "Team member"}</p>
-          </div>
-          <Link to="/settings" onClick={(e) => { e.stopPropagation(); onNavigate?.(); }} className="rounded-md p-1.5 text-sidebar-muted hover:bg-sidebar-hover hover:text-sidebar-foreground" aria-label="Settings">
+        <div className="flex items-center gap-3 rounded-xl p-2 hover:bg-sidebar-hover">
+          <Link to="/profile" onClick={onNavigate} className="flex min-w-0 flex-1 items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-sidebar-accent text-xs font-bold text-sidebar-accent-foreground">
+              {initials}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-medium text-sidebar-foreground">{profile?.full_name || "Staff"}</p>
+              <p className="truncate text-[11px] text-sidebar-muted">{profile?.department || profile?.email || "Team member"}</p>
+            </div>
+          </Link>
+          <Link to="/settings" onClick={onNavigate} className="rounded-md p-1.5 text-sidebar-muted hover:bg-sidebar-hover hover:text-sidebar-foreground" aria-label="Settings">
             <SettingsIcon className="h-3.5 w-3.5" />
           </Link>
           <button
-            onClick={async (e) => {
-              e.preventDefault();
-              e.stopPropagation();
+            onClick={async () => {
               await supabase.auth.signOut();
               window.location.href = "/hq-login";
             }}
@@ -198,7 +194,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
           >
             <LogOut className="h-3.5 w-3.5" />
           </button>
-        </Link>
+        </div>
       </div>
     </nav>
   );
