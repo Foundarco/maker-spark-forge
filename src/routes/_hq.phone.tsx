@@ -85,26 +85,41 @@ function PhonePage() {
         {/* Active call panel */}
         <div className="rounded-xl border border-border bg-card p-6">
           {active ? (
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">{initials(active.peerName)}</div>
-                  <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-card bg-emerald-500" />
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">{initials(active.peerName)}</div>
+                    <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-card bg-emerald-500" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold">{active.peerName}</p>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                      {active.status === "ringing" ? "Ringing…" : active.status === "active" ? `On call · ${formatDuration(active.startedAt, null)}` : "Ended"}
+                      {active.kind === "channel" && " · Channel"}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-lg font-semibold">{active.peerName}</p>
-                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                    {active.status === "ringing" ? "Ringing…" : active.status === "active" ? `On call · ${formatDuration(active.startedAt, null)}` : "Ended"}
-                  </p>
+                <div className="flex items-center gap-2">
+                  <button onClick={toggleMute} className={`flex h-10 w-10 items-center justify-center rounded-full border ${active.muted ? "bg-muted" : "border-border hover:bg-muted"}`} aria-label="Toggle mute">
+                    {active.muted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  </button>
+                  <button onClick={endCall} className="flex h-10 items-center gap-2 rounded-full bg-red-500 px-4 text-sm font-medium text-white hover:bg-red-600">
+                    <PhoneOff className="h-4 w-4" /> End call
+                  </button>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button onClick={toggleMute} className={`flex h-10 w-10 items-center justify-center rounded-full border ${active.muted ? "bg-muted" : "border-border hover:bg-muted"}`} aria-label="Toggle mute">
-                  {active.muted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
-                </button>
-                <button onClick={endCall} className="flex h-10 items-center gap-2 rounded-full bg-red-500 px-4 text-sm font-medium text-white hover:bg-red-600">
-                  <PhoneOff className="h-4 w-4" /> End call
-                </button>
+              <div>
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Auto-notes</label>
+                  <span className="text-[10px] text-muted-foreground">Saved with call history</span>
+                </div>
+                <textarea
+                  value={active.notes}
+                  onChange={(e) => updateNotes(e.target.value)}
+                  placeholder="Jot notes during the call — action items, decisions, follow-ups…"
+                  className="h-28 w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+                />
               </div>
             </div>
           ) : (
