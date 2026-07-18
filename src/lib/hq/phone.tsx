@@ -26,6 +26,12 @@ export type IncomingCall = {
   offer: RTCSessionDescriptionInit;
 };
 
+export type ChannelCallState = {
+  channelId: string;
+  channelName: string;
+  isHost: boolean;
+};
+
 type PhoneCtx = {
   active: Call | null;
   history: Call[];
@@ -39,6 +45,10 @@ type PhoneCtx = {
   toggleMute: () => void;
   updateNotes: (notes: string) => void;
   remoteAudioRef: React.RefObject<HTMLAudioElement | null>;
+  channelCall: ChannelCallState | null;
+  startChannelCall: (channelId: string, channelName: string) => Promise<void>;
+  joinChannelCall: (channelId: string, channelName: string) => Promise<void>;
+  leaveChannelCall: () => Promise<void>;
 };
 
 const Ctx = createContext<PhoneCtx | null>(null);
