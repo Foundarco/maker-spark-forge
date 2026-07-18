@@ -71,6 +71,13 @@
   --border: oklch(0.92 0.005 260);
   --input: oklch(0.92 0.005 260);
   --ring: oklch(0.68 0.2 40);
+  /* Looplet-style dark sidebar */
+  --sidebar: oklch(0.19 0.03 260);
+  --sidebar-foreground: oklch(0.98 0 0);
+  --sidebar-muted: oklch(0.68 0.02 260);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-accent: oklch(0.62 0.19 256);
+  --sidebar-accent-foreground: oklch(0.99 0 0);
 }
 
 .dark {
