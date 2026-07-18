@@ -333,6 +333,7 @@ function ChannelsPage() {
                   </button>
                 )}
               </div>
+            </header>
             <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto px-5 py-4">
               {messages.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet in #{activeChannel.name}.</p>}
               {rendered.map((r) => {
