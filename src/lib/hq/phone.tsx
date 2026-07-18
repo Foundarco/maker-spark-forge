@@ -139,6 +139,8 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
       peerChannelRef.current = null;
       peerIdRef.current = null;
     }
+    stopAllCallSounds();
+    stopRecognition();
   };
 
   const createPeer = useCallback((remoteId: string, callId: string) => {
