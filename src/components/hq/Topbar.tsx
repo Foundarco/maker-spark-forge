@@ -75,27 +75,18 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           <Menu className="h-5 w-5" />
         </button>
 
-        <div className="hidden items-center gap-1.5 text-muted-foreground lg:flex">
-          <Sun className="h-4 w-4" />
-          <span className="text-xs">72°F · Fair</span>
-        </div>
-
         <div className="flex-1" />
-
-        <button
-          onClick={() => navigate({ to: "/dashboard" })}
-          className="flex h-8 items-center gap-1.5 rounded-full bg-primary px-3 text-xs font-semibold text-primary-foreground hover:bg-primary/90"
-        >
-          <Plus className="h-3.5 w-3.5" /> Quick Add
-        </button>
 
         <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted" aria-label="Call">
           <Phone className="h-4 w-4" />
         </button>
 
-        <Link to="/files" className="flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium hover:bg-muted">
-          Docbox
-          <span className="rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">50</span>
+        <Link to="/calendar" className="flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium hover:bg-muted">
+          <CalendarIcon className="h-3.5 w-3.5" />
+          Calendar
+          {eventsToday > 0 && (
+            <span className="rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">{eventsToday}</span>
+          )}
         </Link>
 
         <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted" aria-label="Apps">
