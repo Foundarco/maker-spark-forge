@@ -436,7 +436,7 @@ function ChannelsPage() {
                       ) : (
                         <>
                           <div className={optimistic ? "opacity-70" : ""}>
-                            <MessageBody body={m.body} attachments={m.attachments} deleted={isDeleted} />
+                            <MessageBody body={m.body} attachments={m.attachments} deleted={isDeleted} currentUserId={me ?? undefined} />
                           </div>
                           {m.edited_at && !isDeleted && <span className="text-[10px] text-muted-foreground">(edited)</span>}
                           {!optimistic && !isDeleted && <MessageReactions messageType="channel" messageId={m.id} me={me} />}
