@@ -183,7 +183,7 @@ export const Route = createFileRoute("/api/public/resend-inbound")({
         }
 
         if (row) {
-          await supabaseAdmin.from("hq_emails").update(patch).eq("id", row.id);
+          await supabaseAdmin.from("hq_emails").update(patch as any).eq("id", row.id);
         }
 
         return new Response("ok");
