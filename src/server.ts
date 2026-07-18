@@ -47,6 +47,20 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      // Route the hq subdomain straight to the internal workspace login.
+      // Runs at the edge so it works during SSR, before any route renders.
+      const url = new URL(request.url);
+      const host = url.hostname.toLowerCase();
+      const isHqHost = host === "hq.clovrlab.com" || host.startsWith("hq.") || host.startsWith("hq--");
+      if (isHqHost && request.method === "GET") {
+        const p = url.pathname;
+        const isHqRoute = p === "/hq-login" || p.startsWith("/dashboard") || p.startsWith("/meeting") || p.startsWith("/auth");
+        const isAsset = p.startsWith("/_") || p.startsWith("/api/") || p.startsWith("/assets/") || /\.[a-zA-Z0-9]+$/.test(p);
+        // Any marketing path on the hq subdomain redirects to the login.
+        if (!isHqRoute && !isAsset) {
+          return Response.redirect(`${url.origin}/hq-login`, 302);
+        }
+      }
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
