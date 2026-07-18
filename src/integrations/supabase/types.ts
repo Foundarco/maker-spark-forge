@@ -4074,6 +4074,7 @@ export type Database = {
         Args: { _route: string; _user_id: string }
         Returns: boolean
       }
+      is_employee: { Args: { _user_id: string }; Returns: boolean }
       is_suspended: { Args: { _user_id: string }; Returns: boolean }
       mark_meeting_invite_joined: {
         Args: { _name?: string; _token: string }
