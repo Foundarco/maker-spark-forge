@@ -495,7 +495,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
       if (!audio) {
         audio = new Audio();
         audio.autoplay = true;
-        audio.playsInline = true;
+        audio.setAttribute("playsinline", "true");
         audio.className = "hidden";
         document.body.appendChild(audio);
         channelRemoteAudiosRef.current.set(remoteId, audio);
