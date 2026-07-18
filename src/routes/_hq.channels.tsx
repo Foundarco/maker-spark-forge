@@ -120,6 +120,22 @@ function ChannelsPage() {
 
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages]);
 
+  // Subscribe to channel call presence for the active channel
+  useEffect(() => {
+    if (!active) { setCallParticipants([]); return; }
+    const ch = supabase.channel(`channel-call:${active}`, { config: { presence: { key: `viewer-${Math.random().toString(36).slice(2)}` } } });
+    const sync = () => {
+      const state = ch.presenceState() as Record<string, any[]>;
+      const ids = Object.values(state).flat().map((p: any) => p.user_id).filter(Boolean);
+      setCallParticipants(Array.from(new Set(ids)));
+    };
+    ch.on("presence", { event: "sync" }, sync)
+      .on("presence", { event: "join" }, sync)
+      .on("presence", { event: "leave" }, sync)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [active]);
+
   const activeChannel = useMemo(() => channels.find((c) => c.id === active), [channels, active]);
 
   const ensureProfile = async (uid: string) => {
