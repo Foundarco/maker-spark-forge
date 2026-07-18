@@ -70,11 +70,16 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const savedIdsRef = useRef<Set<string>>(new Set());
   const pendingIceRef = useRef<RTCIceCandidateInit[]>([]);
   const inboxChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const peerChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const peerIdRef = useRef<string | null>(null);
+  // Cache one long-lived peer-inbox channel per peer id, keyed by peerId.
+  // Concurrent onicecandidate + offer/answer would previously race on a
+  // single ref, creating multiple channels and dropping signaling messages.
+  const peerChannelsRef = useRef<Map<string, Promise<ReturnType<typeof supabase.channel>>>>(new Map());
   const callIdRef = useRef<string | null>(null);
   const recognitionRef = useRef<any>(null);
   const recognitionActiveRef = useRef(false);
+  // Channel call presence (multi-user "in call" indicator; separate from 1:1 audio)
+  const [channelCall, setChannelCallState] = useState<{ channelId: string; channelName: string; isHost: boolean } | null>(null);
+  const channelCallChRef = useRef<any>(null);
 
   // Append a transcribed chunk to the active call's notes
   const appendNotes = useCallback((text: string) => {
