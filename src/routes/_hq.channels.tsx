@@ -37,7 +37,8 @@ function dayLabel(iso: string) {
 }
 
 function ChannelsPage() {
-  const { startCall, active: activeCall } = usePhone();
+  const { startCall, active: activeCall, channelCall, startChannelCall, joinChannelCall, leaveChannelCall } = usePhone();
+  const [callParticipants, setCallParticipants] = useState<string[]>([]);
   const navigate = useNavigate();
   const [me, setMe] = useState<string | null>(null);
   const [perms, setPerms] = useState<Permissions>({ manage_channels: false, manage_roles: false, manage_messages: false, admin: false });
