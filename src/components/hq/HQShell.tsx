@@ -8,6 +8,7 @@ import { RecordTabsProvider, useRecordTabs } from "@/lib/hq/record-tabs";
 import { navGroups } from "./nav-config";
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
 import { PhoneProvider } from "@/lib/hq/phone";
+import { SoundNotifier } from "./SoundNotifier";
 
 const HIDE_KEY = "hq.sidebar.hidden";
 
@@ -49,6 +50,7 @@ export function HQShell() {
     <PhoneProvider>
     <RecordTabsProvider>
       <TabAutoOpener />
+      <SoundNotifier />
       <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
         <aside
           className={`hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block ${

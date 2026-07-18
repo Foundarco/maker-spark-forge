@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { playRingback, playIncomingRing, stopAllCallSounds, playSound } from "@/lib/hq/sounds";
 
 export type CallStatus = "ringing" | "connecting" | "active" | "ended";
 export type CallKind = "user" | "channel";
@@ -72,6 +73,47 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const peerChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
   const peerIdRef = useRef<string | null>(null);
   const callIdRef = useRef<string | null>(null);
+  const recognitionRef = useRef<any>(null);
+  const recognitionActiveRef = useRef(false);
+
+  // Append a transcribed chunk to the active call's notes
+  const appendNotes = useCallback((text: string) => {
+    if (!text.trim()) return;
+    setActive((cur) => cur ? { ...cur, notes: (cur.notes ? cur.notes.trimEnd() + " " : "") + text.trim() } : cur);
+  }, []);
+
+  const startRecognition = useCallback(() => {
+    if (recognitionActiveRef.current) return;
+    const SR = (typeof window !== "undefined") && ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition);
+    if (!SR) return; // unsupported browser
+    try {
+      const rec = new SR();
+      rec.continuous = true;
+      rec.interimResults = false;
+      rec.lang = navigator.language || "en-US";
+      rec.onresult = (e: any) => {
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const r = e.results[i];
+          if (r.isFinal) appendNotes(r[0]?.transcript || "");
+        }
+      };
+      rec.onerror = () => {};
+      rec.onend = () => {
+        // Auto-restart while a call is still active
+        if (recognitionActiveRef.current) { try { rec.start(); } catch {} }
+      };
+      rec.start();
+      recognitionRef.current = rec;
+      recognitionActiveRef.current = true;
+    } catch {}
+  }, [appendNotes]);
+
+  const stopRecognition = useCallback(() => {
+    recognitionActiveRef.current = false;
+    const rec = recognitionRef.current;
+    if (rec) { try { rec.stop(); } catch {} }
+    recognitionRef.current = null;
+  }, []);
 
   // Persist history / autonotes
   useEffect(() => {
@@ -138,6 +180,8 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
       peerChannelRef.current = null;
       peerIdRef.current = null;
     }
+    stopAllCallSounds();
+    stopRecognition();
   };
 
   const createPeer = useCallback((remoteId: string, callId: string) => {
@@ -333,6 +377,34 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const updateNotes = useCallback((notes: string) => {
     setActive((cur) => cur ? { ...cur, notes } : cur);
   }, []);
+
+  // Ringing/connect/end sounds tied to call state
+  const prevStatusRef = useRef<CallStatus | null>(null);
+  useEffect(() => {
+    const status = active?.status ?? null;
+    const prev = prevStatusRef.current;
+    if (active?.direction === "outbound" && status === "ringing") {
+      playRingback();
+    } else {
+      stopAllCallSounds();
+      if (active && status === "active" && prev !== "active") playSound("call-connect");
+    }
+    if (!active && prev && prev !== "ended") playSound("call-end");
+    prevStatusRef.current = status;
+  }, [active?.status, active?.direction, active]);
+
+  // Incoming ring
+  useEffect(() => {
+    if (incoming) playIncomingRing();
+    else stopAllCallSounds();
+  }, [incoming]);
+
+  // Speech-to-text transcription during active call when auto-notes is on
+  useEffect(() => {
+    if (active?.status === "active" && autoNotesEnabled) startRecognition();
+    else stopRecognition();
+  }, [active?.status, autoNotesEnabled, startRecognition, stopRecognition]);
+
 
   return (
     <Ctx.Provider value={{

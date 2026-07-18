@@ -134,24 +134,20 @@ function PhonePage() {
           )}
         </div>
 
-        {/* Settings row */}
-        <div className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3">
-          <div className="flex items-center gap-2">
-            <StickyNote className="h-4 w-4 text-muted-foreground" />
-            <div>
-              <p className="text-sm font-medium">Auto-notes during calls</p>
-              <p className="text-[11px] text-muted-foreground">Off by default. When on, a notes field appears during calls and saves to Meeting Notes on end.</p>
-            </div>
-          </div>
-          <button
-            onClick={() => setAutoNotesEnabled(!autoNotesEnabled)}
-            className={`relative h-6 w-11 flex-shrink-0 rounded-full transition ${autoNotesEnabled ? "bg-primary" : "bg-muted"}`}
-            aria-pressed={autoNotesEnabled}
-            aria-label="Toggle auto-notes"
-          >
-            <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition ${autoNotesEnabled ? "left-5" : "left-0.5"}`} />
-          </button>
-        </div>
+        {/* Auto-notes toggle (compact) */}
+        <button
+          onClick={() => setAutoNotesEnabled(!autoNotesEnabled)}
+          aria-pressed={autoNotesEnabled}
+          className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 text-xs transition ${autoNotesEnabled ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground hover:bg-muted"}`}
+          title="When on, transcribed speech is captured to call notes and saved to Meeting Notes when the call ends."
+        >
+          <StickyNote className="h-3.5 w-3.5" />
+          Auto-notes {autoNotesEnabled ? "on" : "off"}
+          <span className={`ml-1 relative h-3.5 w-6 rounded-full transition ${autoNotesEnabled ? "bg-primary" : "bg-muted-foreground/30"}`}>
+            <span className={`absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white shadow transition ${autoNotesEnabled ? "left-3" : "left-0.5"}`} />
+          </span>
+        </button>
+
 
         {/* History */}
         <div className="flex-1 overflow-hidden rounded-xl border border-border bg-card">
