@@ -334,6 +334,7 @@ export type Database = {
           deleted_at: string | null
           edited_at: string | null
           id: string
+          mentions: string[] | null
           reply_to_id: string | null
         }
         Insert: {
@@ -345,6 +346,7 @@ export type Database = {
           deleted_at?: string | null
           edited_at?: string | null
           id?: string
+          mentions?: string[] | null
           reply_to_id?: string | null
         }
         Update: {
@@ -356,6 +358,7 @@ export type Database = {
           deleted_at?: string | null
           edited_at?: string | null
           id?: string
+          mentions?: string[] | null
           reply_to_id?: string | null
         }
         Relationships: [
@@ -454,6 +457,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      company_email_settings: {
+        Row: {
+          default_footer: string | null
+          from_name: string | null
+          id: string
+          reply_to: string | null
+          sender_domain: string | null
+          track_clicks: boolean
+          track_opens: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          default_footer?: string | null
+          from_name?: string | null
+          id?: string
+          reply_to?: string | null
+          sender_domain?: string | null
+          track_clicks?: boolean
+          track_opens?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          default_footer?: string | null
+          from_name?: string | null
+          id?: string
+          reply_to?: string | null
+          sender_domain?: string | null
+          track_clicks?: boolean
+          track_opens?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
       }
       contact_submissions: {
         Row: {
@@ -1053,6 +1092,7 @@ export type Database = {
           deleted_at: string | null
           edited_at: string | null
           id: string
+          mentions: string[] | null
           read_at: string | null
           recipient_id: string
           reply_to_id: string | null
@@ -1065,6 +1105,7 @@ export type Database = {
           deleted_at?: string | null
           edited_at?: string | null
           id?: string
+          mentions?: string[] | null
           read_at?: string | null
           recipient_id: string
           reply_to_id?: string | null
@@ -1077,6 +1118,7 @@ export type Database = {
           deleted_at?: string | null
           edited_at?: string | null
           id?: string
+          mentions?: string[] | null
           read_at?: string | null
           recipient_id?: string
           reply_to_id?: string | null
@@ -1088,6 +1130,107 @@ export type Database = {
             columns: ["reply_to_id"]
             isOneToOne: false
             referencedRelation: "direct_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drive_items: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          id: string
+          kind: string
+          mime_type: string | null
+          name: string
+          owner_id: string
+          parent_id: string | null
+          size_bytes: number | null
+          starred: boolean
+          storage_path: string | null
+          trashed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind: string
+          mime_type?: string | null
+          name: string
+          owner_id: string
+          parent_id?: string | null
+          size_bytes?: number | null
+          starred?: boolean
+          storage_path?: string | null
+          trashed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          kind?: string
+          mime_type?: string | null
+          name?: string
+          owner_id?: string
+          parent_id?: string | null
+          size_bytes?: number | null
+          starred?: boolean
+          storage_path?: string | null
+          trashed_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drive_items_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "drive_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drive_shares: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          permission: string
+          role_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          permission?: string
+          role_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          permission?: string
+          role_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drive_shares_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "drive_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drive_shares_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "custom_roles"
             referencedColumns: ["id"]
           },
         ]
@@ -3839,6 +3982,48 @@ export type Database = {
           },
         ]
       }
+      user_email_settings: {
+        Row: {
+          auto_reply_body: string | null
+          auto_reply_enabled: boolean
+          auto_reply_subject: string | null
+          created_at: string
+          digest_frequency: string
+          display_name: string | null
+          notify_on_mention: boolean
+          notify_on_new: boolean
+          signature: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_reply_body?: string | null
+          auto_reply_enabled?: boolean
+          auto_reply_subject?: string | null
+          created_at?: string
+          digest_frequency?: string
+          display_name?: string | null
+          notify_on_mention?: boolean
+          notify_on_new?: boolean
+          signature?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_reply_body?: string | null
+          auto_reply_enabled?: boolean
+          auto_reply_subject?: string | null
+          created_at?: string
+          digest_frequency?: string
+          display_name?: string | null
+          notify_on_mention?: boolean
+          notify_on_new?: boolean
+          signature?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -3865,6 +4050,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      drive_has_access: {
+        Args: { _item_id: string; _user_id: string }
+        Returns: boolean
+      }
       get_meeting_invite_by_token: {
         Args: { _meeting_id: string; _token: string }
         Returns: {
