@@ -1995,11 +1995,14 @@ export type Database = {
           cc: string | null
           created_at: string
           created_by: string | null
+          direction: string
           folder: string
           from_addr: string | null
           id: string
+          in_reply_to: string | null
           is_read: boolean
           mailbox: string
+          message_id: string | null
           owner_id: string | null
           sent_at: string | null
           status: string | null
@@ -2013,11 +2016,14 @@ export type Database = {
           cc?: string | null
           created_at?: string
           created_by?: string | null
+          direction?: string
           folder?: string
           from_addr?: string | null
           id?: string
+          in_reply_to?: string | null
           is_read?: boolean
           mailbox?: string
+          message_id?: string | null
           owner_id?: string | null
           sent_at?: string | null
           status?: string | null
@@ -2031,11 +2037,14 @@ export type Database = {
           cc?: string | null
           created_at?: string
           created_by?: string | null
+          direction?: string
           folder?: string
           from_addr?: string | null
           id?: string
+          in_reply_to?: string | null
           is_read?: boolean
           mailbox?: string
+          message_id?: string | null
           owner_id?: string | null
           sent_at?: string | null
           status?: string | null
