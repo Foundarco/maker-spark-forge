@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight, Phone, Video, StickyNote } from "lucide-react";
+import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight, Phone, Video } from "lucide-react";
+import { createInstantMeeting } from "@/lib/hq/instant-meeting";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
