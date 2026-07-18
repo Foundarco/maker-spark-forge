@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import {
   Inbox, Send, FileEdit, Archive, Flag, Trash2, Users, Filter, FileText,
-  Search, Plus, Reply, ReplyAll, Forward, Star, Paperclip, X, ChevronRight, MailOpen, Circle,
+  Search, Plus, Reply, ReplyAll, Forward, Star, Paperclip, X, ChevronRight, MailOpen, Circle, Settings as SettingsIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
