@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { PanelLeftOpen } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
+import { CommunicationSubNav } from "./CommunicationSubNav";
 import { RecordTabsProvider, useRecordTabs } from "@/lib/hq/record-tabs";
 import { navGroups } from "./nav-config";
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
