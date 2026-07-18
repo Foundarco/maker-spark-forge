@@ -5,9 +5,9 @@ export type HQTheme = "dark" | "light" | "system";
 const KEY = "hq-theme";
 
 export function getStoredTheme(): HQTheme {
-  if (typeof window === "undefined") return "dark";
+  if (typeof window === "undefined") return "light";
   const v = window.localStorage.getItem(KEY) as HQTheme | null;
-  return v === "light" || v === "dark" || v === "system" ? v : "dark";
+  return v === "light" || v === "dark" || v === "system" ? v : "light";
 }
 
 export function resolveTheme(t: HQTheme): "dark" | "light" {
