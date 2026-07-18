@@ -5,6 +5,17 @@ import {
   Search, Plus, Reply, ReplyAll, Forward, Star, Paperclip, X, ChevronRight, MailOpen, Circle,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { sendEmailViaResend } from "@/lib/hq/mail.functions";
+
+const DEFAULT_FROM_DOMAIN = "clovrlab.com";
+const MAILBOX_FROM: Record<string, string> = {
+  personal: `hq@${DEFAULT_FROM_DOMAIN}`,
+  support: `support@${DEFAULT_FROM_DOMAIN}`,
+  sales: `sales@${DEFAULT_FROM_DOMAIN}`,
+  info: `info@${DEFAULT_FROM_DOMAIN}`,
+  billing: `billing@${DEFAULT_FROM_DOMAIN}`,
+};
 
 export const Route = createFileRoute("/_hq/mail")({
   head: () => ({ meta: [{ title: "Mail — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
