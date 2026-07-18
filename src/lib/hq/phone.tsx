@@ -1,24 +1,28 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 
 export type CallStatus = "ringing" | "active" | "ended";
+export type CallKind = "user" | "channel";
 
 export type Call = {
   id: string;
   peerId: string;
   peerName: string;
+  kind: CallKind;
   direction: "outbound" | "inbound";
   status: CallStatus;
   startedAt: string;
   endedAt: string | null;
   muted: boolean;
+  notes: string;
 };
 
 type PhoneCtx = {
   active: Call | null;
   history: Call[];
-  startCall: (peerId: string, peerName: string) => void;
+  startCall: (peerId: string, peerName: string, kind?: CallKind) => void;
   endCall: () => void;
   toggleMute: () => void;
+  updateNotes: (notes: string) => void;
 };
 
 const Ctx = createContext<PhoneCtx | null>(null);
@@ -27,25 +31,29 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const [active, setActive] = useState<Call | null>(null);
   const [history, setHistory] = useState<Call[]>(() => {
     if (typeof window === "undefined") return [];
-    try { return JSON.parse(localStorage.getItem("hq.call.history") || "[]"); } catch { return []; }
+    try {
+      const raw = JSON.parse(localStorage.getItem("hq.call.history") || "[]");
+      return raw.map((c: any) => ({ kind: "user", notes: "", ...c })) as Call[];
+    } catch { return []; }
   });
 
   useEffect(() => {
     try { localStorage.setItem("hq.call.history", JSON.stringify(history.slice(0, 50))); } catch {}
   }, [history]);
 
-  const startCall = useCallback((peerId: string, peerName: string) => {
+  const startCall = useCallback((peerId: string, peerName: string, kind: CallKind = "user") => {
     const c: Call = {
       id: crypto.randomUUID(),
-      peerId, peerName,
+      peerId, peerName, kind,
       direction: "outbound",
       status: "ringing",
       startedAt: new Date().toISOString(),
       endedAt: null,
       muted: false,
+      notes: "",
     };
     setActive(c);
-    // Simulate answered after 1.2s
+    // Auto-answer after 1.2s (simulated)
     setTimeout(() => setActive((cur) => cur && cur.id === c.id ? { ...cur, status: "active" } : cur), 1200);
   }, []);
 
@@ -62,7 +70,11 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     setActive((cur) => cur ? { ...cur, muted: !cur.muted } : cur);
   }, []);
 
-  return <Ctx.Provider value={{ active, history, startCall, endCall, toggleMute }}>{children}</Ctx.Provider>;
+  const updateNotes = useCallback((notes: string) => {
+    setActive((cur) => cur ? { ...cur, notes } : cur);
+  }, []);
+
+  return <Ctx.Provider value={{ active, history, startCall, endCall, toggleMute, updateNotes }}>{children}</Ctx.Provider>;
 }
 
 export function usePhone() {
