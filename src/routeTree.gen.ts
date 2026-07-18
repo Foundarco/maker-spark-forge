@@ -172,7 +172,6 @@ import { Route as HqFilesVersionsRouteImport } from './routes/_hq.files-versions
 import { Route as HqFilesSharedRouteImport } from './routes/_hq.files-shared'
 import { Route as HqFilesPermissionsRouteImport } from './routes/_hq.files-permissions'
 import { Route as HqFilesBackupRouteImport } from './routes/_hq.files-backup'
-import { Route as HqFilesRouteImport } from './routes/_hq.files'
 import { Route as HqFeedRouteImport } from './routes/_hq.feed'
 import { Route as HqFactoryLiveRouteImport } from './routes/_hq.factory-live'
 import { Route as HqExpensesRouteImport } from './routes/_hq.expenses'
@@ -180,6 +179,7 @@ import { Route as HqEmployeesRouteImport } from './routes/_hq.employees'
 import { Route as HqEmailSupportRouteImport } from './routes/_hq.email-support'
 import { Route as HqEmailCampaignsRouteImport } from './routes/_hq.email-campaigns'
 import { Route as HqEcoRouteImport } from './routes/_hq.eco'
+import { Route as HqDriveRouteImport } from './routes/_hq.drive'
 import { Route as HqDocsRouteImport } from './routes/_hq.docs'
 import { Route as HqDmRouteImport } from './routes/_hq.dm'
 import { Route as HqDiscountsRouteImport } from './routes/_hq.discounts'
@@ -1046,11 +1046,6 @@ const HqFilesBackupRoute = HqFilesBackupRouteImport.update({
   path: '/files-backup',
   getParentRoute: () => HqRoute,
 } as any)
-const HqFilesRoute = HqFilesRouteImport.update({
-  id: '/files',
-  path: '/files',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqFeedRoute = HqFeedRouteImport.update({
   id: '/feed',
   path: '/feed',
@@ -1084,6 +1079,11 @@ const HqEmailCampaignsRoute = HqEmailCampaignsRouteImport.update({
 const HqEcoRoute = HqEcoRouteImport.update({
   id: '/eco',
   path: '/eco',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqDriveRoute = HqDriveRouteImport.update({
+  id: '/drive',
+  path: '/drive',
   getParentRoute: () => HqRoute,
 } as any)
 const HqDocsRoute = HqDocsRouteImport.update({
@@ -1409,6 +1409,7 @@ export interface FileRoutesByFullPath {
   '/discounts': typeof HqDiscountsRoute
   '/dm': typeof HqDmRoute
   '/docs': typeof HqDocsRoute
+  '/drive': typeof HqDriveRoute
   '/eco': typeof HqEcoRoute
   '/email-campaigns': typeof HqEmailCampaignsRoute
   '/email-support': typeof HqEmailSupportRoute
@@ -1416,7 +1417,6 @@ export interface FileRoutesByFullPath {
   '/expenses': typeof HqExpensesRoute
   '/factory-live': typeof HqFactoryLiveRoute
   '/feed': typeof HqFeedRoute
-  '/files': typeof HqFilesRoute
   '/files-backup': typeof HqFilesBackupRoute
   '/files-permissions': typeof HqFilesPermissionsRoute
   '/files-shared': typeof HqFilesSharedRoute
@@ -1631,6 +1631,7 @@ export interface FileRoutesByTo {
   '/discounts': typeof HqDiscountsRoute
   '/dm': typeof HqDmRoute
   '/docs': typeof HqDocsRoute
+  '/drive': typeof HqDriveRoute
   '/eco': typeof HqEcoRoute
   '/email-campaigns': typeof HqEmailCampaignsRoute
   '/email-support': typeof HqEmailSupportRoute
@@ -1638,7 +1639,6 @@ export interface FileRoutesByTo {
   '/expenses': typeof HqExpensesRoute
   '/factory-live': typeof HqFactoryLiveRoute
   '/feed': typeof HqFeedRoute
-  '/files': typeof HqFilesRoute
   '/files-backup': typeof HqFilesBackupRoute
   '/files-permissions': typeof HqFilesPermissionsRoute
   '/files-shared': typeof HqFilesSharedRoute
@@ -1855,6 +1855,7 @@ export interface FileRoutesById {
   '/_hq/discounts': typeof HqDiscountsRoute
   '/_hq/dm': typeof HqDmRoute
   '/_hq/docs': typeof HqDocsRoute
+  '/_hq/drive': typeof HqDriveRoute
   '/_hq/eco': typeof HqEcoRoute
   '/_hq/email-campaigns': typeof HqEmailCampaignsRoute
   '/_hq/email-support': typeof HqEmailSupportRoute
@@ -1862,7 +1863,6 @@ export interface FileRoutesById {
   '/_hq/expenses': typeof HqExpensesRoute
   '/_hq/factory-live': typeof HqFactoryLiveRoute
   '/_hq/feed': typeof HqFeedRoute
-  '/_hq/files': typeof HqFilesRoute
   '/_hq/files-backup': typeof HqFilesBackupRoute
   '/_hq/files-permissions': typeof HqFilesPermissionsRoute
   '/_hq/files-shared': typeof HqFilesSharedRoute
@@ -2080,6 +2080,7 @@ export interface FileRouteTypes {
     | '/discounts'
     | '/dm'
     | '/docs'
+    | '/drive'
     | '/eco'
     | '/email-campaigns'
     | '/email-support'
@@ -2087,7 +2088,6 @@ export interface FileRouteTypes {
     | '/expenses'
     | '/factory-live'
     | '/feed'
-    | '/files'
     | '/files-backup'
     | '/files-permissions'
     | '/files-shared'
@@ -2302,6 +2302,7 @@ export interface FileRouteTypes {
     | '/discounts'
     | '/dm'
     | '/docs'
+    | '/drive'
     | '/eco'
     | '/email-campaigns'
     | '/email-support'
@@ -2309,7 +2310,6 @@ export interface FileRouteTypes {
     | '/expenses'
     | '/factory-live'
     | '/feed'
-    | '/files'
     | '/files-backup'
     | '/files-permissions'
     | '/files-shared'
@@ -2525,6 +2525,7 @@ export interface FileRouteTypes {
     | '/_hq/discounts'
     | '/_hq/dm'
     | '/_hq/docs'
+    | '/_hq/drive'
     | '/_hq/eco'
     | '/_hq/email-campaigns'
     | '/_hq/email-support'
@@ -2532,7 +2533,6 @@ export interface FileRouteTypes {
     | '/_hq/expenses'
     | '/_hq/factory-live'
     | '/_hq/feed'
-    | '/_hq/files'
     | '/_hq/files-backup'
     | '/_hq/files-permissions'
     | '/_hq/files-shared'
@@ -3861,13 +3861,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqFilesBackupRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/files': {
-      id: '/_hq/files'
-      path: '/files'
-      fullPath: '/files'
-      preLoaderRoute: typeof HqFilesRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/feed': {
       id: '/_hq/feed'
       path: '/feed'
@@ -3915,6 +3908,13 @@ declare module '@tanstack/react-router' {
       path: '/eco'
       fullPath: '/eco'
       preLoaderRoute: typeof HqEcoRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/drive': {
+      id: '/_hq/drive'
+      path: '/drive'
+      fullPath: '/drive'
+      preLoaderRoute: typeof HqDriveRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/docs': {
@@ -4320,6 +4320,7 @@ interface HqRouteChildren {
   HqDiscountsRoute: typeof HqDiscountsRoute
   HqDmRoute: typeof HqDmRoute
   HqDocsRoute: typeof HqDocsRoute
+  HqDriveRoute: typeof HqDriveRoute
   HqEcoRoute: typeof HqEcoRoute
   HqEmailCampaignsRoute: typeof HqEmailCampaignsRoute
   HqEmailSupportRoute: typeof HqEmailSupportRoute
@@ -4327,7 +4328,6 @@ interface HqRouteChildren {
   HqExpensesRoute: typeof HqExpensesRoute
   HqFactoryLiveRoute: typeof HqFactoryLiveRoute
   HqFeedRoute: typeof HqFeedRoute
-  HqFilesRoute: typeof HqFilesRoute
   HqFilesBackupRoute: typeof HqFilesBackupRoute
   HqFilesPermissionsRoute: typeof HqFilesPermissionsRoute
   HqFilesSharedRoute: typeof HqFilesSharedRoute
@@ -4501,6 +4501,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqDiscountsRoute: HqDiscountsRoute,
   HqDmRoute: HqDmRoute,
   HqDocsRoute: HqDocsRoute,
+  HqDriveRoute: HqDriveRoute,
   HqEcoRoute: HqEcoRoute,
   HqEmailCampaignsRoute: HqEmailCampaignsRoute,
   HqEmailSupportRoute: HqEmailSupportRoute,
@@ -4508,7 +4509,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqExpensesRoute: HqExpensesRoute,
   HqFactoryLiveRoute: HqFactoryLiveRoute,
   HqFeedRoute: HqFeedRoute,
-  HqFilesRoute: HqFilesRoute,
   HqFilesBackupRoute: HqFilesBackupRoute,
   HqFilesPermissionsRoute: HqFilesPermissionsRoute,
   HqFilesSharedRoute: HqFilesSharedRoute,
