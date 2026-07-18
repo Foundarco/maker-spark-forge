@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Phone, PhoneIncoming, PhoneOutgoing, PhoneOff, Search, User as UserIcon, Mic, MicOff } from "lucide-react";
+import { Phone, PhoneIncoming, PhoneOutgoing, PhoneOff, Search, Mic, MicOff, StickyNote } from "lucide-react";
 import { usePhone, formatDuration } from "@/lib/hq/phone";
 
 export const Route = createFileRoute("/_hq/phone")({
