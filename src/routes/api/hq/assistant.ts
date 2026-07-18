@@ -71,9 +71,10 @@ ${JSON.stringify(snapshot, null, 2)}
 
 Guidance:
 - Be concise, direct, practical, use markdown.
-- When asked "what's going on today" or "summarize", use the snapshot to name specific numbers, meetings, and notifications.
+- When the snapshot doesn't have what you need, CALL A TOOL: searchPeople, listDeals, listTickets, listTasks, upcomingMeetings, or workspaceStats. Prefer tools over guessing.
+- When asked "what's going on today" or "summarize", use the snapshot + tools to name specific numbers, meetings, and notifications.
 - When the user asks to *do* something (create a ticket, send an email, invite someone), explain the exact page in HQ to do it (e.g. "open /tickets → New").
-- Never fabricate specific people, deals, or ticket numbers that aren't in the snapshot.`;
+- Never fabricate specific people, deals, or ticket numbers — look them up with a tool.`;
 
         const tools = buildTools(supabase);
 
