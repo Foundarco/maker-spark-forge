@@ -1,6 +1,6 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, Sparkles } from "lucide-react";
+import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose } from "lucide-react";
 import { navGroups } from "./nav-config";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +13,7 @@ const ALWAYS_VISIBLE = new Set<string>([
 
 type Profile = { full_name: string | null; email: string | null; department: string | null };
 
-export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; onCollapse?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
@@ -66,28 +66,36 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   };
 
   return (
-    <nav className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
-      {/* Brand */}
-      <div className="flex items-center gap-2.5 px-5 py-4">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-sidebar-accent text-sidebar-accent-foreground">
-          <Sparkles className="h-4 w-4" />
+    <nav
+      className="flex h-full flex-col text-sidebar-foreground"
+      style={{ background: "var(--sidebar-gradient)" }}
+    >
+      {/* Workspace card */}
+      <div className="px-3 pt-4">
+        <div className="flex items-center gap-2">
+          <button className="flex flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3 py-2.5 text-left hover:bg-white/[0.10]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-bold text-sidebar-accent-foreground">
+              {initials || "CL"}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Lab</p>
+              <p className="truncate text-[11px] text-sidebar-muted">Internal Workspace</p>
+            </div>
+            <ChevronDown className="h-3.5 w-3.5 text-sidebar-muted" />
+          </button>
+          {onCollapse && (
+            <button
+              onClick={onCollapse}
+              className="hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-sidebar-muted hover:bg-white/[0.10] hover:text-sidebar-foreground lg:flex"
+              aria-label="Collapse sidebar"
+            >
+              <PanelLeftClose className="h-4 w-4" />
+            </button>
+          )}
         </div>
-        <p className="flex-1 truncate text-[15px] font-semibold tracking-tight">Clovr HQ</p>
       </div>
 
-      {/* Workspace card */}
-      <div className="px-3">
-        <button className="flex w-full items-center gap-3 rounded-xl bg-[color-mix(in_oklab,var(--sidebar-foreground)_6%,transparent)] px-3 py-2.5 text-left hover:bg-sidebar-hover">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-accent/25 text-[11px] font-bold text-sidebar-foreground">
-            {initials || "CL"}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Lab</p>
-            <p className="truncate text-[11px] text-sidebar-muted">Internal Workspace</p>
-          </div>
-          <ChevronDown className="h-3.5 w-3.5 text-sidebar-muted" />
-        </button>
-      </div>
+
 
       {/* Search */}
       <form onSubmit={onSearch} className="px-3 pt-3">
@@ -155,7 +163,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
       {/* Footer links */}
       <div className="border-t border-sidebar-border px-3 py-2 text-[13px]">
-        <Link to="/settings" onClick={onNavigate} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground/75 hover:bg-sidebar-hover hover:text-sidebar-foreground">
+        <Link to="/help" onClick={onNavigate} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground/75 hover:bg-sidebar-hover hover:text-sidebar-foreground">
           <HelpCircle className="h-[15px] w-[15px] text-sidebar-muted" />
           Help & Support
         </Link>
