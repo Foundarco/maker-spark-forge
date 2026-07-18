@@ -554,7 +554,7 @@ function OnboardingTab() {
   return (
     <div>
       <div className="mb-4 flex items-center gap-3">
-        <p className="text-sm text-muted-foreground">Tasks are auto-created from department templates when a user accepts their invite. Manage templates in <a className="text-primary hover:underline" href="/admin/access">Admin → Access</a>.</p>
+        <p className="text-sm text-muted-foreground">Tasks are auto-created from department templates when a user accepts their invite. Manage templates in <a className="text-primary hover:underline" href="/admin/company?tab=onboarding">Admin → Onboarding</a>.</p>
       </div>
       {employees.length === 0 && <p className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-muted-foreground">No employees.</p>}
       <div className="space-y-4">
