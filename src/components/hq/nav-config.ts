@@ -9,7 +9,7 @@ import {
   Globe, Send, Share2, Palette, BarChart3, Rocket,
   Target, Map, StickyNote, Handshake, Gavel, Compass,
   IdCard, UserSearch, ClipboardCheck as OnboardIcon, Clock, Star, Network,
-  FolderOpen, Share, Lock, FileCode,
+  HardDrive, Share, Lock, FileCode,
   Inbox, SendHorizontal, Users as UsersAlt, Filter as FilterAlt,
   Server, Plug, ScrollText as LogsIcon,
   Lightbulb,
@@ -40,14 +40,13 @@ export const navGroups: NavGroup[] = [
       { label: "Email", to: "/mail", icon: Inbox },
       { label: "Communication", to: "/channels", icon: Hash },
       { label: "Calendar", to: "/calendar", icon: Calendar },
-      { label: "Cloud Storage", to: "/files", icon: FolderOpen },
+      { label: "Drive", to: "/drive", icon: HardDrive },
       { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
     ],
   },
   {
     label: "Product Team",
     items: [
-      // Engineering
       { label: "Projects", to: "/projects", icon: FolderKanban },
       { label: "Tasks & Boards", to: "/tasks", icon: CheckSquare },
       { label: "Milestones & Roadmap", to: "/milestones", icon: Flag },
@@ -56,11 +55,9 @@ export const navGroups: NavGroup[] = [
       { label: "BOM & Change Orders", to: "/bom", icon: ListTree },
       { label: "Reviews & Testing", to: "/design-reviews", icon: Eye },
       { label: "Issues", to: "/issues", icon: Bug },
-      // Product catalog
       { label: "Product Catalog", to: "/product-catalog", icon: ProdIcon },
       { label: "Features & Compatibility", to: "/product-features", icon: Sparkles },
       { label: "Documentation", to: "/docs", icon: BookText },
-      // Manufacturing
       { label: "Assembly Floor · Live", to: "/factory-live", icon: Activity },
       { label: "Production & Work Orders", to: "/production", icon: Factory },
       { label: "Inventory & Warehouse", to: "/inventory", icon: Boxes },
@@ -68,7 +65,6 @@ export const navGroups: NavGroup[] = [
       { label: "Packaging & Shipping", to: "/packaging", icon: Package },
       { label: "Suppliers & Purchasing", to: "/suppliers", icon: Store },
       { label: "Shipping Tracking", to: "/shipping-tracking", icon: MapPin },
-      // Development
       { label: "Code & Repos", to: "/repos", icon: GitBranch },
       { label: "Software & APIs", to: "/software-apis", icon: Terminal },
       { label: "Integrations", to: "/it-integrations", icon: Plug },
@@ -76,7 +72,6 @@ export const navGroups: NavGroup[] = [
       { label: "Security & Logs", to: "/it-security", icon: Shield },
     ],
   },
-
   {
     label: "Customer Service",
     items: [
