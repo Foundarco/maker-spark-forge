@@ -88,5 +88,6 @@ export function HQShell() {
         </div>
       </div>
     </RecordTabsProvider>
+    </PhoneProvider>
   );
 }
