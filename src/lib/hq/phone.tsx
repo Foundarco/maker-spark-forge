@@ -89,7 +89,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const recognitionRef = useRef<any>(null);
   const recognitionActiveRef = useRef(false);
   // Channel call presence (multi-user "in call" indicator; separate from 1:1 audio)
-  const [channelCall, setChannelCallState] = useState<{ channelId: string; channelName: string; isHost: boolean } | null>(null);
+  const [channelCall, setChannelCallState] = useState<ChannelCallState | null>(null);
   const channelCallChRef = useRef<any>(null);
   const channelCallSessionIdRef = useRef<string | null>(null);
 
@@ -436,7 +436,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   // -------------------- Channel call (multi-user presence room) --------------------
   // Presence-based only in this iteration: participants show up as "in call"
   // in the channel header for everyone. Actual audio is 1:1 via DM/user calls.
-  const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean, sessionId = crypto.randomUUID()) => {
+  const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean, sessionId: string = crypto.randomUUID()) => {
     if (!meIdRef.current) return;
     if (channelCallChRef.current) {
       try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current, session_id: channelCallSessionIdRef.current } }); } catch {}
