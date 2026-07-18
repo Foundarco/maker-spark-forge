@@ -226,15 +226,8 @@ function DMPage() {
           </div>
         ) : (
           <>
-            <header className="flex items-center gap-3 border-b border-border px-5 py-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                {initials(activeProfile?.full_name || activeProfile?.email || "")}
-              </div>
-              <button onClick={(e) => active && setOpenProfile({ userId: active, x: e.clientX, y: e.clientY })} className="text-left hover:underline">
-                <p className="text-sm font-semibold">{activeProfile?.full_name || activeProfile?.email}</p>
-                {activeProfile?.department && <p className="text-xs text-muted-foreground">{activeProfile.department}</p>}
-              </button>
-            </header>
+            <DMHeader active={active} activeProfile={activeProfile} onOpenProfile={(x, y) => active && setOpenProfile({ userId: active, x, y })} />
+
             <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto px-5 py-4">
               {thread.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet. Say hello.</p>}
               {rendered.map((r) => {
