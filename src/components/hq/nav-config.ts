@@ -37,20 +37,10 @@ export const navGroups: NavGroup[] = [
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Assistant", to: "/assistant", icon: Bot },
+      { label: "Email", to: "/mail", icon: Inbox },
+      { label: "Workspace", to: "/channels", icon: Hash },
       { label: "Cloud Storage", to: "/files", icon: FolderOpen },
       { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
-    ],
-  },
-  {
-    label: "Email",
-    items: [
-      { label: "Email", to: "/mail", icon: Inbox },
-    ],
-  },
-  {
-    label: "Communication",
-    items: [
-      { label: "Workspace", to: "/channels", icon: Hash },
     ],
   },
   {
