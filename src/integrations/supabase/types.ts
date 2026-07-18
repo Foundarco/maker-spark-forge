@@ -1916,6 +1916,39 @@ export type Database = {
         }
         Relationships: []
       }
+      hq_email_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          message_id: string | null
+          occurred_at: string
+          payload: Json | null
+          recipient: string | null
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          message_id?: string | null
+          occurred_at?: string
+          payload?: Json | null
+          recipient?: string | null
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          message_id?: string | null
+          occurred_at?: string
+          payload?: Json | null
+          recipient?: string | null
+          subject?: string | null
+        }
+        Relationships: []
+      }
       hq_email_rules: {
         Row: {
           action: string
@@ -1992,18 +2025,26 @@ export type Database = {
         Row: {
           bcc: string | null
           body: string | null
+          bounced_at: string | null
           cc: string | null
+          clicks_count: number
+          complained_at: string | null
           created_at: string
           created_by: string | null
+          delivered_at: string | null
           direction: string
           folder: string
           from_addr: string | null
           id: string
           in_reply_to: string | null
           is_read: boolean
+          last_event: string | null
+          last_event_at: string | null
           mailbox: string
           message_id: string | null
+          opens_count: number
           owner_id: string | null
+          scheduled_at: string | null
           sent_at: string | null
           status: string | null
           subject: string
@@ -2013,18 +2054,26 @@ export type Database = {
         Insert: {
           bcc?: string | null
           body?: string | null
+          bounced_at?: string | null
           cc?: string | null
+          clicks_count?: number
+          complained_at?: string | null
           created_at?: string
           created_by?: string | null
+          delivered_at?: string | null
           direction?: string
           folder?: string
           from_addr?: string | null
           id?: string
           in_reply_to?: string | null
           is_read?: boolean
+          last_event?: string | null
+          last_event_at?: string | null
           mailbox?: string
           message_id?: string | null
+          opens_count?: number
           owner_id?: string | null
+          scheduled_at?: string | null
           sent_at?: string | null
           status?: string | null
           subject: string
@@ -2034,18 +2083,26 @@ export type Database = {
         Update: {
           bcc?: string | null
           body?: string | null
+          bounced_at?: string | null
           cc?: string | null
+          clicks_count?: number
+          complained_at?: string | null
           created_at?: string
           created_by?: string | null
+          delivered_at?: string | null
           direction?: string
           folder?: string
           from_addr?: string | null
           id?: string
           in_reply_to?: string | null
           is_read?: boolean
+          last_event?: string | null
+          last_event_at?: string | null
           mailbox?: string
           message_id?: string | null
+          opens_count?: number
           owner_id?: string | null
+          scheduled_at?: string | null
           sent_at?: string | null
           status?: string | null
           subject?: string
