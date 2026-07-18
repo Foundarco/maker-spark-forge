@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { playRingback, playIncomingRing, stopAllCallSounds, playSound } from "@/lib/hq/sounds";
 
 export type CallStatus = "ringing" | "connecting" | "active" | "ended";
 export type CallKind = "user" | "channel";
