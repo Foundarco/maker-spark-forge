@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Send, Paperclip, X, Loader2, Reply } from "lucide-react";
 import { EmojiPickerButton } from "./EmojiPickerButton";
+import { MentionPicker, type MentionCandidate } from "./MentionPicker";
+import { extractMentionIds } from "@/lib/hq/mentions";
 
 export type Attachment = { path: string; url: string; name: string; type: string; size: number };
 
 export function MessageComposer({
   onSend, placeholder, userId, replyTo, onCancelReply,
 }: {
-  onSend: (body: string, attachments: Attachment[]) => Promise<void> | void;
+  onSend: (body: string, attachments: Attachment[], mentions: string[]) => Promise<void> | void;
   placeholder?: string;
   userId: string;
   replyTo?: { name: string; body: string; deleted?: boolean } | null;
@@ -20,7 +22,43 @@ export function MessageComposer({
   const taRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Mention picker state
+  const [mention, setMention] = useState<{ query: string; anchor: { x: number; y: number } | null; start: number } | null>(null);
+
   useEffect(() => { if (replyTo) taRef.current?.focus(); }, [replyTo]);
+
+  const updateMentionFromCaret = () => {
+    const ta = taRef.current;
+    if (!ta) return;
+    const val = ta.value;
+    const caret = ta.selectionStart ?? 0;
+    // find last '@' before caret with only word chars after it
+    let i = caret - 1;
+    while (i >= 0 && /[A-Za-z0-9 ._-]/.test(val[i])) i--;
+    if (i < 0 || val[i] !== "@") { setMention(null); return; }
+    // must be preceded by whitespace or line start
+    if (i > 0 && !/\s/.test(val[i - 1])) { setMention(null); return; }
+    const query = val.slice(i + 1, caret);
+    if (query.length > 30) { setMention(null); return; }
+    const rect = ta.getBoundingClientRect();
+    setMention({ query, start: i, anchor: { x: rect.left + 8, y: rect.top - 8 - 6 * 32 } });
+  };
+
+  const pickMention = (u: MentionCandidate) => {
+    if (!mention || !taRef.current) return;
+    const ta = taRef.current;
+    const before = text.slice(0, mention.start);
+    const after = text.slice(ta.selectionStart ?? 0);
+    const token = `@[${u.full_name || u.email || "User"}](${u.id})`;
+    const next = `${before}${token} ${after}`;
+    setText(next);
+    setMention(null);
+    setTimeout(() => {
+      ta.focus();
+      const pos = (before + token + " ").length;
+      ta.selectionStart = ta.selectionEnd = pos;
+    }, 0);
+  };
 
   const insertEmoji = (e: string) => {
     const ta = taRef.current;
@@ -52,9 +90,11 @@ export function MessageComposer({
     e?.preventDefault();
     const body = text.trim();
     if (!body && attaching.length === 0) return;
-    await onSend(body, attaching);
+    const mentions = extractMentionIds(body);
+    await onSend(body, attaching, mentions);
     setText("");
     setAttaching([]);
+    setMention(null);
     taRef.current?.focus();
   };
 
@@ -93,10 +133,16 @@ export function MessageComposer({
         <textarea
           ref={taRef}
           value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void submit(); } if (e.key === "Escape" && replyTo) onCancelReply?.(); }}
+          onChange={(e) => { setText(e.target.value); setTimeout(updateMentionFromCaret, 0); }}
+          onKeyUp={updateMentionFromCaret}
+          onClick={updateMentionFromCaret}
+          onKeyDown={(e) => {
+            if (mention && (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "Enter" || e.key === "Tab" || e.key === "Escape")) return;
+            if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void submit(); }
+            if (e.key === "Escape" && replyTo) onCancelReply?.();
+          }}
           rows={1}
-          placeholder={placeholder ?? "Type a message…"}
+          placeholder={placeholder ?? "Type a message… @ to mention"}
           className="max-h-32 flex-1 resize-none bg-transparent px-1 text-sm outline-none placeholder:text-muted-foreground"
         />
         <EmojiPickerButton onPick={insertEmoji} />
@@ -104,6 +150,14 @@ export function MessageComposer({
           <Send className="h-4 w-4" />
         </button>
       </div>
+      {mention && (
+        <MentionPicker
+          query={mention.query}
+          anchor={mention.anchor}
+          onPick={pickMention}
+          onClose={() => setMention(null)}
+        />
+      )}
     </form>
   );
 }
