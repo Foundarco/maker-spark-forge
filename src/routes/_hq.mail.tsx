@@ -145,7 +145,7 @@ function MailClient() {
     }
   }, [selected?.id]);
 
-  const openCompose = (init?: Partial<{ to: string; cc: string; subject: string; body: string; mailbox: string }>) => {
+  const openCompose = (init?: Partial<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo: string | null }>) => {
     setCompose({
       to: init?.to ?? "",
       cc: init?.cc ?? "",
