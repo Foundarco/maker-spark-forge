@@ -163,7 +163,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
 
       {/* Footer links */}
       <div className="border-t border-sidebar-border px-3 py-2 text-[13px]">
-        <Link to="/settings" onClick={onNavigate} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground/75 hover:bg-sidebar-hover hover:text-sidebar-foreground">
+        <Link to="/help" onClick={onNavigate} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground/75 hover:bg-sidebar-hover hover:text-sidebar-foreground">
           <HelpCircle className="h-[15px] w-[15px] text-sidebar-muted" />
           Help & Support
         </Link>
