@@ -49,12 +49,14 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
   const call = () => {
     if (!profile || active) return;
     onClose();
-    startCall(userId, name);
-    navigate({ to: "/phone" });
+    startCall(userId, name, "user");
   };
-  const meet = () => {
+  const meet = async () => {
+    if (!profile) return;
     onClose();
-    navigate({ to: "/meetings" });
+    const { createInstantMeeting } = await import("@/lib/hq/instant-meeting");
+    const id = await createInstantMeeting(`Meeting with ${name}`, [userId]);
+    if (id) navigate({ to: "/meeting/$id", params: { id } });
   };
   const notes = () => {
     onClose();
