@@ -1,13 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight } from "lucide-react";
+import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight, Phone, Video } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
 import { ProfilePopover } from "@/components/hq/ProfilePopover";
 import { ChannelAccessDialog } from "@/components/hq/ChannelAccessDialog";
 import { loadMyPermissions, type Permissions } from "@/lib/hq/permissions";
+import { usePhone } from "@/lib/hq/phone";
+import { createInstantMeeting } from "@/lib/hq/instant-meeting";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_hq/channels")({
   head: () => ({ meta: [{ title: "Channels — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
