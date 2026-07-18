@@ -144,7 +144,7 @@ function ChannelsPage() {
     if (data) setProfiles((prev) => ({ ...prev, [uid]: data as Profile }));
   };
 
-  const send = async (body: string, attachments: Attachment[]) => {
+  const send = async (body: string, attachments: Attachment[], mentions: string[]) => {
     if ((!body && attachments.length === 0) || !me || !active) return;
     const tempId = `tmp-${crypto.randomUUID()}`;
     const replyId = replyingTo?.id && !replyingTo.id.startsWith("tmp-") ? replyingTo.id : null;
@@ -152,7 +152,7 @@ function ChannelsPage() {
     setMessages((prev) => [...prev, optimistic]);
     setReplyingTo(null);
     await ensureProfile(me);
-    const { data, error } = await supabase.from("channel_messages").insert({ channel_id: active, author_id: me, body, attachments: attachments as any, reply_to_id: replyId } as any).select().single();
+    const { data, error } = await supabase.from("channel_messages").insert({ channel_id: active, author_id: me, body, attachments: attachments as any, reply_to_id: replyId, mentions } as any).select().single();
     if (error) { setMessages((prev) => prev.filter((m) => m.id !== tempId)); alert(error.message); return; }
     if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as ChannelMessage) : m));
   };
