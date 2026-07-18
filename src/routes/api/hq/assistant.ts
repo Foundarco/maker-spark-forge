@@ -75,10 +75,14 @@ Guidance:
 - When the user asks to *do* something (create a ticket, send an email, invite someone), explain the exact page in HQ to do it (e.g. "open /tickets → New").
 - Never fabricate specific people, deals, or ticket numbers that aren't in the snapshot.`;
 
+        const tools = buildTools(supabase);
+
         const result = streamText({
           model,
           system: systemPrompt,
           messages: await convertToModelMessages(messages),
+          tools,
+          stopWhen: stepCountIs(8),
         });
 
         return result.toUIMessageStreamResponse({ originalMessages: messages });
@@ -86,3 +90,75 @@ Guidance:
     },
   },
 });
+
+function buildTools(supabase: SupabaseClient) {
+  return {
+    searchPeople: tool({
+      description: "Search company staff by name. Use to look up who someone is or find their department/email.",
+      inputSchema: z.object({ query: z.string().min(1).describe("Partial name to search") }),
+      execute: async ({ query }) => {
+        const { data } = await supabase.from("profiles").select("id, full_name, email, department").ilike("full_name", `%${query}%`).limit(10);
+        return data ?? [];
+      },
+    }),
+    listDeals: tool({
+      description: "List sales deals visible to the user, optionally filtered by stage (e.g. 'won', 'lost', 'negotiation').",
+      inputSchema: z.object({ stage: z.string().optional(), limit: z.number().int().min(1).max(50).default(20) }),
+      execute: async ({ stage, limit }) => {
+        let q = supabase.from("sales_deals").select("id, name, amount, stage, close_date").order("updated_at", { ascending: false }).limit(limit);
+        if (stage) q = q.eq("stage", stage);
+        const { data } = await q;
+        return data ?? [];
+      },
+    }),
+    listTickets: tool({
+      description: "List customer service tickets, optionally filtered by status.",
+      inputSchema: z.object({ status: z.string().optional(), limit: z.number().int().min(1).max(50).default(20) }),
+      execute: async ({ status, limit }) => {
+        let q = supabase.from("cs_tickets").select("id, subject, status, priority, customer_email, updated_at").order("updated_at", { ascending: false }).limit(limit);
+        if (status) q = q.eq("status", status);
+        const { data } = await q;
+        return data ?? [];
+      },
+    }),
+    listTasks: tool({
+      description: "List engineering tasks. Filter by status or assignee_id (uuid).",
+      inputSchema: z.object({ status: z.string().optional(), assignee_id: z.string().uuid().optional(), limit: z.number().int().min(1).max(50).default(20) }),
+      execute: async ({ status, assignee_id, limit }) => {
+        let q = supabase.from("eng_tasks").select("id, title, status, priority, assignee_id, due_date, updated_at").order("updated_at", { ascending: false }).limit(limit);
+        if (status) q = q.eq("status", status);
+        if (assignee_id) q = q.eq("assignee_id", assignee_id);
+        const { data } = await q;
+        return data ?? [];
+      },
+    }),
+    upcomingMeetings: tool({
+      description: "List meetings starting in the next N days (default 7).",
+      inputSchema: z.object({ days: z.number().int().min(1).max(30).default(7) }),
+      execute: async ({ days }) => {
+        const end = new Date(); end.setDate(end.getDate() + days);
+        const { data } = await supabase.from("meetings").select("id, title, starts_at, ends_at, host_id").gte("starts_at", new Date().toISOString()).lte("starts_at", end.toISOString()).order("starts_at").limit(20);
+        return data ?? [];
+      },
+    }),
+    workspaceStats: tool({
+      description: "Get high-level KPIs: active employees, open tickets, open work orders, pipeline value.",
+      inputSchema: z.object({}),
+      execute: async () => {
+        const [emp, tickets, work, deals] = await Promise.all([
+          supabase.from("hr_employees").select("id", { count: "exact", head: true }).eq("status", "active"),
+          supabase.from("cs_tickets").select("id", { count: "exact", head: true }).not("status", "in", "(resolved,closed)"),
+          supabase.from("mfg_work_orders").select("id", { count: "exact", head: true }).not("status", "in", "(done,closed)"),
+          supabase.from("sales_deals").select("amount, stage"),
+        ]);
+        const pipeline = (deals.data || []).filter((d: any) => d.stage !== "won" && d.stage !== "lost").reduce((s: number, d: any) => s + Number(d.amount || 0), 0);
+        return {
+          active_employees: emp.count ?? 0,
+          open_tickets: tickets.count ?? 0,
+          open_work_orders: work.count ?? 0,
+          pipeline_value: pipeline,
+        };
+      },
+    }),
+  };
+}
