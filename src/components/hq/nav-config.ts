@@ -89,7 +89,7 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Growth",
+    label: "Growth Team",
     items: [
       { label: "Pipeline & CRM", to: "/pipeline", icon: Filter },
       { label: "Orders & Contracts", to: "/orders", icon: Receipt },
@@ -105,7 +105,7 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "HR & Administration",
+    label: "Operations Team",
     items: [
       { label: "People", to: "/employees", icon: IdCard },
       { label: "Hiring", to: "/hiring", icon: UserSearch },
