@@ -94,18 +94,8 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
           )}
         </div>
       </div>
-      <div className="px-3">
-        <button className="flex w-full items-center gap-3 rounded-xl bg-[color-mix(in_oklab,var(--sidebar-foreground)_6%,transparent)] px-3 py-2.5 text-left hover:bg-sidebar-hover">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-accent/25 text-[11px] font-bold text-sidebar-foreground">
-            {initials || "CL"}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Lab</p>
-            <p className="truncate text-[11px] text-sidebar-muted">Internal Workspace</p>
-          </div>
-          <ChevronDown className="h-3.5 w-3.5 text-sidebar-muted" />
-        </button>
-      </div>
+
+
 
       {/* Search */}
       <form onSubmit={onSearch} className="px-3 pt-3">
