@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { Bell, LogOut, User as UserIcon, Menu, Plus, Phone, Grid3x3, Sun } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Bell, LogOut, User as UserIcon, Menu, Phone, Grid3x3, Calendar as CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { RecordTabs } from "./RecordTabs";
