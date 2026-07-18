@@ -156,19 +156,33 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Send to peer via their inbox channel
-  const sendToPeer = useCallback(async (peerId: string, event: string, payload: any) => {
-    if (!peerChannelRef.current || peerIdRef.current !== peerId) {
-      if (peerChannelRef.current) supabase.removeChannel(peerChannelRef.current);
-      const ch = supabase.channel(`phone:${peerId}`);
-      await new Promise<void>((res) => {
-        ch.subscribe((status) => { if (status === "SUBSCRIBED") res(); });
+  // Send to peer via their inbox channel. Race-safe: the first call for a
+  // given peer creates and subscribes the channel; concurrent calls reuse
+  // the same promise so ICE and offer/answer don't stomp on each other.
+  const getPeerChannel = useCallback((peerId: string) => {
+    const cache = peerChannelsRef.current;
+    let p = cache.get(peerId);
+    if (!p) {
+      p = new Promise((resolve) => {
+        const ch = supabase.channel(`phone:${peerId}`);
+        ch.subscribe((status) => { if (status === "SUBSCRIBED") resolve(ch); });
       });
-      peerChannelRef.current = ch;
-      peerIdRef.current = peerId;
+      cache.set(peerId, p);
     }
-    await peerChannelRef.current!.send({ type: "broadcast", event, payload });
+    return p;
   }, []);
+
+  const sendToPeer = useCallback(async (peerId: string, event: string, payload: any) => {
+    const ch = await getPeerChannel(peerId);
+    await ch.send({ type: "broadcast", event, payload });
+  }, [getPeerChannel]);
+
+  const dropPeerChannels = () => {
+    for (const p of peerChannelsRef.current.values()) {
+      p.then((ch) => { try { supabase.removeChannel(ch); } catch {} });
+    }
+    peerChannelsRef.current.clear();
+  };
 
   const cleanupMedia = () => {
     if (pcRef.current) {
@@ -180,11 +194,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
       localStreamRef.current = null;
     }
     pendingIceRef.current = [];
-    if (peerChannelRef.current) {
-      supabase.removeChannel(peerChannelRef.current);
-      peerChannelRef.current = null;
-      peerIdRef.current = null;
-    }
+    dropPeerChannels();
     stopAllCallSounds();
     stopRecognition();
   };
