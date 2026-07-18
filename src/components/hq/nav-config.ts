@@ -39,27 +39,18 @@ export const navGroups: NavGroup[] = [
       { label: "Assistant", to: "/assistant", icon: Bot },
       { label: "Cloud Storage", to: "/files", icon: FolderOpen },
       { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
-      { label: "Settings", to: "/settings", icon: Settings },
     ],
   },
   {
     label: "Email",
     items: [
-      { label: "Inbox", to: "/mail", icon: Inbox },
-      { label: "Sent & Drafts", to: "/mail-sent", icon: SendHorizontal },
-      { label: "Shared Mailboxes", to: "/mail-shared", icon: UsersAlt },
-      { label: "Rules & Templates", to: "/mail-rules", icon: FilterAlt },
+      { label: "Email", to: "/mail", icon: Inbox },
     ],
   },
-
   {
     label: "Communication",
     items: [
-      { label: "Messages", to: "/dm", icon: MessagesSquare },
-      { label: "Channels", to: "/channels", icon: Hash },
-      { label: "Meetings", to: "/meetings", icon: Video },
-      { label: "Meeting Notes", to: "/meeting-notes", icon: StickyNote },
-      { label: "Calendar", to: "/calendar", icon: Calendar },
+      { label: "Workspace", to: "/channels", icon: Hash },
     ],
   },
   {
