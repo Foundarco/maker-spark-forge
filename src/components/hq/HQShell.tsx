@@ -1,12 +1,31 @@
-import { Outlet } from "@tanstack/react-router";
+import { Outlet, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PanelLeftOpen } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
-import { RecordTabsProvider } from "@/lib/hq/record-tabs";
+import { RecordTabsProvider, useRecordTabs } from "@/lib/hq/record-tabs";
+import { navGroups } from "./nav-config";
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
 
 const HIDE_KEY = "hq.sidebar.hidden";
+
+function TabAutoOpener() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { openTab } = useRecordTabs();
+  useEffect(() => {
+    if (!pathname || pathname === "/" || pathname === "/dashboard") return;
+    for (const g of navGroups) {
+      for (const item of g.items) {
+        if (item.to === pathname) {
+          openTab({ id: item.to, label: item.label, to: item.to });
+          return;
+        }
+      }
+    }
+  }, [pathname, openTab]);
+  return null;
+}
+
 
 export function HQShell() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -26,6 +45,7 @@ export function HQShell() {
 
   return (
     <RecordTabsProvider>
+      <TabAutoOpener />
       <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
         <aside
           className={`hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block ${
