@@ -38,7 +38,8 @@ export const navGroups: NavGroup[] = [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Assistant", to: "/assistant", icon: Bot },
       { label: "Email", to: "/mail", icon: Inbox },
-      { label: "Workspace", to: "/channels", icon: Hash },
+      { label: "Communication", to: "/channels", icon: Hash },
+      { label: "Calendar", to: "/calendar", icon: Calendar },
       { label: "Cloud Storage", to: "/files", icon: FolderOpen },
       { label: "Ideas", to: "/rd-ideas", icon: Lightbulb },
     ],
@@ -88,7 +89,7 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Growth",
+    label: "Growth Team",
     items: [
       { label: "Pipeline & CRM", to: "/pipeline", icon: Filter },
       { label: "Orders & Contracts", to: "/orders", icon: Receipt },
@@ -104,7 +105,7 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "HR & Administration",
+    label: "Operations Team",
     items: [
       { label: "People", to: "/employees", icon: IdCard },
       { label: "Hiring", to: "/hiring", icon: UserSearch },

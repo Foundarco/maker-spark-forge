@@ -1,11 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Hash, MessagesSquare, Video, Calendar, StickyNote } from "lucide-react";
+import { Hash, MessagesSquare, Video, StickyNote } from "lucide-react";
 
 const items = [
   { to: "/channels", label: "Channels", icon: Hash },
   { to: "/dm", label: "Messages", icon: MessagesSquare },
   { to: "/meetings", label: "Meetings", icon: Video },
-  { to: "/calendar", label: "Calendar", icon: Calendar },
   { to: "/meeting-notes", label: "Notes", icon: StickyNote },
 ];
 
