@@ -16,7 +16,7 @@ function initials(n: string) {
 }
 
 function PhonePage() {
-  const { active, history, startCall, endCall, toggleMute, updateNotes } = usePhone();
+  const { active, history, startCall, endCall, toggleMute, updateNotes, autoNotesEnabled, setAutoNotesEnabled } = usePhone();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [q, setQ] = useState("");
   const [, tick] = useState(0);
