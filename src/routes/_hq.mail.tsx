@@ -152,6 +152,7 @@ function MailClient() {
       subject: init?.subject ?? "",
       body: init?.body ?? "",
       mailbox: init?.mailbox ?? "personal",
+      inReplyTo: init?.inReplyTo ?? null,
     });
   };
 
