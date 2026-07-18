@@ -73,8 +73,8 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
       {/* Workspace card */}
       <div className="px-3 pt-4">
         <div className="flex items-center gap-2">
-          <button className="flex flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3 py-2.5 text-left hover:bg-white/[0.10]">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-bold text-sidebar-accent-foreground">
+          <button className="flex h-11 flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3 text-left hover:bg-white/[0.10]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-bold text-sidebar-accent-foreground">
               {initials || "CL"}
             </div>
             <div className="min-w-0 flex-1">
@@ -86,7 +86,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
           {onCollapse && (
             <button
               onClick={onCollapse}
-              className="hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-sidebar-muted hover:bg-white/[0.10] hover:text-sidebar-foreground lg:flex"
+              className="hidden h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.06] text-sidebar-muted hover:bg-white/[0.10] hover:text-sidebar-foreground lg:flex"
               aria-label="Collapse sidebar"
             >
               <PanelLeftClose className="h-4 w-4" />
