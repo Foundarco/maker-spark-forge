@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { X, Mail, Building2, MessageSquare, User as UserIcon } from "lucide-react";
+import { X, Mail, Building2, MessageSquare, User as UserIcon, Phone, Video, StickyNote } from "lucide-react";
+import { usePhone } from "@/lib/hq/phone";
 
 type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
 type Role = { id: string; name: string; color: string; position: number };
@@ -40,9 +41,24 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
     ? { position: "fixed", top: anchor.y, left: anchor.x, zIndex: 60 }
     : { position: "fixed", top: "20%", left: "50%", transform: "translateX(-50%)", zIndex: 60 };
 
+  const { startCall, active } = usePhone();
   const openDM = () => {
     onClose();
     navigate({ to: "/dm", search: { user: userId } as any });
+  };
+  const call = () => {
+    if (!profile || active) return;
+    onClose();
+    startCall(userId, name);
+    navigate({ to: "/phone" });
+  };
+  const meet = () => {
+    onClose();
+    navigate({ to: "/meetings" });
+  };
+  const notes = () => {
+    onClose();
+    navigate({ to: "/meeting-notes" });
   };
 
   return (
@@ -62,15 +78,20 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
         <button onClick={openDM} disabled={!profile} className="flex items-center justify-center gap-1 rounded-lg bg-primary px-2 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-50">
           <MessageSquare className="h-3 w-3" /> Message
         </button>
+        <button onClick={call} disabled={!profile || !!active} className="flex items-center justify-center gap-1 rounded-lg bg-emerald-500 px-2 py-1.5 text-xs font-medium text-white disabled:opacity-50">
+          <Phone className="h-3 w-3" /> Call
+        </button>
+        <button onClick={meet} className="flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs hover:bg-muted">
+          <Video className="h-3 w-3" /> Meeting
+        </button>
+        <button onClick={notes} className="flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs hover:bg-muted">
+          <StickyNote className="h-3 w-3" /> Notes
+        </button>
         {profile?.email ? (
-          <a href={`mailto:${profile.email}`} className="flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs hover:bg-muted">
+          <a href={`mailto:${profile.email}`} className="col-span-2 flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs hover:bg-muted">
             <Mail className="h-3 w-3" /> Email
           </a>
-        ) : (
-          <button disabled className="flex items-center justify-center gap-1 rounded-lg border border-border px-2 py-1.5 text-xs opacity-50">
-            <Mail className="h-3 w-3" /> Email
-          </button>
-        )}
+        ) : null}
       </div>
 
       {profile?.email && (
