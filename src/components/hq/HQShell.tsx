@@ -1,26 +1,38 @@
 import { Outlet } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { PanelLeftOpen } from "lucide-react";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { RecordTabsProvider } from "@/lib/hq/record-tabs";
-
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
+
+const HIDE_KEY = "hq.sidebar.hidden";
 
 export function HQShell() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [hidden, setHidden] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem(HIDE_KEY) === "1";
+  });
 
   useEffect(() => {
     applyTheme(getStoredTheme());
-    return () => {
-      document.documentElement.classList.remove("dark");
-    };
   }, []);
+
+  const setHiddenPersist = (v: boolean) => {
+    setHidden(v);
+    try { localStorage.setItem(HIDE_KEY, v ? "1" : "0"); } catch {}
+  };
 
   return (
     <RecordTabsProvider>
-      <div className="flex h-dvh w-full overflow-hidden bg-sidebar text-foreground">
-        <aside className="hidden h-full w-[260px] flex-shrink-0 overflow-hidden lg:block">
-          <Sidebar />
+      <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
+        <aside
+          className={`hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block ${
+            hidden ? "w-0" : "w-[260px]"
+          }`}
+        >
+          <Sidebar onCollapse={() => setHiddenPersist(true)} />
         </aside>
 
         {mobileOpen && (
@@ -32,10 +44,20 @@ export function HQShell() {
           </div>
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden py-2 pr-2">
+        {hidden && (
+          <button
+            onClick={() => setHiddenPersist(false)}
+            className="fixed left-3 top-3 z-40 hidden h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-lg transition hover:bg-muted lg:flex"
+            aria-label="Open sidebar"
+          >
+            <PanelLeftOpen className="h-4 w-4" />
+          </button>
+        )}
+
+        <div className="flex min-w-0 flex-1 flex-col overflow-hidden py-2 pr-2 pl-2">
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border bg-background shadow-sm">
             <Topbar onMenuClick={() => setMobileOpen(true)} />
-            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-surface">
+            <main className="flex-1 overflow-x-hidden overflow-y-auto bg-background">
               <Outlet />
             </main>
           </div>

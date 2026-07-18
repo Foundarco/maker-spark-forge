@@ -1,6 +1,6 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, Sparkles } from "lucide-react";
+import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose } from "lucide-react";
 import { navGroups } from "./nav-config";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,7 +13,7 @@ const ALWAYS_VISIBLE = new Set<string>([
 
 type Profile = { full_name: string | null; email: string | null; department: string | null };
 
-export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
+export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; onCollapse?: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
