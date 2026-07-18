@@ -26,6 +26,12 @@ export type IncomingCall = {
   offer: RTCSessionDescriptionInit;
 };
 
+export type ChannelCallState = {
+  channelId: string;
+  channelName: string;
+  isHost: boolean;
+};
+
 type PhoneCtx = {
   active: Call | null;
   history: Call[];
@@ -39,6 +45,10 @@ type PhoneCtx = {
   toggleMute: () => void;
   updateNotes: (notes: string) => void;
   remoteAudioRef: React.RefObject<HTMLAudioElement | null>;
+  channelCall: ChannelCallState | null;
+  startChannelCall: (channelId: string, channelName: string) => Promise<void>;
+  joinChannelCall: (channelId: string, channelName: string) => Promise<void>;
+  leaveChannelCall: () => Promise<void>;
 };
 
 const Ctx = createContext<PhoneCtx | null>(null);
@@ -70,11 +80,16 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const savedIdsRef = useRef<Set<string>>(new Set());
   const pendingIceRef = useRef<RTCIceCandidateInit[]>([]);
   const inboxChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const peerChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
-  const peerIdRef = useRef<string | null>(null);
+  // Cache one long-lived peer-inbox channel per peer id, keyed by peerId.
+  // Concurrent onicecandidate + offer/answer would previously race on a
+  // single ref, creating multiple channels and dropping signaling messages.
+  const peerChannelsRef = useRef<Map<string, Promise<ReturnType<typeof supabase.channel>>>>(new Map());
   const callIdRef = useRef<string | null>(null);
   const recognitionRef = useRef<any>(null);
   const recognitionActiveRef = useRef(false);
+  // Channel call presence (multi-user "in call" indicator; separate from 1:1 audio)
+  const [channelCall, setChannelCallState] = useState<{ channelId: string; channelName: string; isHost: boolean } | null>(null);
+  const channelCallChRef = useRef<any>(null);
 
   // Append a transcribed chunk to the active call's notes
   const appendNotes = useCallback((text: string) => {
@@ -146,24 +161,38 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     return () => {
       mounted = false;
       if (inboxChannelRef.current) supabase.removeChannel(inboxChannelRef.current);
-      if (peerChannelRef.current) supabase.removeChannel(peerChannelRef.current);
+      // cleanupMedia below also drops any peer channels
       cleanupMedia();
     };
   }, []);
 
-  // Send to peer via their inbox channel
-  const sendToPeer = useCallback(async (peerId: string, event: string, payload: any) => {
-    if (!peerChannelRef.current || peerIdRef.current !== peerId) {
-      if (peerChannelRef.current) supabase.removeChannel(peerChannelRef.current);
-      const ch = supabase.channel(`phone:${peerId}`);
-      await new Promise<void>((res) => {
-        ch.subscribe((status) => { if (status === "SUBSCRIBED") res(); });
+  // Send to peer via their inbox channel. Race-safe: the first call for a
+  // given peer creates and subscribes the channel; concurrent calls reuse
+  // the same promise so ICE and offer/answer don't stomp on each other.
+  const getPeerChannel = useCallback((peerId: string) => {
+    const cache = peerChannelsRef.current;
+    let p = cache.get(peerId);
+    if (!p) {
+      p = new Promise((resolve) => {
+        const ch = supabase.channel(`phone:${peerId}`);
+        ch.subscribe((status) => { if (status === "SUBSCRIBED") resolve(ch); });
       });
-      peerChannelRef.current = ch;
-      peerIdRef.current = peerId;
+      cache.set(peerId, p);
     }
-    await peerChannelRef.current!.send({ type: "broadcast", event, payload });
+    return p;
   }, []);
+
+  const sendToPeer = useCallback(async (peerId: string, event: string, payload: any) => {
+    const ch = await getPeerChannel(peerId);
+    await ch.send({ type: "broadcast", event, payload });
+  }, [getPeerChannel]);
+
+  const dropPeerChannels = () => {
+    for (const p of peerChannelsRef.current.values()) {
+      p.then((ch) => { try { supabase.removeChannel(ch); } catch {} });
+    }
+    peerChannelsRef.current.clear();
+  };
 
   const cleanupMedia = () => {
     if (pcRef.current) {
@@ -175,11 +204,7 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
       localStreamRef.current = null;
     }
     pendingIceRef.current = [];
-    if (peerChannelRef.current) {
-      supabase.removeChannel(peerChannelRef.current);
-      peerChannelRef.current = null;
-      peerIdRef.current = null;
-    }
+    dropPeerChannels();
     stopAllCallSounds();
     stopRecognition();
   };
@@ -406,12 +431,66 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   }, [active?.status, autoNotesEnabled, startRecognition, stopRecognition]);
 
 
+  // -------------------- Channel call (multi-user presence room) --------------------
+  // Presence-based only in this iteration: participants show up as "in call"
+  // in the channel header for everyone. Actual audio is 1:1 via DM/user calls.
+  const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean) => {
+    if (!meIdRef.current) return;
+    if (channelCallChRef.current) {
+      try { await channelCallChRef.current.untrack(); } catch {}
+      supabase.removeChannel(channelCallChRef.current);
+      channelCallChRef.current = null;
+    }
+    const ch = supabase.channel(`channel-call:${channelId}`, {
+      config: { presence: { key: meIdRef.current } },
+    });
+    ch.subscribe(async (status) => {
+      if (status === "SUBSCRIBED") {
+        await ch.track({ user_id: meIdRef.current, joined_at: new Date().toISOString() });
+      }
+    });
+    channelCallChRef.current = ch;
+    setChannelCallState({ channelId, channelName, isHost });
+  }, []);
+
+  const startChannelCall = useCallback(async (channelId: string, channelName: string) => {
+    if (channelCall || !meIdRef.current) return;
+    // Announce in the channel
+    try {
+      await supabase.from("channel_messages").insert({
+        channel_id: channelId,
+        author_id: meIdRef.current,
+        body: `📞 Started a call — click Join in the header to hop in.`,
+        attachments: [{ type: "call_announcement", channelId, host_id: meIdRef.current }] as any,
+      } as any);
+    } catch {}
+    await joinChannelCallPresence(channelId, channelName, true);
+    playSound("call-connect");
+  }, [channelCall, joinChannelCallPresence]);
+
+  const joinChannelCall = useCallback(async (channelId: string, channelName: string) => {
+    if (channelCall) return;
+    await joinChannelCallPresence(channelId, channelName, false);
+    playSound("call-connect");
+  }, [channelCall, joinChannelCallPresence]);
+
+  const leaveChannelCall = useCallback(async () => {
+    if (channelCallChRef.current) {
+      try { await channelCallChRef.current.untrack(); } catch {}
+      supabase.removeChannel(channelCallChRef.current);
+      channelCallChRef.current = null;
+    }
+    setChannelCallState(null);
+    playSound("call-end");
+  }, []);
+
   return (
     <Ctx.Provider value={{
       active, history, incoming,
       autoNotesEnabled, setAutoNotesEnabled,
       startCall, acceptIncoming, declineIncoming, endCall, toggleMute, updateNotes,
       remoteAudioRef,
+      channelCall, startChannelCall, joinChannelCall, leaveChannelCall,
     }}>
       {children}
       {/* Hidden audio element for remote stream */}

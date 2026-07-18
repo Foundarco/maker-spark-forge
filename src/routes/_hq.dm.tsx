@@ -303,19 +303,46 @@ function DMHeader({ active, activeProfile, onOpenProfile }: { active: string | n
   const { startCall, active: activeCall } = usePhone();
   const navigate = useNavigate();
   const name = activeProfile?.full_name || activeProfile?.email || "";
-  const call = () => { if (active && !activeCall) startCall(active, name, "user"); };
+  const onCall = !!activeCall && activeCall.peerId === active;
+
+  const postAutoMessage = async (body: string) => {
+    if (!active) return;
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return;
+    await supabase.from("direct_messages").insert({
+      sender_id: u.user.id,
+      recipient_id: active,
+      body,
+    } as any);
+  };
+
+  const call = async () => {
+    if (!active || activeCall) return;
+    await postAutoMessage(`📞 Started a voice call — ringing you now.`);
+    startCall(active, name, "user");
+  };
   const meet = async () => {
     if (!active) return;
     const id = await createInstantMeeting(`Meeting with ${name}`, [active]);
-    if (id) navigate({ to: "/meeting/$id", params: { id } });
+    if (!id) return;
+    await postAutoMessage(`📹 Started a meeting — join here: /meeting/${id}`);
+    navigate({ to: "/meeting/$id", params: { id } });
   };
   return (
     <header className="flex items-center gap-3 border-b border-border px-5 py-3">
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+      <div className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold ${onCall ? "bg-emerald-500 text-white ring-2 ring-emerald-300" : "bg-primary/10 text-primary"}`}>
         {initials(name)}
       </div>
       <button onClick={(e) => onOpenProfile(e.clientX, e.clientY)} className="flex-1 text-left hover:underline">
-        <p className="text-sm font-semibold">{name}</p>
+        <p className="flex items-center gap-2 text-sm font-semibold">
+          {name}
+          {onCall && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              On call
+            </span>
+          )}
+        </p>
         {activeProfile?.department && <p className="text-xs text-muted-foreground">{activeProfile.department}</p>}
       </button>
       <div className="flex items-center gap-1">

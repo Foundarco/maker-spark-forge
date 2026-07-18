@@ -37,7 +37,8 @@ function dayLabel(iso: string) {
 }
 
 function ChannelsPage() {
-  const { startCall, active: activeCall } = usePhone();
+  const { startCall, active: activeCall, channelCall, startChannelCall, joinChannelCall, leaveChannelCall } = usePhone();
+  const [callParticipants, setCallParticipants] = useState<string[]>([]);
   const navigate = useNavigate();
   const [me, setMe] = useState<string | null>(null);
   const [perms, setPerms] = useState<Permissions>({ manage_channels: false, manage_roles: false, manage_messages: false, admin: false });
@@ -118,6 +119,22 @@ function ChannelsPage() {
   }, [active]);
 
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages]);
+
+  // Subscribe to channel call presence for the active channel
+  useEffect(() => {
+    if (!active) { setCallParticipants([]); return; }
+    const ch = supabase.channel(`channel-call:${active}`, { config: { presence: { key: `viewer-${Math.random().toString(36).slice(2)}` } } });
+    const sync = () => {
+      const state = ch.presenceState() as Record<string, any[]>;
+      const ids = Object.values(state).flat().map((p: any) => p.user_id).filter(Boolean);
+      setCallParticipants(Array.from(new Set(ids)));
+    };
+    ch.on("presence", { event: "sync" }, sync)
+      .on("presence", { event: "join" }, sync)
+      .on("presence", { event: "leave" }, sync)
+      .subscribe();
+    return () => { supabase.removeChannel(ch); };
+  }, [active]);
 
   const activeChannel = useMemo(() => channels.find((c) => c.id === active), [channels, active]);
 
@@ -307,14 +324,35 @@ function ChannelsPage() {
                 {activeChannel.description && <p className="mt-0.5 text-xs text-muted-foreground">{activeChannel.description}</p>}
               </div>
               <div className="flex items-center gap-1">
-                <button
-                  onClick={() => { if (!activeCall) startCall(activeChannel.id, `#${activeChannel.name}`, "channel"); }}
-                  disabled={!!activeCall}
-                  title="Start channel call"
-                  className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
-                >
-                  <Phone className="h-3 w-3" /> Call
-                </button>
+                {(() => {
+                  const inThisCall = channelCall?.channelId === activeChannel.id;
+                  const otherCallActive = !!channelCall && !inThisCall;
+                  const hasCall = callParticipants.length > 0;
+                  if (inThisCall) {
+                    return (
+                      <button onClick={() => leaveChannelCall()} title="Leave channel call" className="flex items-center gap-1 rounded-lg bg-rose-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-600">
+                        <Phone className="h-3 w-3" /> Leave · {callParticipants.length}
+                      </button>
+                    );
+                  }
+                  if (hasCall) {
+                    return (
+                      <button onClick={() => joinChannelCall(activeChannel.id, activeChannel.name)} disabled={otherCallActive} title="Join channel call" className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
+                        <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" /> Join · {callParticipants.length}
+                      </button>
+                    );
+                  }
+                  return (
+                    <button
+                      onClick={() => startChannelCall(activeChannel.id, activeChannel.name)}
+                      disabled={otherCallActive}
+                      title="Start channel call"
+                      className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50"
+                    >
+                      <Phone className="h-3 w-3" /> Call
+                    </button>
+                  );
+                })()}
                 <button
                   onClick={async () => {
                     const { data: mem } = await supabase.from("channel_members").select("user_id").eq("channel_id", activeChannel.id);
@@ -334,6 +372,18 @@ function ChannelsPage() {
                 )}
               </div>
             </header>
+            {callParticipants.length > 0 && channelCall?.channelId !== activeChannel.id && (
+              <div className="flex items-center justify-between gap-2 border-b border-emerald-500/30 bg-emerald-500/10 px-5 py-2">
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="font-semibold text-emerald-700 dark:text-emerald-300">Active call</span>
+                  <span className="text-muted-foreground">· {callParticipants.length} {callParticipants.length === 1 ? "person" : "people"} in call</span>
+                </div>
+                <button onClick={() => joinChannelCall(activeChannel.id, activeChannel.name)} disabled={!!channelCall} className="rounded-md bg-emerald-500 px-3 py-1 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
+                  Join
+                </button>
+              </div>
+            )}
             <div ref={scrollRef} className="flex-1 space-y-1 overflow-y-auto px-5 py-4">
               {messages.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet in #{activeChannel.name}.</p>}
               {rendered.map((r) => {

@@ -57,12 +57,10 @@ export function playIncomingRing() {
   let cancelled = false;
   const cycle = () => {
     if (cancelled) return;
-    // Two short chirps
-    tone(880, 0.25, { gain: 0.12, type: "triangle" });
-    tone(1100, 0.25, { gain: 0.12, type: "triangle", delay: 0.35 });
-    tone(880, 0.25, { gain: 0.12, type: "triangle", delay: 0.9 });
-    tone(1100, 0.25, { gain: 0.12, type: "triangle", delay: 1.25 });
-    const id = window.setTimeout(cycle, 2400);
+    // Soft two-note descending chime (E5 → C5), like a gentle doorbell
+    tone(659.25, 0.5, { gain: 0.09, type: "sine", attack: 0.06, release: 0.2 });
+    tone(523.25, 0.6, { gain: 0.09, type: "sine", delay: 0.4, attack: 0.06, release: 0.25 });
+    const id = window.setTimeout(cycle, 3000);
     loops.set("incoming", { stop: () => { cancelled = true; clearTimeout(id); } });
   };
   cycle();
