@@ -378,6 +378,34 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
     setActive((cur) => cur ? { ...cur, notes } : cur);
   }, []);
 
+  // Ringing/connect/end sounds tied to call state
+  const prevStatusRef = useRef<CallStatus | null>(null);
+  useEffect(() => {
+    const status = active?.status ?? null;
+    const prev = prevStatusRef.current;
+    if (active?.direction === "outbound" && status === "ringing") {
+      playRingback();
+    } else {
+      stopAllCallSounds();
+      if (active && status === "active" && prev !== "active") playSound("call-connect");
+    }
+    if (!active && prev && prev !== "ended") playSound("call-end");
+    prevStatusRef.current = status;
+  }, [active?.status, active?.direction, active]);
+
+  // Incoming ring
+  useEffect(() => {
+    if (incoming) playIncomingRing();
+    else stopAllCallSounds();
+  }, [incoming]);
+
+  // Speech-to-text transcription during active call when auto-notes is on
+  useEffect(() => {
+    if (active?.status === "active" && autoNotesEnabled) startRecognition();
+    else stopRecognition();
+  }, [active?.status, autoNotesEnabled, startRecognition, stopRecognition]);
+
+
   return (
     <Ctx.Provider value={{
       active, history, incoming,
