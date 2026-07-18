@@ -133,7 +133,7 @@ function RootComponent() {
     const h = window.location.hostname;
     const hqHost = h === "hq.clovrlab.com" || h.startsWith("hq--") || h.startsWith("hq.");
     if (hqHost && window.location.pathname === "/") {
-      window.location.replace("/dashboard");
+      window.location.replace("/hq-login");
     }
   }, []);
 

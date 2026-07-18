@@ -29,6 +29,7 @@ export type IncomingCall = {
 export type ChannelCallState = {
   channelId: string;
   channelName: string;
+  sessionId: string;
   isHost: boolean;
 };
 
@@ -47,7 +48,7 @@ type PhoneCtx = {
   remoteAudioRef: React.RefObject<HTMLAudioElement | null>;
   channelCall: ChannelCallState | null;
   startChannelCall: (channelId: string, channelName: string) => Promise<void>;
-  joinChannelCall: (channelId: string, channelName: string) => Promise<void>;
+  joinChannelCall: (channelId: string, channelName: string, sessionId?: string) => Promise<void>;
   leaveChannelCall: () => Promise<void>;
 };
 
@@ -88,8 +89,9 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   const recognitionRef = useRef<any>(null);
   const recognitionActiveRef = useRef(false);
   // Channel call presence (multi-user "in call" indicator; separate from 1:1 audio)
-  const [channelCall, setChannelCallState] = useState<{ channelId: string; channelName: string; isHost: boolean } | null>(null);
+  const [channelCall, setChannelCallState] = useState<ChannelCallState | null>(null);
   const channelCallChRef = useRef<any>(null);
+  const channelCallSessionIdRef = useRef<string | null>(null);
 
   // Append a transcribed chunk to the active call's notes
   const appendNotes = useCallback((text: string) => {
@@ -434,60 +436,63 @@ export function PhoneProvider({ children }: { children: ReactNode }) {
   // -------------------- Channel call (multi-user presence room) --------------------
   // Presence-based only in this iteration: participants show up as "in call"
   // in the channel header for everyone. Actual audio is 1:1 via DM/user calls.
-  const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean) => {
+  const joinChannelCallPresence = useCallback(async (channelId: string, channelName: string, isHost: boolean, sessionId: string = crypto.randomUUID()) => {
     if (!meIdRef.current) return;
     if (channelCallChRef.current) {
-      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current } }); } catch {}
+      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current, session_id: channelCallSessionIdRef.current } }); } catch {}
       try { await channelCallChRef.current.untrack(); } catch {}
       supabase.removeChannel(channelCallChRef.current);
       channelCallChRef.current = null;
     }
+    channelCallSessionIdRef.current = sessionId;
     const ch = supabase.channel(`channel-call:${channelId}`, {
       config: { presence: { key: meIdRef.current } },
     });
     // Broadcast fallback: reply to any "who" ping with our user_id so
     // viewers see participants even if presence sync is delayed.
     ch.on("broadcast", { event: "who" }, () => {
-      ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current } });
+      ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current, session_id: sessionId } });
     });
     ch.subscribe(async (status) => {
       if (status === "SUBSCRIBED") {
-        await ch.track({ user_id: meIdRef.current, joined_at: new Date().toISOString() });
-        await ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current } });
+        await ch.track({ user_id: meIdRef.current, session_id: sessionId, joined_at: new Date().toISOString() });
+        await ch.send({ type: "broadcast", event: "hello", payload: { user_id: meIdRef.current, session_id: sessionId } });
       }
     });
     channelCallChRef.current = ch;
-    setChannelCallState({ channelId, channelName, isHost });
+    setChannelCallState({ channelId, channelName, sessionId, isHost });
   }, []);
 
   const startChannelCall = useCallback(async (channelId: string, channelName: string) => {
     if (channelCall || !meIdRef.current) return;
+    const sessionId = crypto.randomUUID();
     // Announce in the channel
     try {
       await supabase.from("channel_messages").insert({
         channel_id: channelId,
         author_id: meIdRef.current,
         body: `📞 Started a call — click Join in the header to hop in.`,
-        attachments: [{ type: "call_announcement", channelId, host_id: meIdRef.current }] as any,
+        attachments: [{ type: "call_announcement", channelId, host_id: meIdRef.current, session_id: sessionId }] as any,
       } as any);
     } catch {}
-    await joinChannelCallPresence(channelId, channelName, true);
+    await joinChannelCallPresence(channelId, channelName, true, sessionId);
     playSound("call-connect");
   }, [channelCall, joinChannelCallPresence]);
 
-  const joinChannelCall = useCallback(async (channelId: string, channelName: string) => {
+  const joinChannelCall = useCallback(async (channelId: string, channelName: string, sessionId?: string) => {
     if (channelCall) return;
-    await joinChannelCallPresence(channelId, channelName, false);
+    await joinChannelCallPresence(channelId, channelName, false, sessionId);
     playSound("call-connect");
   }, [channelCall, joinChannelCallPresence]);
 
   const leaveChannelCall = useCallback(async () => {
     if (channelCallChRef.current) {
-      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current } }); } catch {}
+      try { await channelCallChRef.current.send({ type: "broadcast", event: "bye", payload: { user_id: meIdRef.current, session_id: channelCallSessionIdRef.current } }); } catch {}
       try { await channelCallChRef.current.untrack(); } catch {}
       supabase.removeChannel(channelCallChRef.current);
       channelCallChRef.current = null;
     }
+    channelCallSessionIdRef.current = null;
     setChannelCallState(null);
     playSound("call-end");
   }, []);

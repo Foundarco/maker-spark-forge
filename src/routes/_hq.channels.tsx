@@ -24,6 +24,7 @@ type ChannelMessage = {
   edited_at: string | null; deleted_at: string | null; attachments: Attachment[]; reply_to_id: string | null;
 };
 type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
+type ChannelCallSession = { sessionId: string; hostId: string; startedAt: string };
 
 function initials(name: string) {
   return name.split(/\s+/).map((w) => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
@@ -34,6 +35,16 @@ function dayLabel(iso: string) {
   const y = new Date(now.getTime() - 86400000);
   if (d.toDateString() === y.toDateString()) return "Yesterday";
   return d.toLocaleDateString([], { weekday: "long", month: "short", day: "numeric" });
+}
+
+function getCallSessionFromMessage(message: ChannelMessage): ChannelCallSession | null {
+  const attachment = (message.attachments ?? []).find((a: any) => a?.type === "call_announcement") as any;
+  const sessionId = attachment?.session_id;
+  if (!sessionId) return null;
+  const startedAt = message.created_at;
+  const ageMs = Date.now() - new Date(startedAt).getTime();
+  if (ageMs > 4 * 60 * 60 * 1000) return null;
+  return { sessionId, hostId: attachment.host_id || message.author_id, startedAt };
 }
 
 function ChannelsPage() {
@@ -57,6 +68,7 @@ function ChannelsPage() {
   const [openProfile, setOpenProfile] = useState<{ userId: string; x: number; y: number } | null>(null);
   const [replyingTo, setReplyingTo] = useState<ChannelMessage | null>(null);
   const [showAccess, setShowAccess] = useState(false);
+  const [callSessions, setCallSessions] = useState<Record<string, ChannelCallSession>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
   const msgRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -83,6 +95,13 @@ function ChannelsPage() {
       const { data } = await supabase.from("channel_messages").select("*").eq("channel_id", active).order("created_at", { ascending: true });
       const msgs = (data ?? []) as any as ChannelMessage[];
       setMessages(msgs);
+      const latestCall = [...msgs].reverse().map(getCallSessionFromMessage).find(Boolean);
+      setCallSessions((prev) => {
+        if (latestCall) return { ...prev, [active]: latestCall };
+        const next = { ...prev };
+        delete next[active];
+        return next;
+      });
       const authorIds = Array.from(new Set(msgs.map((m) => m.author_id)));
       if (authorIds.length) {
         const { data: p } = await supabase.from("profiles").select("id, full_name, email, department").in("id", authorIds);
@@ -99,6 +118,8 @@ function ChannelsPage() {
       .channel(`chm-${active}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "channel_messages", filter: `channel_id=eq.${active}` }, (payload) => {
         const m = payload.new as any as ChannelMessage;
+        const callSession = getCallSessionFromMessage(m);
+        if (callSession) setCallSessions((prev) => ({ ...prev, [m.channel_id]: callSession }));
         setMessages((prev) => {
           if (prev.some((x) => x.id === m.id)) return prev;
           const idx = prev.findIndex((x) => x.id.startsWith("tmp-") && x.author_id === m.author_id && x.body === m.body);
@@ -136,6 +157,8 @@ function ChannelsPage() {
       .on("presence", { event: "leave" }, sync)
       .on("broadcast", { event: "hello" }, ({ payload }) => {
         const uid = payload?.user_id;
+        const sessionId = payload?.session_id;
+        if (sessionId) setCallSessions((prev) => ({ ...prev, [active]: { sessionId, hostId: uid || "", startedAt: new Date().toISOString() } }));
         if (uid) setCallParticipants((prev) => prev.includes(uid) ? prev : [...prev, uid]);
       })
       .on("broadcast", { event: "bye" }, ({ payload }) => {
@@ -152,6 +175,7 @@ function ChannelsPage() {
   }, [active]);
 
   const activeChannel = useMemo(() => channels.find((c) => c.id === active), [channels, active]);
+  const activeCallSession = active ? callSessions[active] : undefined;
 
   const ensureProfile = async (uid: string) => {
     if (profiles[uid]) return;
@@ -342,18 +366,19 @@ function ChannelsPage() {
                 {(() => {
                   const inThisCall = channelCall?.channelId === activeChannel.id;
                   const otherCallActive = !!channelCall && !inThisCall;
-                  const hasCall = callParticipants.length > 0;
+                  const hasCall = callParticipants.length > 0 || !!activeCallSession;
+                  const participantCount = Math.max(callParticipants.length, activeCallSession ? 1 : 0);
                   if (inThisCall) {
                     return (
                       <button onClick={() => leaveChannelCall()} title="Leave channel call" className="flex items-center gap-1 rounded-lg bg-rose-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-rose-600">
-                        <Phone className="h-3 w-3" /> Leave · {callParticipants.length}
+                        <Phone className="h-3 w-3" /> Leave · {participantCount}
                       </button>
                     );
                   }
                   if (hasCall) {
                     return (
-                      <button onClick={() => joinChannelCall(activeChannel.id, activeChannel.name)} disabled={otherCallActive} title="Join channel call" className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
-                        <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" /> Join · {callParticipants.length}
+                      <button onClick={() => joinChannelCall(activeChannel.id, activeChannel.name, activeCallSession?.sessionId)} disabled={otherCallActive} title="Join channel call" className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
+                        <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" /> Join · {participantCount}
                       </button>
                     );
                   }
@@ -387,14 +412,14 @@ function ChannelsPage() {
                 )}
               </div>
             </header>
-            {callParticipants.length > 0 && channelCall?.channelId !== activeChannel.id && (
+            {(callParticipants.length > 0 || activeCallSession) && channelCall?.channelId !== activeChannel.id && (
               <div className="flex items-center justify-between gap-2 border-b border-emerald-500/30 bg-emerald-500/10 px-5 py-2">
                 <div className="flex items-center gap-2 text-xs">
                   <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="font-semibold text-emerald-700 dark:text-emerald-300">Active call</span>
-                  <span className="text-muted-foreground">· {callParticipants.length} {callParticipants.length === 1 ? "person" : "people"} in call</span>
+                  <span className="text-muted-foreground">· {Math.max(callParticipants.length, activeCallSession ? 1 : 0)} {Math.max(callParticipants.length, activeCallSession ? 1 : 0) === 1 ? "person" : "people"} in call</span>
                 </div>
-                <button onClick={() => joinChannelCall(activeChannel.id, activeChannel.name)} disabled={!!channelCall} className="rounded-md bg-emerald-500 px-3 py-1 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
+                <button onClick={() => joinChannelCall(activeChannel.id, activeChannel.name, activeCallSession?.sessionId)} disabled={!!channelCall} className="rounded-md bg-emerald-500 px-3 py-1 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
                   Join
                 </button>
               </div>
