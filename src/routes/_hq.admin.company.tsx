@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save } from "lucide-react";
+import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/_hq/admin/company")({
   head: () => ({ meta: [{ title: "Company Settings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
