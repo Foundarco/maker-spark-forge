@@ -1,10 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Bell, LogOut, User as UserIcon, Menu, Phone, Grid3x3, Calendar as CalendarIcon } from "lucide-react";
+import { Bell, Menu, Phone, PhoneOff, Mic, MicOff, Grip, LayoutDashboard, Mail, Calendar as CalendarIcon, FolderOpen, MessagesSquare, Users, Bot } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { RecordTabs } from "./RecordTabs";
+import { usePhone, formatDuration } from "@/lib/hq/phone";
 
-type Profile = { full_name: string | null; email: string | null; avatar_url: string | null };
 type Notification = {
   id: string;
   title: string | null;
@@ -13,42 +13,36 @@ type Notification = {
   read_at: string | null;
 };
 
+const APPS = [
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { to: "/mail", label: "Email", icon: Mail },
+  { to: "/channels", label: "Channels", icon: MessagesSquare },
+  { to: "/phone", label: "Phone", icon: Phone },
+  { to: "/calendar", label: "Calendar", icon: CalendarIcon },
+  { to: "/files", label: "Files", icon: FolderOpen },
+  { to: "/employees", label: "People", icon: Users },
+  { to: "/assistant", label: "Assistant", icon: Bot },
+] as const;
+
 export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
-  const [profile, setProfile] = useState<Profile | null>(null);
   const [unread, setUnread] = useState(0);
-  const [eventsToday, setEventsToday] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
   const [notifs, setNotifs] = useState<Notification[]>([]);
+  const [appsOpen, setAppsOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
+  const [, tick] = useState(0);
+  const { active, endCall, toggleMute } = usePhone();
 
   useEffect(() => {
     let mounted = true;
     (async () => {
       const { data: userData } = await supabase.auth.getUser();
-      const uid = userData.user?.id;
-      if (!uid || !mounted) return;
-      const { data: p } = await supabase
-        .from("profiles")
-        .select("full_name, email, avatar_url")
-        .eq("id", uid)
-        .maybeSingle();
-      if (mounted && p) setProfile(p as Profile);
-
+      if (!userData.user || !mounted) return;
       const { count } = await supabase
         .from("notifications")
         .select("*", { count: "exact", head: true })
         .is("read_at", null);
       if (mounted && count !== null) setUnread(count);
-      if (mounted && count !== null) setUnread(count);
-
-      const start = new Date(); start.setHours(0,0,0,0);
-      const end = new Date(); end.setHours(23,59,59,999);
-      const { count: ec } = await supabase
-        .from("calendar_events")
-        .select("*", { count: "exact", head: true })
-        .gte("starts_at", start.toISOString())
-        .lte("starts_at", end.toISOString());
-      if (mounted && ec !== null) setEventsToday(ec);
     })();
     return () => { mounted = false; };
   }, []);
@@ -65,11 +59,16 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
     })();
   }, [notifOpen]);
 
-  const initials = (profile?.full_name || profile?.email || "?").slice(0, 2).toUpperCase();
+  useEffect(() => {
+    if (!active || active.status !== "active") return;
+    const t = setInterval(() => tick((x) => x + 1), 1000);
+    return () => clearInterval(t);
+  }, [active]);
+
+  const closeAll = () => { setNotifOpen(false); setAppsOpen(false); setPhoneOpen(false); };
 
   return (
     <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur-xl">
-      {/* Chrome row */}
       <div className="flex h-11 items-center gap-2 px-4">
         <button className="rounded-lg p-2 hover:bg-muted lg:hidden" onClick={onMenuClick} aria-label="Menu">
           <Menu className="h-5 w-5" />
@@ -77,25 +76,92 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
         <div className="flex-1" />
 
-        <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted" aria-label="Call">
-          <Phone className="h-4 w-4" />
-        </button>
-
-        <Link to="/calendar" className="flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium hover:bg-muted">
-          <CalendarIcon className="h-3.5 w-3.5" />
-          Calendar
-          {eventsToday > 0 && (
-            <span className="rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">{eventsToday}</span>
-          )}
-        </Link>
-
-        <button className="rounded-lg p-2 text-muted-foreground hover:bg-muted" aria-label="Apps">
-          <Grid3x3 className="h-4 w-4" />
-        </button>
-
+        {/* Phone */}
         <div className="relative">
           <button
-            onClick={() => { setNotifOpen((v) => !v); setMenuOpen(false); }}
+            onClick={() => { closeAll(); setPhoneOpen((v) => !v); }}
+            className="relative rounded-lg p-2 text-muted-foreground hover:bg-muted"
+            aria-label="Phone"
+          >
+            <Phone className="h-4 w-4" />
+            {active && (
+              <span className="absolute bottom-1 right-1 h-2 w-2 rounded-full border border-background bg-emerald-500 shadow" />
+            )}
+          </button>
+          {phoneOpen && (
+            <div className="absolute right-0 top-11 w-72 rounded-xl border border-border bg-card p-1 shadow-xl">
+              <div className="border-b border-border px-3 py-2">
+                <p className="text-sm font-semibold">Phone</p>
+              </div>
+              {active ? (
+                <div className="p-3">
+                  <div className="mb-3 flex items-center gap-3">
+                    <div className="relative">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+                        {active.peerName.slice(0, 2).toUpperCase()}
+                      </div>
+                      <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-card bg-emerald-500" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold">{active.peerName}</p>
+                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                        {active.status === "ringing" ? "Ringing…" : `On call · ${formatDuration(active.startedAt, null)}`}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={toggleMute} className={`flex flex-1 items-center justify-center gap-1 rounded-lg border py-1.5 text-xs ${active.muted ? "border-border bg-muted" : "border-border hover:bg-muted"}`}>
+                      {active.muted ? <MicOff className="h-3 w-3" /> : <Mic className="h-3 w-3" />}
+                      {active.muted ? "Unmute" : "Mute"}
+                    </button>
+                    <button onClick={endCall} className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-red-500 py-1.5 text-xs font-medium text-white hover:bg-red-600">
+                      <PhoneOff className="h-3 w-3" /> End
+                    </button>
+                  </div>
+                  <Link to="/phone" onClick={() => setPhoneOpen(false)} className="mt-2 block rounded-md py-1.5 text-center text-xs text-primary hover:bg-muted">
+                    Open phone →
+                  </Link>
+                </div>
+              ) : (
+                <div className="p-4 text-center">
+                  <p className="text-xs text-muted-foreground">No active call.</p>
+                  <Link to="/phone" onClick={() => setPhoneOpen(false)} className="mt-2 inline-block rounded-md px-3 py-1.5 text-xs font-medium text-primary hover:bg-muted">
+                    Open phone →
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Apps grid (dots) */}
+        <div className="relative">
+          <button
+            onClick={() => { closeAll(); setAppsOpen((v) => !v); }}
+            className="rounded-lg p-2 text-muted-foreground hover:bg-muted"
+            aria-label="Apps"
+          >
+            <Grip className="h-4 w-4" />
+          </button>
+          {appsOpen && (
+            <div className="absolute right-0 top-11 w-64 rounded-xl border border-border bg-card p-2 shadow-xl">
+              <p className="px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Apps</p>
+              <div className="grid grid-cols-3 gap-1">
+                {APPS.map((a) => (
+                  <Link key={a.to} to={a.to} onClick={() => setAppsOpen(false)} className="flex flex-col items-center gap-1 rounded-lg p-3 text-center hover:bg-muted">
+                    <a.icon className="h-5 w-5 text-primary" />
+                    <span className="text-[11px] font-medium">{a.label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Notifications */}
+        <div className="relative">
+          <button
+            onClick={() => { closeAll(); setNotifOpen((v) => !v); }}
             className="relative rounded-lg p-2 text-muted-foreground hover:bg-muted"
             aria-label="Notifications"
           >
@@ -134,38 +200,8 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
             </div>
           )}
         </div>
-
-        <div className="relative">
-          <button
-            onClick={() => { setMenuOpen((v) => !v); setNotifOpen(false); }}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/15 text-xs font-semibold text-primary"
-          >
-            {initials}
-          </button>
-          {menuOpen && (
-            <div className="absolute right-0 top-11 w-56 rounded-xl border border-border bg-card p-1 shadow-xl">
-              <div className="border-b border-border px-3 py-2">
-                <p className="truncate text-sm font-medium">{profile?.full_name ?? "Staff"}</p>
-                <p className="truncate text-xs text-muted-foreground">{profile?.email}</p>
-              </div>
-              <Link to="/settings" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted">
-                <UserIcon className="h-4 w-4" /> Profile & Settings
-              </Link>
-              <button
-                onClick={async () => {
-                  await supabase.auth.signOut();
-                  window.location.href = "/hq-login";
-                }}
-                className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted"
-              >
-                <LogOut className="h-4 w-4" /> Sign out
-              </button>
-            </div>
-          )}
-        </div>
       </div>
 
-      {/* Record tabs row */}
       <RecordTabs />
     </header>
   );

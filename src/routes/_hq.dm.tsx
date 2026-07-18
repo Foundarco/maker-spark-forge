@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight } from "lucide-react";
+import { MessagesSquare, Search, User as UserIcon, Check, CheckCheck, Pencil, Trash2, X, Reply, CornerDownRight, Phone, Video, StickyNote } from "lucide-react";
 import { MessageReactions } from "@/components/hq/MessageReactions";
 import { MessageComposer, type Attachment } from "@/components/hq/MessageComposer";
 import { MessageBody } from "@/components/hq/MessageBody";
 import { ProfilePopover } from "@/components/hq/ProfilePopover";
+import { usePhone } from "@/lib/hq/phone";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_hq/dm")({
   head: () => ({ meta: [{ title: "Messages — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -224,15 +226,8 @@ function DMPage() {
           </div>
         ) : (
           <>
-            <header className="flex items-center gap-3 border-b border-border px-5 py-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                {initials(activeProfile?.full_name || activeProfile?.email || "")}
-              </div>
-              <button onClick={(e) => active && setOpenProfile({ userId: active, x: e.clientX, y: e.clientY })} className="text-left hover:underline">
-                <p className="text-sm font-semibold">{activeProfile?.full_name || activeProfile?.email}</p>
-                {activeProfile?.department && <p className="text-xs text-muted-foreground">{activeProfile.department}</p>}
-              </button>
-            </header>
+            <DMHeader active={active} activeProfile={activeProfile} onOpenProfile={(x, y) => active && setOpenProfile({ userId: active, x, y })} />
+
             <div ref={scrollRef} className="flex-1 space-y-2 overflow-y-auto px-5 py-4">
               {thread.length === 0 && <p className="mt-8 text-center text-sm text-muted-foreground">No messages yet. Say hello.</p>}
               {rendered.map((r) => {
@@ -300,5 +295,34 @@ function DMPage() {
 
       {openProfile && <ProfilePopover userId={openProfile.userId} anchor={{ x: openProfile.x, y: openProfile.y }} onClose={() => setOpenProfile(null)} />}
     </div>
+  );
+}
+
+function DMHeader({ active, activeProfile, onOpenProfile }: { active: string | null; activeProfile: Profile | undefined; onOpenProfile: (x: number, y: number) => void }) {
+  const { startCall, active: activeCall } = usePhone();
+  const navigate = useNavigate();
+  const name = activeProfile?.full_name || activeProfile?.email || "";
+  const call = () => { if (active && !activeCall) { startCall(active, name); navigate({ to: "/phone" }); } };
+  return (
+    <header className="flex items-center gap-3 border-b border-border px-5 py-3">
+      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
+        {initials(name)}
+      </div>
+      <button onClick={(e) => onOpenProfile(e.clientX, e.clientY)} className="flex-1 text-left hover:underline">
+        <p className="text-sm font-semibold">{name}</p>
+        {activeProfile?.department && <p className="text-xs text-muted-foreground">{activeProfile.department}</p>}
+      </button>
+      <div className="flex items-center gap-1">
+        <button onClick={call} disabled={!!activeCall} title="Start voice call" className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-600 disabled:opacity-50">
+          <Phone className="h-3 w-3" /> Call
+        </button>
+        <button onClick={() => navigate({ to: "/meetings" })} title="Start meeting" className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
+          <Video className="h-3 w-3" /> Meeting
+        </button>
+        <button onClick={() => navigate({ to: "/meeting-notes" })} title="Notes" className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">
+          <StickyNote className="h-3 w-3" /> Notes
+        </button>
+      </div>
+    </header>
   );
 }

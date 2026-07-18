@@ -7,6 +7,7 @@ import { CommunicationSubNav } from "./CommunicationSubNav";
 import { RecordTabsProvider, useRecordTabs } from "@/lib/hq/record-tabs";
 import { navGroups } from "./nav-config";
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
+import { PhoneProvider } from "@/lib/hq/phone";
 
 const HIDE_KEY = "hq.sidebar.hidden";
 
@@ -45,6 +46,7 @@ export function HQShell() {
   };
 
   return (
+    <PhoneProvider>
     <RecordTabsProvider>
       <TabAutoOpener />
       <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
@@ -86,5 +88,6 @@ export function HQShell() {
         </div>
       </div>
     </RecordTabsProvider>
+    </PhoneProvider>
   );
 }

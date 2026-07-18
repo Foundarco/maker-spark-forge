@@ -113,6 +113,7 @@ import { Route as HqPoliciesRouteImport } from './routes/_hq.policies'
 import { Route as HqPnlRouteImport } from './routes/_hq.pnl'
 import { Route as HqPipelineRouteImport } from './routes/_hq.pipeline'
 import { Route as HqPhoneLogsRouteImport } from './routes/_hq.phone-logs'
+import { Route as HqPhoneRouteImport } from './routes/_hq.phone'
 import { Route as HqPcbRouteImport } from './routes/_hq.pcb'
 import { Route as HqPayrollRouteImport } from './routes/_hq.payroll'
 import { Route as HqPartnershipsRouteImport } from './routes/_hq.partnerships'
@@ -748,6 +749,11 @@ const HqPipelineRoute = HqPipelineRouteImport.update({
 const HqPhoneLogsRoute = HqPhoneLogsRouteImport.update({
   id: '/phone-logs',
   path: '/phone-logs',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqPhoneRoute = HqPhoneRouteImport.update({
+  id: '/phone',
+  path: '/phone',
   getParentRoute: () => HqRoute,
 } as any)
 const HqPcbRoute = HqPcbRouteImport.update({
@@ -1468,6 +1474,7 @@ export interface FileRoutesByFullPath {
   '/partnerships': typeof HqPartnershipsRoute
   '/payroll': typeof HqPayrollRoute
   '/pcb': typeof HqPcbRoute
+  '/phone': typeof HqPhoneRoute
   '/phone-logs': typeof HqPhoneLogsRoute
   '/pipeline': typeof HqPipelineRoute
   '/pnl': typeof HqPnlRoute
@@ -1689,6 +1696,7 @@ export interface FileRoutesByTo {
   '/partnerships': typeof HqPartnershipsRoute
   '/payroll': typeof HqPayrollRoute
   '/pcb': typeof HqPcbRoute
+  '/phone': typeof HqPhoneRoute
   '/phone-logs': typeof HqPhoneLogsRoute
   '/pipeline': typeof HqPipelineRoute
   '/pnl': typeof HqPnlRoute
@@ -1913,6 +1921,7 @@ export interface FileRoutesById {
   '/_hq/partnerships': typeof HqPartnershipsRoute
   '/_hq/payroll': typeof HqPayrollRoute
   '/_hq/pcb': typeof HqPcbRoute
+  '/_hq/phone': typeof HqPhoneRoute
   '/_hq/phone-logs': typeof HqPhoneLogsRoute
   '/_hq/pipeline': typeof HqPipelineRoute
   '/_hq/pnl': typeof HqPnlRoute
@@ -2136,6 +2145,7 @@ export interface FileRouteTypes {
     | '/partnerships'
     | '/payroll'
     | '/pcb'
+    | '/phone'
     | '/phone-logs'
     | '/pipeline'
     | '/pnl'
@@ -2357,6 +2367,7 @@ export interface FileRouteTypes {
     | '/partnerships'
     | '/payroll'
     | '/pcb'
+    | '/phone'
     | '/phone-logs'
     | '/pipeline'
     | '/pnl'
@@ -2580,6 +2591,7 @@ export interface FileRouteTypes {
     | '/_hq/partnerships'
     | '/_hq/payroll'
     | '/_hq/pcb'
+    | '/_hq/phone'
     | '/_hq/phone-logs'
     | '/_hq/pipeline'
     | '/_hq/pnl'
@@ -3434,6 +3446,13 @@ declare module '@tanstack/react-router' {
       path: '/phone-logs'
       fullPath: '/phone-logs'
       preLoaderRoute: typeof HqPhoneLogsRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/phone': {
+      id: '/_hq/phone'
+      path: '/phone'
+      fullPath: '/phone'
+      preLoaderRoute: typeof HqPhoneRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/pcb': {
@@ -4367,6 +4386,7 @@ interface HqRouteChildren {
   HqPartnershipsRoute: typeof HqPartnershipsRoute
   HqPayrollRoute: typeof HqPayrollRoute
   HqPcbRoute: typeof HqPcbRoute
+  HqPhoneRoute: typeof HqPhoneRoute
   HqPhoneLogsRoute: typeof HqPhoneLogsRoute
   HqPipelineRoute: typeof HqPipelineRoute
   HqPnlRoute: typeof HqPnlRoute
@@ -4547,6 +4567,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqPartnershipsRoute: HqPartnershipsRoute,
   HqPayrollRoute: HqPayrollRoute,
   HqPcbRoute: HqPcbRoute,
+  HqPhoneRoute: HqPhoneRoute,
   HqPhoneLogsRoute: HqPhoneLogsRoute,
   HqPipelineRoute: HqPipelineRoute,
   HqPnlRoute: HqPnlRoute,
