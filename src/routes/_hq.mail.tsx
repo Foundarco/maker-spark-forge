@@ -175,11 +175,13 @@ function MailClient() {
   }, [selected?.id]);
 
   const openCompose = (init?: Partial<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo: string | null }>) => {
+    const sig = userSettings.signature ? `\n\n${userSettings.signature}` : "";
+    const baseBody = init?.body ?? "";
     setCompose({
       to: init?.to ?? "",
       cc: init?.cc ?? "",
       subject: init?.subject ?? "",
-      body: init?.body ?? "",
+      body: baseBody + (baseBody.includes(userSettings.signature) || !sig ? "" : sig),
       mailbox: init?.mailbox ?? "personal",
       inReplyTo: init?.inReplyTo ?? null,
     });
