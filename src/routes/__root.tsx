@@ -106,9 +106,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const hqRedirectScript = `
+    (function () {
+      try {
+        var host = window.location.hostname.toLowerCase();
+        var path = window.location.pathname;
+        var referrer = document.referrer || "";
+        var isHqHost = host === "hq.clovrlab.com" || host.indexOf("hq.") === 0 || host.indexOf("hq--") === 0;
+        var cameFromHq = /^https:\/\/hq\.clovrlab\.com(?:\/|$)/i.test(referrer);
+        var isRootPath = path === "/" || path === "" || path === "/index.html";
+        if ((isHqHost || cameFromHq) && isRootPath) {
+          window.location.replace("/hq-login");
+        }
+      } catch (error) {}
+    })();
+  `;
+
   return (
     <html lang="en">
       <head>
+        <script dangerouslySetInnerHTML={{ __html: hqRedirectScript }} />
         <HeadContent />
       </head>
       <body>
