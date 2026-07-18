@@ -76,6 +76,35 @@ function MailClient() {
   const [sending, setSending] = useState(false);
   const sendFn = useServerFn(sendEmailViaResend);
   const [loading, setLoading] = useState(true);
+  const [userSettings, setUserSettings] = useState<{ signature: string; auto_reply_enabled: boolean; auto_reply_subject: string; auto_reply_body: string; notify_on_new: boolean; notify_on_mention: boolean; digest_frequency: string; display_name: string }>({
+    signature: "", auto_reply_enabled: false, auto_reply_subject: "", auto_reply_body: "", notify_on_new: true, notify_on_mention: true, digest_frequency: "off", display_name: "",
+  });
+  const [showSettings, setShowSettings] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return;
+      const { data } = await supabase.from("user_email_settings").select("*").eq("user_id", u.user.id).maybeSingle();
+      if (data) setUserSettings({
+        signature: data.signature ?? "",
+        auto_reply_enabled: !!data.auto_reply_enabled,
+        auto_reply_subject: data.auto_reply_subject ?? "",
+        auto_reply_body: data.auto_reply_body ?? "",
+        notify_on_new: data.notify_on_new ?? true,
+        notify_on_mention: data.notify_on_mention ?? true,
+        digest_frequency: data.digest_frequency ?? "off",
+        display_name: data.display_name ?? "",
+      });
+    })();
+  }, []);
+
+  const saveUserSettings = async () => {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return;
+    await supabase.from("user_email_settings").upsert({ user_id: u.user.id, ...userSettings, updated_at: new Date().toISOString() } as any);
+    setShowSettings(false);
+  };
 
   const refresh = async () => {
     setLoading(true);
