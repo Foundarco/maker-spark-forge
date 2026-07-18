@@ -401,7 +401,7 @@ function MailClient() {
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={() => sendCompose(true)} className="rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted">Save draft</button>
-                <button onClick={() => sendCompose(false)} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90"><Send className="h-3 w-3" /> Send</button>
+                <button disabled={sending} onClick={() => sendCompose(false)} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"><Send className="h-3 w-3" /> {sending ? "Sending…" : "Send"}</button>
               </div>
             </footer>
           </div>
