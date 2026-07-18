@@ -35,7 +35,8 @@ export function useRouteAccess(): AccessState {
       let allowed: Set<string> | null = null;
       if (!isAdmin) {
         if (roleIds.length === 0) {
-          allowed = null; // no custom roles → unrestricted (backwards compatible)
+          // Base employee with no custom roles → communication-only.
+          allowed = new Set<string>(["/channels", "/dm", "/meetings", "/phone", "/meeting-notes"]);
         } else {
           const { data: routes } = await supabase
             .from("role_route_access")

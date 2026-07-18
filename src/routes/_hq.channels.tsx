@@ -120,19 +120,34 @@ function ChannelsPage() {
 
   useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages]);
 
-  // Subscribe to channel call presence for the active channel
+  // Subscribe to channel call presence + broadcast for the active channel
   useEffect(() => {
     if (!active) { setCallParticipants([]); return; }
-    const ch = supabase.channel(`channel-call:${active}`, { config: { presence: { key: `viewer-${Math.random().toString(36).slice(2)}` } } });
+    setCallParticipants([]);
+    const viewerKey = `viewer-${Math.random().toString(36).slice(2)}`;
+    const ch = supabase.channel(`channel-call:${active}`, { config: { presence: { key: viewerKey } } });
     const sync = () => {
       const state = ch.presenceState() as Record<string, any[]>;
       const ids = Object.values(state).flat().map((p: any) => p.user_id).filter(Boolean);
-      setCallParticipants(Array.from(new Set(ids)));
+      setCallParticipants((prev) => Array.from(new Set([...prev, ...ids])));
     };
     ch.on("presence", { event: "sync" }, sync)
       .on("presence", { event: "join" }, sync)
       .on("presence", { event: "leave" }, sync)
-      .subscribe();
+      .on("broadcast", { event: "hello" }, ({ payload }) => {
+        const uid = payload?.user_id;
+        if (uid) setCallParticipants((prev) => prev.includes(uid) ? prev : [...prev, uid]);
+      })
+      .on("broadcast", { event: "bye" }, ({ payload }) => {
+        const uid = payload?.user_id;
+        if (uid) setCallParticipants((prev) => prev.filter((x) => x !== uid));
+      })
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") {
+          // Ask any participants to announce themselves
+          await ch.send({ type: "broadcast", event: "who", payload: {} });
+        }
+      });
     return () => { supabase.removeChannel(ch); };
   }, [active]);
 
