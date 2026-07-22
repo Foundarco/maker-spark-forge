@@ -9,10 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkRouteImport } from './routes/work'
 import { Route as UpgradesRouteImport } from './routes/upgrades'
 import { Route as SupportUsRouteImport } from './routes/support-us'
 import { Route as StoreRouteImport } from './routes/store'
 import { Route as SoftwareRouteImport } from './routes/software'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as QuoteRouteImport } from './routes/quote'
+import { Route as ProcessRouteImport } from './routes/process'
 import { Route as PressRouteImport } from './routes/press'
 import { Route as PartsRouteImport } from './routes/parts'
 import { Route as MissionRouteImport } from './routes/mission'
@@ -232,6 +236,11 @@ import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 import { Route as HqAdminBrandingRouteImport } from './routes/_hq.admin.branding'
 import { Route as HqAdminAccessRouteImport } from './routes/_hq.admin.access'
 
+const WorkRoute = WorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UpgradesRoute = UpgradesRouteImport.update({
   id: '/upgrades',
   path: '/upgrades',
@@ -250,6 +259,21 @@ const StoreRoute = StoreRouteImport.update({
 const SoftwareRoute = SoftwareRouteImport.update({
   id: '/software',
   path: '/software',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuoteRoute = QuoteRouteImport.update({
+  id: '/quote',
+  path: '/quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcessRoute = ProcessRouteImport.update({
+  id: '/process',
+  path: '/process',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PressRoute = PressRouteImport.update({
@@ -1363,10 +1387,14 @@ export interface FileRoutesByFullPath {
   '/mission': typeof MissionRoute
   '/parts': typeof PartsRoute
   '/press': typeof PressRoute
+  '/process': typeof ProcessRoute
+  '/quote': typeof QuoteRoute
+  '/services': typeof ServicesRoute
   '/software': typeof SoftwareRouteWithChildren
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
   '/upgrades': typeof UpgradesRoute
+  '/work': typeof WorkRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
   '/analytics': typeof HqAnalyticsRoute
@@ -1585,10 +1613,14 @@ export interface FileRoutesByTo {
   '/mission': typeof MissionRoute
   '/parts': typeof PartsRoute
   '/press': typeof PressRoute
+  '/process': typeof ProcessRoute
+  '/quote': typeof QuoteRoute
+  '/services': typeof ServicesRoute
   '/software': typeof SoftwareRouteWithChildren
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
   '/upgrades': typeof UpgradesRoute
+  '/work': typeof WorkRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
   '/analytics': typeof HqAnalyticsRoute
@@ -1809,10 +1841,14 @@ export interface FileRoutesById {
   '/mission': typeof MissionRoute
   '/parts': typeof PartsRoute
   '/press': typeof PressRoute
+  '/process': typeof ProcessRoute
+  '/quote': typeof QuoteRoute
+  '/services': typeof ServicesRoute
   '/software': typeof SoftwareRouteWithChildren
   '/store': typeof StoreRouteWithChildren
   '/support-us': typeof SupportUsRoute
   '/upgrades': typeof UpgradesRoute
+  '/work': typeof WorkRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/accounts': typeof HqAccountsRoute
   '/_hq/analytics': typeof HqAnalyticsRoute
@@ -2034,10 +2070,14 @@ export interface FileRouteTypes {
     | '/mission'
     | '/parts'
     | '/press'
+    | '/process'
+    | '/quote'
+    | '/services'
     | '/software'
     | '/store'
     | '/support-us'
     | '/upgrades'
+    | '/work'
     | '/accounting'
     | '/accounts'
     | '/analytics'
@@ -2256,10 +2296,14 @@ export interface FileRouteTypes {
     | '/mission'
     | '/parts'
     | '/press'
+    | '/process'
+    | '/quote'
+    | '/services'
     | '/software'
     | '/store'
     | '/support-us'
     | '/upgrades'
+    | '/work'
     | '/accounting'
     | '/accounts'
     | '/analytics'
@@ -2479,10 +2523,14 @@ export interface FileRouteTypes {
     | '/mission'
     | '/parts'
     | '/press'
+    | '/process'
+    | '/quote'
+    | '/services'
     | '/software'
     | '/store'
     | '/support-us'
     | '/upgrades'
+    | '/work'
     | '/_hq/accounting'
     | '/_hq/accounts'
     | '/_hq/analytics'
@@ -2704,10 +2752,14 @@ export interface RootRouteChildren {
   MissionRoute: typeof MissionRoute
   PartsRoute: typeof PartsRoute
   PressRoute: typeof PressRoute
+  ProcessRoute: typeof ProcessRoute
+  QuoteRoute: typeof QuoteRoute
+  ServicesRoute: typeof ServicesRoute
   SoftwareRoute: typeof SoftwareRouteWithChildren
   StoreRoute: typeof StoreRouteWithChildren
   SupportUsRoute: typeof SupportUsRoute
   UpgradesRoute: typeof UpgradesRoute
+  WorkRoute: typeof WorkRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
@@ -2720,6 +2772,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/work': {
+      id: '/work'
+      path: '/work'
+      fullPath: '/work'
+      preLoaderRoute: typeof WorkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/upgrades': {
       id: '/upgrades'
       path: '/upgrades'
@@ -2746,6 +2805,27 @@ declare module '@tanstack/react-router' {
       path: '/software'
       fullPath: '/software'
       preLoaderRoute: typeof SoftwareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quote': {
+      id: '/quote'
+      path: '/quote'
+      fullPath: '/quote'
+      preLoaderRoute: typeof QuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/process': {
+      id: '/process'
+      path: '/process'
+      fullPath: '/process'
+      preLoaderRoute: typeof ProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/press': {
@@ -4737,10 +4817,14 @@ const rootRouteChildren: RootRouteChildren = {
   MissionRoute: MissionRoute,
   PartsRoute: PartsRoute,
   PressRoute: PressRoute,
+  ProcessRoute: ProcessRoute,
+  QuoteRoute: QuoteRoute,
+  ServicesRoute: ServicesRoute,
   SoftwareRoute: SoftwareRouteWithChildren,
   StoreRoute: StoreRouteWithChildren,
   SupportUsRoute: SupportUsRoute,
   UpgradesRoute: UpgradesRoute,
+  WorkRoute: WorkRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalShippingReturnsRoute: LegalShippingReturnsRoute,
