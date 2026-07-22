@@ -1,47 +1,47 @@
 // Single source of truth for brand identity across the whole site.
-// Swap these values (and optionally add a logo file) to rebrand everything.
+// Nimbus Forge — a hardware product studio: design, prototype, manufacture, ship.
 
 export const brand = {
-  name: "Loomprint",
-  tagline: "Community-first 3D printers, built to teach.",
+  name: "Nimbus Forge",
+  tagline: "From idea to shelf. One team, one cloud.",
   shortMission:
-    "We build approachable, repairable 3D printers so more people — especially young people — can learn how things are made.",
-  // Set logoUrl to a path (e.g. "/logo.svg") once you have one. Until then,
-  // the site renders a typographic wordmark using `name`.
+    "Nimbus Forge is a hardware product studio. We take your idea from a sketch to a working prototype to a manufactured product on the shelf — under one roof, without the handoffs.",
+  // Set logoUrl to a path once available. Until then, a typographic cloud
+  // wordmark is rendered via BrandLogo.
   logoUrl: null as string | null,
   contact: {
-    general: "hello@[placeholder-domain].com",
-    support: "support@[placeholder-domain].com",
-    press: "press@[placeholder-domain].com",
-    partnerships: "partnerships@[placeholder-domain].com",
+    general: "hello@clovrlab.com",
+    support: "support@clovrlab.com",
+    press: "press@clovrlab.com",
+    partnerships: "partnerships@clovrlab.com",
   },
   socials: {
     discord: "#",
     youtube: "#",
     instagram: "#",
     github: "#",
+    linkedin: "#",
   },
-  // 5 brand pillars — final wording TBD.
   pillars: [
     {
-      title: "Community-first",
-      body: "Owners help owners. Documentation, guides, and design decisions live in the open where the community can improve them.",
+      title: "One team, end to end",
+      body: "Designers, engineers, and manufacturing sit in one room. No lost translation between concept and factory floor.",
     },
     {
-      title: "Built to teach",
-      body: "Every printer is a working example of how it works — visible mechanism, labeled parts, and lessons that grow with the student.",
+      title: "Prototype in days",
+      body: "In-house 3D printing, CNC, and electronics prototyping means a working v1 in a week — not a quarter.",
     },
     {
-      title: "Repairable by design",
-      body: "If it breaks, you can fix it. Standard fasteners, printable spares, and step-by-step guides for every common failure.",
+      title: "Manufacturing that scales",
+      body: "From a batch of 50 to a run of 50,000. We own the supply chain, tooling, and QA so you don't have to.",
     },
     {
-      title: "Honest engineering",
-      body: "We tell you what the machine is good at, and what it isn't. Trade-offs are documented, not hidden behind marketing copy.",
+      title: "Transparent by default",
+      body: "Real-time dashboards on every build, every unit cost, every timeline. You see what we see.",
     },
     {
-      title: "Made to last",
-      body: "Long-lived components over disposable ones. Upgrades ship as parts, not as new machines.",
+      title: "Cloud-native operations",
+      body: "Every file, drawing, BOM, and inspection lives in one place — accessible to you and your team from anywhere.",
     },
   ],
 } as const;

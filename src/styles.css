@@ -39,6 +39,12 @@
   --color-success-foreground: var(--success-foreground);
   --color-success-soft: var(--success-soft);
   --color-accent-warn: var(--accent-warn);
+  --color-sky: var(--sky);
+  --color-sky-50: var(--sky-50);
+  --color-sky-100: var(--sky-100);
+  --color-sky-200: var(--sky-200);
+  --color-sky-300: var(--sky-300);
+  --color-cloud: var(--cloud);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-muted: var(--sidebar-muted);
@@ -70,6 +76,13 @@
   --success-foreground: oklch(1 0 0);
   --success-soft: oklch(0.94 0.06 155);
   --accent-warn: oklch(0.72 0.18 55);
+  /* Cloud palette — sky blues + soft whites */
+  --sky-50: #f0f9ff;
+  --sky-100: #e0f2fe;
+  --sky-200: #bae6fd;
+  --sky-300: #7dd3fc;
+  --sky: #38bdf8;
+  --cloud: #f8fafc;
   --secondary: oklch(0.965 0.005 260);
   --secondary-foreground: oklch(0.2 0.02 260);
   --muted: oklch(0.965 0.005 260);

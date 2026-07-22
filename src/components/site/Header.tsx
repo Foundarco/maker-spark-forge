@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { BrandLogo } from "./BrandLogo";
-import { Menu, X, ShoppingBag, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowUpRight } from "lucide-react";
 
 type LinkItem = { to: string; label: string; desc?: string; params?: Record<string, string> };
 type MegaSection = { heading?: string; links: LinkItem[] };
@@ -11,120 +11,35 @@ type NavItem =
 
 const nav: NavItem[] = [
   {
-    label: "Printers",
+    label: "Services",
     sections: [
       {
-        heading: "Shop printers",
+        heading: "What we do",
         links: [
-          { to: "/store/$slug", params: { slug: "core-printer" }, label: "The Core Printer", desc: "Our flagship desktop printer" },
-          { to: "/store", label: "All printers", desc: "Browse the full lineup" },
-          { to: "/compare", label: "Compare models", desc: "Specs side-by-side" },
+          { to: "/services", label: "Product Development", desc: "Concept, industrial design, engineering" },
+          { to: "/services", label: "Prototyping", desc: "3D print, CNC, electronics in-house" },
+          { to: "/services", label: "Manufacturing", desc: "Tooling, assembly, QA, fulfillment" },
         ],
       },
       {
-        heading: "Add-ons",
+        heading: "Capabilities",
         links: [
-          { to: "/accessories", label: "Accessories", desc: "Build plates, nozzles, tools" },
-          { to: "/upgrades", label: "Upgrades", desc: "Enclosures, extruders, sensors" },
-          { to: "/parts", label: "Replacement parts", desc: "Every screw, every belt" },
+          { to: "/services", label: "Mechanical engineering", desc: "CAD, DFM, structural analysis" },
+          { to: "/services", label: "Electronics & firmware", desc: "PCB design, embedded software" },
+          { to: "/services", label: "Certification & compliance", desc: "FCC, CE, UL, safety" },
         ],
       },
     ],
     featured: {
-      title: "Now shipping",
-      body: "The Core Printer — open frame, direct drive, endlessly repairable.",
-      cta: { label: "Shop the Core", to: "/store" },
+      title: "One team, end to end",
+      body: "Skip the agency handoffs. Design, engineering, and manufacturing under one cloud.",
+      cta: { label: "See how we work", to: "/process" },
     },
   },
-  {
-    label: "Materials",
-    sections: [
-      {
-        heading: "Buy materials",
-        links: [
-          { to: "/materials/filament", label: "Filament spools", desc: "PLA, PETG, TPU, ABS" },
-          { to: "/materials/pellets", label: "Pellets", desc: "Bulk material for the Pellet System" },
-          { to: "/materials", label: "All materials", desc: "Browse the catalog" },
-        ],
-      },
-      {
-        heading: "Sustainability",
-        links: [
-          { to: "/materials/recycling", label: "Recycling program", desc: "Send back spools & failed prints" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Software",
-    sections: [
-      {
-        heading: "Tools",
-        links: [
-          { to: "/software/slicer", label: "LoomSlicer", desc: "Our free desktop slicer" },
-          { to: "/software/app", label: "Mobile app", desc: "Monitor prints from anywhere" },
-          { to: "/software/firmware", label: "Firmware", desc: "Open, versioned, changelog-first" },
-        ],
-      },
-      {
-        heading: "Resources",
-        links: [
-          { to: "/software/downloads", label: "Downloads", desc: "Slicer, firmware, drivers" },
-          { to: "/software", label: "Software overview", desc: "How everything fits together" },
-        ],
-      },
-    ],
-    featured: {
-      title: "LoomSlicer 2.0",
-      body: "Rewritten from the ground up. Faster, prettier, and 100% free.",
-      cta: { label: "See what's new", to: "/software/slicer" },
-    },
-  },
-  {
-    label: "Business",
-    sections: [
-      {
-        heading: "Company",
-        links: [
-          { to: "/about", label: "About", desc: "Who we are, why we exist" },
-          { to: "/mission", label: "Our mission", desc: "The 'why' behind the work" },
-          { to: "/how-its-built", label: "How it's built", desc: "Engineering & manufacturing" },
-          { to: "/careers", label: "Careers", desc: "Come build with us" },
-          { to: "/press", label: "Press", desc: "Media kit & mentions" },
-        ],
-      },
-      {
-        heading: "Community",
-        links: [
-          { to: "/community", label: "Community", desc: "Forum, ambassadors, events" },
-          { to: "/get-involved", label: "Get involved", desc: "Educators, testers, contributors" },
-          { to: "/support-us", label: "Support us", desc: "Ways to help us grow" },
-          { to: "/blog", label: "Blog", desc: "Field notes & release journals" },
-        ],
-      },
-    ],
-  },
-  {
-    label: "Support",
-    sections: [
-      {
-        heading: "Get help",
-        links: [
-          { to: "/help", label: "Help center", desc: "Guides & repair walkthroughs" },
-          { to: "/faq", label: "FAQ", desc: "Quick answers" },
-          { to: "/contact", label: "Contact us", desc: "Talk to a human" },
-        ],
-      },
-      {
-        heading: "Policies",
-        links: [
-          { to: "/legal/warranty", label: "Warranty", desc: "One year, full coverage" },
-          { to: "/legal/shipping-returns", label: "Shipping & returns", desc: "How we ship & handle returns" },
-          { to: "/legal/privacy", label: "Privacy", desc: "How we handle your data" },
-        ],
-      },
-    ],
-  },
+  { label: "Process", to: "/process" },
+  { label: "Work", to: "/work" },
+  { label: "About", to: "/about" },
+  { label: "Journal", to: "/blog" },
 ];
 
 export function Header() {
@@ -153,8 +68,8 @@ export function Header() {
     <header
       className={`sticky top-0 z-40 transition-all duration-300 ${
         scrolled
-          ? "border-b border-border bg-background/85 backdrop-blur-xl"
-          : "border-b border-transparent bg-background/60 backdrop-blur-md"
+          ? "border-b border-sky-200/60 bg-white/85 backdrop-blur-xl"
+          : "border-b border-transparent bg-white/60 backdrop-blur-md"
       }`}
       onMouseLeave={closeWithDelay}
     >
@@ -169,20 +84,17 @@ export function Header() {
               <Link
                 key={item.label}
                 to={item.to}
-                className="rounded-full px-3.5 py-1.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
-                activeProps={{ className: "text-foreground bg-muted" }}
+                className="rounded-full px-3.5 py-1.5 text-sm text-muted-foreground transition hover:bg-sky-100/60 hover:text-foreground"
+                activeProps={{ className: "text-foreground bg-sky-100/60" }}
               >
                 {item.label}
               </Link>
             ) : (
-              <div
-                key={item.label}
-                onMouseEnter={() => openWithDelay(item.label)}
-              >
+              <div key={item.label} onMouseEnter={() => openWithDelay(item.label)}>
                 <button
                   type="button"
-                  className={`inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm transition hover:bg-muted hover:text-foreground ${
-                    openMenu === item.label ? "bg-muted text-foreground" : "text-muted-foreground"
+                  className={`inline-flex items-center gap-1 rounded-full px-3.5 py-1.5 text-sm transition hover:bg-sky-100/60 hover:text-foreground ${
+                    openMenu === item.label ? "bg-sky-100/60 text-foreground" : "text-muted-foreground"
                   }`}
                   aria-expanded={openMenu === item.label}
                   onClick={() => setOpenMenu(openMenu === item.label ? null : item.label)}
@@ -197,21 +109,19 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <Link
-            to="/cart"
-            className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium hover:border-foreground/30 sm:inline-flex"
-            aria-label="Cart"
+            to="/contact"
+            className="hidden rounded-full border border-sky-200 bg-white px-4 py-2 text-sm font-medium text-ink hover:border-primary/40 sm:inline-flex"
           >
-            <ShoppingBag className="h-4 w-4" aria-hidden />
-            Cart
+            Contact
           </Link>
           <Link
-            to="/store"
-            className="hidden rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:brightness-110 sm:inline-flex"
+            to="/quote"
+            className="hidden items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition hover:brightness-110 sm:inline-flex"
           >
-            Shop
+            Request a quote <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
           <button
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border lg:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sky-200 lg:hidden"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
@@ -224,7 +134,7 @@ export function Header() {
       {/* Mega menu panel */}
       {openMenu && (
         <div
-          className="absolute inset-x-0 top-full hidden border-t border-border bg-background/95 backdrop-blur-xl shadow-xl lg:block"
+          className="absolute inset-x-0 top-full hidden border-t border-sky-200/60 bg-white/95 backdrop-blur-xl shadow-xl lg:block"
           onMouseEnter={() => openWithDelay(openMenu)}
           onMouseLeave={closeWithDelay}
         >
@@ -245,7 +155,7 @@ export function Header() {
                           <Link
                             to={l.to}
                             params={l.params}
-                            className="group -mx-2 block rounded-lg px-3 py-2 transition hover:bg-muted"
+                            className="group -mx-2 block rounded-lg px-3 py-2 transition hover:bg-sky-50"
                             onClick={() => setOpenMenu(null)}
                           >
                             <p className="text-sm font-semibold text-foreground group-hover:text-primary">
@@ -261,22 +171,18 @@ export function Header() {
                   </div>
                 ))}
                 {item.featured && (
-                  <div className="relative overflow-hidden rounded-2xl surface-dark p-6">
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-70"
-                      style={{
-                        background:
-                          "radial-gradient(ellipse 80% 80% at 100% 0%, oklch(0.4 0.18 40 / 0.4), transparent 60%)",
-                      }}
-                      aria-hidden
-                    />
+                  <div
+                    className="relative overflow-hidden rounded-2xl p-6"
+                    style={{ background: "linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%)" }}
+                  >
+                    <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/20 blur-2xl" />
                     <div className="relative">
-                      <p className="text-xs font-semibold uppercase tracking-widest text-primary">Featured</p>
+                      <p className="text-xs font-semibold uppercase tracking-widest text-sky-200">Featured</p>
                       <h3 className="mt-2 text-xl font-semibold text-white">{item.featured.title}</h3>
-                      <p className="mt-2 text-sm text-white/70">{item.featured.body}</p>
+                      <p className="mt-2 text-sm text-white/80">{item.featured.body}</p>
                       <Link
                         to={item.featured.cta.to}
-                        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary"
+                        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-white"
                         onClick={() => setOpenMenu(null)}
                       >
                         {item.featured.cta.label} →
@@ -292,7 +198,7 @@ export function Header() {
 
       {/* Mobile menu */}
       {mobileOpen ? (
-        <div className="border-t border-border bg-background lg:hidden">
+        <div className="border-t border-sky-200/60 bg-white lg:hidden">
           <nav className="mx-auto grid w-full max-w-7xl gap-1 px-5 py-4" aria-label="Mobile">
             {nav.map((item) =>
               "to" in item ? (
@@ -300,13 +206,13 @@ export function Header() {
                   key={item.label}
                   to={item.to}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-muted"
+                  className="rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-sky-50"
                 >
                   {item.label}
                 </Link>
               ) : (
                 <details key={item.label} className="group rounded-lg">
-                  <summary className="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-muted">
+                  <summary className="flex cursor-pointer items-center justify-between rounded-lg px-3 py-2.5 text-base font-semibold text-foreground hover:bg-sky-50">
                     {item.label}
                     <ChevronDown className="h-4 w-4 transition group-open:rotate-180" />
                   </summary>
@@ -325,7 +231,7 @@ export function Header() {
                                 to={l.to}
                                 params={l.params}
                                 onClick={() => setMobileOpen(false)}
-                                className="block rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                                className="block rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-sky-50 hover:text-foreground"
                               >
                                 {l.label}
                               </Link>
@@ -338,20 +244,20 @@ export function Header() {
                 </details>
               )
             )}
-            <div className="mt-3 flex gap-2 border-t border-border pt-4">
+            <div className="mt-3 flex gap-2 border-t border-sky-200/60 pt-4">
               <Link
-                to="/cart"
+                to="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 rounded-full border border-border px-4 py-2.5 text-center text-sm font-medium"
+                className="flex-1 rounded-full border border-sky-200 px-4 py-2.5 text-center text-sm font-medium"
               >
-                Cart
+                Contact
               </Link>
               <Link
-                to="/store"
+                to="/quote"
                 onClick={() => setMobileOpen(false)}
                 className="flex-1 rounded-full bg-primary px-4 py-2.5 text-center text-sm font-semibold text-primary-foreground"
               >
-                Shop
+                Request a quote
               </Link>
             </div>
           </nav>
