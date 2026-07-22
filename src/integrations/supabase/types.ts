@@ -3654,6 +3654,60 @@ export type Database = {
         }
         Relationships: []
       }
+      quote_requests: {
+        Row: {
+          assigned_to: string | null
+          budget: string | null
+          company: string | null
+          created_at: string
+          description: string
+          email: string
+          id: string
+          name: string
+          project_type: string | null
+          services: string[]
+          source: string | null
+          stage: string | null
+          status: string
+          timeline: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          budget?: string | null
+          company?: string | null
+          created_at?: string
+          description: string
+          email: string
+          id?: string
+          name: string
+          project_type?: string | null
+          services?: string[]
+          source?: string | null
+          stage?: string | null
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          budget?: string | null
+          company?: string | null
+          created_at?: string
+          description?: string
+          email?: string
+          id?: string
+          name?: string
+          project_type?: string | null
+          services?: string[]
+          source?: string | null
+          stage?: string | null
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       role_route_access: {
         Row: {
           created_at: string

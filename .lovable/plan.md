@@ -1,67 +1,94 @@
-# Big update — 5 workstreams
+# Website rebuild — "Nimbus Forge"
 
-Shipping in this order so each phase leaves the app usable.
+Pivoting the public site from Loomprint (3D printer product) to a full-service hardware product-development studio, wrapped in a literal cloud brand.
 
-## 1. @Mentions + notification sounds (small, high value)
+## Brand direction
 
-- Channel & DM composer: `@` triggers a user picker (searches `profiles`). Mentions stored as `@[Name](user_id)` markdown, rendered via `UserMention`.
-- On send: parse mentions → insert rows into `notifications` (`title`, `body`, `link` to the channel/DM).
-- `SoundNotifier` already plays site-wide sounds on `notifications` inserts and DM inserts — extend to detect if the current user is `@mentioned` in a `channel_messages` row and play the higher-priority "ping" sound + browser Notification (with permission prompt on first mention).
-- Add unread badge counts in the sidebar for Communication.
+- **Name:** Nimbus Forge — clouds (Nimbus) + hardware/making (Forge). Tagline: *"From idea to shelf. One team, one cloud."*
+- **Palette (cloud-native, added to `src/styles.css`):**
+  - `--sky-50` #F4F8FC (page bg), `--sky-100` #E6EFF8, `--sky-200` #CDDDEC
+  - `--cloud` #FFFFFF, `--cloud-shadow` #DCE4EE
+  - `--ink` #0F1B2D (deep storm-navy for text), `--ink-soft` #4A5A70
+  - `--primary` #3A7BD5 (clear-sky blue), `--primary-glow` #6FA8E8
+  - `--accent` #F5C56A (sunlight through clouds — warm CTA accent)
+- **Typography:** Instrument Serif (display, italic touches for "cloud" words) + Inter (body).
+- **Visual system:** photoreal sky/cloud hero + section backdrops, plus soft SVG cloud silhouettes as decorative accents, drifting subtly on scroll. Rounded 2xl cards with soft cloud-shadow blur. No hard black.
 
-## 2. Google Drive-style Drive
+## Scope (full rebuild)
 
-- Rename nav entry "Cloud Storage" → "Drive". Rebuild `_hq.files.tsx`.
-- New table `drive_items` (folder or file, `parent_id`, `owner_id`, `starred`, `trashed`, `mime_type`, `size_bytes`, `storage_path`).
-- New table `drive_shares` (`item_id`, `user_id | role_id`, `permission: view|comment|edit`).
-- Storage bucket `drive` (private) — real uploads via `supabase.storage.from('drive').upload()`.
-- UI: left nav (My Drive / Shared with me / Starred / Recent / Trash), breadcrumb, folder tree, grid/list toggle, drag-and-drop upload, right-click menu (rename, move, share, star, download, delete), share dialog picking users/roles + permission level.
-- Previews: images + PDFs inline; other types show icon + download.
+Rebrand `src/config/brand.ts` (Nimbus Forge, new mission/pillars/contact placeholders) so all headers/footers/meta update.
 
-## 3. Role-aware Dashboard
+### New / rewritten routes
+- `/` Home — cloud hero, problem→solution, service pillars, process, portfolio teaser, CTA
+- `/services` — overview of the four service groups (Product Dev, Branding & Launch, Manufacturing, Operations)
+- `/services/product-development`, `/services/branding-launch`, `/services/manufacturing`, `/services/operations` — leaf pages, each with capability list + example deliverables
+- `/process` — Discovery → Design → Prototype → Manufacture → Launch → Operate (6-step cloud-journey visual)
+- `/work` — portfolio grid (placeholder case studies)
+- `/work/$slug` — case study template
+- `/about` — mission, vision, team placeholders, "documenting in public" ethos
+- `/journal` — replaces `/blog`, same data source
+- `/journal/$slug`
+- `/contact` — simple contact info + link to quote
+- `/quote` — **primary CTA**: structured multi-step intake (project type, stage, services needed, timeline, budget range, description, contact). Submits to a new `quote_requests` table via a server function; emails notification via existing Resend setup.
+- `/legal/privacy`, `/legal/terms` — keep, restyle
 
-- Rebuild `_hq.dashboard.tsx` as a 3-column layout.
-- Detects user's roles (`user_roles` + `user_custom_roles`) and renders relevant KPI cards:
-  - Growth: open deals, pipeline value, MRR, new leads this week, invoices due.
-  - Product: open issues, active work orders, tasks in progress, inventory low-stock.
-  - Operations: pending onboarding, time-off requests, open tickets.
-  - Everyone: my tasks, my meetings today, my unread mentions.
-- Right rail: Today's meetings (with RSVPs), unread channels/DMs, mentions & pings feed.
-- All data fetched via `useSuspenseQuery` per-section so partial failures don't break the page.
+### Removed / redirected (Loomprint-specific)
+Delete: `store`, `store.$slug`, `cart`, `checkout`, `compare`, `accessories`, `parts`, `upgrades`, `materials*`, `software*`, `learn*`, `how-its-built`, `mission` (folded into `/about`), `community`, `get-involved`, `support-us`, `press`, `careers` (keep as light placeholder), `faq`, `help*`, `legal.warranty`, `legal.shipping-returns`, `legal.cookies`.
 
-## 4. AI Assistant that actually knows the workspace
+Corresponding `products`/content queries in `src/lib/content.functions.ts` swapped from printers/materials to services + case studies.
 
-- Give the assistant tools (AI SDK `tool()` calls) — server-side, running under `requireSupabaseAuth` so every query respects RLS:
-  - `search_people(query)` → profiles/employees
-  - `search_channels(query)` → recent channel messages
-  - `list_my_meetings(range)` → upcoming meetings
-  - `list_my_tasks()` → open tasks/issues assigned to me
-  - `search_deals(query)`, `search_tickets(query)`, `search_files(query)`
-  - `draft_email({to, subject, purpose})` → returns markdown draft, does NOT send
-  - `draft_announcement`, `draft_meeting_notes`
-- System prompt loaded with: current user profile, their roles, current module, current date.
-- Streaming preserved; multi-step reasoning up to 8 tool calls.
+### Shared components
+- `Header` / `Footer` updated for new nav (Services, Process, Work, Journal, About, Contact → Request a Quote button).
+- New `CloudBackdrop` component: layered SVG clouds + subtle parallax drift.
+- New `ServiceCard`, `ProcessStep`, `CaseStudyCard`.
+- `BrandLogo` gets a small cloud mark (inline SVG) next to the wordmark until a real logo exists.
 
-## 5. Email system finish
+### Imagery
+Generate 6–8 hero/section images via `imagegen` (photoreal skies, cloud landscapes, subtle hardware silhouettes against clouds), uploaded through `lovable-assets`. Replace existing `hero-printer` / `materials` / `community` / `detail` asset pointers.
 
-- Resend inbound webhook: already wired; verify signature check and expand event handling (already handles 11 event types — audit).
-- **Per-user email settings** (new tab on `/profile`):
-  - display_name, signature (markdown), auto-reply on/off + text, notification prefs (per-thread, mentions only, digest).
-- **Company admin email settings** (new tab on `/admin/company`):
-  - sender_domain, from_name, default footer, click/open tracking toggles, default reply-to.
-- **Templates management** (`/admin/email-templates`): CRUD on `hq_email_templates` with variable placeholders (`{{name}}`, `{{company}}`), preview pane, test-send.
-- **Suppression list** (`/admin/email-suppression`): view bounced/complained/unsubscribed; call `email_domain--check_email_suppression` + button to resubscribe (removes from local suppression cache; Lovable still enforces global rules).
+### Data / backend
+- New `quote_requests` table (id, name, email, company, project_type, stage, services text[], timeline, budget, description, status, created_at) with RLS: anon INSERT allowed, authenticated employees SELECT/UPDATE via `is_employee`. GRANTs included.
+- Server function `submitQuoteRequest` (public, rate-limit friendly, Zod-validated) — inserts row and sends notification email through existing Resend infra.
+- HQ side: add a lightweight `/quote-requests` view under Growth Team to triage submissions (reuses `ResourcePage`).
 
-## Technical notes (per file)
+## SEO / metadata
 
-- Migration bundling: one migration for `drive_items`, `drive_shares`, storage bucket policies, `user_email_settings`, `company_email_settings`, plus RLS + GRANTs.
-- Assistant tools live in `src/routes/api/hq/assistant.ts` using `experimental_tool` from AI SDK, with each tool's `execute` doing a Supabase query using the request's bearer token.
-- Mention parser: shared util `src/lib/hq/mentions.ts` (parse + render + notify).
-- Sidebar badges use a lightweight `useUnreadCounts()` hook subscribing to realtime.
-- No new third-party packages required.
+Each route gets its own `head()` with unique title, meta description, og:title, og:description. Home + leaf pages set `og:image` to their absolute hero URL. `robots`/canonical tags on all public routes.
 
-## Delivery order this turn
+## Out of scope this pass
 
-I'll do **Phase 1 (mentions + sounds) + Phase 2 (Drive) + start Phase 3 (dashboard skeleton)** in this turn. Phases 4 (assistant tools) and 5 (email settings + templates) in a follow-up turn — they each add ~15–20 files and I'd rather ship each one solid than half of everything.
+- Final logo artwork (typographic mark + cloud SVG placeholder for now)
+- Real case study content (structured placeholders)
+- Pricing pages (quote-driven for now)
+- HQ-side changes beyond the new quote-requests triage view
 
-Sound good?
+## Technical notes
+
+```text
+src/
+  config/brand.ts                (rewrite)
+  components/site/
+    CloudBackdrop.tsx            (new)
+    ServiceCard.tsx              (new)
+    ProcessStep.tsx              (new)
+    CaseStudyCard.tsx            (new)
+    Header.tsx / Footer.tsx      (nav rewrite)
+    BrandLogo.tsx                (cloud mark)
+  routes/
+    index.tsx                    (rewrite)
+    services.tsx + 4 children    (new)
+    process.tsx                  (new)
+    work.tsx, work.$slug.tsx     (new)
+    about.tsx                    (rewrite)
+    journal.tsx, journal.$slug   (rename from blog.*)
+    contact.tsx                  (rewrite)
+    quote.tsx                    (new, primary CTA)
+    _hq.quote-requests.tsx       (new, triage)
+    [Loomprint routes]           (delete)
+  lib/
+    content.functions.ts         (services + case studies)
+    quote.functions.ts           (new server fn)
+  styles.css                     (cloud tokens)
+```
+
+Migration adds `quote_requests` with GRANTs + RLS in one file. Existing Loomprint tables in the DB are left in place (unused) to avoid touching HQ data.
