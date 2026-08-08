@@ -149,6 +149,45 @@ export type Database = {
         }
         Relationships: []
       }
+      announcement_acks: {
+        Row: {
+          acknowledged_at: string | null
+          announcement_id: string
+          id: string
+          user_id: string
+          viewed_at: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          announcement_id: string
+          id?: string
+          user_id: string
+          viewed_at?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          announcement_id?: string
+          id?: string
+          user_id?: string
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_acks_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcement_acks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       announcements: {
         Row: {
           author_id: string | null
@@ -493,6 +532,1387 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: []
+      }
+      con_audit_log: {
+        Row: {
+          action: string
+          actor_id: string | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          field: string | null
+          id: string
+          new_value: string | null
+          old_value: string | null
+          summary: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          field?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          summary?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          field?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          summary?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_audit_log_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_change_orders: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          co_number: string | null
+          cost_delta: number | null
+          created_at: string
+          days_delta: number | null
+          id: string
+          job_id: string | null
+          reason: string | null
+          requested_by: string | null
+          scope: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          co_number?: string | null
+          cost_delta?: number | null
+          created_at?: string
+          days_delta?: number | null
+          id?: string
+          job_id?: string | null
+          reason?: string | null
+          requested_by?: string | null
+          scope?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          co_number?: string | null
+          cost_delta?: number | null
+          created_at?: string
+          days_delta?: number | null
+          id?: string
+          job_id?: string | null
+          reason?: string | null
+          requested_by?: string | null
+          scope?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_change_orders_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_change_orders_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_clients: {
+        Row: {
+          address: string | null
+          city: string | null
+          client_type: string | null
+          company: string | null
+          created_at: string
+          created_by: string | null
+          email: string | null
+          id: string
+          name: string
+          notes: string | null
+          owner_id: string | null
+          phone: string | null
+          state: string | null
+          status: string
+          updated_at: string
+          zip: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          client_type?: string | null
+          company?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          zip?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          client_type?: string | null
+          company?: string | null
+          created_at?: string
+          created_by?: string | null
+          email?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          state?: string | null
+          status?: string
+          updated_at?: string
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_clients_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_clients_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_context_messages: {
+        Row: {
+          attachments: Json | null
+          author_id: string | null
+          body: string
+          channel: string
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          internal: boolean | null
+          mentions: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json | null
+          author_id?: string | null
+          body: string
+          channel?: string
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          internal?: boolean | null
+          mentions?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json | null
+          author_id?: string | null
+          body?: string
+          channel?: string
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          internal?: boolean | null
+          mentions?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_context_messages_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_crew_assignments: {
+        Row: {
+          created_at: string
+          crew_id: string | null
+          end_date: string | null
+          id: string
+          job_id: string | null
+          notes: string | null
+          role: string | null
+          start_date: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          crew_id?: string | null
+          end_date?: string | null
+          id?: string
+          job_id?: string | null
+          notes?: string | null
+          role?: string | null
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          crew_id?: string | null
+          end_date?: string | null
+          id?: string
+          job_id?: string | null
+          notes?: string | null
+          role?: string | null
+          start_date?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_crew_assignments_crew_id_fkey"
+            columns: ["crew_id"]
+            isOneToOne: false
+            referencedRelation: "con_crews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_crew_assignments_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_crew_assignments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_crews: {
+        Row: {
+          created_at: string
+          foreman_id: string | null
+          id: string
+          name: string
+          notes: string | null
+          size: number | null
+          status: string
+          trade: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          foreman_id?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          size?: number | null
+          status?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          foreman_id?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          size?: number | null
+          status?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_crews_foreman_id_fkey"
+            columns: ["foreman_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_daily_logs: {
+        Row: {
+          created_at: string
+          crew_count: number | null
+          delays: string | null
+          hours_worked: number | null
+          id: string
+          job_id: string | null
+          log_date: string
+          materials_received: string | null
+          photos: string[] | null
+          status: string
+          submitted_by: string | null
+          temperature: string | null
+          updated_at: string
+          visitors: string | null
+          weather: string | null
+          work_performed: string | null
+        }
+        Insert: {
+          created_at?: string
+          crew_count?: number | null
+          delays?: string | null
+          hours_worked?: number | null
+          id?: string
+          job_id?: string | null
+          log_date?: string
+          materials_received?: string | null
+          photos?: string[] | null
+          status?: string
+          submitted_by?: string | null
+          temperature?: string | null
+          updated_at?: string
+          visitors?: string | null
+          weather?: string | null
+          work_performed?: string | null
+        }
+        Update: {
+          created_at?: string
+          crew_count?: number | null
+          delays?: string | null
+          hours_worked?: number | null
+          id?: string
+          job_id?: string | null
+          log_date?: string
+          materials_received?: string | null
+          photos?: string[] | null
+          status?: string
+          submitted_by?: string | null
+          temperature?: string | null
+          updated_at?: string
+          visitors?: string | null
+          weather?: string | null
+          work_performed?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_daily_logs_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_daily_logs_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_deliveries: {
+        Row: {
+          created_at: string
+          expected_date: string | null
+          id: string
+          job_id: string | null
+          material: string
+          notes: string | null
+          po_id: string | null
+          quantity: number | null
+          received_by: string | null
+          received_date: string | null
+          status: string
+          supplier: string | null
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expected_date?: string | null
+          id?: string
+          job_id?: string | null
+          material: string
+          notes?: string | null
+          po_id?: string | null
+          quantity?: number | null
+          received_by?: string | null
+          received_date?: string | null
+          status?: string
+          supplier?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expected_date?: string | null
+          id?: string
+          job_id?: string | null
+          material?: string
+          notes?: string | null
+          po_id?: string | null
+          quantity?: number | null
+          received_by?: string | null
+          received_date?: string | null
+          status?: string
+          supplier?: string | null
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_deliveries_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_deliveries_po_id_fkey"
+            columns: ["po_id"]
+            isOneToOne: false
+            referencedRelation: "mfg_purchase_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_deliveries_received_by_fkey"
+            columns: ["received_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_documents: {
+        Row: {
+          created_at: string
+          doc_type: string | null
+          entity_id: string | null
+          entity_type: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          is_latest: boolean | null
+          job_id: string | null
+          notes: string | null
+          supersedes: string | null
+          title: string
+          updated_at: string
+          uploaded_by: string | null
+          version: string | null
+        }
+        Insert: {
+          created_at?: string
+          doc_type?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          is_latest?: boolean | null
+          job_id?: string | null
+          notes?: string | null
+          supersedes?: string | null
+          title: string
+          updated_at?: string
+          uploaded_by?: string | null
+          version?: string | null
+        }
+        Update: {
+          created_at?: string
+          doc_type?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          is_latest?: boolean | null
+          job_id?: string | null
+          notes?: string | null
+          supersedes?: string | null
+          title?: string
+          updated_at?: string
+          uploaded_by?: string | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_documents_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_documents_supersedes_fkey"
+            columns: ["supersedes"]
+            isOneToOne: false
+            referencedRelation: "con_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_equipment: {
+        Row: {
+          asset_tag: string | null
+          assigned_to: string | null
+          category: string | null
+          created_at: string
+          hours_meter: number | null
+          id: string
+          job_id: string | null
+          make: string | null
+          model: string | null
+          name: string
+          next_service_date: string | null
+          next_service_hours: number | null
+          notes: string | null
+          odometer: number | null
+          purchase_cost: number | null
+          status: string
+          updated_at: string
+          year: number | null
+        }
+        Insert: {
+          asset_tag?: string | null
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string
+          hours_meter?: number | null
+          id?: string
+          job_id?: string | null
+          make?: string | null
+          model?: string | null
+          name: string
+          next_service_date?: string | null
+          next_service_hours?: number | null
+          notes?: string | null
+          odometer?: number | null
+          purchase_cost?: number | null
+          status?: string
+          updated_at?: string
+          year?: number | null
+        }
+        Update: {
+          asset_tag?: string | null
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string
+          hours_meter?: number | null
+          id?: string
+          job_id?: string | null
+          make?: string | null
+          model?: string | null
+          name?: string
+          next_service_date?: string | null
+          next_service_hours?: number | null
+          notes?: string | null
+          odometer?: number | null
+          purchase_cost?: number | null
+          status?: string
+          updated_at?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_equipment_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_equipment_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_estimate_lines: {
+        Row: {
+          category: string | null
+          created_at: string
+          description: string
+          estimate_id: string
+          id: string
+          quantity: number | null
+          sort_order: number | null
+          total: number | null
+          unit: string | null
+          unit_cost: number | null
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          description: string
+          estimate_id: string
+          id?: string
+          quantity?: number | null
+          sort_order?: number | null
+          total?: number | null
+          unit?: string | null
+          unit_cost?: number | null
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          description?: string
+          estimate_id?: string
+          id?: string
+          quantity?: number | null
+          sort_order?: number | null
+          total?: number | null
+          unit?: string | null
+          unit_cost?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_estimate_lines_estimate_id_fkey"
+            columns: ["estimate_id"]
+            isOneToOne: false
+            referencedRelation: "con_estimates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_estimates: {
+        Row: {
+          approved_at: string | null
+          client_id: string | null
+          created_at: string
+          created_by: string | null
+          estimate_number: string | null
+          estimator_id: string | null
+          id: string
+          job_id: string | null
+          markup_pct: number | null
+          scope: string | null
+          status: string
+          subtotal: number | null
+          title: string
+          total: number | null
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          estimate_number?: string | null
+          estimator_id?: string | null
+          id?: string
+          job_id?: string | null
+          markup_pct?: number | null
+          scope?: string | null
+          status?: string
+          subtotal?: number | null
+          title: string
+          total?: number | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          client_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          estimate_number?: string | null
+          estimator_id?: string | null
+          id?: string
+          job_id?: string | null
+          markup_pct?: number | null
+          scope?: string | null
+          status?: string
+          subtotal?: number | null
+          title?: string
+          total?: number | null
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_estimates_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "con_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_estimates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_estimates_estimator_id_fkey"
+            columns: ["estimator_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_estimates_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_inspections: {
+        Row: {
+          completed_date: string | null
+          created_at: string
+          id: string
+          inspection_type: string | null
+          inspector: string | null
+          inspector_id: string | null
+          job_id: string | null
+          notes: string | null
+          result: string | null
+          scheduled_date: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          completed_date?: string | null
+          created_at?: string
+          id?: string
+          inspection_type?: string | null
+          inspector?: string | null
+          inspector_id?: string | null
+          job_id?: string | null
+          notes?: string | null
+          result?: string | null
+          scheduled_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_date?: string | null
+          created_at?: string
+          id?: string
+          inspection_type?: string | null
+          inspector?: string | null
+          inspector_id?: string | null
+          job_id?: string | null
+          notes?: string | null
+          result?: string | null
+          scheduled_date?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_inspections_inspector_id_fkey"
+            columns: ["inspector_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_inspections_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_jobs: {
+        Row: {
+          actual_cost: number | null
+          actual_end_date: string | null
+          address: string | null
+          billed: number | null
+          city: string | null
+          client_id: string | null
+          contract_value: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          division: string | null
+          estimated_cost: number | null
+          id: string
+          job_number: string | null
+          job_type: string | null
+          name: string
+          percent_complete: number | null
+          photo_url: string | null
+          project_manager_id: string | null
+          stage: string
+          start_date: string | null
+          state: string | null
+          status: string
+          superintendent_id: string | null
+          target_end_date: string | null
+          updated_at: string
+          zip: string | null
+        }
+        Insert: {
+          actual_cost?: number | null
+          actual_end_date?: string | null
+          address?: string | null
+          billed?: number | null
+          city?: string | null
+          client_id?: string | null
+          contract_value?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          division?: string | null
+          estimated_cost?: number | null
+          id?: string
+          job_number?: string | null
+          job_type?: string | null
+          name: string
+          percent_complete?: number | null
+          photo_url?: string | null
+          project_manager_id?: string | null
+          stage?: string
+          start_date?: string | null
+          state?: string | null
+          status?: string
+          superintendent_id?: string | null
+          target_end_date?: string | null
+          updated_at?: string
+          zip?: string | null
+        }
+        Update: {
+          actual_cost?: number | null
+          actual_end_date?: string | null
+          address?: string | null
+          billed?: number | null
+          city?: string | null
+          client_id?: string | null
+          contract_value?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          division?: string | null
+          estimated_cost?: number | null
+          id?: string
+          job_number?: string | null
+          job_type?: string | null
+          name?: string
+          percent_complete?: number | null
+          photo_url?: string | null
+          project_manager_id?: string | null
+          stage?: string
+          start_date?: string | null
+          state?: string | null
+          status?: string
+          superintendent_id?: string | null
+          target_end_date?: string | null
+          updated_at?: string
+          zip?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_jobs_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "con_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_jobs_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_jobs_project_manager_id_fkey"
+            columns: ["project_manager_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_jobs_superintendent_id_fkey"
+            columns: ["superintendent_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_permits: {
+        Row: {
+          applied_date: string | null
+          authority: string | null
+          created_at: string
+          expires_date: string | null
+          fee: number | null
+          id: string
+          inspection_date: string | null
+          issued_date: string | null
+          job_id: string | null
+          notes: string | null
+          permit_number: string | null
+          permit_type: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          applied_date?: string | null
+          authority?: string | null
+          created_at?: string
+          expires_date?: string | null
+          fee?: number | null
+          id?: string
+          inspection_date?: string | null
+          issued_date?: string | null
+          job_id?: string | null
+          notes?: string | null
+          permit_number?: string | null
+          permit_type?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          applied_date?: string | null
+          authority?: string | null
+          created_at?: string
+          expires_date?: string | null
+          fee?: number | null
+          id?: string
+          inspection_date?: string | null
+          issued_date?: string | null
+          job_id?: string | null
+          notes?: string | null
+          permit_number?: string | null
+          permit_type?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_permits_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_punch_items: {
+        Row: {
+          assignee_id: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          job_id: string | null
+          location: string | null
+          photo_url: string | null
+          priority: string | null
+          status: string
+          title: string
+          trade: string | null
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          job_id?: string | null
+          location?: string | null
+          photo_url?: string | null
+          priority?: string | null
+          status?: string
+          title: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          job_id?: string | null
+          location?: string | null
+          photo_url?: string | null
+          priority?: string | null
+          status?: string
+          title?: string
+          trade?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_punch_items_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_punch_items_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_safety_incidents: {
+        Row: {
+          corrective_action: string | null
+          created_at: string
+          description: string | null
+          id: string
+          incident_date: string
+          incident_type: string | null
+          involved_id: string | null
+          job_id: string | null
+          lost_time_hours: number | null
+          osha_reportable: boolean | null
+          reported_by: string | null
+          severity: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          corrective_action?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          incident_date?: string
+          incident_type?: string | null
+          involved_id?: string | null
+          job_id?: string | null
+          lost_time_hours?: number | null
+          osha_reportable?: boolean | null
+          reported_by?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          corrective_action?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          incident_date?: string
+          incident_type?: string | null
+          involved_id?: string | null
+          job_id?: string | null
+          lost_time_hours?: number | null
+          osha_reportable?: boolean | null
+          reported_by?: string | null
+          severity?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_safety_incidents_involved_id_fkey"
+            columns: ["involved_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_safety_incidents_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_safety_incidents_reported_by_fkey"
+            columns: ["reported_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_subcontractors: {
+        Row: {
+          contact_name: string | null
+          created_at: string
+          email: string | null
+          hourly_rate: number | null
+          id: string
+          insurance_expires: string | null
+          license_number: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          rating: number | null
+          status: string
+          trade: string | null
+          updated_at: string
+          w9_on_file: boolean | null
+        }
+        Insert: {
+          contact_name?: string | null
+          created_at?: string
+          email?: string | null
+          hourly_rate?: number | null
+          id?: string
+          insurance_expires?: string | null
+          license_number?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          rating?: number | null
+          status?: string
+          trade?: string | null
+          updated_at?: string
+          w9_on_file?: boolean | null
+        }
+        Update: {
+          contact_name?: string | null
+          created_at?: string
+          email?: string | null
+          hourly_rate?: number | null
+          id?: string
+          insurance_expires?: string | null
+          license_number?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          rating?: number | null
+          status?: string
+          trade?: string | null
+          updated_at?: string
+          w9_on_file?: boolean | null
+        }
+        Relationships: []
+      }
+      con_submittals: {
+        Row: {
+          answer: string | null
+          ball_in_court: string | null
+          created_at: string
+          due_date: string | null
+          id: string
+          job_id: string | null
+          kind: string
+          number: string | null
+          question: string | null
+          responded_at: string | null
+          spec_section: string | null
+          status: string
+          submitted_by: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          answer?: string | null
+          ball_in_court?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          job_id?: string | null
+          kind?: string
+          number?: string | null
+          question?: string | null
+          responded_at?: string | null
+          spec_section?: string | null
+          status?: string
+          submitted_by?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string | null
+          ball_in_court?: string | null
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          job_id?: string | null
+          kind?: string
+          number?: string | null
+          question?: string | null
+          responded_at?: string | null
+          spec_section?: string | null
+          status?: string
+          submitted_by?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_submittals_ball_in_court_fkey"
+            columns: ["ball_in_court"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_submittals_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_submittals_submitted_by_fkey"
+            columns: ["submitted_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_tasks: {
+        Row: {
+          assignee_id: string | null
+          blocked_reason: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          department: string | null
+          depends_on: string | null
+          description: string | null
+          due_date: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          job_id: string | null
+          owner_id: string | null
+          priority: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          blocked_reason?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          depends_on?: string | null
+          description?: string | null
+          due_date?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          job_id?: string | null
+          owner_id?: string | null
+          priority?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          blocked_reason?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          department?: string | null
+          depends_on?: string | null
+          description?: string | null
+          due_date?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          job_id?: string | null
+          owner_id?: string | null
+          priority?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_tasks_assignee_id_fkey"
+            columns: ["assignee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_tasks_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_tasks_depends_on_fkey"
+            columns: ["depends_on"]
+            isOneToOne: false
+            referencedRelation: "con_tasks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_tasks_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_tasks_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contact_submissions: {
         Row: {
@@ -2462,6 +3882,66 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_certifications: {
+        Row: {
+          created_at: string
+          document_url: string | null
+          employee_id: string | null
+          expires_date: string | null
+          id: string
+          issue_date: string | null
+          issuer: string | null
+          name: string
+          notes: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_url?: string | null
+          employee_id?: string | null
+          expires_date?: string | null
+          id?: string
+          issue_date?: string | null
+          issuer?: string | null
+          name: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_url?: string | null
+          employee_id?: string | null
+          expires_date?: string | null
+          id?: string
+          issue_date?: string | null
+          issuer?: string | null
+          name?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_certifications_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_certifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hr_departments: {
         Row: {
           budget: number | null
@@ -2869,6 +4349,72 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      hr_training: {
+        Row: {
+          category: string | null
+          completed_date: string | null
+          course: string
+          created_at: string
+          document_url: string | null
+          employee_id: string | null
+          expires_date: string | null
+          id: string
+          instructor: string | null
+          required: boolean | null
+          score: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          completed_date?: string | null
+          course: string
+          created_at?: string
+          document_url?: string | null
+          employee_id?: string | null
+          expires_date?: string | null
+          id?: string
+          instructor?: string | null
+          required?: boolean | null
+          score?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          completed_date?: string | null
+          course?: string
+          created_at?: string
+          document_url?: string | null
+          employee_id?: string | null
+          expires_date?: string | null
+          id?: string
+          instructor?: string | null
+          required?: boolean | null
+          score?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_training_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_training_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       idea_comments: {
         Row: {
