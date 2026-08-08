@@ -3,6 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { postQuery } from "@/lib/content.queries";
 import { Section, PageHeader } from "@/components/site/Section";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
+import heroAsset from "@/assets/mg-hero.jpg.asset.json";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params, context }) => {
