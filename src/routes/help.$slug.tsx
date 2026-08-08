@@ -4,16 +4,62 @@ import { guideQuery } from "@/lib/content.queries";
 import { Section, PageHeader, Eyebrow } from "@/components/site/Section";
 import { Card } from "@/components/site/Card";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
+import heroAsset from "@/assets/mg-hero.jpg.asset.json";
+
+type Step = { title: string; body: string };
 
 export const Route = createFileRoute("/help/$slug")({
   loader: async ({ params, context }) => {
     const guide = await context.queryClient.ensureQueryData(guideQuery(params.slug));
     if (!guide) throw notFound();
-    return { slug: params.slug };
+    return {
+      slug: params.slug,
+      title: guide.title as string,
+      symptom: (guide.symptom as string | null) ?? "",
+      body: (guide.body as string | null) ?? "",
+      steps: (Array.isArray(guide.steps) ? (guide.steps as unknown as Step[]) : []) ?? [],
+    };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     if (!loaderData) return { meta: [{ title: `Guide — ${brand.name}` }, { name: "robots", content: "noindex" }] };
-    return { meta: [{ title: `Guide · ${loaderData.slug} — ${brand.name}` }] };
+    const title = `${loaderData.title} — Homeowner Guide | ${brand.name}`;
+    const raw = loaderData.symptom || loaderData.body || `Step-by-step homeowner guide from ${brand.name}.`;
+    const description = (raw.length < 50 ? `${raw} A step-by-step homeowner guide from ${brand.name}.` : raw).slice(0, 158);
+    const url = `https://clovrlab.com/help/${params.slug}`;
+    const image = absoluteUrl(heroAsset.url);
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: loaderData.title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: loaderData.title,
+            description,
+            url,
+            step: loaderData.steps.map((s, i) => ({
+              "@type": "HowToStep",
+              position: i + 1,
+              name: s.title,
+              text: s.body,
+            })),
+          }),
+        },
+      ],
+    };
   },
   component: GuidePage,
   notFoundComponent: () => (
