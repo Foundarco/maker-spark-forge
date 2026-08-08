@@ -16,9 +16,9 @@ function isHqHost(host: string): boolean {
   return h === "hq.clovrlab.com" || h.startsWith("hq.") || h.startsWith("hq--");
 }
 
-const title = `${brand.name} — Five divisions. One builder. Since ${brand.established}.`;
+const title = `${brand.name} — Five Divisions, One Builder`;
 const description =
-  "McGuire Construction is a family-run, vertically integrated builder established in 1974. Construction, concrete, excavation, landscape, and development — all five divisions open and self-performed.";
+  `Family-run, vertically integrated builder since ${brand.established}. Construction, concrete, excavation, landscape, and development — all self-performed.`;
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
