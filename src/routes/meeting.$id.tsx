@@ -237,17 +237,13 @@ function MeetingRoom() {
         const name = (p as Profile | null)?.full_name || (p as Profile | null)?.email || "Teammate";
         meData = { id: u.user.id, name, external: false };
       } else if (inviteToken) {
-        const { data: invRows } = await supabase.rpc("get_meeting_invite_by_token", {
-          _token: inviteToken,
-          _meeting_id: id,
-        });
-        const inv = Array.isArray(invRows) ? invRows[0] : null;
+        const inv = await lookupMeetingInvite({ data: { token: inviteToken, meetingId: id } });
         if (!inv) { setError("This guest link is invalid or has expired."); return; }
         const cachedName = typeof window !== "undefined" ? window.sessionStorage.getItem(`meeting-guest-${id}`) : null;
         const name = inv.name || cachedName || null;
         if (!name) { setGuestNamePrompt({ email: inv.email }); return; }
         meData = { id: `guest-${inv.id}`, name, external: true };
-        await supabase.rpc("mark_meeting_invite_joined", { _token: inviteToken, _name: name });
+        await markMeetingInviteJoined({ data: { token: inviteToken, meetingId: id, name } });
       } else {
         // Open link — anyone with the URL can join by giving a name.
         const cachedName = typeof window !== "undefined" ? window.sessionStorage.getItem(`meeting-guest-${id}`) : null;
