@@ -89,6 +89,27 @@ export function Footer() {
             </div>
           ))}
         </div>
+
+        {/* Division index */}
+        <div className="mt-20 border-t border-white/10 pt-10">
+          <h3 className="rule-label mb-6 text-white/40">The McGuire Group</h3>
+          <ul className="grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-5">
+            {divisions.map((d) => (
+              <li key={d.slug}>
+                <Link
+                  to="/divisions/$slug"
+                  params={{ slug: d.slug }}
+                  className="flex h-full flex-col bg-ink px-5 py-6 transition-colors hover:bg-white/5"
+                >
+                  <span className="display-cond text-2xl text-white/25">{d.n}</span>
+                  <span className="mt-3 text-sm font-semibold text-white">{d.short}</span>
+                  <span className="mt-1 text-xs text-white/45">{d.status}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center">
           <p>© {new Date().getFullYear()} {brand.name}. Licensed &amp; insured. All rights reserved.</p>
           <p>{brand.serviceArea}</p>
