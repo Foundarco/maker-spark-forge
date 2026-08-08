@@ -127,26 +127,26 @@ function ContactPage() {
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div>
                     <label className={labelCls} htmlFor="name">Full name *</label>
-                    <input id="name" name="name" required maxLength={120} className={fieldCls} placeholder="Jane Doe" />
+                    <input aria-label="Full name *" id="name" name="name" required maxLength={120} className={fieldCls} placeholder="Jane Doe" />
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="email">Email *</label>
-                    <input id="email" name="email" type="email" required maxLength={255} className={fieldCls} placeholder="jane@example.com" />
+                    <input aria-label="Email *" id="email" name="email" type="email" required maxLength={255} className={fieldCls} placeholder="jane@example.com" />
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="phone">Phone</label>
-                    <input id="phone" name="phone" maxLength={60} className={fieldCls} placeholder="(555) 555-0100" />
+                    <input aria-label="Phone" id="phone" name="phone" maxLength={60} className={fieldCls} placeholder="(555) 555-0100" />
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="address">Project address</label>
-                    <input id="address" name="address" maxLength={300} className={fieldCls} placeholder="Street, city" />
+                    <input aria-label="Project address" id="address" name="address" maxLength={300} className={fieldCls} placeholder="Street, city" />
                   </div>
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-3">
                   <div>
                     <label className={labelCls} htmlFor="projectType">Project type *</label>
-                    <select id="projectType" name="projectType" required defaultValue="renovation" className={fieldCls}>
+                    <select aria-label="Project type *" id="projectType" name="projectType" required defaultValue="renovation" className={fieldCls}>
                       {projectTypes.map((t) => (
                         <option key={t.value} value={t.value}>{t.label}</option>
                       ))}
@@ -154,7 +154,7 @@ function ContactPage() {
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="budget">Budget range</label>
-                    <select id="budget" name="budget" defaultValue="" className={fieldCls}>
+                    <select aria-label="Budget range" id="budget" name="budget" defaultValue="" className={fieldCls}>
                       <option value="">Not sure yet</option>
                       <option>Under $25k</option>
                       <option>$25k – $75k</option>
@@ -165,7 +165,7 @@ function ContactPage() {
                   </div>
                   <div>
                     <label className={labelCls} htmlFor="timeline">Ideal start</label>
-                    <select id="timeline" name="timeline" defaultValue="" className={fieldCls}>
+                    <select aria-label="Ideal start" id="timeline" name="timeline" defaultValue="" className={fieldCls}>
                       <option value="">Flexible</option>
                       <option>As soon as possible</option>
                       <option>1–3 months</option>
@@ -177,7 +177,7 @@ function ContactPage() {
 
                 <div>
                   <label className={labelCls} htmlFor="description">Describe the project *</label>
-                  <textarea
+                  <textarea aria-label="Describe the project *"
                     id="description"
                     name="description"
                     required
@@ -191,7 +191,7 @@ function ContactPage() {
 
                 <div>
                   <label className={labelCls} htmlFor="additionalInfo">Anything else</label>
-                  <textarea
+                  <textarea aria-label="Anything else"
                     id="additionalInfo"
                     name="additionalInfo"
                     maxLength={2000}

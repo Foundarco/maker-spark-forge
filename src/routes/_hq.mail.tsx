@@ -336,11 +336,11 @@ function MailClient() {
             <div className="max-h-[70vh] space-y-5 overflow-y-auto p-5 text-sm">
               <div>
                 <label className="mb-1 block text-xs font-semibold text-muted-foreground">Display name</label>
-                <input value={userSettings.display_name} onChange={(e) => setUserSettings({ ...userSettings, display_name: e.target.value })} placeholder="Jane Doe" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
+                <input aria-label="Display name" value={userSettings.display_name} onChange={(e) => setUserSettings({ ...userSettings, display_name: e.target.value })} placeholder="Jane Doe" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
               </div>
               <div>
                 <label className="mb-1 block text-xs font-semibold text-muted-foreground">Signature</label>
-                <textarea value={userSettings.signature} onChange={(e) => setUserSettings({ ...userSettings, signature: e.target.value })} rows={5} placeholder="— Jane Doe&#10;Engineering, Clovr Lab" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
+                <textarea aria-label="Signature" value={userSettings.signature} onChange={(e) => setUserSettings({ ...userSettings, signature: e.target.value })} rows={5} placeholder="— Jane Doe&#10;Engineering, Clovr Lab" className="w-full rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary" />
                 <p className="mt-1 text-[11px] text-muted-foreground">Automatically appended when composing new email.</p>
               </div>
               <div className="rounded-lg border border-border bg-muted/30 p-4">
@@ -359,7 +359,7 @@ function MailClient() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-semibold text-muted-foreground">Digest frequency</label>
-                <select value={userSettings.digest_frequency} onChange={(e) => setUserSettings({ ...userSettings, digest_frequency: e.target.value })} className="rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary">
+                <select aria-label="Digest frequency" value={userSettings.digest_frequency} onChange={(e) => setUserSettings({ ...userSettings, digest_frequency: e.target.value })} className="rounded-md border border-border bg-background px-3 py-2 outline-none focus:border-primary">
                   <option value="off">Off</option>
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
@@ -430,9 +430,9 @@ function MailClient() {
                 <button onClick={() => openCompose({ to: selected.from_addr ?? "", cc: selected.cc ?? "", subject: `Re: ${selected.subject ?? ""}`, body: `\n\n---\n${selected.body ?? ""}`, inReplyTo: (selected as any).message_id ?? null })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><ReplyAll className="h-3 w-3" /> Reply all</button>
                 <button onClick={() => openCompose({ subject: `Fwd: ${selected.subject ?? ""}`, body: `\n\n---\nFrom: ${selected.from_addr}\n${selected.body ?? ""}` })} className="inline-flex items-center gap-1 rounded-md border border-border px-2.5 py-1 text-xs hover:bg-muted"><Forward className="h-3 w-3" /> Forward</button>
                 <div className="ml-auto flex items-center gap-1">
-                  <button onClick={() => setFlag(selected.id, selected.status === "flagged" ? "read" : "flagged")} className="rounded-md p-1.5 hover:bg-muted" title="Flag"><Star className={`h-3.5 w-3.5 ${selected.status === "flagged" ? "fill-amber-400 text-amber-500" : ""}`} /></button>
-                  <button onClick={() => setFlag(selected.id, "archived")} className="rounded-md p-1.5 hover:bg-muted" title="Archive"><Archive className="h-3.5 w-3.5" /></button>
-                  <button onClick={() => deleteEmail(selected.id)} className="rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive" title="Delete"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <button aria-label="Star" onClick={() => setFlag(selected.id, selected.status === "flagged" ? "read" : "flagged")} className="rounded-md p-1.5 hover:bg-muted" title="Flag"><Star className={`h-3.5 w-3.5 ${selected.status === "flagged" ? "fill-amber-400 text-amber-500" : ""}`} /></button>
+                  <button aria-label="Archive" onClick={() => setFlag(selected.id, "archived")} className="rounded-md p-1.5 hover:bg-muted" title="Archive"><Archive className="h-3.5 w-3.5" /></button>
+                  <button aria-label="Delete" onClick={() => deleteEmail(selected.id)} className="rounded-md p-1.5 hover:bg-destructive/10 hover:text-destructive" title="Delete"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
               </div>
               <h1 className="text-xl font-semibold">{selected.subject || "(no subject)"}</h1>
@@ -555,7 +555,7 @@ function ManageView({ view, rules, templates, onRefresh, onUseTemplate }: { view
                       <td className="px-3 py-2 text-muted-foreground">{r.action_value || "—"}</td>
                       <td className="px-3 py-2 text-right">
                         <button onClick={() => toggleRule(r)} className={`mr-2 rounded px-2 py-1 text-[10px] font-semibold ${r.active ? "bg-emerald-500/10 text-emerald-600" : "bg-muted text-muted-foreground"}`}>{r.active ? "Active" : "Off"}</button>
-                        <button onClick={() => remove("hq_email_rules", r.id)} className="rounded p-1 hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                        <button aria-label="Delete" onClick={() => remove("hq_email_rules", r.id)} className="rounded p-1 hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                       </td>
                     </tr>
                   ))}
@@ -573,7 +573,7 @@ function ManageView({ view, rules, templates, onRefresh, onUseTemplate }: { view
                       <p className="truncate font-semibold">{t.name}</p>
                       {t.category && <span className="mt-0.5 inline-block rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground">{t.category}</span>}
                     </div>
-                    <button onClick={() => remove("hq_email_templates", t.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                    <button aria-label="Delete" onClick={() => remove("hq_email_templates", t.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <p className="mt-2 truncate text-sm text-muted-foreground">{t.subject}</p>
                   <p className="mt-1 line-clamp-3 text-xs text-muted-foreground">{t.body}</p>
@@ -591,28 +591,28 @@ function ManageView({ view, rules, templates, onRefresh, onUseTemplate }: { view
             <h2 className="text-lg font-semibold">New {view === "rules" ? "rule" : "template"}</h2>
             {view === "rules" ? (
               <>
-                <input required placeholder="Rule name" value={ruleForm.name} onChange={(e) => setRuleForm({ ...ruleForm, name: e.target.value })} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
+                <input aria-label="Rule name" required placeholder="Rule name" value={ruleForm.name} onChange={(e) => setRuleForm({ ...ruleForm, name: e.target.value })} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
                 <div className="grid grid-cols-2 gap-2">
                   <select value={ruleForm.match_field} onChange={(e) => setRuleForm({ ...ruleForm, match_field: e.target.value })} className="rounded border border-border bg-background px-2 py-2 text-sm">
                     <option value="from_addr">From</option><option value="to_addr">To</option><option value="subject">Subject</option><option value="body">Body</option>
                   </select>
-                  <input required placeholder="contains…" value={ruleForm.match_value} onChange={(e) => setRuleForm({ ...ruleForm, match_value: e.target.value })} className="rounded border border-border bg-background px-3 py-2 text-sm" />
+                  <input aria-label="contains" required placeholder="contains…" value={ruleForm.match_value} onChange={(e) => setRuleForm({ ...ruleForm, match_value: e.target.value })} className="rounded border border-border bg-background px-3 py-2 text-sm" />
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <select value={ruleForm.action} onChange={(e) => setRuleForm({ ...ruleForm, action: e.target.value })} className="rounded border border-border bg-background px-2 py-2 text-sm">
                     <option value="label">Apply label</option><option value="forward">Forward</option><option value="move">Move</option><option value="reply">Auto-reply</option><option value="delete">Delete</option>
                   </select>
-                  <input placeholder="value" value={ruleForm.action_value} onChange={(e) => setRuleForm({ ...ruleForm, action_value: e.target.value })} className="rounded border border-border bg-background px-3 py-2 text-sm" />
+                  <input aria-label="value" placeholder="value" value={ruleForm.action_value} onChange={(e) => setRuleForm({ ...ruleForm, action_value: e.target.value })} className="rounded border border-border bg-background px-3 py-2 text-sm" />
                 </div>
               </>
             ) : (
               <>
-                <input required placeholder="Template name" value={tplForm.name} onChange={(e) => setTplForm({ ...tplForm, name: e.target.value })} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
+                <input aria-label="Template name" required placeholder="Template name" value={tplForm.name} onChange={(e) => setTplForm({ ...tplForm, name: e.target.value })} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
                 <select value={tplForm.category} onChange={(e) => setTplForm({ ...tplForm, category: e.target.value })} className="w-full rounded border border-border bg-background px-2 py-2 text-sm">
                   <option value="general">General</option><option value="sales">Sales</option><option value="support">Support</option><option value="onboarding">Onboarding</option><option value="marketing">Marketing</option>
                 </select>
-                <input placeholder="Subject" value={tplForm.subject} onChange={(e) => setTplForm({ ...tplForm, subject: e.target.value })} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
-                <textarea placeholder="Body" value={tplForm.body} onChange={(e) => setTplForm({ ...tplForm, body: e.target.value })} rows={6} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
+                <input aria-label="Subject" placeholder="Subject" value={tplForm.subject} onChange={(e) => setTplForm({ ...tplForm, subject: e.target.value })} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
+                <textarea aria-label="Body" placeholder="Body" value={tplForm.body} onChange={(e) => setTplForm({ ...tplForm, body: e.target.value })} rows={6} className="w-full rounded border border-border bg-background px-3 py-2 text-sm" />
               </>
             )}
             <div className="flex justify-end gap-2 pt-2">

@@ -284,16 +284,16 @@ function IdeasPage() {
         <form onSubmit={submit} className="mb-6 space-y-4 rounded-xl border border-border bg-card p-5">
           <div>
             <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground">Title</label>
-            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="A short summary of your idea or tip" required autoFocus className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+            <input aria-label="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="A short summary of your idea or tip" required autoFocus className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground">Details</label>
-            <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} placeholder="What's the idea, why does it matter, and what would it change? Include context, examples, or links." className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+            <textarea aria-label="Details" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} placeholder="What's the idea, why does it matter, and what would it change? Include context, examples, or links." className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label className="mb-1 block text-xs font-medium uppercase tracking-wider text-muted-foreground">Category</label>
-              <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+              <select aria-label="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
                 {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
               </select>
             </div>

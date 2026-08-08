@@ -260,7 +260,7 @@ function DMPage() {
                         {editingMsg?.id === m.id ? (
                           <div className="flex items-center gap-2">
                             <input autoFocus value={editingMsg.body} onChange={(e) => setEditingMsg({ ...editingMsg, body: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") saveEdit(); if (e.key === "Escape") setEditingMsg(null); }} className="flex-1 rounded border border-border bg-background px-2 py-1 text-sm text-foreground outline-none" />
-                            <button onClick={saveEdit} className="rounded bg-background/20 p-1"><Check className="h-3 w-3" /></button>
+                            <button aria-label="Save" onClick={saveEdit} className="rounded bg-background/20 p-1"><Check className="h-3 w-3" /></button>
                             <button onClick={() => setEditingMsg(null)} className="rounded p-1"><X className="h-3 w-3" /></button>
                           </div>
                         ) : (

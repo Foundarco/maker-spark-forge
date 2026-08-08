@@ -90,7 +90,7 @@ export function ChannelAccessDialog({ channelId, channelName, onClose }: { chann
                           <p className="text-sm">{p?.full_name || p?.email || m.user_id.slice(0, 8)}</p>
                           {p?.department && <p className="text-[10px] text-muted-foreground">{p.department}</p>}
                         </div>
-                        <button onClick={() => removeUser(m.user_id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
+                        <button aria-label="Delete" onClick={() => removeUser(m.user_id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
                       </div>
                     );
                   })}

@@ -590,7 +590,7 @@ function MeetingRoom() {
           <p className="mt-1 text-sm text-muted-foreground">
             {guestNamePrompt.email ? `Signed in as guest: ${guestNamePrompt.email}` : "Enter your name to join."}
           </p>
-          <input name="name" required autoFocus placeholder="Your name" className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+          <input aria-label="Your name" name="name" required autoFocus placeholder="Your name" className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
           <button type="submit" className="mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Continue</button>
         </form>
       </div>
@@ -702,7 +702,7 @@ function MeetingRoom() {
                     placeholder="Message everyone"
                     className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
                   />
-                  <button type="submit" className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground hover:opacity-90">
+                  <button aria-label="Send message" type="submit" className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground hover:opacity-90">
                     <Send className="h-4 w-4" />
                   </button>
                 </form>

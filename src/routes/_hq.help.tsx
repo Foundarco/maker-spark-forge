@@ -156,7 +156,7 @@ function HelpPage() {
           <form onSubmit={submit} className="space-y-3">
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">Subject</label>
-              <input
+              <input aria-label="Subject"
                 value={form.subject}
                 onChange={(e) => setForm({ ...form, subject: e.target.value })}
                 required
@@ -166,7 +166,7 @@ function HelpPage() {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">Urgency</label>
-              <select
+              <select aria-label="Urgency"
                 value={form.urgency}
                 onChange={(e) => setForm({ ...form, urgency: e.target.value })}
                 className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
@@ -179,7 +179,7 @@ function HelpPage() {
             </div>
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">Details</label>
-              <textarea
+              <textarea aria-label="Details"
                 value={form.body}
                 onChange={(e) => setForm({ ...form, body: e.target.value })}
                 rows={4}
