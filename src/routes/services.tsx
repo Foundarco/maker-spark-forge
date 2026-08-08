@@ -23,6 +23,31 @@ export const Route = createFileRoute("/services")({
       { name: "twitter:image", content: divisions[0].image },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/services" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: `Services — ${brand.name}`,
+          description: desc,
+          url: "https://clovrlab.com/services",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: services.map((s: any, i: number) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: {
+                "@type": "Service",
+                name: s.title ?? s.name,
+                description: s.description ?? s.blurb ?? undefined,
+                provider: { "@type": "GeneralContractor", name: brand.name },
+              },
+            })),
+          },
+        }),
+      },
+    ],
   }),
   component: ServicesPage,
 });
