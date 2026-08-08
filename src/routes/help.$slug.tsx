@@ -105,9 +105,6 @@ function GuidePage() {
             ))}
           </ol>
         </div>
-            ))}
-          </ol>
-        </div>
       </Section>
 
       <Section>
