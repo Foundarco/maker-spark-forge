@@ -218,13 +218,14 @@
 ---------------------------------------------------------------- */
 
 .site-theme {
-  --acc-construction: #dc2626;
-  --acc-concrete: #7f1d1d;
-  --acc-excavation: #ea580c;
-  --acc-landscape: #9f1239;
-  --acc-development: #e11d48;
-  --acc-live: #16a34a;
+  --acc-construction: #2563eb;
+  --acc-concrete: #1e3a8a;
+  --acc-excavation: #0ea5e9;
+  --acc-landscape: #0891b2;
+  --acc-development: #4f46e5;
+  --acc-live: #22c55e;
 }
+
 
 @utility accent-ink {
   color: var(--accent-color, var(--color-primary));
