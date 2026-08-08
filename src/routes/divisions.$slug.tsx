@@ -114,10 +114,10 @@ function DivisionDetail() {
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.3fr]">
           <SectionLabel n="02">Capabilities</SectionLabel>
           <ul className="divide-y divide-border border-y border-border">
-            {d.capabilities.map((c) => (
+            {d.capabilities.map((c: string, i: number) => (
               <li key={c} className="flex items-center gap-4 py-4 text-lg text-ink">
                 <span className="rule-label w-6 shrink-0 text-muted-foreground">
-                  {String(d.capabilities.indexOf(c) + 1).padStart(2, "0")}
+                  {String(i + 1).padStart(2, "0")}
                 </span>
                 {c}
               </li>
@@ -131,7 +131,7 @@ function DivisionDetail() {
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.3fr]">
           <SectionLabel n="03">What we&rsquo;re building toward</SectionLabel>
           <ul className="grid gap-px bg-border sm:grid-cols-3">
-            {d.buildingToward.map((b) => (
+            {d.buildingToward.map((b: string) => (
               <li key={b} className="bg-card p-7">
                 <Check className="h-5 w-5 text-ink" aria-hidden />
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{b}</p>

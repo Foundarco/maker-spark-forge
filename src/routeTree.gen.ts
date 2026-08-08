@@ -27,6 +27,7 @@ import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
+import { Route as DivisionsSlugRouteImport } from './routes/divisions.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as HqWorkOrdersRouteImport } from './routes/_hq.work-orders'
 import { Route as HqWebhooksRouteImport } from './routes/_hq.webhooks'
@@ -297,6 +298,11 @@ const HelpSlugRoute = HelpSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => HelpRoute,
+} as any)
+const DivisionsSlugRoute = DivisionsSlugRouteImport.update({
+  id: '/divisions/$slug',
+  path: '/divisions/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
@@ -1387,6 +1393,7 @@ export interface FileRoutesByFullPath {
   '/webhooks': typeof HqWebhooksRoute
   '/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/divisions/$slug': typeof DivisionsSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -1586,6 +1593,7 @@ export interface FileRoutesByTo {
   '/webhooks': typeof HqWebhooksRoute
   '/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/divisions/$slug': typeof DivisionsSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -1788,6 +1796,7 @@ export interface FileRoutesById {
   '/_hq/webhooks': typeof HqWebhooksRoute
   '/_hq/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/divisions/$slug': typeof DivisionsSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
@@ -1989,6 +1998,7 @@ export interface FileRouteTypes {
     | '/webhooks'
     | '/work-orders'
     | '/blog/$slug'
+    | '/divisions/$slug'
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -2188,6 +2198,7 @@ export interface FileRouteTypes {
     | '/webhooks'
     | '/work-orders'
     | '/blog/$slug'
+    | '/divisions/$slug'
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -2389,6 +2400,7 @@ export interface FileRouteTypes {
     | '/_hq/webhooks'
     | '/_hq/work-orders'
     | '/blog/$slug'
+    | '/divisions/$slug'
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
@@ -2419,6 +2431,7 @@ export interface RootRouteChildren {
   ProcessRoute: typeof ProcessRoute
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
+  DivisionsSlugRoute: typeof DivisionsSlugRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
@@ -2555,6 +2568,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/help/$slug'
       preLoaderRoute: typeof HelpSlugRouteImport
       parentRoute: typeof HelpRoute
+    }
+    '/divisions/$slug': {
+      id: '/divisions/$slug'
+      path: '/divisions/$slug'
+      fullPath: '/divisions/$slug'
+      preLoaderRoute: typeof DivisionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -4223,6 +4243,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProcessRoute: ProcessRoute,
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
+  DivisionsSlugRoute: DivisionsSlugRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
