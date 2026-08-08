@@ -12,7 +12,10 @@ export function Section({
   wide?: boolean;
 }) {
   return (
-    <section id={id} className={`mx-auto w-full ${wide ? "max-w-7xl" : "max-w-6xl"} px-5 py-16 sm:px-8 sm:py-24 ${className}`}>
+    <section
+      id={id}
+      className={`mx-auto w-full ${wide ? "max-w-7xl" : "max-w-6xl"} px-5 py-20 sm:px-8 sm:py-28 ${className}`}
+    >
       {children}
     </section>
   );
@@ -20,8 +23,8 @@ export function Section({
 
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
-      <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
+    <p className="rule-label mb-4 flex items-center gap-3 text-muted-foreground">
+      <span className="h-px w-8 bg-ink/30" aria-hidden />
       {children}
     </p>
   );
@@ -37,16 +40,32 @@ export function PageHeader({
   lede?: ReactNode;
 }) {
   return (
-    <div className="mb-12 max-w-3xl sm:mb-16">
+    <div className="max-w-3xl">
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h1 className="text-5xl font-semibold leading-[0.98] tracking-tight text-ink sm:text-6xl md:text-7xl">
-        {title}
-      </h1>
+      <h1 className="text-4xl font-bold leading-[1.02] tracking-tight text-ink sm:text-6xl">{title}</h1>
       {lede ? (
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">
-          {lede}
-        </p>
+        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">{lede}</p>
       ) : null}
+    </div>
+  );
+}
+
+export function SectionHeading({
+  eyebrow,
+  title,
+  lede,
+  className = "",
+}: {
+  eyebrow?: string;
+  title: ReactNode;
+  lede?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={`max-w-2xl ${className}`}>
+      {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
+      <h2 className="text-3xl font-bold leading-tight tracking-tight text-ink sm:text-4xl">{title}</h2>
+      {lede ? <p className="mt-4 text-base leading-relaxed text-muted-foreground">{lede}</p> : null}
     </div>
   );
 }
