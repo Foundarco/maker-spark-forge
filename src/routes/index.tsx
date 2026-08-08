@@ -62,9 +62,9 @@ export const Route = createFileRoute("/")({
 
 const timeline = [
   { year: "1974", title: "The first crew", body: "The family picks up its first contracts — framing, additions, and finish carpentry done by hand, one job at a time." },
-  { year: "2000s", title: "Systems take hold", body: "Checklists, written estimates, and published schedules replace handshake deals. Quality stops depending on who shows up." },
-  { year: "2010s", title: "Full-scope building", body: "Ground-up homes, structural work, and whole-home renovations delivered under one accountable team." },
-  { year: "2020s", title: "A second generation", body: "The next generation takes the same standards and builds the organization around them — division by division." },
+  { year: "1980s", title: "Systems take hold", body: "Checklists, written estimates, and published schedules replace handshake deals. Quality stops depending on who shows up." },
+  { year: "2000s", title: "Full-scope building", body: "Ground-up homes, structural work, and whole-home renovations delivered under one accountable team." },
+  { year: "2010s", title: "A second generation", body: "The next generation takes the same standards and builds the organization around them — division by division." },
   { year: "Today", title: "Fully integrated", body: "Construction, concrete, excavation, landscape, and development all open, all in-house, all self-performed." },
 ];
 
