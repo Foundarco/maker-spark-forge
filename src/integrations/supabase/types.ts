@@ -5731,6 +5731,14 @@ export type Database = {
         Args: { _name?: string; _token: string }
         Returns: undefined
       }
+      notify_managers: {
+        Args: { _body: string; _link: string; _title: string }
+        Returns: undefined
+      }
+      notify_user: {
+        Args: { _body: string; _link: string; _title: string; _user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       app_role:
