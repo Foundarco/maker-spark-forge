@@ -34,13 +34,13 @@ export const Route = createFileRoute("/services")({
           url: "https://clovrlab.com/services",
           mainEntity: {
             "@type": "ItemList",
-            itemListElement: services.map((s: any, i: number) => ({
+            itemListElement: services.map((s, i) => ({
               "@type": "ListItem",
               position: i + 1,
               item: {
                 "@type": "Service",
-                name: s.title ?? s.name,
-                description: s.description ?? s.blurb ?? undefined,
+                name: s.title,
+                description: s.summary,
                 provider: { "@type": "GeneralContractor", name: brand.name },
               },
             })),
