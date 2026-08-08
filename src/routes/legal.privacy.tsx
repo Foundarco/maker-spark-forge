@@ -10,7 +10,10 @@ export const Route = createFileRoute("/legal/privacy")({
       { name: "description", content: `How ${brand.name} collects, uses, and protects personal information.` },
       { property: "og:title", content: `Privacy Policy — ${brand.name}` },
       { property: "og:description", content: `How ${brand.name} collects, uses, and protects personal information.` },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/legal/privacy" },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/legal/privacy" }],
   }),
   component: () => (
     <Section>

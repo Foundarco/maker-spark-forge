@@ -11,11 +11,15 @@ export const Route = createFileRoute("/help")({
   loader: ({ context }) => context.queryClient.ensureQueryData(guidesQuery),
   head: () => ({
     meta: [
-      { title: `Help & repair — ${brand.name}` },
-      { name: "description", content: "Symptom-first repair guides, warranty info, and how to reach support." },
-      { property: "og:title", content: `Help & repair — ${brand.name}` },
-      { property: "og:description", content: "Symptom-first repair guides for the Core Printer." },
+      { title: `Homeowner Help & Warranty Support | ${brand.name}` },
+      { name: "description", content: "Warranty claims, punch-list requests, seasonal home maintenance guides, and how to reach the McGuire office after your project is finished." },
+      { property: "og:title", content: `Homeowner Help & Warranty Support | ${brand.name}` },
+      { property: "og:description", content: "Warranty claims, punch lists, and maintenance guidance for McGuire clients." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/help" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/help" }],
   }),
   component: HelpPage,
 });
