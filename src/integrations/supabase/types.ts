@@ -3654,6 +3654,57 @@ export type Database = {
         }
         Relationships: []
       }
+      project_requests: {
+        Row: {
+          additional_info: string | null
+          address: string | null
+          budget: string | null
+          created_at: string
+          description: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          photo_urls: string[]
+          project_type: string
+          status: string
+          timeline: string | null
+          updated_at: string
+        }
+        Insert: {
+          additional_info?: string | null
+          address?: string | null
+          budget?: string | null
+          created_at?: string
+          description: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          photo_urls?: string[]
+          project_type: string
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          additional_info?: string | null
+          address?: string | null
+          budget?: string | null
+          created_at?: string
+          description?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          photo_urls?: string[]
+          project_type?: string
+          status?: string
+          timeline?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       quote_requests: {
         Row: {
           assigned_to: string | null
