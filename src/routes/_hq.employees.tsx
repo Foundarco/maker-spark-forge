@@ -180,43 +180,43 @@ function EmployeeEditor({ employee, profiles, onClose, onSaved }: { employee: Em
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">{form.id ? "Edit person" : "Add person"}</h3>
           <button onClick={onClose} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Full name"><input value={form.full_name} onChange={(e) => update({ full_name: e.target.value })} className={inputCls} /></Field>
-          <Field label="Email"><input value={form.email ?? ""} onChange={(e) => update({ email: e.target.value })} className={inputCls} /></Field>
-          <Field label="Title"><input value={form.title ?? ""} onChange={(e) => update({ title: e.target.value })} className={inputCls} /></Field>
+          <Field label="Full name"><input aria-label="Full name" value={form.full_name} onChange={(e) => update({ full_name: e.target.value })} className={inputCls} /></Field>
+          <Field label="Email"><input aria-label="Email" value={form.email ?? ""} onChange={(e) => update({ email: e.target.value })} className={inputCls} /></Field>
+          <Field label="Title"><input aria-label="Title" value={form.title ?? ""} onChange={(e) => update({ title: e.target.value })} className={inputCls} /></Field>
           <Field label="Department">
-            <select value={form.department ?? ""} onChange={(e) => update({ department: e.target.value })} className={inputCls}>
+            <select aria-label="Department" value={form.department ?? ""} onChange={(e) => update({ department: e.target.value })} className={inputCls}>
               <option value="">—</option>
               {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
             </select>
           </Field>
           <Field label="Status">
-            <select value={form.status} onChange={(e) => update({ status: e.target.value })} className={inputCls}>
+            <select aria-label="Status" value={form.status} onChange={(e) => update({ status: e.target.value })} className={inputCls}>
               {["active","on_leave","terminated"].map((s) => <option key={s} value={s}>{s}</option>)}
             </select>
           </Field>
           <Field label="Employment type">
-            <select value={form.employment_type ?? ""} onChange={(e) => update({ employment_type: e.target.value })} className={inputCls}>
+            <select aria-label="Employment type" value={form.employment_type ?? ""} onChange={(e) => update({ employment_type: e.target.value })} className={inputCls}>
               <option value="full_time">Full-time</option>
               <option value="part_time">Part-time</option>
               <option value="contract">Contract</option>
               <option value="intern">Intern</option>
             </select>
           </Field>
-          <Field label="Start date"><input type="date" value={form.start_date ?? ""} onChange={(e) => update({ start_date: e.target.value })} className={inputCls} /></Field>
+          <Field label="Start date"><input aria-label="Start date" type="date" value={form.start_date ?? ""} onChange={(e) => update({ start_date: e.target.value })} className={inputCls} /></Field>
           <Field label="Manager">
-            <select value={form.manager_id ?? ""} onChange={(e) => update({ manager_id: e.target.value || null })} className={inputCls}>
+            <select aria-label="Manager" value={form.manager_id ?? ""} onChange={(e) => update({ manager_id: e.target.value || null })} className={inputCls}>
               <option value="">—</option>
               {profiles.map((p) => <option key={p.id} value={p.id}>{p.full_name || p.email}</option>)}
             </select>
           </Field>
           <Field label="Linked HQ user (optional)" full>
-            <select value={form.user_id ?? ""} onChange={(e) => update({ user_id: e.target.value || null })} className={inputCls}>
+            <select aria-label="Linked HQ user (optional)" value={form.user_id ?? ""} onChange={(e) => update({ user_id: e.target.value || null })} className={inputCls}>
               <option value="">Not linked</option>
               {profiles.map((p) => <option key={p.id} value={p.id}>{p.full_name || p.email}</option>)}
             </select>
@@ -375,14 +375,14 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
 
       {showInvite && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowInvite(false)}>
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Invite a new user</h3>
               <button onClick={() => setShowInvite(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
             </div>
             <div className="space-y-2">
-              <input placeholder="email@company.com" value={inv.email} onChange={(e) => setInv({ ...inv, email: e.target.value })} className={inputCls} />
-              <input placeholder="Full name (optional)" value={inv.full_name} onChange={(e) => setInv({ ...inv, full_name: e.target.value })} className={inputCls} />
+              <input aria-label="email@company.com" placeholder="email@company.com" value={inv.email} onChange={(e) => setInv({ ...inv, email: e.target.value })} className={inputCls} />
+              <input aria-label="Full name (optional)" placeholder="Full name (optional)" value={inv.full_name} onChange={(e) => setInv({ ...inv, full_name: e.target.value })} className={inputCls} />
               <select value={inv.department} onChange={(e) => setInv({ ...inv, department: e.target.value })} className={inputCls}>
                 <option value="">Department…</option>
                 {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
@@ -402,7 +402,7 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
 
       {editUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setEditUser(null)}>
-          <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Edit roles</h3>
               <button onClick={() => setEditUser(null)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>

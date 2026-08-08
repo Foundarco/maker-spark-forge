@@ -317,7 +317,7 @@ function MeetingsPage() {
                       </div>
                     )}
                     {m.host_id === me && (
-                      <button onClick={() => remove(m)} className="rounded p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                      <button aria-label="Delete" onClick={() => remove(m)} className="rounded p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                     )}
                   </div>
                 </div>
@@ -334,7 +334,7 @@ function MeetingsPage() {
         const externals = extInvites.filter((x) => x.meeting_id === m.id);
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setDetailOpen(null)}>
-            <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="mb-3 flex items-start justify-between">
                 <div>
                   <h3 className="text-lg font-semibold">{m.title}</h3>
@@ -396,25 +396,25 @@ function MeetingsPage() {
               <button type="button" onClick={() => setShowNew(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
             </div>
             <div className="space-y-3">
-              <input required autoFocus placeholder="Meeting title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
-              <textarea placeholder="Agenda / description" rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <input aria-label="Meeting title" required autoFocus placeholder="Meeting title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <textarea aria-label="Agenda / description" placeholder="Agenda / description" rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Starts</label>
-                  <input required type="datetime-local" value={form.starts_at} onChange={(e) => setForm({ ...form, starts_at: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                  <input aria-label="Starts" required type="datetime-local" value={form.starts_at} onChange={(e) => setForm({ ...form, starts_at: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
                 </div>
                 <div>
                   <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Ends</label>
-                  <input required type="datetime-local" value={form.ends_at} onChange={(e) => setForm({ ...form, ends_at: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                  <input aria-label="Ends" required type="datetime-local" value={form.ends_at} onChange={(e) => setForm({ ...form, ends_at: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
                 </div>
               </div>
-              <input placeholder="Location (optional)" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <input aria-label="Location (optional)" placeholder="Location (optional)" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
 
               {/* Recurrence */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Repeats</label>
-                  <select value={form.recurrence} onChange={(e) => setForm({ ...form, recurrence: e.target.value as typeof form.recurrence })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+                  <select aria-label="Repeats" value={form.recurrence} onChange={(e) => setForm({ ...form, recurrence: e.target.value as typeof form.recurrence })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
                     <option value="none">Does not repeat</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -425,7 +425,7 @@ function MeetingsPage() {
                 {form.recurrence !== "none" && (
                   <div>
                     <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Occurrences (max 24)</label>
-                    <input type="number" min={1} max={24} value={form.occurrences} onChange={(e) => setForm({ ...form, occurrences: Math.max(1, Math.min(24, Number(e.target.value) || 1)) })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                    <input aria-label="Occurrences (max 24)" type="number" min={1} max={24} value={form.occurrences} onChange={(e) => setForm({ ...form, occurrences: Math.max(1, Math.min(24, Number(e.target.value) || 1)) })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
                   </div>
                 )}
               </div>

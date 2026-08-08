@@ -82,7 +82,7 @@ function HQLogin() {
             {mode === "signup" && (
               <div>
                 <label className="block text-xs font-medium uppercase tracking-wider text-muted-foreground">Full name</label>
-                <input
+                <input aria-label="Full name"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
@@ -93,7 +93,7 @@ function HQLogin() {
             )}
             <div>
               <label className="block text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</label>
-              <input
+              <input aria-label="Email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -104,7 +104,7 @@ function HQLogin() {
             </div>
             <div>
               <label className="block text-xs font-medium uppercase tracking-wider text-muted-foreground">Password</label>
-              <input
+              <input aria-label="Password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

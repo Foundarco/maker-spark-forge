@@ -194,9 +194,9 @@ function CalendarPage() {
             <h1 className="text-xl font-semibold">{cursor.toLocaleDateString([], { month: "long", year: "numeric" })}</h1>
           </div>
           <div className="flex items-center gap-2">
-            <button onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))} className="rounded-lg border border-border p-1.5 hover:bg-muted"><ChevronLeft className="h-4 w-4" /></button>
+            <button aria-label="Previous" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))} className="rounded-lg border border-border p-1.5 hover:bg-muted"><ChevronLeft className="h-4 w-4" /></button>
             <button onClick={() => setCursor(new Date())} className="rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">Today</button>
-            <button onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))} className="rounded-lg border border-border p-1.5 hover:bg-muted"><ChevronRight className="h-4 w-4" /></button>
+            <button aria-label="Next" onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))} className="rounded-lg border border-border p-1.5 hover:bg-muted"><ChevronRight className="h-4 w-4" /></button>
             <button onClick={() => openNew(selectedDay ?? new Date())} className="ml-2 flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground"><Plus className="h-3.5 w-3.5" /> Event</button>
           </div>
         </header>
@@ -284,28 +284,28 @@ function CalendarPage() {
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowForm(false)}>
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">{draft.id ? "Edit event" : "New event"}</h3>
               <button onClick={() => setShowForm(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
             </div>
             <div className="space-y-3">
-              <input autoFocus placeholder="Event title" value={draft.title ?? ""} onChange={(e) => setDraft({ ...draft, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
-              <textarea placeholder="Description (optional)" rows={2} value={draft.description ?? ""} onChange={(e) => setDraft({ ...draft, description: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <input aria-label="Event title" autoFocus placeholder="Event title" value={draft.title ?? ""} onChange={(e) => setDraft({ ...draft, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <textarea aria-label="Description (optional)" placeholder="Description (optional)" rows={2} value={draft.description ?? ""} onChange={(e) => setDraft({ ...draft, description: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={!!draft.all_day} onChange={(e) => setDraft({ ...draft, all_day: e.target.checked })} /> All day
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Starts</label>
-                  <input type="datetime-local" value={draft.starts_at ? toLocalInput(draft.starts_at) : ""} onChange={(e) => setDraft({ ...draft, starts_at: new Date(e.target.value).toISOString() })} className="w-full rounded-lg border border-border bg-background px-2 py-2 text-sm outline-none focus:border-primary" />
+                  <input aria-label="Starts" type="datetime-local" value={draft.starts_at ? toLocalInput(draft.starts_at) : ""} onChange={(e) => setDraft({ ...draft, starts_at: new Date(e.target.value).toISOString() })} className="w-full rounded-lg border border-border bg-background px-2 py-2 text-sm outline-none focus:border-primary" />
                 </div>
                 <div>
                   <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Ends</label>
-                  <input type="datetime-local" value={draft.ends_at ? toLocalInput(draft.ends_at) : ""} onChange={(e) => setDraft({ ...draft, ends_at: new Date(e.target.value).toISOString() })} className="w-full rounded-lg border border-border bg-background px-2 py-2 text-sm outline-none focus:border-primary" />
+                  <input aria-label="Ends" type="datetime-local" value={draft.ends_at ? toLocalInput(draft.ends_at) : ""} onChange={(e) => setDraft({ ...draft, ends_at: new Date(e.target.value).toISOString() })} className="w-full rounded-lg border border-border bg-background px-2 py-2 text-sm outline-none focus:border-primary" />
                 </div>
               </div>
-              <input placeholder="Location (optional)" value={draft.location ?? ""} onChange={(e) => setDraft({ ...draft, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+              <input aria-label="Location (optional)" placeholder="Location (optional)" value={draft.location ?? ""} onChange={(e) => setDraft({ ...draft, location: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
               <div>
                 <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Color</label>
                 <div className="flex gap-2">
@@ -316,7 +316,7 @@ function CalendarPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Visibility</label>
-                <select value={draft.visibility ?? "private"} onChange={(e) => setDraft({ ...draft, visibility: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+                <select aria-label="Visibility" value={draft.visibility ?? "private"} onChange={(e) => setDraft({ ...draft, visibility: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
                   <option value="private">Private (just me)</option>
                   <option value="team">Team-wide</option>
                 </select>
@@ -324,7 +324,7 @@ function CalendarPage() {
             </div>
             <div className="mt-5 flex items-center justify-between gap-2">
               {draft.id && draft.owner_id === me ? (
-                <button onClick={() => remove(draft as Event)} className="rounded-lg border border-destructive/30 p-2 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></button>
+                <button aria-label="Delete" onClick={() => remove(draft as Event)} className="rounded-lg border border-destructive/30 p-2 text-destructive hover:bg-destructive/10"><Trash2 className="h-4 w-4" /></button>
               ) : <span />}
               <div className="flex gap-2">
                 <button onClick={() => setShowForm(false)} className="rounded-lg border border-border px-4 py-2 text-sm">Cancel</button>

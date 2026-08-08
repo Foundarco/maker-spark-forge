@@ -318,15 +318,15 @@ function DrivePage() {
                           <div className="flex items-center justify-end gap-1">
                             {view === "trash" ? (
                               <>
-                                <button onClick={() => restoreItem(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Restore"><Edit2 className="h-3.5 w-3.5" /></button>
-                                <button onClick={() => deleteForever(it)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" title="Delete forever"><Trash2 className="h-3.5 w-3.5" /></button>
+                                <button aria-label="Rename" onClick={() => restoreItem(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Restore"><Edit2 className="h-3.5 w-3.5" /></button>
+                                <button aria-label="Delete" onClick={() => deleteForever(it)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" title="Delete forever"><Trash2 className="h-3.5 w-3.5" /></button>
                               </>
                             ) : (
                               <>
-                                {it.kind === "file" && <button onClick={() => downloadFile(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Download"><Download className="h-3.5 w-3.5" /></button>}
-                                <button onClick={() => setShareTarget(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Share"><Share2 className="h-3.5 w-3.5" /></button>
-                                <button onClick={() => setRenaming(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Rename"><Edit2 className="h-3.5 w-3.5" /></button>
-                                <button onClick={() => trashItem(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-destructive" title="Move to trash"><Trash2 className="h-3.5 w-3.5" /></button>
+                                {it.kind === "file" && <button aria-label="Download" onClick={() => downloadFile(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Download"><Download className="h-3.5 w-3.5" /></button>}
+                                <button aria-label="Share" onClick={() => setShareTarget(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Share"><Share2 className="h-3.5 w-3.5" /></button>
+                                <button aria-label="Rename" onClick={() => setRenaming(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" title="Rename"><Edit2 className="h-3.5 w-3.5" /></button>
+                                <button aria-label="Delete" onClick={() => trashItem(it)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-destructive" title="Move to trash"><Trash2 className="h-3.5 w-3.5" /></button>
                               </>
                             )}
                           </div>
@@ -380,7 +380,7 @@ function RenameDialog({ item, onClose, onSave }: { item: Item; onClose: () => vo
   const [name, setName] = useState(item.name);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-xl border border-border bg-background p-5 shadow-2xl">
+      <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-xl border border-border bg-background p-5 shadow-2xl">
         <h3 className="text-lg font-semibold">Rename</h3>
         <input autoFocus value={name} onChange={(e) => setName(e.target.value)} className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
         <div className="mt-4 flex justify-end gap-2">
@@ -427,7 +427,7 @@ function ShareDialog({ item, me, onClose }: { item: Item; me: string; onClose: (
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg rounded-xl border border-border bg-background p-5 shadow-2xl">
+      <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="w-full max-w-lg rounded-xl border border-border bg-background p-5 shadow-2xl">
         <h3 className="text-lg font-semibold">Share "{item.name}"</h3>
         <div className="mt-4 space-y-3">
           <div className="flex gap-2">
@@ -458,7 +458,7 @@ function ShareDialog({ item, me, onClose }: { item: Item; me: string; onClose: (
                   <div key={s.id} className="flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm">
                     <span className="flex-1">{p?.full_name || p?.email || s.user_id}</span>
                     <span className="text-xs text-muted-foreground">{s.permission}</span>
-                    <button onClick={() => remove(s.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                    <button aria-label="Delete" onClick={() => remove(s.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                 );
               })}

@@ -590,7 +590,7 @@ function MeetingRoom() {
           <p className="mt-1 text-sm text-muted-foreground">
             {guestNamePrompt.email ? `Signed in as guest: ${guestNamePrompt.email}` : "Enter your name to join."}
           </p>
-          <input name="name" required autoFocus placeholder="Your name" className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+          <input aria-label="Your name" name="name" required autoFocus placeholder="Your name" className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
           <button type="submit" className="mt-3 w-full rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Continue</button>
         </form>
       </div>
@@ -702,7 +702,7 @@ function MeetingRoom() {
                     placeholder="Message everyone"
                     className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
                   />
-                  <button type="submit" className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground hover:opacity-90">
+                  <button aria-label="Send message" type="submit" className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground hover:opacity-90">
                     <Send className="h-4 w-4" />
                   </button>
                 </form>
@@ -746,7 +746,7 @@ function MeetingRoom() {
 
       {showLeaveConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setShowLeaveConfirm(false)}>
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-semibold">Leaving as host</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               You're the host of this meeting. End it for everyone (you'll review and edit the meeting notes before saving), or just leave and let the meeting continue.
@@ -768,7 +768,7 @@ function MeetingRoom() {
 
       {notesDraft !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setNotesDraft(null)}>
-          <div className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
+          <div role="dialog" aria-modal="true" className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
             <div className="flex items-start justify-between border-b border-border p-5">
               <div>
                 <h3 className="text-lg font-semibold">Meeting notes</h3>

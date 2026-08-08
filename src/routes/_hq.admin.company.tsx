@@ -219,7 +219,7 @@ function PermissionOverrides() {
             <option value="grant">Grant</option>
             <option value="deny">Deny</option>
           </select>
-          <input placeholder="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className={`${inputCls} sm:col-span-2`} />
+          <input aria-label="Notes" placeholder="Notes" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className={`${inputCls} sm:col-span-2`} />
         </div>
         <div className="mt-3"><button onClick={add} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"><Plus className="h-4 w-4" /> Add override</button></div>
       </div>
@@ -235,7 +235,7 @@ function PermissionOverrides() {
                 <td className="px-4 py-2 font-mono text-xs">{r.permission}</td>
                 <td className="px-4 py-2">{r.granted ? <span className="rounded bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-700">Granted</span> : <span className="rounded bg-destructive/10 px-2 py-0.5 text-xs text-destructive">Denied</span>}</td>
                 <td className="px-4 py-2 text-muted-foreground">{r.notes}</td>
-                <td className="px-4 py-2 text-right"><button onClick={() => del(r.id)} className="text-xs text-destructive hover:underline"><Trash2 className="inline h-3 w-3" /></button></td>
+                <td className="px-4 py-2 text-right"><button aria-label="Delete" onClick={() => del(r.id)} className="text-xs text-destructive hover:underline"><Trash2 className="inline h-3 w-3" /></button></td>
               </tr>
             ))}
             {rows.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-sm text-muted-foreground">No overrides — role permissions apply as-is.</td></tr>}
@@ -296,17 +296,17 @@ function EmailSettings() {
       <h2 className="mb-1 text-lg font-semibold">Company email defaults</h2>
       <p className="mb-4 text-sm text-muted-foreground">Applied to outbound email from shared mailboxes and system notifications.</p>
       <Field label="Default from name">
-        <input value={s.from_name} onChange={(e) => setS({ ...s, from_name: e.target.value })} placeholder="Clovr Lab" className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+        <input aria-label="Default from name" value={s.from_name} onChange={(e) => setS({ ...s, from_name: e.target.value })} placeholder="Clovr Lab" className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
       </Field>
       <Field label="Reply-to address">
-        <input value={s.reply_to} onChange={(e) => setS({ ...s, reply_to: e.target.value })} placeholder="hello@clovrlab.com" className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+        <input aria-label="Reply-to address" value={s.reply_to} onChange={(e) => setS({ ...s, reply_to: e.target.value })} placeholder="hello@clovrlab.com" className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
       </Field>
       <Field label="Sender domain">
-        <input value={s.sender_domain} onChange={(e) => setS({ ...s, sender_domain: e.target.value })} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+        <input aria-label="Sender domain" value={s.sender_domain} onChange={(e) => setS({ ...s, sender_domain: e.target.value })} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
         <p className="mt-1 text-xs text-muted-foreground">Verified in Resend. Shared mailboxes (support@, sales@, etc.) send from this domain.</p>
       </Field>
       <Field label="Default footer">
-        <textarea value={s.default_footer} onChange={(e) => setS({ ...s, default_footer: e.target.value })} rows={4} placeholder="Appended to outbound company email." className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+        <textarea aria-label="Default footer" value={s.default_footer} onChange={(e) => setS({ ...s, default_footer: e.target.value })} rows={4} placeholder="Appended to outbound company email." className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
       </Field>
       <Field label="Tracking">
         <div className="flex flex-col gap-2">
@@ -680,7 +680,7 @@ function RolesManager() {
                         <p className="text-sm">{p.full_name || p.email}</p>
                         {p.department && <p className="text-xs text-muted-foreground">{p.department}</p>}
                       </div>
-                      <button onClick={() => toggleAssign(p.id)} className="rounded p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
+                      <button aria-label="Delete" onClick={() => toggleAssign(p.id)} className="rounded p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3.5 w-3.5" /></button>
                     </li>
                   ))}
                 </ul>
@@ -708,7 +708,7 @@ function RolesManager() {
 
       {showAssign && selectedRole && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowAssign(false)}>
-          <div className="flex w-full max-w-md flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="flex w-full max-w-md flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-border p-4">
               <h3 className="font-semibold">Add members to <span style={{ color: selectedRole.color }}>{selectedRole.name}</span></h3>
               <button onClick={() => setShowAssign(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
@@ -774,9 +774,9 @@ function OnboardingTemplates() {
             <option value="">Global (all)</option>
             {DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
-          <input placeholder="Task" value={form.task ?? ""} onChange={(e) => setForm({ ...form, task: e.target.value })} className={`${inputCls} sm:col-span-2`} />
-          <input placeholder="Category" value={form.category ?? ""} onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputCls} />
-          <input type="number" placeholder="Days" value={form.days_offset ?? 0} onChange={(e) => setForm({ ...form, days_offset: Number(e.target.value) })} className={inputCls} />
+          <input aria-label="Task" placeholder="Task" value={form.task ?? ""} onChange={(e) => setForm({ ...form, task: e.target.value })} className={`${inputCls} sm:col-span-2`} />
+          <input aria-label="Category" placeholder="Category" value={form.category ?? ""} onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputCls} />
+          <input aria-label="Days" type="number" placeholder="Days" value={form.days_offset ?? 0} onChange={(e) => setForm({ ...form, days_offset: Number(e.target.value) })} className={inputCls} />
         </div>
         <div className="mt-3">
           <button onClick={add} className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground">
@@ -797,7 +797,7 @@ function OnboardingTemplates() {
                 <td className="px-4 py-2"><input defaultValue={r.task} onBlur={(e) => e.target.value !== r.task && update(r.id, { task: e.target.value })} className="w-full bg-transparent" /></td>
                 <td className="px-4 py-2"><input defaultValue={r.category ?? ""} onBlur={(e) => update(r.id, { category: e.target.value || null })} className="w-full bg-transparent" /></td>
                 <td className="px-4 py-2"><input type="number" defaultValue={r.days_offset} onBlur={(e) => update(r.id, { days_offset: Number(e.target.value) })} className="w-16 bg-transparent" /></td>
-                <td className="px-4 py-2 text-right"><button onClick={() => del(r.id)} className="text-xs text-destructive hover:underline"><Trash2 className="inline h-3 w-3" /></button></td>
+                <td className="px-4 py-2 text-right"><button aria-label="Delete" onClick={() => del(r.id)} className="text-xs text-destructive hover:underline"><Trash2 className="inline h-3 w-3" /></button></td>
               </tr>
             ))}
             {rows.length === 0 && <tr><td colSpan={5} className="p-8 text-center text-sm text-muted-foreground">No templates yet — add company-wide onboarding tasks above.</td></tr>}

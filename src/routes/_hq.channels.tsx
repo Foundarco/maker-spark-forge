@@ -470,7 +470,7 @@ function ChannelsPage() {
                       {editingMsg?.id === m.id ? (
                         <div className="mt-1 flex items-center gap-2">
                           <input autoFocus value={editingMsg.body} onChange={(e) => setEditingMsg({ ...editingMsg, body: e.target.value })} onKeyDown={(e) => { if (e.key === "Enter") saveEdit(); if (e.key === "Escape") setEditingMsg(null); }} className="flex-1 rounded border border-border bg-background px-2 py-1 text-sm outline-none focus:border-primary" />
-                          <button onClick={saveEdit} className="rounded bg-primary px-2 py-1 text-xs text-primary-foreground"><Check className="h-3 w-3" /></button>
+                          <button aria-label="Save" onClick={saveEdit} className="rounded bg-primary px-2 py-1 text-xs text-primary-foreground"><Check className="h-3 w-3" /></button>
                           <button onClick={() => setEditingMsg(null)} className="rounded border border-border px-2 py-1 text-xs">Cancel</button>
                         </div>
                       ) : (
@@ -525,18 +525,18 @@ function ChannelsPage() {
             <div className="space-y-3">
               <div>
                 <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Name</label>
-                <input required autoFocus value={newChan.name} onChange={(e) => setNewChan({ ...newChan, name: e.target.value })} placeholder="e.g. product-launch" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                <input aria-label="Name" required autoFocus value={newChan.name} onChange={(e) => setNewChan({ ...newChan, name: e.target.value })} placeholder="e.g. product-launch" className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
               </div>
               <div>
                 <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Category</label>
-                <select value={newChan.category_id} onChange={(e) => setNewChan({ ...newChan, category_id: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
+                <select aria-label="Category" value={newChan.category_id} onChange={(e) => setNewChan({ ...newChan, category_id: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary">
                   <option value="">— None —</option>
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
               </div>
               <div>
                 <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Description</label>
-                <textarea value={newChan.description} onChange={(e) => setNewChan({ ...newChan, description: e.target.value })} rows={2} placeholder="What's this channel about?" className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+                <textarea aria-label="Description" value={newChan.description} onChange={(e) => setNewChan({ ...newChan, description: e.target.value })} rows={2} placeholder="What's this channel about?" className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
               </div>
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={newChan.is_private} onChange={(e) => setNewChan({ ...newChan, is_private: e.target.checked })} />

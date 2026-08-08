@@ -179,7 +179,7 @@ function MeetingNotesPage() {
               {selected.author_id === me && (
                 <div className="flex gap-2">
                   <button onClick={() => startEdit(selected)} className="rounded-lg border border-border px-3 py-1.5 text-xs hover:bg-muted">Edit</button>
-                  <button onClick={() => remove(selected)} className="rounded-lg border border-destructive/30 p-1.5 text-destructive hover:bg-destructive/10"><Trash2 className="h-3.5 w-3.5" /></button>
+                  <button aria-label="Delete" onClick={() => remove(selected)} className="rounded-lg border border-destructive/30 p-1.5 text-destructive hover:bg-destructive/10"><Trash2 className="h-3.5 w-3.5" /></button>
                 </div>
               )}
             </header>
@@ -224,11 +224,11 @@ function NoteEditor({ draft, setDraft, onSave, onCancel }: { draft: Partial<Note
         </div>
       </header>
       <div className="flex-1 space-y-4 overflow-y-auto p-5">
-        <input autoFocus placeholder="Meeting title" value={draft.title ?? ""} onChange={(e) => setDraft({ ...draft, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-lg font-semibold outline-none focus:border-primary" />
+        <input aria-label="Meeting title" autoFocus placeholder="Meeting title" value={draft.title ?? ""} onChange={(e) => setDraft({ ...draft, title: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-lg font-semibold outline-none focus:border-primary" />
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <label className="mb-1 block text-xs uppercase tracking-wider text-muted-foreground">Meeting date & time</label>
-            <input type="datetime-local" value={draft.meeting_date ? toLocalInput(draft.meeting_date) : ""} onChange={(e) => setDraft({ ...draft, meeting_date: e.target.value ? new Date(e.target.value).toISOString() : null })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
+            <input aria-label="Meeting date & time" type="datetime-local" value={draft.meeting_date ? toLocalInput(draft.meeting_date) : ""} onChange={(e) => setDraft({ ...draft, meeting_date: e.target.value ? new Date(e.target.value).toISOString() : null })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
           </div>
         </div>
         <div>
@@ -266,7 +266,7 @@ function NoteEditor({ draft, setDraft, onSave, onCancel }: { draft: Partial<Note
             <label className="block text-xs uppercase tracking-wider text-muted-foreground">Notes</label>
             <TranscribeButton onText={(t) => setDraft({ ...draft, body: `${draft.body ?? ""}${draft.body ? "\n" : ""}${t}` })} />
           </div>
-          <textarea value={draft.body ?? ""} onChange={(e) => setDraft({ ...draft, body: e.target.value })} rows={16} placeholder={`# Agenda\n- \n\n# Decisions\n- \n\n# Action items\n- [ ] `} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary" />
+          <textarea aria-label="Notes" value={draft.body ?? ""} onChange={(e) => setDraft({ ...draft, body: e.target.value })} rows={16} placeholder={`# Agenda\n- \n\n# Decisions\n- \n\n# Action items\n- [ ] `} className="w-full resize-none rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none focus:border-primary" />
         </div>
       </div>
     </div>
