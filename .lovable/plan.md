@@ -1,94 +1,42 @@
-# Website rebuild — "Nimbus Forge"
+# McGuire Construction — Public Website Rebuild
 
-Pivoting the public site from Loomprint (3D printer product) to a full-service hardware product-development studio, wrapped in a literal cloud brand.
+Replace the Nimbus Forge cloud-themed marketing site with a restrained, architectural site for McGuire Construction. The internal HQ workspace stays untouched.
 
-## Brand direction
+## Brand foundation
 
-- **Name:** Nimbus Forge — clouds (Nimbus) + hardware/making (Forge). Tagline: *"From idea to shelf. One team, one cloud."*
-- **Palette (cloud-native, added to `src/styles.css`):**
-  - `--sky-50` #F4F8FC (page bg), `--sky-100` #E6EFF8, `--sky-200` #CDDDEC
-  - `--cloud` #FFFFFF, `--cloud-shadow` #DCE4EE
-  - `--ink` #0F1B2D (deep storm-navy for text), `--ink-soft` #4A5A70
-  - `--primary` #3A7BD5 (clear-sky blue), `--primary-glow` #6FA8E8
-  - `--accent` #F5C56A (sunlight through clouds — warm CTA accent)
-- **Typography:** Instrument Serif (display, italic touches for "cloud" words) + Inter (body).
-- **Visual system:** photoreal sky/cloud hero + section backdrops, plus soft SVG cloud silhouettes as decorative accents, drifting subtly on scroll. Rounded 2xl cards with soft cloud-shadow blur. No hard black.
+- Name: McGuire Construction. Established 1995 (family legacy wording only — never "operating in California since 1995").
+- Primary message: BUILT SINCE 1995. BUILT FOR WHAT'S NEXT.
+- Supporting: A family construction legacy carried into the next generation.
+- Palette: black, off-white, charcoal, warm neutral, single restrained accent line color. No orange/black clichés, no gradients, no big rounded cards, minimal shadows.
+- Type: strong condensed/geometric display for headings, clean sans for body. Uppercase headings with tight tracking, wide whitespace, thin 1px rules as the main structural device.
+- Motion: fades and small offsets only, respects reduced motion.
 
-## Scope (full rebuild)
+## Pages
 
-Rebrand `src/config/brand.ts` (Nimbus Forge, new mission/pillars/contact placeholders) so all headers/footers/meta update.
+1. **Home** — full-bleed hero image + headline, buttons Start a Project / View Projects; short intro ("Construction Built on Experience."); services preview grid (6 categories linking to Services); three principles (Build Well / Communicate Clearly / Build for the Long Term); final CTA.
+2. **Services** — structured list (rule-separated rows, not cards) of the six services with the availability/licensing note.
+3. **Projects** — portfolio grid with image, name, category, short description. Content comes from a small typed data file so real photos can drop in later. Placeholders are explicitly labeled "Placeholder — for replacement", never presented as completed McGuire work.
+4. **About** — hero "A FAMILY LEGACY. A NEW GENERATION.", 1995 / Today / The Mission blocks, concise.
+5. **Process** — 01–07 steps, horizontal numbered timeline on desktop, vertical on mobile.
+6. **Contact / Start a Project** — intake form: name, email, phone, project address, project type (dropdown), description, desired timeline, approximate budget, photo upload, additional info. Confirmation copy: "Project request received. We'll review the information provided and follow up regarding next steps." No response-time promise.
 
-### New / rewritten routes
-- `/` Home — cloud hero, problem→solution, service pillars, process, portfolio teaser, CTA
-- `/services` — overview of the four service groups (Product Dev, Branding & Launch, Manufacturing, Operations)
-- `/services/product-development`, `/services/branding-launch`, `/services/manufacturing`, `/services/operations` — leaf pages, each with capability list + example deliverables
-- `/process` — Discovery → Design → Prototype → Manufacture → Launch → Operate (6-step cloud-journey visual)
-- `/work` — portfolio grid (placeholder case studies)
-- `/work/$slug` — case study template
-- `/about` — mission, vision, team placeholders, "documenting in public" ethos
-- `/journal` — replaces `/blog`, same data source
-- `/journal/$slug`
-- `/contact` — simple contact info + link to quote
-- `/quote` — **primary CTA**: structured multi-step intake (project type, stage, services needed, timeline, budget range, description, contact). Submits to a new `quote_requests` table via a server function; emails notification via existing Resend setup.
-- `/legal/privacy`, `/legal/terms` — keep, restyle
-
-### Removed / redirected (Loomprint-specific)
-Delete: `store`, `store.$slug`, `cart`, `checkout`, `compare`, `accessories`, `parts`, `upgrades`, `materials*`, `software*`, `learn*`, `how-its-built`, `mission` (folded into `/about`), `community`, `get-involved`, `support-us`, `press`, `careers` (keep as light placeholder), `faq`, `help*`, `legal.warranty`, `legal.shipping-returns`, `legal.cookies`.
-
-Corresponding `products`/content queries in `src/lib/content.functions.ts` swapped from printers/materials to services + case studies.
-
-### Shared components
-- `Header` / `Footer` updated for new nav (Services, Process, Work, Journal, About, Contact → Request a Quote button).
-- New `CloudBackdrop` component: layered SVG clouds + subtle parallax drift.
-- New `ServiceCard`, `ProcessStep`, `CaseStudyCard`.
-- `BrandLogo` gets a small cloud mark (inline SVG) next to the wordmark until a real logo exists.
-
-### Imagery
-Generate 6–8 hero/section images via `imagegen` (photoreal skies, cloud landscapes, subtle hardware silhouettes against clouds), uploaded through `lovable-assets`. Replace existing `hero-printer` / `materials` / `community` / `detail` asset pointers.
-
-### Data / backend
-- New `quote_requests` table (id, name, email, company, project_type, stage, services text[], timeline, budget, description, status, created_at) with RLS: anon INSERT allowed, authenticated employees SELECT/UPDATE via `is_employee`. GRANTs included.
-- Server function `submitQuoteRequest` (public, rate-limit friendly, Zod-validated) — inserts row and sends notification email through existing Resend infra.
-- HQ side: add a lightweight `/quote-requests` view under Growth Team to triage submissions (reuses `ResourcePage`).
-
-## SEO / metadata
-
-Each route gets its own `head()` with unique title, meta description, og:title, og:description. Home + leaf pages set `og:image` to their absolute hero URL. `robots`/canonical tags on all public routes.
-
-## Out of scope this pass
-
-- Final logo artwork (typographic mark + cloud SVG placeholder for now)
-- Real case study content (structured placeholders)
-- Pricing pages (quote-driven for now)
-- HQ-side changes beyond the new quote-requests triage view
+Navigation: Home, Services, Projects, About, Process, Contact + "Start a Project" CTA. Clean full-screen mobile menu. Footer: company block, nav, service areas placeholder, legal line.
 
 ## Technical notes
 
-```text
-src/
-  config/brand.ts                (rewrite)
-  components/site/
-    CloudBackdrop.tsx            (new)
-    ServiceCard.tsx              (new)
-    ProcessStep.tsx              (new)
-    CaseStudyCard.tsx            (new)
-    Header.tsx / Footer.tsx      (nav rewrite)
-    BrandLogo.tsx                (cloud mark)
-  routes/
-    index.tsx                    (rewrite)
-    services.tsx + 4 children    (new)
-    process.tsx                  (new)
-    work.tsx, work.$slug.tsx     (new)
-    about.tsx                    (rewrite)
-    journal.tsx, journal.$slug   (rename from blog.*)
-    contact.tsx                  (rewrite)
-    quote.tsx                    (new, primary CTA)
-    _hq.quote-requests.tsx       (new, triage)
-    [Loomprint routes]           (delete)
-  lib/
-    content.functions.ts         (services + case studies)
-    quote.functions.ts           (new server fn)
-  styles.css                     (cloud tokens)
-```
+- New `src/config/brand.ts` (McGuire identity, services, process steps, principles) as the single content source.
+- Replace cloud tokens in `src/styles.css` with the construction palette and new font links in `__root.tsx` (link tags, not CSS @import).
+- Rebuild `src/components/site/*`: Header, Footer, Section/PageHeader, and add `SectionRule`, `ServiceRow`, `ProjectCard`, `TimelineStep`. Remove `CloudBackdrop`.
+- Routes: rewrite `/`, `/services`, `/about`, `/process`; add `/projects` and `/contact`; delete the leftover unlinked Loomprint/Nimbus routes (store, materials, software, learn, community, faq, work, etc.).
+- Intake form reuses the existing `quote_requests` server function pattern. The current table's `stage`/`service` enums don't match construction — a migration will widen the intake fields (project_type, address, timeline, budget, photo URLs) before wiring the form. Photo uploads go to a storage bucket with anonymous insert-only access.
+- Architecture kept extension-ready: content in typed data modules, DB-backed intake, so projects/CRM/estimates/scheduling can be layered on later without a rewrite.
+- Images: high-quality architectural/construction photography generated as placeholders, CDN-hosted, all with descriptive alt text, lazy-loaded below the fold.
 
-Migration adds `quote_requests` with GRANTs + RLS in one file. Existing Loomprint tables in the DB are left in place (unused) to avoid touching HQ data.
+## SEO
+
+Per-route title, meta description, og:title/og:description/og:url, canonical, og:image on pages with a hero. LocalBusiness/GeneralContractor JSON-LD on Home and Contact, BreadcrumbList on deep pages. Updated `robots.txt` and `sitemap.xml` for the new route set. Single H1 per page, semantic sections.
+
+## Assumptions to confirm
+
+- Public phone/email and California service area aren't finalized — I'll use a contact form-first approach and leave clearly marked placeholders for phone, email, and service area.
+- The HQ internal workspace and its routes stay exactly as they are.
