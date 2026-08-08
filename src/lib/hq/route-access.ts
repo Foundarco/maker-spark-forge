@@ -23,7 +23,13 @@ export function useRouteAccess(): AccessState {
           .from("user_custom_roles")
           .select("role_id, custom_roles(permissions)")
           .eq("user_id", uid),
-        supabase.rpc("is_suspended", { _user_id: uid } as any),
+        supabase
+          .from("hr_suspensions")
+          .select("id, ends_at")
+          .eq("user_id", uid)
+          .eq("active", true)
+          .lte("starts_at", new Date().toISOString())
+          .limit(50),
       ]);
       const sysRoles = (sys.data ?? []).map((r: any) => r.role);
       const isAdmin =
@@ -45,7 +51,11 @@ export function useRouteAccess(): AccessState {
           allowed = new Set((routes ?? []).map((r: any) => r.route));
         }
       }
-      if (alive) setState({ loading: false, isAdmin, allowed, suspended: !!suspRes.data });
+      const now = Date.now();
+      const suspended = ((suspRes.data ?? []) as any[]).some(
+        (s) => !s.ends_at || new Date(s.ends_at).getTime() > now,
+      );
+      if (alive) setState({ loading: false, isAdmin, allowed, suspended });
     })();
     return () => { alive = false; };
   }, []);
