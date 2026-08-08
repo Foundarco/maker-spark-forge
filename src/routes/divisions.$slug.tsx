@@ -5,6 +5,7 @@ import { CTAButton } from "@/components/site/CTAButton";
 import { divisions, getDivision } from "@/config/divisions";
 import { CountUp } from "@/components/site/CountUp";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/$slug")({
   loader: ({ params }) => {
