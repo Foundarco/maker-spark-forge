@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { BrandLogo } from "./BrandLogo";
 import { brand } from "@/config/brand";
+import { divisions } from "@/config/divisions";
 
 const cols = [
   {
