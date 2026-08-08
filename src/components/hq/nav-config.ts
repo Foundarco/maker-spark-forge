@@ -47,7 +47,7 @@ export const navGroups: NavGroup[] = [
   {
     label: "Product Team",
     items: [
-      { label: "Projects", to: "/projects", icon: FolderKanban },
+      { label: "Projects", to: "/eng-projects", icon: FolderKanban },
       { label: "Tasks & Boards", to: "/tasks", icon: CheckSquare },
       { label: "Milestones & Roadmap", to: "/milestones", icon: Flag },
       { label: "Design & CAD Library", to: "/cad", icon: FileBox },
