@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Plus, Pencil, Trash2, Search, Loader2, X } from "lucide-react";
@@ -12,6 +13,8 @@ export type FieldType =
   | "select"
   | "user"
   | "project"
+  | "job"
+  | "client"
   | "supplier"
   | "workorder"
   | "account"
@@ -50,19 +53,22 @@ export type ResourceConfig<T = any> = {
   searchable?: string[]; // column keys to include in text search
   defaults?: Record<string, any>;
   baseFilter?: Record<string, any>; // eq filter applied to load + merged into new-row defaults
+  noCreatedBy?: boolean; // set when the table has no created_by column
 };
 
 type Profile = { id: string; full_name: string | null; email: string | null };
 type Project = { id: string; name: string; code: string | null };
+type Job = { id: string; name: string; job_number: string | null };
+type Client = { id: string; name: string; company: string | null };
 type Supplier = { id: string; name: string };
 type WorkOrder = { id: string; order_number: string; product_name: string };
 type FinAccount = { id: string; name: string; code: string | null; type: string };
-type Ctx = { profiles: Profile[]; projects: Project[]; suppliers: Supplier[]; workorders: WorkOrder[]; accounts: FinAccount[] };
+type Ctx = { profiles: Profile[]; projects: Project[]; jobs: Job[]; clients: Client[]; suppliers: Supplier[]; workorders: WorkOrder[]; accounts: FinAccount[] };
 
 export function ResourcePage<T extends { id: string }>({ config }: { config: ResourceConfig<T> }) {
   const [rows, setRows] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
-  const [ctx, setCtx] = useState<Ctx>({ profiles: [], projects: [], suppliers: [], workorders: [], accounts: [] });
+  const [ctx, setCtx] = useState<Ctx>({ profiles: [], projects: [], jobs: [], clients: [], suppliers: [], workorders: [], accounts: [] });
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<T | null>(null);
   const [creating, setCreating] = useState(false);
@@ -72,6 +78,8 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
     return {
       profiles: s.has("user"),
       projects: s.has("project"),
+      jobs: s.has("job"),
+      clients: s.has("client"),
       suppliers: s.has("supplier"),
       workorders: s.has("workorder"),
       accounts: s.has("account"),
@@ -95,11 +103,15 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
       needs.suppliers ? ((supabase.from("mfg_suppliers") as any).select("id, name").order("name") as any) : Promise.resolve({ data: [] }),
       needs.workorders ? ((supabase.from("mfg_work_orders") as any).select("id, order_number, product_name").order("created_at", { ascending: false }) as any) : Promise.resolve({ data: [] }),
       needs.accounts ? ((supabase.from("fin_accounts") as any).select("id, name, code, type").order("code") as any) : Promise.resolve({ data: [] }),
+      needs.jobs ? ((supabase.from("con_jobs") as any).select("id, name, job_number").order("job_number", { ascending: false }) as any) : Promise.resolve({ data: [] }),
+      needs.clients ? ((supabase.from("con_clients") as any).select("id, name, company").order("name") as any) : Promise.resolve({ data: [] }),
     ];
-    const [p, pr, su, wo, ac] = await Promise.all(promises);
+    const [p, pr, su, wo, ac, jb, cl] = await Promise.all(promises);
     setCtx({
       profiles: (p.data ?? []) as Profile[],
       projects: (pr.data ?? []) as Project[],
+      jobs: (jb.data ?? []) as Job[],
+      clients: (cl.data ?? []) as Client[],
       suppliers: (su.data ?? []) as Supplier[],
       workorders: (wo.data ?? []) as WorkOrder[],
       accounts: (ac.data ?? []) as FinAccount[],
@@ -261,7 +273,7 @@ function ResourceDialog<T extends { id: string }>({ config, ctx, row, onClose, o
       else if (f.type === "tags") v = Array.isArray(v) ? v : String(v).split(",").map((s) => s.trim()).filter(Boolean);
       payload[f.key] = v;
     }
-    if (!isEdit && user) payload.created_by = user.id;
+    if (!isEdit && user && !config.noCreatedBy) payload.created_by = user.id;
     if (!isEdit && config.baseFilter) Object.assign(payload, config.baseFilter);
     let error: any = null;
     if (isEdit) {
@@ -341,6 +353,22 @@ function FieldInput({ field, value, onChange, ctx }: { field: FieldDef; value: a
       </select>
     );
   }
+  if (field.type === "job") {
+    return (
+      <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={base}>
+        <option value="">No job</option>
+        {ctx.jobs.map((j) => <option key={j.id} value={j.id}>{j.job_number ? `${j.job_number} · ${j.name}` : j.name}</option>)}
+      </select>
+    );
+  }
+  if (field.type === "client") {
+    return (
+      <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={base}>
+        <option value="">No client</option>
+        {ctx.clients.map((c) => <option key={c.id} value={c.id}>{c.company ? `${c.name} — ${c.company}` : c.name}</option>)}
+      </select>
+    );
+  }
   if (field.type === "supplier") {
     return (
       <select value={value ?? ""} onChange={(e) => onChange(e.target.value)} className={base}>
@@ -405,4 +433,26 @@ export function DateCell({ date }: { date: string | null }) {
   if (!date) return <span className="text-muted-foreground text-xs">—</span>;
   const d = new Date(date);
   return <span className="text-sm text-muted-foreground">{d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</span>;
+}
+
+export function JobCell({ jobId, jobs }: { jobId: string | null; jobs: { id: string; name: string; job_number: string | null }[] }) {
+  if (!jobId) return <span className="text-muted-foreground text-xs">—</span>;
+  const j = jobs.find((x) => x.id === jobId);
+  if (!j) return <span className="text-muted-foreground text-xs">—</span>;
+  return (
+    <Link to="/jobs/$id" params={{ id: j.id }} className="text-sm font-medium text-primary hover:underline">
+      {j.job_number ? `${j.job_number} · ${j.name}` : j.name}
+    </Link>
+  );
+}
+
+export function ClientCell({ clientId, clients }: { clientId: string | null; clients: { id: string; name: string; company: string | null }[] }) {
+  if (!clientId) return <span className="text-muted-foreground text-xs">—</span>;
+  const c = clients.find((x) => x.id === clientId);
+  if (!c) return <span className="text-muted-foreground text-xs">—</span>;
+  return (
+    <Link to="/clients/$id" params={{ id: c.id }} className="text-sm font-medium text-primary hover:underline">
+      {c.company || c.name}
+    </Link>
+  );
 }
