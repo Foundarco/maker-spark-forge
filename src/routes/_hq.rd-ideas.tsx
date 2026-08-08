@@ -14,7 +14,7 @@ export const Route = createFileRoute("/_hq/rd-ideas")({
 
 type Idea = {
   id: string;
-  author_id: string;
+  author_id: string | null;
   title: string;
   description: string | null;
   category: string | null;
@@ -34,7 +34,7 @@ type Idea = {
 type Comment = {
   id: string;
   idea_id: string;
-  author_id: string;
+  author_id: string | null;
   body: string;
   is_anonymous: boolean;
   created_at: string;
@@ -117,7 +117,7 @@ function IdeasPage() {
     if (error) setError(error.message);
     const list = (data ?? []) as Idea[];
     setIdeas(list);
-    const authorIds = Array.from(new Set([...list.map((i) => i.author_id), ...list.map((i) => i.assigned_to).filter(Boolean) as string[]]));
+    const authorIds = Array.from(new Set([...list.map((i) => i.author_id), ...list.map((i) => i.assigned_to)].filter(Boolean) as string[]));
     if (authorIds.length) {
       const { data: p } = await supabase.from("profiles").select("id, full_name, email").in("id", authorIds);
       const map: Record<string, Profile> = {};
@@ -231,7 +231,7 @@ function IdeasPage() {
 
   // Show real author name unless anonymous (and viewer isn't admin/author)
   const displayAuthor = (idea: Idea): { name: string; masked: boolean } => {
-    if (idea.is_anonymous && !isAdmin && idea.author_id !== userId) {
+    if (!idea.author_id || (idea.is_anonymous && !isAdmin && idea.author_id !== userId)) {
       return { name: "Anonymous", masked: true };
     }
     const p = profiles[idea.author_id];
@@ -482,7 +482,7 @@ function IdeaDetail(props: {
       const { data } = await supabase.from("idea_comments_masked").select("*").eq("idea_id", idea.id).order("created_at", { ascending: true });
       const list = (data ?? []) as Comment[];
       setComments(list);
-      const ids = Array.from(new Set(list.map((c) => c.author_id)));
+      const ids = Array.from(new Set(list.map((c) => c.author_id).filter(Boolean) as string[]));
       if (ids.length) {
         const { data: p } = await supabase.from("profiles").select("id, full_name, email").in("id", ids);
         const map: Record<string, Profile> = {};
@@ -542,7 +542,7 @@ function IdeaDetail(props: {
   };
 
   const commentAuthor = (c: Comment) => {
-    if (c.is_anonymous && !isAdmin && c.author_id !== userId) return { name: "Anonymous", masked: true };
+    if (!c.author_id || (c.is_anonymous && !isAdmin && c.author_id !== userId)) return { name: "Anonymous", masked: true };
     const p = commentProfiles[c.author_id] || profiles[c.author_id];
     return { name: p?.full_name || p?.email || "Someone", masked: c.is_anonymous };
   };
