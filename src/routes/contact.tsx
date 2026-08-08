@@ -6,7 +6,7 @@ import { CTAButtonBtn } from "@/components/site/CTAButton";
 import { submitProjectRequest } from "@/lib/project-request.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { brand } from "@/config/brand";
-import { Check, Loader2, Phone, Mail, Clock, MapPin, Upload, X } from "lucide-react";
+import { Check, Loader2, Upload, X } from "lucide-react";
 
 const desc =
   "Request a free estimate from McGuire Construction. Tell us about your project, share photos, and we'll respond within two business days.";
