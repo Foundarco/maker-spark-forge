@@ -68,16 +68,19 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const siteDescription =
+  "Family-run general contractor since 1974. Homes, additions, and renovations built with disciplined craftsmanship and schedules that hold.";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: `${brand.name} — ${brand.tagline}` },
-      { name: "description", content: brand.shortMission },
+      { name: "description", content: siteDescription },
       { property: "og:site_name", content: brand.name },
       { property: "og:title", content: `${brand.name} — ${brand.tagline}` },
-      { property: "og:description", content: brand.shortMission },
+      { property: "og:description", content: siteDescription },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -89,6 +92,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&display=swap",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": `${SITE_URL}/#website`,
+              url: `${SITE_URL}/`,
+              name: brand.name,
+              description: siteDescription,
+              publisher: { "@id": `${SITE_URL}/#organization` },
+            },
+            {
+              "@type": "Organization",
+              "@id": `${SITE_URL}/#organization`,
+              name: brand.name,
+              url: `${SITE_URL}/`,
+              slogan: brand.tagline,
+              foundingDate: String(brand.established),
+              description: siteDescription,
+              telephone: brand.phone,
+              email: brand.contact.general,
+              areaServed: brand.serviceArea,
+            },
+          ],
+        }),
       },
     ],
   }),
