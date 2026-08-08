@@ -18,9 +18,9 @@ export const Route = createFileRoute("/services")({
       { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/services" },
-      { property: "og:image", content: divisions[0].image },
+      { property: "og:image", content: `https://clovrlab.com${divisions[0].image}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: divisions[0].image },
+      { name: "twitter:image", content: `https://clovrlab.com${divisions[0].image}` },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/services" }],
     scripts: [

@@ -22,9 +22,9 @@ export const Route = createFileRoute("/about")({
       { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/about" },
-      { property: "og:image", content: founderAsset.url },
+      { property: "og:image", content: `https://clovrlab.com${founderAsset.url}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: founderAsset.url },
+      { name: "twitter:image", content: `https://clovrlab.com${founderAsset.url}` },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/about" }],
     scripts: [

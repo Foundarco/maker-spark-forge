@@ -34,9 +34,9 @@ export const Route = createFileRoute("/")({
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/" },
-      { property: "og:image", content: heroAsset.url },
+      { property: "og:image", content: `https://clovrlab.com${heroAsset.url}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: heroAsset.url },
+      { name: "twitter:image", content: `https://clovrlab.com${heroAsset.url}` },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/" }],
     scripts: [
