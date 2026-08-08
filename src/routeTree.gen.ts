@@ -21,11 +21,13 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
+import { Route as DivisionsSlugRouteImport } from './routes/divisions.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as HqWorkOrdersRouteImport } from './routes/_hq.work-orders'
 import { Route as HqWebhooksRouteImport } from './routes/_hq.webhooks'
@@ -267,6 +269,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
+  id: '/divisions/',
+  path: '/divisions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeetingIdRoute = MeetingIdRouteImport.update({
   id: '/meeting/$id',
   path: '/meeting/$id',
@@ -291,6 +298,11 @@ const HelpSlugRoute = HelpSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => HelpRoute,
+} as any)
+const DivisionsSlugRoute = DivisionsSlugRouteImport.update({
+  id: '/divisions/$slug',
+  path: '/divisions/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
@@ -1381,11 +1393,13 @@ export interface FileRoutesByFullPath {
   '/webhooks': typeof HqWebhooksRoute
   '/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/divisions/$slug': typeof DivisionsSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/divisions/': typeof DivisionsIndexRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -1579,11 +1593,13 @@ export interface FileRoutesByTo {
   '/webhooks': typeof HqWebhooksRoute
   '/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/divisions/$slug': typeof DivisionsSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/divisions': typeof DivisionsIndexRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -1780,11 +1796,13 @@ export interface FileRoutesById {
   '/_hq/webhooks': typeof HqWebhooksRoute
   '/_hq/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/divisions/$slug': typeof DivisionsSlugRoute
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/divisions/': typeof DivisionsIndexRoute
   '/_hq/admin/access': typeof HqAdminAccessRoute
   '/_hq/admin/branding': typeof HqAdminBrandingRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
@@ -1980,11 +1998,13 @@ export interface FileRouteTypes {
     | '/webhooks'
     | '/work-orders'
     | '/blog/$slug'
+    | '/divisions/$slug'
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/divisions/'
     | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
@@ -2178,11 +2198,13 @@ export interface FileRouteTypes {
     | '/webhooks'
     | '/work-orders'
     | '/blog/$slug'
+    | '/divisions/$slug'
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/divisions'
     | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
@@ -2378,11 +2400,13 @@ export interface FileRouteTypes {
     | '/_hq/webhooks'
     | '/_hq/work-orders'
     | '/blog/$slug'
+    | '/divisions/$slug'
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/divisions/'
     | '/_hq/admin/access'
     | '/_hq/admin/branding'
     | '/_hq/admin/company'
@@ -2407,10 +2431,12 @@ export interface RootRouteChildren {
   ProcessRoute: typeof ProcessRoute
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
+  DivisionsSlugRoute: typeof DivisionsSlugRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
   MeetingIdRoute: typeof MeetingIdRoute
+  DivisionsIndexRoute: typeof DivisionsIndexRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
   ApiPublicResendInboundRoute: typeof ApiPublicResendInboundRoute
 }
@@ -2501,6 +2527,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/divisions/': {
+      id: '/divisions/'
+      path: '/divisions'
+      fullPath: '/divisions/'
+      preLoaderRoute: typeof DivisionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meeting/$id': {
       id: '/meeting/$id'
       path: '/meeting/$id'
@@ -2535,6 +2568,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/help/$slug'
       preLoaderRoute: typeof HelpSlugRouteImport
       parentRoute: typeof HelpRoute
+    }
+    '/divisions/$slug': {
+      id: '/divisions/$slug'
+      path: '/divisions/$slug'
+      fullPath: '/divisions/$slug'
+      preLoaderRoute: typeof DivisionsSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -4203,23 +4243,15 @@ const rootRouteChildren: RootRouteChildren = {
   ProcessRoute: ProcessRoute,
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
+  DivisionsSlugRoute: DivisionsSlugRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
   MeetingIdRoute: MeetingIdRoute,
+  DivisionsIndexRoute: DivisionsIndexRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
   ApiPublicResendInboundRoute: ApiPublicResendInboundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

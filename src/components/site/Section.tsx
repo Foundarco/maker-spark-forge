@@ -21,6 +21,45 @@ export function Section({
   );
 }
 
+/** Numbered architectural section marker: "— 02 / THE McGUIRE GROUP" */
+export function SectionLabel({
+  n,
+  children,
+  tone = "dark",
+  className = "",
+}: {
+  n?: string;
+  children: ReactNode;
+  tone?: "dark" | "light";
+  className?: string;
+}) {
+  const color = tone === "light" ? "text-white/55" : "text-muted-foreground";
+  const rule = tone === "light" ? "bg-white/30" : "bg-ink/30";
+  return (
+    <p className={`rule-label flex items-center gap-3 ${color} ${className}`}>
+      <span className={`h-px w-10 ${rule}`} aria-hidden />
+      {n ? <span className="tabular-nums">{n}</span> : null}
+      {n ? <span aria-hidden className={color}>/</span> : null}
+      <span>{children}</span>
+    </p>
+  );
+}
+
+/** Oversized condensed headline used across the redesigned public site. */
+export function DisplayHeading({
+  children,
+  as: Tag = "h2",
+  className = "",
+}: {
+  children: ReactNode;
+  as?: "h1" | "h2" | "h3";
+  className?: string;
+}) {
+  return (
+    <Tag className={`display-cond text-[clamp(2.25rem,6vw,5rem)] ${className}`}>{children}</Tag>
+  );
+}
+
 export function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <p className="rule-label mb-4 flex items-center gap-3 text-muted-foreground">
