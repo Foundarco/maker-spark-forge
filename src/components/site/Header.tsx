@@ -6,9 +6,8 @@ import { brand } from "@/config/brand";
 import { divisions } from "@/config/divisions";
 
 const nav = [
-  { to: "/services", label: "Services" },
   { to: "/projects", label: "Projects" },
-  { to: "/process", label: "Process" },
+  { to: "/careers", label: "Careers" },
   { to: "/about", label: "About" },
 ] as const;
 
@@ -38,7 +37,7 @@ export function Header() {
       <div className="hidden bg-ink text-white lg:block">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-2 text-[0.72rem] sm:px-8">
           <p className="flex items-center gap-2 text-white/80">
-            <Sparkles className="h-3.5 w-3.5 text-[var(--acc-excavation)]" aria-hidden />
+            <Sparkles className="h-3.5 w-3.5 text-[var(--acc-construction)]" aria-hidden />
             All five McGuire divisions are now open and taking work.
           </p>
           <div className="flex items-center gap-5 text-white/60">
@@ -86,8 +85,8 @@ export function Header() {
             className="hidden items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-ink transition hover:border-ink sm:inline-flex"
           >
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--acc-landscape)] opacity-70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--acc-landscape)]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--acc-live)] opacity-70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--acc-live)]" />
             </span>
             {brand.phone}
           </a>
