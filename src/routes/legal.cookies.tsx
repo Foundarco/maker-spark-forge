@@ -10,7 +10,10 @@ export const Route = createFileRoute("/legal/cookies")({
       { name: "description", content: "What cookies and similar technologies we use, and why." },
       { property: "og:title", content: `Cookie Policy — ${brand.name}` },
       { property: "og:description", content: "Cookies and similar technologies." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/legal/cookies" },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/legal/cookies" }],
   }),
   component: () => (
     <Section>

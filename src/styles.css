@@ -140,29 +140,29 @@
 ---------------------------------------------------------------- */
 .site-theme {
   --radius: 0.25rem;
-  --background: oklch(0.975 0.004 85);
-  --surface: oklch(0.955 0.006 85);
-  --foreground: oklch(0.28 0.008 60);
-  --ink: oklch(0.17 0.008 60);
-  --warm: oklch(0.945 0.010 80);
+  --background: oklch(0.985 0.004 40);
+  --surface: oklch(0.962 0.008 35);
+  --foreground: oklch(0.28 0.012 30);
+  --ink: oklch(0.16 0.012 30);
+  --warm: oklch(0.955 0.014 35);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.008 60);
+  --card-foreground: oklch(0.24 0.010 30);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.008 60);
-  --primary: oklch(0.22 0.010 60);
-  --primary-foreground: oklch(0.98 0.004 85);
-  --primary-soft: oklch(0.93 0.008 75);
-  --secondary: oklch(0.94 0.008 80);
-  --secondary-foreground: oklch(0.22 0.010 60);
-  --muted: oklch(0.945 0.006 80);
-  --muted-foreground: oklch(0.50 0.010 65);
-  --accent: oklch(0.90 0.018 75);
-  --accent-foreground: oklch(0.22 0.010 60);
-  --border: oklch(0.90 0.008 80);
-  --input: oklch(0.92 0.008 80);
-  --ring: oklch(0.45 0.012 60);
-  --stone: oklch(0.86 0.020 78);
-  --stone-deep: oklch(0.62 0.022 72);
+  --popover-foreground: oklch(0.24 0.010 30);
+  --primary: oklch(0.52 0.201 27);
+  --primary-foreground: oklch(0.99 0.004 40);
+  --primary-soft: oklch(0.955 0.030 27);
+  --secondary: oklch(0.95 0.010 35);
+  --secondary-foreground: oklch(0.22 0.012 30);
+  --muted: oklch(0.955 0.008 35);
+  --muted-foreground: oklch(0.50 0.014 30);
+  --accent: oklch(0.94 0.035 27);
+  --accent-foreground: oklch(0.35 0.16 27);
+  --border: oklch(0.905 0.010 35);
+  --input: oklch(0.925 0.010 35);
+  --ring: oklch(0.52 0.201 27);
+  --stone: oklch(0.88 0.020 40);
+  --stone-deep: oklch(0.62 0.024 38);
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   background-color: var(--background);
   color: var(--foreground);
@@ -217,11 +217,12 @@
 ---------------------------------------------------------------- */
 
 .site-theme {
-  --acc-construction: #4f46e5;
-  --acc-concrete: #0f766e;
-  --acc-excavation: #b45309;
-  --acc-landscape: #15803d;
-  --acc-development: #be123c;
+  --acc-construction: #dc2626;
+  --acc-concrete: #7f1d1d;
+  --acc-excavation: #ea580c;
+  --acc-landscape: #9f1239;
+  --acc-development: #e11d48;
+  --acc-live: #16a34a;
 }
 
 @utility accent-ink {

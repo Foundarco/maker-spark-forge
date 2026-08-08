@@ -6,11 +6,15 @@ import { brand } from "@/config/brand";
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: `FAQ — ${brand.name}` },
-      { name: "description", content: "Answers to the questions we get most about the printer, ordering, materials, and warranty." },
-      { property: "og:title", content: `FAQ — ${brand.name}` },
-      { property: "og:description", content: "Answers to the questions we get most." },
+      { title: `Homeowner FAQ — Estimates, Timelines & Warranty | ${brand.name}` },
+      { name: "description", content: "Answers to the questions homeowners ask most: how estimates are built, what a realistic timeline looks like, change orders, permits, payment schedules, and our warranty." },
+      { property: "og:title", content: `Homeowner FAQ | ${brand.name}` },
+      { property: "og:description", content: "Estimates, timelines, change orders, permits, payments, and warranty — answered plainly." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/faq" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/faq" }],
   }),
   component: FAQPage,
 });

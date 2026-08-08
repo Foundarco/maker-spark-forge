@@ -10,7 +10,10 @@ export const Route = createFileRoute("/legal/terms")({
       { name: "description", content: `The terms that apply when you use ${brand.name}'s website and services.` },
       { property: "og:title", content: `Terms of Service — ${brand.name}` },
       { property: "og:description", content: `The terms that apply when you use ${brand.name}.` },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/legal/terms" },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/legal/terms" }],
   }),
   component: () => (
     <Section>

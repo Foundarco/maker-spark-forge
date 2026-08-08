@@ -9,11 +9,15 @@ export const Route = createFileRoute("/blog")({
   loader: ({ context }) => context.queryClient.ensureQueryData(postsQuery),
   head: () => ({
     meta: [
-      { title: `Blog — ${brand.name}` },
-      { name: "description", content: "Build updates, community stories, education notes, and company news." },
-      { property: "og:title", content: `Blog — ${brand.name}` },
-      { property: "og:description", content: "Build updates, community stories, education notes, and company news." },
+      { title: `The Job Site Journal — Build Notes | ${brand.name}` },
+      { name: "description", content: "Notes from McGuire job sites: how we sequence a build, what materials we specify, division updates, and lessons from thirty years of residential construction." },
+      { property: "og:title", content: `The Job Site Journal | ${brand.name}` },
+      { property: "og:description", content: "Build notes, material choices, and division updates from McGuire crews." },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/blog" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/blog" }],
   }),
   component: BlogPage,
 });

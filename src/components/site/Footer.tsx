@@ -7,9 +7,9 @@ const cols = [
   {
     title: "Work",
     links: [
-      { to: "/services", label: "Services" },
+      { to: "/divisions", label: "Divisions" },
       { to: "/projects", label: "Projects" },
-      { to: "/process", label: "Process" },
+      { to: "/services", label: "Services" },
     ],
   },
   {
