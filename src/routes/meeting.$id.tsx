@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link, useSearch } from "@tanstack/react-r
 import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { lookupMeetingInvite, markMeetingInviteJoined } from "@/lib/hq/meeting-invite.functions";
 import {
   Mic, MicOff, Video as VideoIcon, VideoOff, ScreenShare, ScreenShareOff,
   PhoneOff, FileText, Copy, Check, Users, MessageSquare, Send, Maximize2, X,
