@@ -61,7 +61,7 @@ export function ChannelAccessDialog({ channelId, channelName, onClose }: { chann
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
-      <div className="w-full max-w-lg rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-border p-4">
           <div>
             <h3 className="font-semibold">Access · #{channelName}</h3>

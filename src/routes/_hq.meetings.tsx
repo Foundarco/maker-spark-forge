@@ -334,7 +334,7 @@ function MeetingsPage() {
         const externals = extInvites.filter((x) => x.meeting_id === m.id);
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setDetailOpen(null)}>
-            <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="mb-3 flex items-start justify-between">
                 <div>
                   <h3 className="text-lg font-semibold">{m.title}</h3>

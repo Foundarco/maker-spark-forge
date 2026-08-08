@@ -284,7 +284,7 @@ function CalendarPage() {
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowForm(false)}>
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">{draft.id ? "Edit event" : "New event"}</h3>
               <button onClick={() => setShowForm(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>

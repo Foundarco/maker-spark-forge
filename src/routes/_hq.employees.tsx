@@ -180,7 +180,7 @@ function EmployeeEditor({ employee, profiles, onClose, onSaved }: { employee: Em
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
-      <div className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">{form.id ? "Edit person" : "Add person"}</h3>
           <button onClick={onClose} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
@@ -375,7 +375,7 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
 
       {showInvite && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowInvite(false)}>
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Invite a new user</h3>
               <button onClick={() => setShowInvite(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>
@@ -402,7 +402,7 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
 
       {editUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setEditUser(null)}>
-          <div className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Edit roles</h3>
               <button onClick={() => setEditUser(null)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>

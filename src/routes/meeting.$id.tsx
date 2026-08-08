@@ -746,7 +746,7 @@ function MeetingRoom() {
 
       {showLeaveConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setShowLeaveConfirm(false)}>
-          <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-semibold">Leaving as host</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               You're the host of this meeting. End it for everyone (you'll review and edit the meeting notes before saving), or just leave and let the meeting continue.
@@ -768,7 +768,7 @@ function MeetingRoom() {
 
       {notesDraft !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setNotesDraft(null)}>
-          <div className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
+          <div role="dialog" aria-modal="true" className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
             <div className="flex items-start justify-between border-b border-border p-5">
               <div>
                 <h3 className="text-lg font-semibold">Meeting notes</h3>

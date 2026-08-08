@@ -708,7 +708,7 @@ function RolesManager() {
 
       {showAssign && selectedRole && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowAssign(false)}>
-          <div className="flex w-full max-w-md flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="flex w-full max-w-md flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-border p-4">
               <h3 className="font-semibold">Add members to <span style={{ color: selectedRole.color }}>{selectedRole.name}</span></h3>
               <button onClick={() => setShowAssign(false)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>

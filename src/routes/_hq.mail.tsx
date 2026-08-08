@@ -325,7 +325,7 @@ function MailClient() {
 
       {showSettings && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-6" onClick={() => setShowSettings(false)}>
-          <div className="w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <header className="flex items-center justify-between border-b border-border px-5 py-3">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Mail</p>
@@ -454,7 +454,7 @@ function MailClient() {
 
       {compose && (
         <div className="fixed inset-0 z-40 flex items-end justify-end bg-black/30 p-6" onClick={() => setCompose(null)}>
-          <div className="flex h-[560px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+          <div role="dialog" aria-modal="true" className="flex h-[560px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <header className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-2.5">
               <p className="text-sm font-semibold">New message</p>
               <button onClick={() => setCompose(null)} className="rounded p-1 hover:bg-muted"><X className="h-4 w-4" /></button>

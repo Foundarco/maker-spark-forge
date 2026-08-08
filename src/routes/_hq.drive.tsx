@@ -380,7 +380,7 @@ function RenameDialog({ item, onClose, onSave }: { item: Item; onClose: () => vo
   const [name, setName] = useState(item.name);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-xl border border-border bg-background p-5 shadow-2xl">
+      <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-xl border border-border bg-background p-5 shadow-2xl">
         <h3 className="text-lg font-semibold">Rename</h3>
         <input autoFocus value={name} onChange={(e) => setName(e.target.value)} className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
         <div className="mt-4 flex justify-end gap-2">
@@ -427,7 +427,7 @@ function ShareDialog({ item, me, onClose }: { item: Item; me: string; onClose: (
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
-      <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg rounded-xl border border-border bg-background p-5 shadow-2xl">
+      <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="w-full max-w-lg rounded-xl border border-border bg-background p-5 shadow-2xl">
         <h3 className="text-lg font-semibold">Share "{item.name}"</h3>
         <div className="mt-4 space-y-3">
           <div className="flex gap-2">
