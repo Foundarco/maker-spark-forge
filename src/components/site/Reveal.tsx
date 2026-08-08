@@ -20,24 +20,42 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
-      el.classList.add("is-in");
+
+    const show = () => el.classList.add("is-in");
+
+    // Already in (or above) the viewport on mount — reveal right away.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92) {
+      show();
       return;
     }
+
+    if (typeof IntersectionObserver === "undefined") {
+      show();
+      return;
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
-            el.classList.add("is-in");
+            show();
             io.unobserve(el);
           }
         });
       },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.08 },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.01 },
     );
     io.observe(el);
-    return () => io.disconnect();
+
+    // Safety net: never leave content invisible.
+    const t = window.setTimeout(show, 2500);
+    return () => {
+      window.clearTimeout(t);
+      io.disconnect();
+    };
   }, []);
+
 
   return (
     <Tag

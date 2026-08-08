@@ -5,31 +5,56 @@ export function CountUp({ value, className = "" }: { value: string; className?: 
   const match = value.match(/^([^\d]*)([\d,.]+)(.*)$/);
   const ref = useRef<HTMLSpanElement | null>(null);
   const target = match ? Number(match[2].replace(/,/g, "")) : 0;
-  const [n, setN] = useState(match ? 0 : NaN);
+  const [n, setN] = useState(0);
 
   useEffect(() => {
-    if (!match) return;
     const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") return setN(target);
+    if (!el) return;
+    let raf = 0;
+    let done = false;
+
+    const run = () => {
+      if (done) return;
+      done = true;
+      const dur = 1000;
+      const t0 = performance.now();
+      const step = (t: number) => {
+        const p = Math.min(1, (t - t0) / dur);
+        setN(target * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) raf = requestAnimationFrame(step);
+        else setN(target);
+      };
+      raf = requestAnimationFrame(step);
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      setN(target);
+      return;
+    }
+
     const io = new IntersectionObserver(
       (entries) => {
-        if (!entries.some((e) => e.isIntersecting)) return;
-        io.disconnect();
-        const dur = 1100;
-        const t0 = performance.now();
-        const step = (t: number) => {
-          const p = Math.min(1, (t - t0) / dur);
-          const eased = 1 - Math.pow(1 - p, 3);
-          setN(target * eased);
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          run();
+        }
       },
-      { threshold: 0.4 },
+      { threshold: 0.2 },
     );
     io.observe(el);
-    return () => io.disconnect();
-  }, [target, match]);
+
+    // Safety net so a number never stays stuck part-way.
+    const fallback = window.setTimeout(() => {
+      io.disconnect();
+      setN(target);
+    }, 3000);
+
+    return () => {
+      window.clearTimeout(fallback);
+      cancelAnimationFrame(raf);
+      io.disconnect();
+    };
+  }, [target]);
 
   if (!match) return <span className={className}>{value}</span>;
 
@@ -47,3 +72,4 @@ export function CountUp({ value, className = "" }: { value: string; className?: 
     </span>
   );
 }
+

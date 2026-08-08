@@ -53,10 +53,10 @@ const leaders = [
   {
     name: "Michael McGuire",
     role: "Founder",
-    years: `1995 – 2018 · Chairman today`,
+    years: `1974 – 2018 · Chairman today`,
     image: founderAsset.url,
     alt: "Michael McGuire, founder of McGuire Construction, standing in a lumber yard at golden hour",
-    bio: "Michael started McGuire Construction in 1995 with a pickup, a framing crew of one, and a rule he never broke: finish the job the way you told the homeowner you would. He spent twenty-three years on the tools before handing over day-to-day operations — and he still walks the framing on every custom home.",
+    bio: "Michael started McGuire Construction in 1974 with a pickup, a framing crew of one, and a rule he never broke: finish the job the way you told the homeowner you would. He spent forty years on the tools before handing over day-to-day operations — and he still walks the framing on every custom home.",
     quote: "You don't get a second reputation. Build it right the first time.",
   },
   {
@@ -71,9 +71,9 @@ const leaders = [
 ];
 
 const timeline = [
-  { year: "1995", body: "Michael McGuire starts framing houses out of a single truck, taking work by referral only." },
-  { year: "2003", body: "First full crew hired. The company moves into additions and structural remodels." },
-  { year: "2011", body: "A dedicated millwork shop opens, bringing cabinetry and trim work in-house." },
+  { year: "1974", body: "Michael McGuire starts framing houses out of a single truck, taking work by referral only." },
+  { year: "1988", body: "First full crew hired. The company moves into additions and structural remodels." },
+  { year: "2004", body: "A dedicated millwork shop opens, bringing cabinetry and trim work in-house." },
   { year: "2018", body: "Ryan McGuire takes over as president and formalizes scheduling and estimating systems." },
   { year: "2022", body: "Concrete and excavation come in-house — the first two divisions of the McGuire Group." },
   { year: "Today", body: "Five divisions, in-house crews across every trade, and a project system clients can see into." },
@@ -83,11 +83,6 @@ function AboutPage() {
   return (
     <>
       <section className="relative overflow-hidden border-b border-border bg-warm">
-        <div
-          className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full opacity-20 blur-3xl float-slow"
-          style={{ background: "var(--acc-construction)" }}
-          aria-hidden
-        />
         <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <PageHeader
             eyebrow={`Family-run since ${brand.established}`}

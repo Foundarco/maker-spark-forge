@@ -27,9 +27,9 @@ export type Division = {
 export const divisions: Division[] = [
   {
     slug: "construction",
-    accent: "#dc2626",
-    accentName: "Signal Red",
-    stats: [{ label: "Years building", value: "30" }, { label: "Projects delivered", value: "420+" }, { label: "In-house crews", value: "6" }],
+    accent: "#2563eb",
+    accentName: "Signal Blue",
+    stats: [{ label: "Years building", value: "50" }, { label: "Projects delivered", value: "420+" }, { label: "In-house crews", value: "6" }],
     n: "01",
     name: "McGuire Construction",
     short: "Construction",
@@ -38,7 +38,7 @@ export const divisions: Division[] = [
     mission:
       "Residential construction delivered start to finish — ground-up homes, additions, renovations, and the finish work that makes them last.",
     intro:
-      "Construction is the division the family has run since 1995. Every system, checklist, and standard the wider McGuire organization will use was written here, on real job sites, under real deadlines.",
+      "Construction is the division the family has run since 1974. Every system, checklist, and standard the wider McGuire organization will use was written here, on real job sites, under real deadlines.",
     capabilities: [
       "New home construction",
       "Additions and structural work",
@@ -57,8 +57,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "concrete",
-    accent: "#7f1d1d",
-    accentName: "Deep Maroon",
+    accent: "#1e3a8a",
+    accentName: "Deep Navy",
     stats: [{ label: "Yards poured / yr", value: "9,400" }, { label: "Crews", value: "4" }, { label: "Avg. pour lead time", value: "5 days" }],
     n: "02",
     name: "McGuire Concrete",
@@ -86,8 +86,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "excavation",
-    accent: "#ea580c",
-    accentName: "Ember",
+    accent: "#0ea5e9",
+    accentName: "Sky",
     stats: [{ label: "Machines in fleet", value: "18" }, { label: "Sites moved / yr", value: "130" }, { label: "Licensed operators", value: "12" }],
     n: "03",
     name: "McGuire Excavation",
@@ -115,8 +115,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "landscape",
-    accent: "#9f1239",
-    accentName: "Crimson",
+    accent: "#0891b2",
+    accentName: "Cyan",
     stats: [{ label: "Properties finished", value: "260+" }, { label: "Design-build crews", value: "3" }, { label: "Maintenance clients", value: "85" }],
     n: "04",
     name: "McGuire Landscape",
@@ -144,8 +144,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "development",
-    accent: "#e11d48",
-    accentName: "Rose",
+    accent: "#4f46e5",
+    accentName: "Indigo",
     stats: [{ label: "Lots in pipeline", value: "140" }, { label: "Communities", value: "7" }, { label: "Self-performed", value: "100%" }],
     n: "05",
     name: "McGuire Development",
@@ -178,5 +178,5 @@ export function getDivision(slug: string): Division | undefined {
 }
 
 export const statusTone: Record<DivisionStatus, string> = {
-  Active: "border-transparent bg-[color-mix(in_oklab,var(--accent-color,#dc2626)_14%,white)] text-[var(--accent-color,#dc2626)]",
+  Active: "border-transparent bg-[color-mix(in_oklab,var(--accent-color,#2563eb)_14%,white)] text-[var(--accent-color,#2563eb)]",
 };

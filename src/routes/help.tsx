@@ -96,7 +96,7 @@ function HelpPage() {
             <Eyebrow>Warranty</Eyebrow>
             <h2 className="mt-2 text-2xl font-semibold">1 year, full coverage</h2>
             <p className="mt-2 text-sm text-muted-foreground">The short version. Full policy on the warranty page.</p>
-            <Link to="/legal/warranty" className="mt-4 inline-flex text-sm font-medium text-primary hover:underline">Read the warranty →</Link>
+            <Link to="/legal/terms" className="mt-4 inline-flex text-sm font-medium text-primary hover:underline">Read the warranty terms →</Link>
           </Card>
         </div>
         <p className="mt-6 text-xs text-muted-foreground">Not seeing what you need? Email {brand.contact.support}.</p>

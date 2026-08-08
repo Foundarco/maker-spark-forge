@@ -4,7 +4,7 @@ import { CTAButton } from "@/components/site/CTAButton";
 import { brand } from "@/config/brand";
 import { divisions } from "@/config/divisions";
 import { services } from "@/config/site-content";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const desc =
   "New home construction, additions, whole-home renovations, kitchens and baths, custom carpentry, and exteriors — built by McGuire Construction's own crews.";
@@ -65,7 +65,7 @@ function ServicesPage() {
                 <ul className="mt-8 divide-y divide-border border-y border-border">
                   {s.scope.map((item) => (
                     <li key={item} className="flex items-start gap-3 py-3 text-sm text-foreground">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-ink" aria-hidden />
+                      <span className="mt-2 h-px w-4 shrink-0 bg-primary" aria-hidden />
                       {item}
                     </li>
                   ))}

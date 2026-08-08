@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, HardHat, ShieldCheck, GraduationCap, CalendarClock, Wrench, Truck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Section, PageHeader, SectionLabel, DisplayHeading } from "@/components/site/Section";
 import { CTAButton } from "@/components/site/CTAButton";
 import { Reveal } from "@/components/site/Reveal";
@@ -41,23 +41,18 @@ const roles = [
 ];
 
 const benefits = [
-  { icon: CalendarClock, title: "Year-round work", body: "Five divisions means the calendar stays full through the off-season — not layoffs in November." },
-  { icon: ShieldCheck, title: "Real coverage", body: "Health coverage, paid time off, and a retirement match after ninety days." },
-  { icon: GraduationCap, title: "Paid training", body: "Certifications, licenses, and equipment tickets paid for. We'd rather train than rehire." },
-  { icon: Wrench, title: "Tools and trucks", body: "Company trucks, maintained equipment, and a tool allowance every year." },
-  { icon: Truck, title: "Move between divisions", body: "Cross-train across concrete, excavation, and landscape. Your skills stack, your pay follows." },
-  { icon: HardHat, title: "A safe site", body: "Documented safety program, weekly toolbox talks, and no pressure to cut a corner." },
+  { title: "Year-round work", body: "Five divisions means the calendar stays full through the off-season — not layoffs in November." },
+  { title: "Real coverage", body: "Health coverage, paid time off, and a retirement match after ninety days." },
+  { title: "Paid training", body: "Certifications, licenses, and equipment tickets paid for. We'd rather train than rehire." },
+  { title: "Tools and trucks", body: "Company trucks, maintained equipment, and a tool allowance every year." },
+  { title: "Move between divisions", body: "Cross-train across concrete, excavation, and landscape. Your skills stack, your pay follows." },
+  { title: "A safe site", body: "Documented safety program, weekly toolbox talks, and no pressure to cut a corner." },
 ];
 
 function CareersPage() {
   return (
     <>
       <section className="relative overflow-hidden border-b border-border bg-warm">
-        <div
-          className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full opacity-25 blur-3xl float-slow"
-          style={{ background: "var(--acc-construction)" }}
-          aria-hidden
-        />
         <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1.15fr_1fr] lg:items-end">
           <PageHeader
             eyebrow="Careers"
@@ -128,10 +123,8 @@ function CareersPage() {
                     style={{ ["--accent-color" as string]: accent }}
                     className="h-full rounded-2xl bg-card p-8 lift-card accent-ring"
                   >
-                    <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl accent-wash accent-ink">
-                      <b.icon className="h-5 w-5" aria-hidden />
-                    </span>
-                    <h3 className="mt-5 font-display text-lg font-bold text-ink">{b.title}</h3>
+                    <span className="display-cond text-sm accent-ink">{String(i + 1).padStart(2, "0")}</span>
+                    <h3 className="mt-3 font-display text-lg font-bold text-ink">{b.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
                   </div>
                 </Reveal>
