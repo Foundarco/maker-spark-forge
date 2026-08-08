@@ -6,10 +6,12 @@ import { Reveal } from "@/components/site/Reveal";
 import { brand } from "@/config/brand";
 import { divisions } from "@/config/divisions";
 import carpentryAsset from "@/assets/mg-carpentry.jpg.asset.json";
+import { absoluteUrl } from "@/lib/seo";
 
 const title = `Careers — Join the Crew | ${brand.name}`;
 const description =
-  "Open trade positions at McGuire Construction: carpenters, concrete finishers, equipment operators, landscape crews, and project managers. Year-round work, in-house crews, real advancement.";
+  "Trade jobs at McGuire Construction: carpenters, concrete finishers, equipment operators, landscape crews, and project managers. Year-round work.";
+const ogImage = absoluteUrl(carpentryAsset.url);
 
 export const Route = createFileRoute("/careers")({
   head: () => ({
@@ -20,9 +22,9 @@ export const Route = createFileRoute("/careers")({
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/careers" },
-      { property: "og:image", content: carpentryAsset.url },
+      { property: "og:image", content: ogImage },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: carpentryAsset.url },
+      { name: "twitter:image", content: ogImage },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/careers" }],
   }),
