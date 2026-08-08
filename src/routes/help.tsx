@@ -5,6 +5,8 @@ import { Section, PageHeader, Eyebrow } from "@/components/site/Section";
 import { Card } from "@/components/site/Card";
 import { guidesQuery } from "@/lib/content.queries";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
+import heroAsset from "@/assets/mg-hero.jpg.asset.json";
 import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/help")({
@@ -17,7 +19,9 @@ export const Route = createFileRoute("/help")({
       { property: "og:description", content: "Warranty claims, punch lists, and maintenance guidance for McGuire clients." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/help" },
+      { property: "og:image", content: absoluteUrl(heroAsset.url) },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: absoluteUrl(heroAsset.url) },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/help" }],
   }),
@@ -62,7 +66,7 @@ function HelpPage() {
         <div className="space-y-12">
           {Object.entries(byCategory).map(([cat, list]) => (
             <div key={cat}>
-              <Eyebrow>{cat}</Eyebrow>
+              <Eyebrow as="h2">{cat}</Eyebrow>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 {list.map((g) => (
                   <Card key={g.slug} as="article">

@@ -3,6 +3,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { postQuery } from "@/lib/content.queries";
 import { Section, PageHeader } from "@/components/site/Section";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
+import heroAsset from "@/assets/mg-hero.jpg.asset.json";
 
 export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params, context }) => {
@@ -28,7 +30,9 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:description", content: desc.slice(0, 158) },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
+        { property: "og:image", content: absoluteUrl(heroAsset.url) },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: absoluteUrl(heroAsset.url) },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [

@@ -27,21 +27,23 @@ export function SectionLabel({
   children,
   tone = "dark",
   className = "",
+  as: Tag = "p",
 }: {
   n?: string;
   children: ReactNode;
   tone?: "dark" | "light";
   className?: string;
+  as?: "p" | "h2" | "h3";
 }) {
   const color = tone === "light" ? "text-white/55" : "text-muted-foreground";
   const rule = tone === "light" ? "bg-white/30" : "bg-ink/30";
   return (
-    <p className={`rule-label flex items-center gap-3 ${color} ${className}`}>
+    <Tag className={`rule-label flex items-center gap-3 ${color} ${className}`}>
       <span className={`h-px w-10 ${rule}`} aria-hidden />
       {n ? <span className="tabular-nums">{n}</span> : null}
       {n ? <span aria-hidden className={color}>/</span> : null}
       <span>{children}</span>
-    </p>
+    </Tag>
   );
 }
 
@@ -60,12 +62,12 @@ export function DisplayHeading({
   );
 }
 
-export function Eyebrow({ children }: { children: ReactNode }) {
+export function Eyebrow({ children, as: Tag = "p" }: { children: ReactNode; as?: "p" | "h2" | "h3" }) {
   return (
-    <p className="rule-label mb-4 flex items-center gap-3 text-muted-foreground">
+    <Tag className="rule-label mb-4 flex items-center gap-3 text-muted-foreground">
       <span className="h-px w-8 bg-ink/30" aria-hidden />
       {children}
-    </p>
+    </Tag>
   );
 }
 

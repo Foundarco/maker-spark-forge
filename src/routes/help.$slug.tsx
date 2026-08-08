@@ -4,16 +4,62 @@ import { guideQuery } from "@/lib/content.queries";
 import { Section, PageHeader, Eyebrow } from "@/components/site/Section";
 import { Card } from "@/components/site/Card";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
+import heroAsset from "@/assets/mg-hero.jpg.asset.json";
+
+type Step = { title: string; body: string };
 
 export const Route = createFileRoute("/help/$slug")({
   loader: async ({ params, context }) => {
     const guide = await context.queryClient.ensureQueryData(guideQuery(params.slug));
     if (!guide) throw notFound();
-    return { slug: params.slug };
+    return {
+      slug: params.slug,
+      title: guide.title as string,
+      symptom: (guide.symptom as string | null) ?? "",
+      body: (guide.body as string | null) ?? "",
+      steps: (Array.isArray(guide.steps) ? (guide.steps as unknown as Step[]) : []) ?? [],
+    };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     if (!loaderData) return { meta: [{ title: `Guide — ${brand.name}` }, { name: "robots", content: "noindex" }] };
-    return { meta: [{ title: `Guide · ${loaderData.slug} — ${brand.name}` }] };
+    const title = `${loaderData.title} — Homeowner Guide | ${brand.name}`;
+    const raw = loaderData.symptom || loaderData.body || `Step-by-step homeowner guide from ${brand.name}.`;
+    const description = (raw.length < 50 ? `${raw} A step-by-step homeowner guide from ${brand.name}.` : raw).slice(0, 158);
+    const url = `https://clovrlab.com/help/${params.slug}`;
+    const image = absoluteUrl(heroAsset.url);
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: loaderData.title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "HowTo",
+            name: loaderData.title,
+            description,
+            url,
+            step: loaderData.steps.map((s, i) => ({
+              "@type": "HowToStep",
+              position: i + 1,
+              name: s.title,
+              text: s.body,
+            })),
+          }),
+        },
+      ],
+    };
   },
   component: GuidePage,
   notFoundComponent: () => (
@@ -23,8 +69,6 @@ export const Route = createFileRoute("/help/$slug")({
     </Section>
   ),
 });
-
-type Step = { title: string; body: string };
 
 function GuidePage() {
   const { slug } = Route.useLoaderData();
@@ -47,7 +91,7 @@ function GuidePage() {
         <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
           <aside className="md:sticky md:top-24 md:self-start">
             <Card>
-              <Eyebrow>Overview</Eyebrow>
+              <Eyebrow as="h2">Overview</Eyebrow>
               <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{guide.body}</p>
             </Card>
           </aside>
@@ -57,9 +101,6 @@ function GuidePage() {
                 <p className="font-display text-2xl font-semibold text-primary">Step {i + 1}</p>
                 <h2 className="mt-1 text-xl font-semibold">{s.title}</h2>
                 <p className="mt-2 text-muted-foreground">{s.body}</p>
-                <div aria-hidden className="mt-4 aspect-video rounded-xl bg-warm text-center text-xs text-muted-foreground">
-                  <div className="grid h-full place-items-center">[PLACEHOLDER photo / short video for this step]</div>
-                </div>
               </Card>
             ))}
           </ol>

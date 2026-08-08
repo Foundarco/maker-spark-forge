@@ -5,6 +5,7 @@ import { CTAButton } from "@/components/site/CTAButton";
 import { divisions, getDivision } from "@/config/divisions";
 import { CountUp } from "@/components/site/CountUp";
 import { brand } from "@/config/brand";
+import { absoluteUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/$slug")({
   loader: ({ params }) => {
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/divisions/$slug")({
     const d = loaderData.division;
     const title = `${d.name} — Open now | McGuire Construction`;
     const url = `https://clovrlab.com/divisions/${params.slug}`;
+    const image = absoluteUrl(d.image);
     return {
       meta: [
         { title },
@@ -27,9 +29,9 @@ export const Route = createFileRoute("/divisions/$slug")({
         { property: "og:description", content: d.mission },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
-        { property: "og:image", content: d.image },
+        { property: "og:image", content: image },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: d.image },
+        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
@@ -123,7 +125,7 @@ function DivisionDetail() {
       {/* MISSION */}
       <section className="border-b border-border">
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.3fr]">
-          <SectionLabel n="01">Mission</SectionLabel>
+          <SectionLabel as="h2" n="01">Mission</SectionLabel>
           <div>
             <p className="text-2xl leading-snug text-ink sm:text-3xl">{d.mission}</p>
             <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">{d.intro}</p>
@@ -134,7 +136,7 @@ function DivisionDetail() {
       {/* CAPABILITIES */}
       <section className="border-b border-border bg-warm">
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.3fr]">
-          <SectionLabel n="02">Capabilities</SectionLabel>
+          <SectionLabel as="h2" n="02">Capabilities</SectionLabel>
           <ul className="divide-y divide-border border-y border-border">
             {d.capabilities.map((c: string, i: number) => (
               <li key={c} className="flex items-center gap-4 py-4 text-lg text-ink">
@@ -151,7 +153,7 @@ function DivisionDetail() {
       {/* BUILDING TOWARD */}
       <section className="border-b border-border">
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.3fr]">
-          <SectionLabel n="03">Where this division is going</SectionLabel>
+          <SectionLabel as="h2" n="03">Where this division is going</SectionLabel>
           <ul className="grid gap-px bg-border sm:grid-cols-3">
             {d.buildingToward.map((b: string) => (
               <li key={b} className="bg-card p-7">
@@ -165,7 +167,7 @@ function DivisionDetail() {
 
       {/* OTHER DIVISIONS */}
       <section className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
-        <SectionLabel n="04">Other divisions</SectionLabel>
+        <SectionLabel as="h2" n="04">Other divisions</SectionLabel>
         <ul className="mt-10 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
           {others.map((o) => (
             <li key={o.slug}>
