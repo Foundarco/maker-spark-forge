@@ -29,7 +29,7 @@ export const divisions: Division[] = [
     slug: "construction",
     accent: "#4f46e5",
     accentName: "Indigo",
-    stats: [{ label: "Est.", value: "1995" }, { label: "Projects delivered", value: "420+" }, { label: "In-house crews", value: "6" }],
+    stats: [{ label: "Years building", value: "30" }, { label: "Projects delivered", value: "420+" }, { label: "In-house crews", value: "6" }],
     n: "01",
     name: "McGuire Construction",
     short: "Construction",
@@ -66,9 +66,9 @@ export const divisions: Division[] = [
     status: "Active",
     tagline: "Flatwork, foundations, and formed structure.",
     mission:
-      "Bringing concrete in-house so foundations, flatwork, and structural pours run on our schedule and to our tolerances.",
+      "Concrete is in-house — foundations, flatwork, and structural pours run on our schedule and to our tolerances.",
     intro:
-      "Concrete is the first vertical step. Controlling the pour means controlling the start of every build — no waiting on a sub, no inherited mistakes buried under a slab.",
+      "Concrete was the first vertical step, and it changed everything. Controlling the pour means controlling the start of every build — no waiting on a sub, no inherited mistakes buried under a slab.",
     capabilities: [
       "Footings and foundation walls",
       "Slabs on grade and structural slabs",
@@ -97,7 +97,7 @@ export const divisions: Division[] = [
     mission:
       "Site work, grading, utilities, and earthmoving — the groundwork that determines whether the rest of the build goes smoothly.",
     intro:
-      "Most schedule slips start in the dirt. Owning excavation means the site is ready when the crew arrives, and drainage is solved before it becomes a warranty call.",
+      "Most schedule slips start in the dirt. Because we own excavation, the site is ready when the crew arrives and drainage is solved before it becomes a warranty call.",
     capabilities: [
       "Site clearing and rough grading",
       "Foundation and trench excavation",
