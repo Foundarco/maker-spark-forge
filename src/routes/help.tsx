@@ -62,7 +62,7 @@ function HelpPage() {
         <div className="space-y-12">
           {Object.entries(byCategory).map(([cat, list]) => (
             <div key={cat}>
-              <Eyebrow>{cat}</Eyebrow>
+              <Eyebrow as="h2">{cat}</Eyebrow>
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 {list.map((g) => (
                   <Card key={g.slug} as="article">
