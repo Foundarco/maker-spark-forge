@@ -159,7 +159,8 @@ function RootComponent() {
       {isHQ || isChromeless ? (
         <Outlet />
       ) : (
-        <div className="flex min-h-dvh flex-col">
+        <div className="site-theme flex min-h-dvh flex-col bg-background text-foreground">
+
           <Header />
           <main className="flex-1">
             <Outlet />
