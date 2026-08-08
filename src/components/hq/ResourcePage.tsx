@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Plus, Pencil, Trash2, Search, Loader2, X } from "lucide-react";
@@ -287,7 +288,8 @@ function ResourceDialog<T extends { id: string }>({ config, ctx, row, onClose, o
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label="Record form">
+      <EscapeKey onEscape={onClose} />
       <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-border p-4">
           <h2 className="text-lg font-semibold">{isEdit ? "Edit" : "New"} {config.itemName}</h2>

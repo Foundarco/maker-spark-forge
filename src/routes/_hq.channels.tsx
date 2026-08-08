@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Hash, Lock, Plus, X, Trash2, Search, Settings, ChevronDown, ChevronRight, Folder, Pencil, Check, Reply, CornerDownRight, Phone, Video } from "lucide-react";
@@ -500,7 +501,8 @@ function ChannelsPage() {
       </section>
 
       {showNewCat && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNewCat(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNewCat(false)} role="dialog" aria-modal="true" aria-label="New category">
+          <EscapeKey onEscape={() => setShowNewCat(false)} />
           <form onSubmit={createCategory} className="w-full max-w-sm rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">New category</h3>
@@ -516,7 +518,8 @@ function ChannelsPage() {
       )}
 
       {showNew && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNew(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNew(false)} role="dialog" aria-modal="true" aria-label="New channel">
+          <EscapeKey onEscape={() => setShowNew(false)} />
           <form onSubmit={createChannel} className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">Create channel</h3>

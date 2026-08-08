@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate, Link, useSearch } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -745,7 +746,8 @@ function MeetingRoom() {
       )}
 
       {showLeaveConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setShowLeaveConfirm(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setShowLeaveConfirm(false)} role="dialog" aria-modal="true" aria-label="Leave meeting">
+          <EscapeKey onEscape={() => !ending && setShowLeaveConfirm(false)} />
           <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-semibold">Leaving as host</h3>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -767,7 +769,8 @@ function MeetingRoom() {
       )}
 
       {notesDraft !== null && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setNotesDraft(null)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => !ending && setNotesDraft(null)} role="dialog" aria-modal="true" aria-label="Meeting notes">
+          <EscapeKey onEscape={() => !ending && setNotesDraft(null)} />
           <div role="dialog" aria-modal="true" className="flex w-full max-w-2xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()} style={{ maxHeight: "85vh" }}>
             <div className="flex items-start justify-between border-b border-border p-5">
               <div>

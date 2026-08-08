@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -333,7 +334,8 @@ function MeetingsPage() {
         const attendees = participants.filter((p) => p.meeting_id === m.id);
         const externals = extInvites.filter((x) => x.meeting_id === m.id);
         return (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setDetailOpen(null)}>
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setDetailOpen(null)} role="dialog" aria-modal="true" aria-label="Meeting details">
+            <EscapeKey onEscape={() => setDetailOpen(null)} />
             <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="mb-3 flex items-start justify-between">
                 <div>
@@ -389,7 +391,8 @@ function MeetingsPage() {
 
       {/* New meeting */}
       {showNew && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNew(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNew(false)} role="dialog" aria-modal="true" aria-label="New meeting">
+          <EscapeKey onEscape={() => setShowNew(false)} />
           <form onSubmit={create} className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">Schedule meeting</h3>
