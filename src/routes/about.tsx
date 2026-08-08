@@ -10,8 +10,8 @@ import remodelAsset from "@/assets/mg-remodel.jpg.asset.json";
 import founderAsset from "@/assets/mg-founder.jpg.asset.json";
 import presidentAsset from "@/assets/mg-president.jpg.asset.json";
 
-const title = `About & Leadership — Family-Run Since ${brand.established} | ${brand.name}`;
-const desc = `Meet the family behind McGuire Construction: founder Michael McGuire, who started the company in ${brand.established}, and Ryan McGuire, who runs the five divisions today.`;
+const title = `About & Leadership — ${brand.name}`;
+const desc = `Meet the family behind McGuire Construction: founder Michael McGuire, who started the company in ${brand.established}, and Ryan McGuire, who runs it today.`;
 
 export const Route = createFileRoute("/about")({
   head: () => ({
