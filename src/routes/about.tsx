@@ -83,11 +83,6 @@ function AboutPage() {
   return (
     <>
       <section className="relative overflow-hidden border-b border-border bg-warm">
-        <div
-          className="pointer-events-none absolute -left-32 top-0 h-96 w-96 rounded-full opacity-20 blur-3xl float-slow"
-          style={{ background: "var(--acc-construction)" }}
-          aria-hidden
-        />
         <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <PageHeader
             eyebrow={`Family-run since ${brand.established}`}

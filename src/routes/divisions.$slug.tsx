@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SectionLabel, DisplayHeading } from "@/components/site/Section";
 import { CTAButton } from "@/components/site/CTAButton";
 import { divisions, getDivision } from "@/config/divisions";
@@ -155,13 +155,8 @@ function DivisionDetail() {
           <ul className="grid gap-px bg-border sm:grid-cols-3">
             {d.buildingToward.map((b: string) => (
               <li key={b} className="bg-card p-7">
-                <span
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full"
-                  style={{ background: `color-mix(in oklab, ${d.accent} 14%, white)`, color: d.accent }}
-                >
-                  <Check className="h-4 w-4" aria-hidden />
-                </span>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{b}</p>
+                <span className="block h-1 w-10 rounded-full" style={{ background: d.accent }} aria-hidden />
+                <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{b}</p>
               </li>
             ))}
           </ul>

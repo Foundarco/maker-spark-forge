@@ -6,7 +6,7 @@ import { CountUp } from "@/components/site/CountUp";
 import { brand } from "@/config/brand";
 import { services, projects } from "@/config/site-content";
 import { divisions } from "@/config/divisions";
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import heroAsset from "@/assets/mg2-hero.jpg.asset.json";
 import legacyAsset from "@/assets/mg2-legacy.jpg.asset.json";
 import carpentryAsset from "@/assets/mg-carpentry.jpg.asset.json";
@@ -103,16 +103,6 @@ function HomePage() {
           className="absolute inset-0 -z-10 h-full w-full object-cover opacity-45"
         />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/70" aria-hidden />
-        <div
-          className="pointer-events-none absolute -left-32 top-10 -z-10 h-96 w-96 rounded-full opacity-30 blur-3xl float-slow"
-          style={{ background: "radial-gradient(circle, var(--acc-construction), transparent 65%)" }}
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -right-24 bottom-0 -z-10 h-[26rem] w-[26rem] rounded-full opacity-25 blur-3xl float-slow"
-          style={{ background: "radial-gradient(circle, var(--acc-excavation), transparent 65%)", animationDelay: "1.6s" }}
-          aria-hidden
-        />
 
         <div className="mx-auto flex w-full max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-40">
           <Reveal>
@@ -427,9 +417,7 @@ function HomePage() {
                   className="h-full rounded-2xl bg-card p-7 lift-card accent-ring"
                   style={{ ["--accent-color" as string]: divisions[i].accent }}
                 >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full accent-wash">
-                    <Check className="h-4 w-4 accent-ink" aria-hidden />
-                  </span>
+                  <span className="block h-1 w-10 rounded-full accent-bg" aria-hidden />
                   <h3 className="display-cond mt-5 text-xl text-ink">{w.k}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.v}</p>
                 </div>
@@ -477,11 +465,6 @@ function HomePage() {
       {/* ── CTA ──────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-ink text-white">
         <div className="pointer-events-none absolute inset-0 blueprint-grid text-white opacity-60" aria-hidden />
-        <div
-          className="pointer-events-none absolute -bottom-40 left-1/3 h-[30rem] w-[30rem] rounded-full opacity-25 blur-3xl float-slow"
-          style={{ background: "radial-gradient(circle, var(--acc-development), transparent 65%)" }}
-          aria-hidden
-        />
         <div className="relative mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
           <SectionLabel n="06" tone="light">The next fifty years</SectionLabel>
           <h2 className="display-cond mt-8 max-w-5xl text-[clamp(2.5rem,8vw,6.5rem)] text-white">

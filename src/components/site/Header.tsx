@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { BrandLogo } from "./BrandLogo";
-import { Menu, X, Phone, ChevronDown, ArrowRight, Sparkles } from "lucide-react";
+import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
 import { brand } from "@/config/brand";
 import { divisions } from "@/config/divisions";
 
@@ -37,7 +37,6 @@ export function Header() {
       <div className="hidden bg-ink text-white lg:block">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-2 text-[0.72rem] sm:px-8">
           <p className="flex items-center gap-2 text-white/80">
-            <Sparkles className="h-3.5 w-3.5 text-[var(--acc-construction)]" aria-hidden />
             All five McGuire divisions are now open and taking work.
           </p>
           <div className="flex items-center gap-5 text-white/60">
