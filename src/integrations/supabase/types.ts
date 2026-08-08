@@ -4449,6 +4449,13 @@ export type Database = {
             referencedRelation: "ideas"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "idea_comments_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas_masked"
+            referencedColumns: ["id"]
+          },
         ]
       }
       ideas: {
@@ -5698,39 +5705,110 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      idea_comments_masked: {
+        Row: {
+          author_id: string | null
+          body: string | null
+          created_at: string | null
+          id: string | null
+          idea_id: string | null
+          is_anonymous: boolean | null
+        }
+        Insert: {
+          author_id?: never
+          body?: string | null
+          created_at?: string | null
+          id?: string | null
+          idea_id?: string | null
+          is_anonymous?: boolean | null
+        }
+        Update: {
+          author_id?: never
+          body?: string | null
+          created_at?: string | null
+          id?: string | null
+          idea_id?: string | null
+          is_anonymous?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idea_comments_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "idea_comments_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas_masked"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ideas_masked: {
+        Row: {
+          approval_status: string | null
+          assigned_to: string | null
+          author_id: string | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          effort: number | null
+          id: string | null
+          impact: number | null
+          is_anonymous: boolean | null
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          title: string | null
+          updated_at: string | null
+          upvotes: number | null
+        }
+        Insert: {
+          approval_status?: string | null
+          assigned_to?: string | null
+          author_id?: never
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          effort?: number | null
+          id?: string | null
+          impact?: number | null
+          is_anonymous?: boolean | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+          upvotes?: number | null
+        }
+        Update: {
+          approval_status?: string | null
+          assigned_to?: string | null
+          author_id?: never
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          effort?: number | null
+          id?: string | null
+          impact?: number | null
+          is_anonymous?: boolean | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          title?: string | null
+          updated_at?: string | null
+          upvotes?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      drive_has_access: {
-        Args: { _item_id: string; _user_id: string }
-        Returns: boolean
-      }
-      get_meeting_invite_by_token: {
-        Args: { _meeting_id: string; _token: string }
-        Returns: {
-          created_at: string
-          email: string
-          id: string
-          joined_at: string
-          meeting_id: string
-          name: string
-          token: string
-        }[]
-      }
-      has_role_permission: {
-        Args: { _permission: string; _user_id: string }
-        Returns: boolean
-      }
-      has_route_access: {
-        Args: { _route: string; _user_id: string }
-        Returns: boolean
-      }
-      is_employee: { Args: { _user_id: string }; Returns: boolean }
-      is_suspended: { Args: { _user_id: string }; Returns: boolean }
-      mark_meeting_invite_joined: {
-        Args: { _name?: string; _token: string }
-        Returns: undefined
-      }
       notify_managers: {
         Args: { _body: string; _link: string; _title: string }
         Returns: undefined
