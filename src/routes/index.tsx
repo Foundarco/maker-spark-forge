@@ -1,10 +1,12 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Section, SectionHeading, SectionLabel, DisplayHeading } from "@/components/site/Section";
 import { CTAButton } from "@/components/site/CTAButton";
+import { Reveal } from "@/components/site/Reveal";
+import { CountUp } from "@/components/site/CountUp";
 import { brand } from "@/config/brand";
 import { services, projects } from "@/config/site-content";
-import { divisions, statusTone } from "@/config/divisions";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { divisions } from "@/config/divisions";
+import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import heroAsset from "@/assets/mg2-hero.jpg.asset.json";
 import legacyAsset from "@/assets/mg2-legacy.jpg.asset.json";
 import carpentryAsset from "@/assets/mg-carpentry.jpg.asset.json";
@@ -14,9 +16,9 @@ function isHqHost(host: string): boolean {
   return h === "hq.clovrlab.com" || h.startsWith("hq.") || h.startsWith("hq--");
 }
 
-const title = `${brand.name} — Built since ${brand.established}. Built for what's next.`;
+const title = `${brand.name} — Five divisions. One builder. Since ${brand.established}.`;
 const description =
-  "McGuire Construction is a family-run builder established in 1995, growing into a vertically integrated construction group: construction, concrete, excavation, landscape, and development.";
+  "McGuire Construction is a family-run, vertically integrated builder established in 1995. Construction, concrete, excavation, landscape, and development — all five divisions open and self-performed.";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -62,8 +64,8 @@ const timeline = [
   { year: "1995", title: "The first crew", body: "The family picks up its first contracts — framing, additions, and finish carpentry done by hand, one job at a time." },
   { year: "2000s", title: "Systems take hold", body: "Checklists, written estimates, and published schedules replace handshake deals. Quality stops depending on who shows up." },
   { year: "2010s", title: "Full-scope building", body: "Ground-up homes, structural work, and whole-home renovations delivered under one accountable team." },
-  { year: "Today", title: "A second generation", body: "The next generation takes the same standards and starts building the organization around them." },
-  { year: "Next", title: "Vertical integration", body: "Concrete, excavation, landscape, and development brought in-house — the whole build self-performed." },
+  { year: "2020s", title: "A second generation", body: "The next generation takes the same standards and builds the organization around them — division by division." },
+  { year: "Today", title: "Fully integrated", body: "Construction, concrete, excavation, landscape, and development all open, all in-house, all self-performed." },
 ];
 
 const phases = [
@@ -76,15 +78,22 @@ const phases = [
 const whyMcGuire = [
   { k: "Systems, not personalities", v: "Three decades of checklists and inspections mean the standard holds on every job, on every crew." },
   { k: "Written before it's built", v: "Line-item estimates, published schedules, documented change orders. Nothing verbal, nothing vague." },
-  { k: "Built to be integrated", v: "Every division we add removes a subcontractor handoff — and the delay that comes with it." },
+  { k: "One company, zero handoffs", v: "Dirt, concrete, framing, finish, and landscape are all ours. No subcontractor gaps to fall through." },
   { k: "Generational thinking", v: "A family company building for the next thirty years, not the next invoice." },
+];
+
+const headlineStats = [
+  { label: "Years building", value: "30" },
+  { label: "Projects delivered", value: "420+" },
+  { label: "Divisions open", value: "5" },
+  { label: "Work self-performed", value: "100%" },
 ];
 
 function HomePage() {
   return (
     <>
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="relative isolate bg-ink text-white">
+      <section className="relative isolate overflow-hidden bg-ink text-white">
         <img
           src={heroAsset.url}
           alt="Wood-framed home under construction at golden hour with scaffolding and open roof trusses"
@@ -93,88 +102,85 @@ function HomePage() {
           fetchPriority="high"
           className="absolute inset-0 -z-10 h-full w-full object-cover opacity-45"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/50 to-ink/70" aria-hidden />
-        <div className="mx-auto flex w-full max-w-7xl flex-col justify-end px-5 pb-16 pt-32 sm:px-8 sm:pb-24 sm:pt-48">
-          <SectionLabel tone="light">General contractor · Established {brand.established}</SectionLabel>
-          <h1 className="display-cond mt-8 max-w-5xl text-[clamp(2.75rem,9vw,7.5rem)] text-white">
-            Built since {brand.established}.
-            <br />
-            Built for what&rsquo;s next.
-          </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/75">
-            A family construction company carried into its second generation — and built to become a fully
-            integrated construction organization.
-          </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <CTAButton to="/contact" variant="light">
-              Start a project <ArrowRight className="h-4 w-4" />
-            </CTAButton>
-            <Link
-              to="/divisions"
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 border border-white/35 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-white hover:text-ink"
-            >
-              The McGuire Group
-            </Link>
-          </div>
-        </div>
-        {/* division ticker */}
-        <div className="border-t border-white/12">
-          <ul className="mx-auto grid w-full max-w-7xl grid-cols-2 divide-x divide-white/10 px-5 text-white/60 sm:px-8 lg:grid-cols-5">
-            {divisions.map((d) => (
-              <li key={d.slug} className="px-4 py-5 first:pl-0">
-                <p className="rule-label text-white/35">{d.n}</p>
-                <p className="mt-1.5 text-sm font-semibold text-white">{d.short}</p>
-                <p className="text-xs text-white/45">{d.status}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+        <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/70" aria-hidden />
+        <div
+          className="pointer-events-none absolute -left-32 top-10 -z-10 h-96 w-96 rounded-full opacity-30 blur-3xl float-slow"
+          style={{ background: "radial-gradient(circle, var(--acc-construction), transparent 65%)" }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -right-24 bottom-0 -z-10 h-[26rem] w-[26rem] rounded-full opacity-25 blur-3xl float-slow"
+          style={{ background: "radial-gradient(circle, var(--acc-excavation), transparent 65%)", animationDelay: "1.6s" }}
+          aria-hidden
+        />
 
-      {/* ── LEGACY ───────────────────────────────────────── */}
-      <section className="border-b border-border">
-        <div className="mx-auto grid w-full max-w-7xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:items-start">
-          <div className="relative lg:sticky lg:top-28">
-            <img
-              src={legacyAsset.url}
-              alt="Worn vintage framing square, folding rule, chisels and a leather tool belt on a weathered workbench"
-              width={1600}
-              height={1200}
-              loading="lazy"
-              className="aspect-[4/3] w-full object-cover"
-            />
-            <div className="absolute -bottom-6 -right-2 hidden bg-ink px-6 py-5 text-white sm:block lg:-right-6">
-              <p className="rule-label text-white/45">Established</p>
-              <p className="display-cond text-4xl">{brand.established}</p>
-            </div>
-          </div>
-          <div>
-            <SectionLabel n="01">The legacy</SectionLabel>
-            <DisplayHeading className="mt-6 text-ink">
-              A family legacy.
-              <br />A new generation.
-            </DisplayHeading>
-            <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              McGuire started in 1995 with a small crew, hand tools, and a rule that hasn&rsquo;t changed since: if
-              it isn&rsquo;t right, it gets redone. Three decades later the same standard runs the company — now
-              carried by the next generation, with the systems and ambition to grow well beyond a single crew.
+        <div className="mx-auto flex w-full max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 sm:pb-24 sm:pt-40">
+          <Reveal>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white/85 backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-[var(--acc-landscape)]" aria-hidden />
+              All five divisions open · Est. {brand.established}
+            </span>
+          </Reveal>
+          <Reveal delay={80}>
+            <h1 className="display-cond mt-8 max-w-5xl text-[clamp(2.75rem,9vw,7.5rem)] text-white">
+              Five divisions.
+              <br />
+              <span className="gradient-text">One builder.</span>
+            </h1>
+          </Reveal>
+          <Reveal delay={160}>
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/80">
+              A family construction company in its second generation — now self-performing the entire build.
+              Dirt to driveway, footing to finish, all under one roof.
             </p>
-            <ol className="mt-10 divide-y divide-border border-y border-border">
-              {timeline.map((t) => (
-                <li key={t.year} className="grid gap-2 py-5 sm:grid-cols-[7rem_1fr] sm:gap-6">
-                  <span className="display-cond text-xl text-ink/45">{t.year}</span>
-                  <div>
-                    <h3 className="font-display text-base font-bold text-ink">{t.title}</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="mt-9">
-              <CTAButton to="/about" variant="secondary">
-                Read our story
-              </CTAButton>
+          </Reveal>
+          <Reveal delay={240}>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link
+                to="/contact"
+                className="group inline-flex min-h-[52px] items-center gap-2 rounded-full bg-white px-8 text-xs font-semibold uppercase tracking-[0.14em] text-ink transition-all hover:shadow-[0_20px_50px_-20px_rgba(255,255,255,0.65)]"
+              >
+                Start a project
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link
+                to="/divisions"
+                className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-white/35 px-8 text-xs font-semibold uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/12"
+              >
+                Meet the divisions
+              </Link>
             </div>
+          </Reveal>
+
+          {/* headline stats */}
+          <Reveal delay={320}>
+            <dl className="mt-16 grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-2xl bg-white/12 sm:grid-cols-4">
+              {headlineStats.map((s) => (
+                <div key={s.label} className="bg-ink/70 px-5 py-6 backdrop-blur">
+                  <dd className="display-cond text-3xl text-white">
+                    <CountUp value={s.value} />
+                  </dd>
+                  <dt className="mt-1 text-[0.7rem] uppercase tracking-[0.14em] text-white/55">{s.label}</dt>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        </div>
+
+        {/* colour-coded division marquee */}
+        <div className="overflow-hidden border-t border-white/12 py-4">
+          <div className="marquee-track gap-10 whitespace-nowrap">
+            {[0, 1].map((dup) => (
+              <span key={dup} className="flex items-center gap-10 pr-10" aria-hidden={dup === 1}>
+                {divisions.map((d) => (
+                  <span key={d.slug} className="flex items-center gap-3 text-sm">
+                    <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.accent }} />
+                    <span className="display-cond text-xl text-white">{d.short}</span>
+                    <span className="rule-label text-white/40">Open</span>
+                  </span>
+                ))}
+              </span>
+            ))}
           </div>
         </div>
       </section>
@@ -183,109 +189,212 @@ function HomePage() {
       <section className="border-b border-border bg-warm">
         <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
           <div className="flex flex-wrap items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <SectionLabel n="02">The McGuire Group</SectionLabel>
-              <DisplayHeading className="mt-6 text-ink">Divisions</DisplayHeading>
+            <Reveal className="max-w-2xl">
+              <SectionLabel n="01">The McGuire Group</SectionLabel>
+              <DisplayHeading className="mt-6 text-ink">
+                Every division, <span className="gradient-text">open</span>.
+              </DisplayHeading>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                One organization, built in stages. Construction today — with each division that follows bringing
-                another part of the build under our own roof.
+                We stopped subcontracting the parts of a build we cared about most. Today all five divisions are
+                staffed, equipped, and taking work — running on the same schedule and the same standards.
               </p>
-            </div>
+            </Reveal>
             <Link to="/divisions" className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:underline">
               All divisions <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          <ul className="mt-14 border-t border-border">
-            {divisions.map((d) => (
-              <li key={d.slug} className="border-b border-border">
+          <ul className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {divisions.map((d, i) => (
+              <Reveal
+                as="li"
+                key={d.slug}
+                delay={i * 70}
+                className={i === 0 ? "lg:col-span-2" : ""}
+              >
                 <Link
                   to="/divisions/$slug"
                   params={{ slug: d.slug }}
-                  className="group relative grid items-center gap-6 overflow-hidden py-8 lg:grid-cols-[5rem_18rem_1fr_10rem] lg:gap-8"
+                  style={{ ["--accent-color" as string]: d.accent }}
+                  className="group flex h-full flex-col overflow-hidden rounded-2xl bg-card lift-card accent-ring"
                 >
-                  <span className="display-cond text-3xl text-ink/20 transition-colors group-hover:text-ink/60">
-                    {d.n}
-                  </span>
-                  <h3 className="display-cond text-[clamp(1.5rem,3vw,2.25rem)] text-ink">{d.name}</h3>
-                  <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">{d.tagline}</p>
-                  <div className="flex items-center justify-between gap-4 lg:justify-end">
-                    <span className={`rule-label border px-2.5 py-1 ${statusTone[d.status]}`}>{d.status}</span>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-ink transition-transform group-hover:translate-x-1" />
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={d.image}
+                      alt={d.imageAlt}
+                      width={1600}
+                      height={1200}
+                      loading="lazy"
+                      className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.06] ${
+                        i === 0 ? "aspect-[16/8]" : "aspect-[16/10]"
+                      }`}
+                    />
+                    <span
+                      className="absolute inset-0 opacity-25 mix-blend-multiply transition-opacity duration-500 group-hover:opacity-10"
+                      style={{ background: d.accent }}
+                      aria-hidden
+                    />
+                    <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.16em] accent-ink backdrop-blur">
+                      {d.n} · Open now
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col p-7">
+                    <h3 className="display-cond text-[clamp(1.5rem,2.4vw,2.1rem)] text-ink">{d.name}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{d.mission}</p>
+                    <dl className="mt-6 grid grid-cols-3 gap-3">
+                      {d.stats.map((s) => (
+                        <div key={s.label}>
+                          <dd className="display-cond text-xl accent-ink">
+                            <CountUp value={s.value} />
+                          </dd>
+                          <dt className="text-[0.62rem] uppercase tracking-[0.12em] text-muted-foreground">
+                            {s.label}
+                          </dt>
+                        </div>
+                      ))}
+                    </dl>
+                    <span className="mt-7 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] accent-ink">
+                      Explore {d.short}
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </span>
                   </div>
                 </Link>
-              </li>
+              </Reveal>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* ── LEGACY ───────────────────────────────────────── */}
+      <section className="border-b border-border">
+        <div className="mx-auto grid w-full max-w-7xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:items-start">
+          <Reveal className="relative lg:sticky lg:top-28">
+            <img
+              src={legacyAsset.url}
+              alt="Worn vintage framing square, folding rule, chisels and a leather tool belt on a weathered workbench"
+              width={1600}
+              height={1200}
+              loading="lazy"
+              className="aspect-[4/3] w-full rounded-2xl object-cover"
+            />
+            <div className="absolute -bottom-6 -right-2 hidden rounded-2xl bg-ink px-6 py-5 text-white shadow-xl sm:block lg:-right-6">
+              <p className="rule-label text-white/45">Established</p>
+              <p className="display-cond text-4xl gradient-text">{brand.established}</p>
+            </div>
+          </Reveal>
+          <div>
+            <Reveal>
+              <SectionLabel n="02">The legacy</SectionLabel>
+              <DisplayHeading className="mt-6 text-ink">
+                A family legacy.
+                <br />A new generation.
+              </DisplayHeading>
+              <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                McGuire started in 1995 with a small crew, hand tools, and a rule that hasn&rsquo;t changed since: if
+                it isn&rsquo;t right, it gets redone. Three decades later the same standard runs five divisions.
+              </p>
+            </Reveal>
+            <ol className="mt-10 space-y-0 border-l border-border pl-6">
+              {timeline.map((t, i) => (
+                <Reveal as="li" key={t.year} delay={i * 60} className="relative py-5">
+                  <span
+                    className="absolute -left-[1.72rem] top-7 h-3 w-3 rounded-full ring-4 ring-background"
+                    style={{ background: divisions[i % divisions.length].accent }}
+                    aria-hidden
+                  />
+                  <span className="display-cond text-xl text-ink/50">{t.year}</span>
+                  <h3 className="mt-1 font-display text-base font-bold text-ink">{t.title}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{t.body}</p>
+                </Reveal>
+              ))}
+            </ol>
+            <div className="mt-9">
+              <CTAButton to="/about" variant="secondary" className="rounded-full">
+                Read our story
+              </CTAButton>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ── SERVICES ─────────────────────────────────────── */}
       <Section wide>
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <div className="max-w-2xl">
-            <SectionLabel n="03">What we build today</SectionLabel>
-            <DisplayHeading className="mt-6 text-ink">Construction</DisplayHeading>
+          <Reveal className="max-w-2xl">
+            <SectionLabel n="03">What we build</SectionLabel>
+            <DisplayHeading className="mt-6 text-ink">Services</DisplayHeading>
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              Six disciplines, one accountable team. From ground-up homes to a single well-made built-in, the same
-              crews and the same standards apply.
+              From ground-up homes to a single well-made built-in — the same crews, the same standards, the same
+              accountable team on every scope.
             </p>
-          </div>
+          </Reveal>
           <Link to="/services" className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink hover:underline">
             All services <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </div>
-        <div className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <Link
-              key={s.slug}
-              to="/services"
-              hash={s.slug}
-              className="group flex flex-col bg-card p-8 transition-colors hover:bg-warm"
-            >
-              <p className="display-cond text-2xl text-ink/20">{String(i + 1).padStart(2, "0")}</p>
-              <h3 className="mt-4 font-display text-xl font-bold text-ink">{s.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.summary}</p>
-              <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-ink">
-                {s.typical}
-                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-              </span>
-            </Link>
-          ))}
+        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {services.map((s, i) => {
+            const accent = divisions[i % divisions.length].accent;
+            return (
+              <Reveal key={s.slug} delay={i * 60}>
+                <Link
+                  to="/services"
+                  hash={s.slug}
+                  style={{ ["--accent-color" as string]: accent }}
+                  className="group flex h-full flex-col rounded-2xl bg-card p-8 lift-card accent-ring"
+                >
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl accent-wash display-cond text-lg accent-ink">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="mt-5 font-display text-xl font-bold text-ink">{s.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{s.summary}</p>
+                  <span className="mt-6 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] accent-ink">
+                    {s.typical}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </Link>
+              </Reveal>
+            );
+          })}
         </div>
       </Section>
 
       {/* ── BUILT ON SYSTEMS ─────────────────────────────── */}
-      <section className="relative border-y border-border bg-ink text-white">
+      <section className="relative overflow-hidden border-y border-border bg-ink text-white">
         <div className="pointer-events-none absolute inset-0 blueprint-grid text-white opacity-70" aria-hidden />
         <div className="relative mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-28">
-          <SectionLabel n="04" tone="light">Built on systems</SectionLabel>
-          <DisplayHeading className="mt-6 max-w-3xl text-white">
-            The same sequence, every project.
-          </DisplayHeading>
-          <p className="mt-6 max-w-xl text-white/70">
-            Construction goes wrong in the gaps between people. Our process closes them — the same four phases
-            whether we&rsquo;re building a deck or a house.
-          </p>
+          <Reveal>
+            <SectionLabel n="04" tone="light">Built on systems</SectionLabel>
+            <DisplayHeading className="mt-6 max-w-3xl text-white">
+              The same sequence, <span className="gradient-text">every project.</span>
+            </DisplayHeading>
+            <p className="mt-6 max-w-xl text-white/70">
+              Construction goes wrong in the gaps between people. With every trade in-house, there are no gaps —
+              just four phases, run the same way whether we&rsquo;re building a deck or a subdivision.
+            </p>
+          </Reveal>
 
-          <ol className="mt-16 grid gap-px bg-white/12 lg:grid-cols-4">
+          <ol className="mt-16 grid gap-5 lg:grid-cols-4">
             {phases.map((p, i) => (
-              <li key={p.n} className="relative bg-ink p-8">
-                <div className="flex items-center gap-4">
-                  <span className="display-cond text-3xl text-white/30">{p.n}</span>
-                  <span className="h-px flex-1 bg-white/15" aria-hidden />
-                  {i < phases.length - 1 ? (
-                    <ArrowRight className="hidden h-4 w-4 text-white/30 lg:block" aria-hidden />
-                  ) : null}
+              <Reveal as="li" key={p.n} delay={i * 80}>
+                <div
+                  className="relative h-full overflow-hidden rounded-2xl border border-white/12 bg-white/[0.04] p-8 transition-colors hover:bg-white/[0.08]"
+                  style={{ ["--accent-color" as string]: divisions[i].accent }}
+                >
+                  <span className="absolute inset-x-0 top-0 h-1 accent-bg" aria-hidden />
+                  <div className="flex items-center gap-4">
+                    <span className="display-cond text-3xl" style={{ color: divisions[i].accent }}>{p.n}</span>
+                    <span className="h-px flex-1 bg-white/15" aria-hidden />
+                  </div>
+                  <h3 className="display-cond mt-6 text-2xl text-white">{p.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/65">{p.body}</p>
                 </div>
-                <h3 className="display-cond mt-6 text-2xl text-white">{p.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/60">{p.body}</p>
-              </li>
+              </Reveal>
             ))}
           </ol>
 
           <div className="mt-12">
-            <CTAButton to="/process" variant="light">
+            <CTAButton to="/process" variant="light" className="rounded-full">
               See the full process <ArrowRight className="h-4 w-4" />
             </CTAButton>
           </div>
@@ -295,7 +404,7 @@ function HomePage() {
       {/* ── WHY McGUIRE ──────────────────────────────────── */}
       <Section wide>
         <div className="grid gap-14 lg:grid-cols-[1fr_1.25fr]">
-          <div>
+          <Reveal>
             <SectionLabel n="05">Why McGuire</SectionLabel>
             <DisplayHeading className="mt-6 text-ink">
               Discipline
@@ -308,17 +417,25 @@ function HomePage() {
               width={1600}
               height={1200}
               loading="lazy"
-              className="mt-10 aspect-[4/3] w-full object-cover"
+              className="mt-10 aspect-[4/3] w-full rounded-2xl object-cover"
             />
-          </div>
-          <dl className="divide-y divide-border border-y border-border">
-            {whyMcGuire.map((w) => (
-              <div key={w.k} className="grid gap-2 py-7 sm:grid-cols-[1fr_1.4fr] sm:gap-8">
-                <dt className="display-cond text-xl text-ink">{w.k}</dt>
-                <dd className="text-sm leading-relaxed text-muted-foreground">{w.v}</dd>
-              </div>
+          </Reveal>
+          <div className="grid gap-5 sm:grid-cols-2">
+            {whyMcGuire.map((w, i) => (
+              <Reveal key={w.k} delay={i * 70}>
+                <div
+                  className="h-full rounded-2xl bg-card p-7 lift-card accent-ring"
+                  style={{ ["--accent-color" as string]: divisions[i].accent }}
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full accent-wash">
+                    <Check className="h-4 w-4 accent-ink" aria-hidden />
+                  </span>
+                  <h3 className="display-cond mt-5 text-xl text-ink">{w.k}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{w.v}</p>
+                </div>
+              </Reveal>
             ))}
-          </dl>
+          </div>
         </div>
       </Section>
 
@@ -332,47 +449,58 @@ function HomePage() {
             </Link>
           </div>
           <div className="mt-14 grid gap-8 md:grid-cols-3">
-            {projects.slice(0, 3).map((p) => (
-              <Link key={p.slug} to="/projects" hash={p.slug} className="group block">
-                <div className="overflow-hidden bg-muted">
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    width={1600}
-                    height={1200}
-                    loading="lazy"
-                    className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
-                </div>
-                <p className="rule-label mt-5 text-muted-foreground">
-                  {p.category} · {p.year}
-                </p>
-                <h3 className="mt-2 font-display text-xl font-bold text-ink">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.summary}</p>
-              </Link>
+            {projects.slice(0, 3).map((p, i) => (
+              <Reveal key={p.slug} delay={i * 80}>
+                <Link to="/projects" hash={p.slug} className="group block">
+                  <div className="overflow-hidden rounded-2xl bg-muted">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      width={1600}
+                      height={1200}
+                      loading="lazy"
+                      className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                    />
+                  </div>
+                  <p className="rule-label mt-5" style={{ color: divisions[i % divisions.length].accent }}>
+                    {p.category} · {p.year}
+                  </p>
+                  <h3 className="mt-2 font-display text-xl font-bold text-ink">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.summary}</p>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── AMBITION / CTA ───────────────────────────────── */}
-      <section className="relative bg-ink text-white">
+      {/* ── CTA ──────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-ink text-white">
         <div className="pointer-events-none absolute inset-0 blueprint-grid text-white opacity-60" aria-hidden />
+        <div
+          className="pointer-events-none absolute -bottom-40 left-1/3 h-[30rem] w-[30rem] rounded-full opacity-25 blur-3xl float-slow"
+          style={{ background: "radial-gradient(circle, var(--acc-development), transparent 65%)" }}
+          aria-hidden
+        />
         <div className="relative mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
           <SectionLabel n="06" tone="light">The next thirty years</SectionLabel>
           <h2 className="display-cond mt-8 max-w-5xl text-[clamp(2.5rem,8vw,6.5rem)] text-white">
-            This is only
+            One call.
             <br />
-            the beginning.
+            <span className="gradient-text">The whole build.</span>
           </h2>
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-white/70">
-            McGuire is being built the way a building is built — foundation first. Construction today. Concrete,
-            excavation, landscape, and development to come. One organization, self-performing the whole job.
+            Excavation, concrete, construction, landscape, and development — every stage handled by McGuire crews,
+            on one schedule, under one warranty.
           </p>
           <div className="mt-12 flex flex-wrap items-center gap-4">
-            <CTAButton to="/contact" variant="light">
-              Start a project <ArrowRight className="h-4 w-4" />
-            </CTAButton>
+            <Link
+              to="/contact"
+              className="group inline-flex min-h-[52px] items-center gap-2 rounded-full bg-white px-8 text-xs font-semibold uppercase tracking-[0.14em] text-ink transition-all hover:shadow-[0_20px_50px_-20px_rgba(255,255,255,0.65)]"
+            >
+              Start a project
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
             <a
               href={`tel:${brand.phone.replace(/[^0-9+]/g, "")}`}
               className="text-sm text-white/60 transition hover:text-white"
