@@ -1,13 +1,13 @@
 // Single source of truth for brand identity across the public website.
-// McGuire Construction — a family-run general contractor, established 1995.
+// McGuire Construction — a family-run general contractor, established 1974.
 
 export const brand = {
   name: "McGuire Construction",
   shortName: "McGuire",
-  established: 1995,
+  established: 1974,
   tagline: "Built right. Built to last.",
   shortMission:
-    "McGuire Construction is a family-run general contractor building homes, additions, and renovations with disciplined craftsmanship, clear communication, and schedules that hold. Serving homeowners since 1995.",
+    "McGuire Construction is a family-run general contractor building homes, additions, and renovations with disciplined craftsmanship, clear communication, and schedules that hold. Serving homeowners since 1974.",
   phone: "(555) 018-4429",
   serviceArea: "Greater metro area and surrounding counties",
   hours: "Monday–Friday, 7:00am – 5:00pm",
@@ -38,11 +38,11 @@ export const brand = {
     },
     {
       title: "Systems",
-      body: "Three decades of checklists, inspections, and process — so quality doesn't depend on who shows up.",
+      body: "Five decades of checklists, inspections, and process — so quality doesn't depend on who shows up.",
     },
     {
       title: "Long-term thinking",
-      body: "We build for the next thirty years, not the next walkthrough. Most of our work comes from past clients.",
+      body: "We build for the next fifty years, not the next walkthrough. Most of our work comes from past clients.",
     },
   ],
 } as const;

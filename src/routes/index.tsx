@@ -18,7 +18,7 @@ function isHqHost(host: string): boolean {
 
 const title = `${brand.name} — Five divisions. One builder. Since ${brand.established}.`;
 const description =
-  "McGuire Construction is a family-run, vertically integrated builder established in 1995. Construction, concrete, excavation, landscape, and development — all five divisions open and self-performed.";
+  "McGuire Construction is a family-run, vertically integrated builder established in 1974. Construction, concrete, excavation, landscape, and development — all five divisions open and self-performed.";
 
 export const Route = createFileRoute("/")({
   beforeLoad: () => {
@@ -61,7 +61,7 @@ export const Route = createFileRoute("/")({
 });
 
 const timeline = [
-  { year: "1995", title: "The first crew", body: "The family picks up its first contracts — framing, additions, and finish carpentry done by hand, one job at a time." },
+  { year: "1974", title: "The first crew", body: "The family picks up its first contracts — framing, additions, and finish carpentry done by hand, one job at a time." },
   { year: "2000s", title: "Systems take hold", body: "Checklists, written estimates, and published schedules replace handshake deals. Quality stops depending on who shows up." },
   { year: "2010s", title: "Full-scope building", body: "Ground-up homes, structural work, and whole-home renovations delivered under one accountable team." },
   { year: "2020s", title: "A second generation", body: "The next generation takes the same standards and builds the organization around them — division by division." },
@@ -76,14 +76,14 @@ const phases = [
 ];
 
 const whyMcGuire = [
-  { k: "Systems, not personalities", v: "Three decades of checklists and inspections mean the standard holds on every job, on every crew." },
+  { k: "Systems, not personalities", v: "Five decades of checklists and inspections mean the standard holds on every job, on every crew." },
   { k: "Written before it's built", v: "Line-item estimates, published schedules, documented change orders. Nothing verbal, nothing vague." },
   { k: "One company, zero handoffs", v: "Dirt, concrete, framing, finish, and landscape are all ours. No subcontractor gaps to fall through." },
-  { k: "Generational thinking", v: "A family company building for the next thirty years, not the next invoice." },
+  { k: "Generational thinking", v: "A family company building for the next fifty years, not the next invoice." },
 ];
 
 const headlineStats = [
-  { label: "Years building", value: "30" },
+  { label: "Years building", value: "50" },
   { label: "Projects delivered", value: "420+" },
   { label: "Divisions open", value: "5" },
   { label: "Work self-performed", value: "100%" },
@@ -290,8 +290,8 @@ function HomePage() {
                 <br />A new generation.
               </DisplayHeading>
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                McGuire started in 1995 with a small crew, hand tools, and a rule that hasn&rsquo;t changed since: if
-                it isn&rsquo;t right, it gets redone. Three decades later the same standard runs five divisions.
+                McGuire started in 1974 with a small crew, hand tools, and a rule that hasn&rsquo;t changed since: if
+                it isn&rsquo;t right, it gets redone. Five decades later the same standard runs five divisions.
               </p>
             </Reveal>
             <ol className="mt-10 space-y-0 border-l border-border pl-6">
@@ -483,7 +483,7 @@ function HomePage() {
           aria-hidden
         />
         <div className="relative mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
-          <SectionLabel n="06" tone="light">The next thirty years</SectionLabel>
+          <SectionLabel n="06" tone="light">The next fifty years</SectionLabel>
           <h2 className="display-cond mt-8 max-w-5xl text-[clamp(2.5rem,8vw,6.5rem)] text-white">
             One call.
             <br />

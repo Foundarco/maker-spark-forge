@@ -53,10 +53,10 @@ const leaders = [
   {
     name: "Michael McGuire",
     role: "Founder",
-    years: `1995 – 2018 · Chairman today`,
+    years: `1974 – 2004 · Chairman today`,
     image: founderAsset.url,
     alt: "Michael McGuire, founder of McGuire Construction, standing in a lumber yard at golden hour",
-    bio: "Michael started McGuire Construction in 1995 with a pickup, a framing crew of one, and a rule he never broke: finish the job the way you told the homeowner you would. He spent twenty-three years on the tools before handing over day-to-day operations — and he still walks the framing on every custom home.",
+    bio: "Michael started McGuire Construction in 1974 with a pickup, a framing crew of one, and a rule he never broke: finish the job the way you told the homeowner you would. He spent thirty years on the tools before handing over day-to-day operations — and he still walks the framing on every custom home.",
     quote: "You don't get a second reputation. Build it right the first time.",
   },
   {
@@ -71,7 +71,7 @@ const leaders = [
 ];
 
 const timeline = [
-  { year: "1995", body: "Michael McGuire starts framing houses out of a single truck, taking work by referral only." },
+  { year: "1974", body: "Michael McGuire starts framing houses out of a single truck, taking work by referral only." },
   { year: "2003", body: "First full crew hired. The company moves into additions and structural remodels." },
   { year: "2011", body: "A dedicated millwork shop opens, bringing cabinetry and trim work in-house." },
   { year: "2018", body: "Ryan McGuire takes over as president and formalizes scheduling and estimating systems." },
