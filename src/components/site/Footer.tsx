@@ -99,12 +99,16 @@ export function Footer() {
                 <Link
                   to="/divisions/$slug"
                   params={{ slug: d.slug }}
-                  className="flex h-full flex-col bg-ink px-5 py-6 transition-colors hover:bg-white/5"
+                  className="group flex h-full flex-col bg-ink px-5 py-6 transition-colors hover:bg-white/5"
                 >
-                  <span className="display-cond text-2xl text-white/25">{d.n}</span>
+                  <span className="display-cond text-2xl" style={{ color: d.accent }}>{d.n}</span>
                   <span className="mt-3 text-sm font-semibold text-white">{d.short}</span>
-                  <span className="mt-1 text-xs text-white/45">{d.status}</span>
+                  <span className="mt-1 inline-flex items-center gap-1.5 text-xs text-white/55">
+                    <span className="h-1.5 w-1.5 rounded-full" style={{ background: d.accent }} aria-hidden />
+                    Open now
+                  </span>
                 </Link>
+
               </li>
             ))}
           </ul>

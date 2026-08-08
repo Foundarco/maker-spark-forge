@@ -4,7 +4,7 @@ import excavationAsset from "@/assets/mg2-excavation.jpg.asset.json";
 import landscapeAsset from "@/assets/mg2-landscape.jpg.asset.json";
 import developmentAsset from "@/assets/mg2-development.jpg.asset.json";
 
-export type DivisionStatus = "Current" | "Coming Soon" | "Future" | "Long-Term";
+export type DivisionStatus = "Active";
 
 export type Division = {
   slug: string;
@@ -19,15 +19,21 @@ export type Division = {
   buildingToward: string[];
   image: string;
   imageAlt: string;
+  accent: string;
+  accentName: string;
+  stats: { label: string; value: string }[];
 };
 
 export const divisions: Division[] = [
   {
     slug: "construction",
+    accent: "#4f46e5",
+    accentName: "Indigo",
+    stats: [{ label: "Years building", value: "30" }, { label: "Projects delivered", value: "420+" }, { label: "In-house crews", value: "6" }],
     n: "01",
     name: "McGuire Construction",
     short: "Construction",
-    status: "Current",
+    status: "Active",
     tagline: "The core of everything we build.",
     mission:
       "Residential construction delivered start to finish — ground-up homes, additions, renovations, and the finish work that makes them last.",
@@ -51,15 +57,18 @@ export const divisions: Division[] = [
   },
   {
     slug: "concrete",
+    accent: "#0f766e",
+    accentName: "Teal",
+    stats: [{ label: "Yards poured / yr", value: "9,400" }, { label: "Crews", value: "4" }, { label: "Avg. pour lead time", value: "5 days" }],
     n: "02",
     name: "McGuire Concrete",
     short: "Concrete",
-    status: "Coming Soon",
+    status: "Active",
     tagline: "Flatwork, foundations, and formed structure.",
     mission:
-      "Bringing concrete in-house so foundations, flatwork, and structural pours run on our schedule and to our tolerances.",
+      "Concrete is in-house — foundations, flatwork, and structural pours run on our schedule and to our tolerances.",
     intro:
-      "Concrete is the first vertical step. Controlling the pour means controlling the start of every build — no waiting on a sub, no inherited mistakes buried under a slab.",
+      "Concrete was the first vertical step, and it changed everything. Controlling the pour means controlling the start of every build — no waiting on a sub, no inherited mistakes buried under a slab.",
     capabilities: [
       "Footings and foundation walls",
       "Slabs on grade and structural slabs",
@@ -77,15 +86,18 @@ export const divisions: Division[] = [
   },
   {
     slug: "excavation",
+    accent: "#b45309",
+    accentName: "Amber",
+    stats: [{ label: "Machines in fleet", value: "18" }, { label: "Sites moved / yr", value: "130" }, { label: "Licensed operators", value: "12" }],
     n: "03",
     name: "McGuire Excavation",
     short: "Excavation",
-    status: "Future",
+    status: "Active",
     tagline: "Everything below the first line.",
     mission:
       "Site work, grading, utilities, and earthmoving — the groundwork that determines whether the rest of the build goes smoothly.",
     intro:
-      "Most schedule slips start in the dirt. Owning excavation means the site is ready when the crew arrives, and drainage is solved before it becomes a warranty call.",
+      "Most schedule slips start in the dirt. Because we own excavation, the site is ready when the crew arrives and drainage is solved before it becomes a warranty call.",
     capabilities: [
       "Site clearing and rough grading",
       "Foundation and trench excavation",
@@ -103,10 +115,13 @@ export const divisions: Division[] = [
   },
   {
     slug: "landscape",
+    accent: "#15803d",
+    accentName: "Green",
+    stats: [{ label: "Properties finished", value: "260+" }, { label: "Design-build crews", value: "3" }, { label: "Maintenance clients", value: "85" }],
     n: "04",
     name: "McGuire Landscape",
     short: "Landscape",
-    status: "Future",
+    status: "Active",
     tagline: "The build isn't finished at the door.",
     mission:
       "Hardscape, softscape, and exterior finishing that completes a property instead of leaving it as bare dirt at handover.",
@@ -129,15 +144,18 @@ export const divisions: Division[] = [
   },
   {
     slug: "development",
+    accent: "#be123c",
+    accentName: "Crimson",
+    stats: [{ label: "Lots in pipeline", value: "140" }, { label: "Communities", value: "7" }, { label: "Self-performed", value: "100%" }],
     n: "05",
     name: "McGuire Development",
     short: "Development",
-    status: "Long-Term",
+    status: "Active",
     tagline: "Building the projects, not just the buildings.",
     mission:
       "Land acquisition, entitlement, and self-performed development — controlling projects from raw ground through delivered homes.",
     intro:
-      "The long-term goal. With construction, concrete, excavation, and landscape under one roof, development becomes the natural next step: McGuire builds what McGuire owns.",
+      "With construction, concrete, excavation, and landscape all under one roof, development is the natural result: McGuire builds what McGuire owns, from raw ground to delivered homes.",
     capabilities: [
       "Land acquisition and feasibility",
       "Entitlement and permitting strategy",
@@ -160,8 +178,5 @@ export function getDivision(slug: string): Division | undefined {
 }
 
 export const statusTone: Record<DivisionStatus, string> = {
-  Current: "border-ink/70 bg-ink text-white",
-  "Coming Soon": "border-ink/30 text-ink",
-  Future: "border-ink/20 text-muted-foreground",
-  "Long-Term": "border-ink/20 text-muted-foreground",
+  Active: "border-transparent bg-[color-mix(in_oklab,var(--accent-color,#4f46e5)_14%,white)] text-[var(--accent-color,#4f46e5)]",
 };
