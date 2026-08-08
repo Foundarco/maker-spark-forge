@@ -15,13 +15,13 @@ import { Route as ProcessRouteImport } from './routes/process'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as FaqRouteImport } from './routes/faq'
-import { Route as DivisionsRouteImport } from './routes/divisions'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
@@ -239,11 +239,6 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DivisionsRoute = DivisionsRouteImport.update({
-  id: '/divisions',
-  path: '/divisions',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -271,6 +266,11 @@ const HqRoute = HqRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
+  id: '/divisions/',
+  path: '/divisions/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeetingIdRoute = MeetingIdRouteImport.update({
@@ -1210,7 +1210,6 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
-  '/divisions': typeof DivisionsRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
@@ -1393,6 +1392,7 @@ export interface FileRoutesByFullPath {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/divisions/': typeof DivisionsIndexRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -1409,7 +1409,6 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
-  '/divisions': typeof DivisionsRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
@@ -1592,6 +1591,7 @@ export interface FileRoutesByTo {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/divisions': typeof DivisionsIndexRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -1610,7 +1610,6 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
-  '/divisions': typeof DivisionsRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRouteWithChildren
   '/hq-login': typeof HqLoginRoute
@@ -1794,6 +1793,7 @@ export interface FileRoutesById {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/divisions/': typeof DivisionsIndexRoute
   '/_hq/admin/access': typeof HqAdminAccessRoute
   '/_hq/admin/branding': typeof HqAdminBrandingRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
@@ -1812,7 +1812,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
-    | '/divisions'
     | '/faq'
     | '/help'
     | '/hq-login'
@@ -1995,6 +1994,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/divisions/'
     | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
@@ -2011,7 +2011,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
-    | '/divisions'
     | '/faq'
     | '/help'
     | '/hq-login'
@@ -2194,6 +2193,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/divisions'
     | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
@@ -2211,7 +2211,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
-    | '/divisions'
     | '/faq'
     | '/help'
     | '/hq-login'
@@ -2395,6 +2394,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/divisions/'
     | '/_hq/admin/access'
     | '/_hq/admin/branding'
     | '/_hq/admin/company'
@@ -2413,7 +2413,6 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
-  DivisionsRoute: typeof DivisionsRoute
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRouteWithChildren
   HqLoginRoute: typeof HqLoginRoute
@@ -2424,6 +2423,7 @@ export interface RootRouteChildren {
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
   MeetingIdRoute: typeof MeetingIdRoute
+  DivisionsIndexRoute: typeof DivisionsIndexRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
   ApiPublicResendInboundRoute: typeof ApiPublicResendInboundRoute
 }
@@ -2472,13 +2472,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/divisions': {
-      id: '/divisions'
-      path: '/divisions'
-      fullPath: '/divisions'
-      preLoaderRoute: typeof DivisionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -2519,6 +2512,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/': {
+      id: '/divisions/'
+      path: '/divisions'
+      fullPath: '/divisions/'
+      preLoaderRoute: typeof DivisionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meeting/$id': {
@@ -4217,7 +4217,6 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
-  DivisionsRoute: DivisionsRoute,
   FaqRoute: FaqRoute,
   HelpRoute: HelpRouteWithChildren,
   HqLoginRoute: HqLoginRoute,
@@ -4228,6 +4227,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
   MeetingIdRoute: MeetingIdRoute,
+  DivisionsIndexRoute: DivisionsIndexRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
   ApiPublicResendInboundRoute: ApiPublicResendInboundRoute,
 }
