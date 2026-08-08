@@ -70,8 +70,6 @@ export const Route = createFileRoute("/help/$slug")({
   ),
 });
 
-type Step = { title: string; body: string };
-
 function GuidePage() {
   const { slug } = Route.useLoaderData();
   const { data: guide } = useSuspenseQuery(guideQuery(slug));
@@ -93,7 +91,7 @@ function GuidePage() {
         <div className="grid gap-8 md:grid-cols-[1fr_2fr]">
           <aside className="md:sticky md:top-24 md:self-start">
             <Card>
-              <Eyebrow>Overview</Eyebrow>
+              <Eyebrow as="h2">Overview</Eyebrow>
               <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{guide.body}</p>
             </Card>
           </aside>
@@ -103,10 +101,10 @@ function GuidePage() {
                 <p className="font-display text-2xl font-semibold text-primary">Step {i + 1}</p>
                 <h2 className="mt-1 text-xl font-semibold">{s.title}</h2>
                 <p className="mt-2 text-muted-foreground">{s.body}</p>
-                <div aria-hidden className="mt-4 aspect-video rounded-xl bg-warm text-center text-xs text-muted-foreground">
-                  <div className="grid h-full place-items-center">[PLACEHOLDER photo / short video for this step]</div>
-                </div>
               </Card>
+            ))}
+          </ol>
+        </div>
             ))}
           </ol>
         </div>
