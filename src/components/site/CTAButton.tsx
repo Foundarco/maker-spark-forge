@@ -4,13 +4,13 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "secondary" | "ghost" | "light";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+  "inline-flex items-center justify-center gap-2 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.14em] transition-colors duration-200 min-h-[48px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-primary text-primary-foreground hover:brightness-110 hover:-translate-y-0.5 shadow-lg shadow-primary/20",
-  secondary: "border border-border bg-card text-foreground hover:border-foreground/40",
-  ghost: "text-foreground hover:bg-muted",
-  light: "bg-white text-ink hover:bg-white/90",
+  primary: "bg-primary text-primary-foreground hover:bg-ink",
+  secondary: "border border-ink/25 text-ink hover:bg-ink hover:text-primary-foreground",
+  ghost: "text-ink hover:bg-muted",
+  light: "bg-white text-ink hover:bg-white/85",
 };
 
 export function CTAButton({
