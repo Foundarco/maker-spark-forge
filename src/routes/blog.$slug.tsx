@@ -30,7 +30,9 @@ export const Route = createFileRoute("/blog/$slug")({
         { property: "og:description", content: desc.slice(0, 158) },
         { property: "og:type", content: "article" },
         { property: "og:url", content: url },
+        { property: "og:image", content: absoluteUrl(heroAsset.url) },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: absoluteUrl(heroAsset.url) },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
