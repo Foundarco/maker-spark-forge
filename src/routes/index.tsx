@@ -133,8 +133,8 @@ function HomePage() {
 
       {/* ── LEGACY ───────────────────────────────────────── */}
       <section className="border-b border-border">
-        <div className="mx-auto grid w-full max-w-7xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:items-center">
-          <div className="relative">
+        <div className="mx-auto grid w-full max-w-7xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:items-start">
+          <div className="relative lg:sticky lg:top-28">
             <img
               src={legacyAsset.url}
               alt="Worn vintage framing square, folding rule, chisels and a leather tool belt on a weathered workbench"

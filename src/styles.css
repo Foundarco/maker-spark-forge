@@ -178,6 +178,11 @@
   font-weight: 700;
 }
 
+.site-theme .display-cond {
+  font-family: "Oswald", "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
 @utility rule-label {
   font-size: 0.6875rem;
   font-weight: 600;
