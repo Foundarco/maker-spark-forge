@@ -3,7 +3,6 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { SectionLabel, DisplayHeading } from "@/components/site/Section";
 import { CTAButton } from "@/components/site/CTAButton";
 import { divisions, getDivision } from "@/config/divisions";
-import { Reveal } from "@/components/site/Reveal";
 import { CountUp } from "@/components/site/CountUp";
 import { brand } from "@/config/brand";
 
