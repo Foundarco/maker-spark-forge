@@ -257,27 +257,28 @@ function ContactPage() {
             <div className="bg-card p-7">
               <h2 className="rule-label text-muted-foreground">Reach us directly</h2>
               <ul className="mt-5 space-y-4 text-sm">
-                <li className="flex gap-3">
-                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-ink" aria-hidden />
+                <li className="grid gap-1">
+                  <span className="rule-label text-muted-foreground">Phone</span>
                   <a href={`tel:${brand.phone.replace(/[^0-9+]/g, "")}`} className="text-ink hover:underline">
                     {brand.phone}
                   </a>
                 </li>
-                <li className="flex gap-3">
-                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-ink" aria-hidden />
-                  <a href={`mailto:${brand.contact.estimates}`} className="text-ink hover:underline">
+                <li className="grid gap-1">
+                  <span className="rule-label text-muted-foreground">Email</span>
+                  <a href={`mailto:${brand.contact.estimates}`} className="break-words text-ink hover:underline">
                     {brand.contact.estimates}
                   </a>
                 </li>
-                <li className="flex gap-3">
-                  <Clock className="mt-0.5 h-4 w-4 shrink-0 text-ink" aria-hidden />
+                <li className="grid gap-1">
+                  <span className="rule-label text-muted-foreground">Hours</span>
                   <span className="text-muted-foreground">{brand.hours}</span>
                 </li>
-                <li className="flex gap-3">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-ink" aria-hidden />
+                <li className="grid gap-1">
+                  <span className="rule-label text-muted-foreground">Service area</span>
                   <span className="text-muted-foreground">{brand.serviceArea}</span>
                 </li>
               </ul>
+
             </div>
             <div className="bg-card p-7">
               <h2 className="rule-label text-muted-foreground">What happens next</h2>
