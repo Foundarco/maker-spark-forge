@@ -9,7 +9,7 @@ const title = "The McGuire Group — Divisions | McGuire Construction";
 const description =
   "Five divisions, one organization. Construction today; concrete, excavation, landscape, and development as McGuire builds toward full vertical integration.";
 
-export const Route = createFileRoute("/divisions")({
+export const Route = createFileRoute("/divisions/")({
   head: () => ({
     meta: [
       { title },

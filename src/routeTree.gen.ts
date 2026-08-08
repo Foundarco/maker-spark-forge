@@ -15,6 +15,7 @@ import { Route as ProcessRouteImport } from './routes/process'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as DivisionsRouteImport } from './routes/divisions'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -236,6 +237,11 @@ const HelpRoute = HelpRouteImport.update({
 const FaqRoute = FaqRouteImport.update({
   id: '/faq',
   path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsRoute = DivisionsRouteImport.update({
+  id: '/divisions',
+  path: '/divisions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -1204,6 +1210,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/divisions': typeof DivisionsRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
@@ -1402,6 +1409,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/divisions': typeof DivisionsRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
@@ -1602,6 +1610,7 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/divisions': typeof DivisionsRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRouteWithChildren
   '/hq-login': typeof HqLoginRoute
@@ -1803,6 +1812,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/divisions'
     | '/faq'
     | '/help'
     | '/hq-login'
@@ -2001,6 +2011,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/divisions'
     | '/faq'
     | '/help'
     | '/hq-login'
@@ -2200,6 +2211,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/careers'
     | '/contact'
+    | '/divisions'
     | '/faq'
     | '/help'
     | '/hq-login'
@@ -2401,6 +2413,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
+  DivisionsRoute: typeof DivisionsRoute
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRouteWithChildren
   HqLoginRoute: typeof HqLoginRoute
@@ -2457,6 +2470,13 @@ declare module '@tanstack/react-router' {
       path: '/faq'
       fullPath: '/faq'
       preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions': {
+      id: '/divisions'
+      path: '/divisions'
+      fullPath: '/divisions'
+      preLoaderRoute: typeof DivisionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -4197,6 +4217,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
+  DivisionsRoute: DivisionsRoute,
   FaqRoute: FaqRoute,
   HelpRoute: HelpRouteWithChildren,
   HqLoginRoute: HqLoginRoute,
