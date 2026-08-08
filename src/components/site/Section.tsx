@@ -47,8 +47,19 @@ export function SectionLabel({
   );
 }
 
-export function DisplayHeadingPlaceholder() {
-  return null;
+/** Oversized condensed headline used across the redesigned public site. */
+export function DisplayHeading({
+  children,
+  as: Tag = "h2",
+  className = "",
+}: {
+  children: ReactNode;
+  as?: "h1" | "h2" | "h3";
+  className?: string;
+}) {
+  return (
+    <Tag className={`display-cond text-[clamp(2.25rem,6vw,5rem)] ${className}`}>{children}</Tag>
+  );
 }
 
 export function Eyebrow({ children, as: Tag = "p" }: { children: ReactNode; as?: "p" | "h2" | "h3" }) {
