@@ -217,11 +217,11 @@
 ---------------------------------------------------------------- */
 
 .site-theme {
-  --acc-construction: #4f46e5;
-  --acc-concrete: #0f766e;
-  --acc-excavation: #b45309;
-  --acc-landscape: #15803d;
-  --acc-development: #be123c;
+  --acc-construction: #dc2626;
+  --acc-concrete: #7f1d1d;
+  --acc-excavation: #ea580c;
+  --acc-landscape: #9f1239;
+  --acc-development: #e11d48;
 }
 
 @utility accent-ink {
