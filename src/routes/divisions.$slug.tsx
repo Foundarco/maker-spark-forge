@@ -2,7 +2,9 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { SectionLabel, DisplayHeading } from "@/components/site/Section";
 import { CTAButton } from "@/components/site/CTAButton";
-import { divisions, getDivision, statusTone } from "@/config/divisions";
+import { divisions, getDivision } from "@/config/divisions";
+import { Reveal } from "@/components/site/Reveal";
+import { CountUp } from "@/components/site/CountUp";
 import { brand } from "@/config/brand";
 
 export const Route = createFileRoute("/divisions/$slug")({
@@ -16,7 +18,7 @@ export const Route = createFileRoute("/divisions/$slug")({
       return { meta: [{ title: "Division not found — McGuire Construction" }, { name: "robots", content: "noindex" }] };
     }
     const d = loaderData.division;
-    const title = `${d.name} — ${d.status} | McGuire Construction`;
+    const title = `${d.name} — Open now | McGuire Construction`;
     const url = `https://clovrlab.com/divisions/${params.slug}`;
     return {
       meta: [
@@ -72,7 +74,10 @@ function DivisionDetail() {
   return (
     <>
       {/* HERO */}
-      <section className="relative border-b border-border bg-ink text-white">
+      <section
+        className="relative border-b border-border bg-ink text-white"
+        style={{ ["--accent-color" as string]: d.accent }}
+      >
         <img
           src={d.image}
           alt={d.imageAlt}
@@ -88,13 +93,31 @@ function DivisionDetail() {
             <ArrowLeft className="h-3.5 w-3.5" /> The McGuire Group
           </Link>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <span className="display-cond text-4xl text-white/35">{d.n}</span>
-            <span className="rule-label border border-white/40 px-2.5 py-1 text-white/80">{d.status}</span>
+            <span className="display-cond text-4xl" style={{ color: d.accent }}>{d.n}</span>
+            <span
+              className="rule-label inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-white"
+              style={{ background: d.accent }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-white" aria-hidden /> Open now
+            </span>
+            <span className="rule-label rounded-full border border-white/30 px-3 py-1.5 text-white/70">
+              {d.accentName} division
+            </span>
           </div>
           <DisplayHeading as="h1" className="mt-5 max-w-4xl text-white">
             {d.name}
           </DisplayHeading>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/75">{d.tagline}</p>
+          <dl className="mt-12 grid max-w-2xl grid-cols-3 gap-px overflow-hidden rounded-2xl bg-white/12">
+            {d.stats.map((s: { label: string; value: string }) => (
+              <div key={s.label} className="bg-ink/70 px-5 py-6 backdrop-blur">
+                <dd className="display-cond text-3xl text-white">
+                  <CountUp value={s.value} />
+                </dd>
+                <dt className="mt-1 text-[0.68rem] uppercase tracking-[0.14em] text-white/55">{s.label}</dt>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
@@ -116,7 +139,7 @@ function DivisionDetail() {
           <ul className="divide-y divide-border border-y border-border">
             {d.capabilities.map((c: string, i: number) => (
               <li key={c} className="flex items-center gap-4 py-4 text-lg text-ink">
-                <span className="rule-label w-6 shrink-0 text-muted-foreground">
+                <span className="rule-label w-6 shrink-0" style={{ color: d.accent }}>
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 {c}
@@ -129,11 +152,16 @@ function DivisionDetail() {
       {/* BUILDING TOWARD */}
       <section className="border-b border-border">
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1fr_1.3fr]">
-          <SectionLabel n="03">What we&rsquo;re building toward</SectionLabel>
+          <SectionLabel n="03">Where this division is going</SectionLabel>
           <ul className="grid gap-px bg-border sm:grid-cols-3">
             {d.buildingToward.map((b: string) => (
               <li key={b} className="bg-card p-7">
-                <Check className="h-5 w-5 text-ink" aria-hidden />
+                <span
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-full"
+                  style={{ background: `color-mix(in oklab, ${d.accent} 14%, white)`, color: d.accent }}
+                >
+                  <Check className="h-4 w-4" aria-hidden />
+                </span>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{b}</p>
               </li>
             ))}
@@ -150,12 +178,13 @@ function DivisionDetail() {
               <Link
                 to="/divisions/$slug"
                 params={{ slug: o.slug }}
-                className="group flex h-full flex-col bg-card p-7 transition-colors hover:bg-warm"
+                style={{ ["--accent-color" as string]: o.accent }}
+                className="group flex h-full flex-col bg-card p-7 transition-colors hover:accent-wash"
               >
-                <span className="display-cond text-2xl text-ink/25">{o.n}</span>
+                <span className="display-cond text-2xl accent-ink">{o.n}</span>
                 <span className="mt-3 font-display text-lg font-bold text-ink">{o.short}</span>
-                <span className={`rule-label mt-2 inline-flex w-fit border px-2 py-0.5 ${statusTone[o.status]}`}>
-                  {o.status}
+                <span className="rule-label mt-2 inline-flex w-fit rounded-full accent-wash px-2.5 py-1 accent-ink">
+                  Open now
                 </span>
                 <ArrowRight className="mt-6 h-4 w-4 text-ink transition-transform group-hover:translate-x-1" />
               </Link>
