@@ -20,6 +20,7 @@ export const Route = createFileRoute("/divisions/$slug")({
     const d = loaderData.division;
     const title = `${d.name} — Open now | McGuire Construction`;
     const url = `https://clovrlab.com/divisions/${params.slug}`;
+    const image = absoluteUrl(d.image);
     return {
       meta: [
         { title },
@@ -28,9 +29,9 @@ export const Route = createFileRoute("/divisions/$slug")({
         { property: "og:description", content: d.mission },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
-        { property: "og:image", content: d.image },
+        { property: "og:image", content: image },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: d.image },
+        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
       scripts: [
