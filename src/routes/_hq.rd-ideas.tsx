@@ -113,7 +113,7 @@ function IdeasPage() {
         .eq("user_id", u.user.id);
       setIsAdmin((roles ?? []).some((r: { role: string }) => r.role === "admin" || r.role === "super_admin"));
     }
-    const { data, error } = await supabase.from("ideas").select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabase.from("ideas_masked").select("*").order("created_at", { ascending: false });
     if (error) setError(error.message);
     const list = (data ?? []) as Idea[];
     setIdeas(list);
@@ -479,7 +479,7 @@ function IdeaDetail(props: {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("idea_comments").select("*").eq("idea_id", idea.id).order("created_at", { ascending: true });
+      const { data } = await supabase.from("idea_comments_masked").select("*").eq("idea_id", idea.id).order("created_at", { ascending: true });
       const list = (data ?? []) as Comment[];
       setComments(list);
       const ids = Array.from(new Set(list.map((c) => c.author_id)));
