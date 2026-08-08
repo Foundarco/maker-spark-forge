@@ -155,7 +155,7 @@ export const divisions: Division[] = [
     mission:
       "Land acquisition, entitlement, and self-performed development — controlling projects from raw ground through delivered homes.",
     intro:
-      "The long-term goal. With construction, concrete, excavation, and landscape under one roof, development becomes the natural next step: McGuire builds what McGuire owns.",
+      "With construction, concrete, excavation, and landscape all under one roof, development is the natural result: McGuire builds what McGuire owns, from raw ground to delivered homes.",
     capabilities: [
       "Land acquisition and feasibility",
       "Entitlement and permitting strategy",
