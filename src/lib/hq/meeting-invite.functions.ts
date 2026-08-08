@@ -33,7 +33,7 @@ export const markMeetingInviteJoined = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => joinSchema.parse(data))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, unknown> = { joined_at: new Date().toISOString() };
+    const patch: { joined_at: string; name?: string } = { joined_at: new Date().toISOString() };
     if (data.name) patch.name = data.name;
     const { error } = await supabaseAdmin
       .from("meeting_external_invites")
