@@ -21,9 +21,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
-import { Route as LegalWarrantyRouteImport } from './routes/legal.warranty'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
-import { Route as LegalShippingReturnsRouteImport } from './routes/legal.shipping-returns'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
@@ -268,19 +266,9 @@ const MeetingIdRoute = MeetingIdRouteImport.update({
   path: '/meeting/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LegalWarrantyRoute = LegalWarrantyRouteImport.update({
-  id: '/legal/warranty',
-  path: '/legal/warranty',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LegalTermsRoute = LegalTermsRouteImport.update({
   id: '/legal/terms',
   path: '/legal/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LegalShippingReturnsRoute = LegalShippingReturnsRouteImport.update({
-  id: '/legal/shipping-returns',
-  path: '/legal/shipping-returns',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
@@ -1389,9 +1377,7 @@ export interface FileRoutesByFullPath {
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
-  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/legal/warranty': typeof LegalWarrantyRoute
   '/meeting/$id': typeof MeetingIdRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
@@ -1588,9 +1574,7 @@ export interface FileRoutesByTo {
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
-  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/legal/warranty': typeof LegalWarrantyRoute
   '/meeting/$id': typeof MeetingIdRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
@@ -1790,9 +1774,7 @@ export interface FileRoutesById {
   '/help/$slug': typeof HelpSlugRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
-  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/legal/warranty': typeof LegalWarrantyRoute
   '/meeting/$id': typeof MeetingIdRoute
   '/_hq/admin/access': typeof HqAdminAccessRoute
   '/_hq/admin/branding': typeof HqAdminBrandingRoute
@@ -1991,9 +1973,7 @@ export interface FileRouteTypes {
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
-    | '/legal/shipping-returns'
     | '/legal/terms'
-    | '/legal/warranty'
     | '/meeting/$id'
     | '/admin/access'
     | '/admin/branding'
@@ -2190,9 +2170,7 @@ export interface FileRouteTypes {
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
-    | '/legal/shipping-returns'
     | '/legal/terms'
-    | '/legal/warranty'
     | '/meeting/$id'
     | '/admin/access'
     | '/admin/branding'
@@ -2391,9 +2369,7 @@ export interface FileRouteTypes {
     | '/help/$slug'
     | '/legal/cookies'
     | '/legal/privacy'
-    | '/legal/shipping-returns'
     | '/legal/terms'
-    | '/legal/warranty'
     | '/meeting/$id'
     | '/_hq/admin/access'
     | '/_hq/admin/branding'
@@ -2420,9 +2396,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
-  LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
   LegalTermsRoute: typeof LegalTermsRoute
-  LegalWarrantyRoute: typeof LegalWarrantyRoute
   MeetingIdRoute: typeof MeetingIdRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
   ApiPublicResendInboundRoute: typeof ApiPublicResendInboundRoute
@@ -2514,25 +2488,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeetingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/legal/warranty': {
-      id: '/legal/warranty'
-      path: '/legal/warranty'
-      fullPath: '/legal/warranty'
-      preLoaderRoute: typeof LegalWarrantyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/legal/terms': {
       id: '/legal/terms'
       path: '/legal/terms'
       fullPath: '/legal/terms'
       preLoaderRoute: typeof LegalTermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/legal/shipping-returns': {
-      id: '/legal/shipping-returns'
-      path: '/legal/shipping-returns'
-      fullPath: '/legal/shipping-returns'
-      preLoaderRoute: typeof LegalShippingReturnsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/privacy': {
@@ -4224,9 +4184,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
-  LegalShippingReturnsRoute: LegalShippingReturnsRoute,
   LegalTermsRoute: LegalTermsRoute,
-  LegalWarrantyRoute: LegalWarrantyRoute,
   MeetingIdRoute: MeetingIdRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
   ApiPublicResendInboundRoute: ApiPublicResendInboundRoute,
