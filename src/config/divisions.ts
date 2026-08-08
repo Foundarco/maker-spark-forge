@@ -27,8 +27,8 @@ export type Division = {
 export const divisions: Division[] = [
   {
     slug: "construction",
-    accent: "#4f46e5",
-    accentName: "Indigo",
+    accent: "#dc2626",
+    accentName: "Signal Red",
     stats: [{ label: "Years building", value: "30" }, { label: "Projects delivered", value: "420+" }, { label: "In-house crews", value: "6" }],
     n: "01",
     name: "McGuire Construction",
@@ -57,8 +57,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "concrete",
-    accent: "#0f766e",
-    accentName: "Teal",
+    accent: "#7f1d1d",
+    accentName: "Deep Maroon",
     stats: [{ label: "Yards poured / yr", value: "9,400" }, { label: "Crews", value: "4" }, { label: "Avg. pour lead time", value: "5 days" }],
     n: "02",
     name: "McGuire Concrete",
@@ -86,8 +86,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "excavation",
-    accent: "#b45309",
-    accentName: "Amber",
+    accent: "#ea580c",
+    accentName: "Ember",
     stats: [{ label: "Machines in fleet", value: "18" }, { label: "Sites moved / yr", value: "130" }, { label: "Licensed operators", value: "12" }],
     n: "03",
     name: "McGuire Excavation",
@@ -115,8 +115,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "landscape",
-    accent: "#15803d",
-    accentName: "Green",
+    accent: "#9f1239",
+    accentName: "Crimson",
     stats: [{ label: "Properties finished", value: "260+" }, { label: "Design-build crews", value: "3" }, { label: "Maintenance clients", value: "85" }],
     n: "04",
     name: "McGuire Landscape",
@@ -144,8 +144,8 @@ export const divisions: Division[] = [
   },
   {
     slug: "development",
-    accent: "#be123c",
-    accentName: "Crimson",
+    accent: "#e11d48",
+    accentName: "Rose",
     stats: [{ label: "Lots in pipeline", value: "140" }, { label: "Communities", value: "7" }, { label: "Self-performed", value: "100%" }],
     n: "05",
     name: "McGuire Development",
@@ -178,5 +178,5 @@ export function getDivision(slug: string): Division | undefined {
 }
 
 export const statusTone: Record<DivisionStatus, string> = {
-  Active: "border-transparent bg-[color-mix(in_oklab,var(--accent-color,#4f46e5)_14%,white)] text-[var(--accent-color,#4f46e5)]",
+  Active: "border-transparent bg-[color-mix(in_oklab,var(--accent-color,#dc2626)_14%,white)] text-[var(--accent-color,#dc2626)]",
 };
