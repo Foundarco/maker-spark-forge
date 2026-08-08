@@ -1,0 +1,12 @@
+revoke all on function public.notify_user(uuid, text, text, text) from public, anon, authenticated;
+revoke all on function public.notify_managers(text, text, text) from public, anon, authenticated;
+revoke all on function public.con_estimate_approved() from public, anon, authenticated;
+revoke all on function public.con_daily_log_submitted() from public, anon, authenticated;
+revoke all on function public.con_change_order_approved() from public, anon, authenticated;
+revoke all on function public.con_incident_created() from public, anon, authenticated;
+revoke all on function public.con_equipment_service_check() from public, anon, authenticated;
+revoke all on function public.hr_applicant_hired() from public, anon, authenticated;
+revoke all on function public.con_task_assigned() from public, anon, authenticated;
+revoke all on function public.con_punch_assigned() from public, anon, authenticated;
+revoke all on function public.con_submittal_ball_in_court() from public, anon, authenticated;
+revoke all on function public.con_job_audit() from public, anon, authenticated;
