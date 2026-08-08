@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProcessRouteImport } from './routes/process'
@@ -210,6 +211,11 @@ import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 import { Route as HqAdminBrandingRouteImport } from './routes/_hq.admin.branding'
 import { Route as HqAdminAccessRouteImport } from './routes/_hq.admin.access'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -1222,6 +1228,7 @@ export interface FileRoutesByFullPath {
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
   '/analytics': typeof HqAnalyticsRoute
@@ -1422,6 +1429,7 @@ export interface FileRoutesByTo {
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
   '/analytics': typeof HqAnalyticsRoute
@@ -1624,6 +1632,7 @@ export interface FileRoutesById {
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/accounts': typeof HqAccountsRoute
   '/_hq/analytics': typeof HqAnalyticsRoute
@@ -1827,6 +1836,7 @@ export interface FileRouteTypes {
     | '/process'
     | '/projects'
     | '/services'
+    | '/sitemap.xml'
     | '/accounting'
     | '/accounts'
     | '/analytics'
@@ -2027,6 +2037,7 @@ export interface FileRouteTypes {
     | '/process'
     | '/projects'
     | '/services'
+    | '/sitemap.xml'
     | '/accounting'
     | '/accounts'
     | '/analytics'
@@ -2228,6 +2239,7 @@ export interface FileRouteTypes {
     | '/process'
     | '/projects'
     | '/services'
+    | '/sitemap.xml'
     | '/_hq/accounting'
     | '/_hq/accounts'
     | '/_hq/analytics'
@@ -2431,6 +2443,7 @@ export interface RootRouteChildren {
   ProcessRoute: typeof ProcessRoute
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DivisionsSlugRoute: typeof DivisionsSlugRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
@@ -2443,6 +2456,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -4243,6 +4263,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProcessRoute: ProcessRoute,
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   DivisionsSlugRoute: DivisionsSlugRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,

@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /hq-login
+Disallow: /meeting/
+
+Sitemap: https://clovrlab.com/sitemap.xml
