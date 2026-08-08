@@ -132,6 +132,61 @@
   --ring: oklch(0.65 0.20 260);
 }
 
+/* ---------------------------------------------------------------
+   Public website theme — McGuire Construction
+   Scoped to .site-theme so the internal HQ workspace is untouched.
+   Palette: off-white paper, charcoal ink, near-black primary,
+   warm stone accents. No orange/black construction clichés.
+---------------------------------------------------------------- */
+.site-theme {
+  --radius: 0.25rem;
+  --background: oklch(0.975 0.004 85);
+  --surface: oklch(0.955 0.006 85);
+  --foreground: oklch(0.28 0.008 60);
+  --ink: oklch(0.17 0.008 60);
+  --warm: oklch(0.945 0.010 80);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.008 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.008 60);
+  --primary: oklch(0.22 0.010 60);
+  --primary-foreground: oklch(0.98 0.004 85);
+  --primary-soft: oklch(0.93 0.008 75);
+  --secondary: oklch(0.94 0.008 80);
+  --secondary-foreground: oklch(0.22 0.010 60);
+  --muted: oklch(0.945 0.006 80);
+  --muted-foreground: oklch(0.50 0.010 65);
+  --accent: oklch(0.90 0.018 75);
+  --accent-foreground: oklch(0.22 0.010 60);
+  --border: oklch(0.90 0.008 80);
+  --input: oklch(0.92 0.008 80);
+  --ring: oklch(0.45 0.012 60);
+  --stone: oklch(0.86 0.020 78);
+  --stone-deep: oklch(0.62 0.022 72);
+  --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+.site-theme h1,
+.site-theme h2,
+.site-theme h3,
+.site-theme h4 {
+  font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+@utility rule-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+
+
 
 @layer base {
   * { border-color: var(--color-border); }
