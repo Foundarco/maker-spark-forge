@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProcessRouteImport } from './routes/process'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HelpRouteImport } from './routes/help'
@@ -73,7 +74,6 @@ import { Route as HqPurchasingRouteImport } from './routes/_hq.purchasing'
 import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orders'
 import { Route as HqPurchaseHistoryRouteImport } from './routes/_hq.purchase-history'
 import { Route as HqPrototypesRouteImport } from './routes/_hq.prototypes'
-import { Route as HqProjectsRouteImport } from './routes/_hq.projects'
 import { Route as HqProfileRouteImport } from './routes/_hq.profile'
 import { Route as HqProductionRouteImport } from './routes/_hq.production'
 import { Route as HqProductReleasesRouteImport } from './routes/_hq.product-releases'
@@ -150,6 +150,7 @@ import { Route as HqFilesBackupRouteImport } from './routes/_hq.files-backup'
 import { Route as HqFeedRouteImport } from './routes/_hq.feed'
 import { Route as HqFactoryLiveRouteImport } from './routes/_hq.factory-live'
 import { Route as HqExpensesRouteImport } from './routes/_hq.expenses'
+import { Route as HqEngProjectsRouteImport } from './routes/_hq.eng-projects'
 import { Route as HqEmployeesRouteImport } from './routes/_hq.employees'
 import { Route as HqEmailSupportRouteImport } from './routes/_hq.email-support'
 import { Route as HqEmailCampaignsRouteImport } from './routes/_hq.email-campaigns'
@@ -210,6 +211,11 @@ import { Route as HqAdminAccessRouteImport } from './routes/_hq.admin.access'
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProcessRoute = ProcessRouteImport.update({
@@ -524,11 +530,6 @@ const HqPurchaseHistoryRoute = HqPurchaseHistoryRouteImport.update({
 const HqPrototypesRoute = HqPrototypesRouteImport.update({
   id: '/prototypes',
   path: '/prototypes',
-  getParentRoute: () => HqRoute,
-} as any)
-const HqProjectsRoute = HqProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
   getParentRoute: () => HqRoute,
 } as any)
 const HqProfileRoute = HqProfileRouteImport.update({
@@ -911,6 +912,11 @@ const HqExpensesRoute = HqExpensesRouteImport.update({
   path: '/expenses',
   getParentRoute: () => HqRoute,
 } as any)
+const HqEngProjectsRoute = HqEngProjectsRouteImport.update({
+  id: '/eng-projects',
+  path: '/eng-projects',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqEmployeesRoute = HqEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
@@ -1202,6 +1208,7 @@ export interface FileRoutesByFullPath {
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
   '/process': typeof ProcessRoute
+  '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
@@ -1250,6 +1257,7 @@ export interface FileRoutesByFullPath {
   '/email-campaigns': typeof HqEmailCampaignsRoute
   '/email-support': typeof HqEmailSupportRoute
   '/employees': typeof HqEmployeesRoute
+  '/eng-projects': typeof HqEngProjectsRoute
   '/expenses': typeof HqExpensesRoute
   '/factory-live': typeof HqFactoryLiveRoute
   '/feed': typeof HqFeedRoute
@@ -1325,7 +1333,6 @@ export interface FileRoutesByFullPath {
   '/product-releases': typeof HqProductReleasesRoute
   '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
-  '/projects': typeof HqProjectsRoute
   '/prototypes': typeof HqPrototypesRoute
   '/purchase-history': typeof HqPurchaseHistoryRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
@@ -1399,6 +1406,7 @@ export interface FileRoutesByTo {
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
   '/process': typeof ProcessRoute
+  '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
@@ -1447,6 +1455,7 @@ export interface FileRoutesByTo {
   '/email-campaigns': typeof HqEmailCampaignsRoute
   '/email-support': typeof HqEmailSupportRoute
   '/employees': typeof HqEmployeesRoute
+  '/eng-projects': typeof HqEngProjectsRoute
   '/expenses': typeof HqExpensesRoute
   '/factory-live': typeof HqFactoryLiveRoute
   '/feed': typeof HqFeedRoute
@@ -1522,7 +1531,6 @@ export interface FileRoutesByTo {
   '/product-releases': typeof HqProductReleasesRoute
   '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
-  '/projects': typeof HqProjectsRoute
   '/prototypes': typeof HqPrototypesRoute
   '/purchase-history': typeof HqPurchaseHistoryRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
@@ -1598,6 +1606,7 @@ export interface FileRoutesById {
   '/help': typeof HelpRouteWithChildren
   '/hq-login': typeof HqLoginRoute
   '/process': typeof ProcessRoute
+  '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/accounts': typeof HqAccountsRoute
@@ -1646,6 +1655,7 @@ export interface FileRoutesById {
   '/_hq/email-campaigns': typeof HqEmailCampaignsRoute
   '/_hq/email-support': typeof HqEmailSupportRoute
   '/_hq/employees': typeof HqEmployeesRoute
+  '/_hq/eng-projects': typeof HqEngProjectsRoute
   '/_hq/expenses': typeof HqExpensesRoute
   '/_hq/factory-live': typeof HqFactoryLiveRoute
   '/_hq/feed': typeof HqFeedRoute
@@ -1722,7 +1732,6 @@ export interface FileRoutesById {
   '/_hq/product-releases': typeof HqProductReleasesRoute
   '/_hq/production': typeof HqProductionRoute
   '/_hq/profile': typeof HqProfileRoute
-  '/_hq/projects': typeof HqProjectsRoute
   '/_hq/prototypes': typeof HqPrototypesRoute
   '/_hq/purchase-history': typeof HqPurchaseHistoryRoute
   '/_hq/purchase-orders': typeof HqPurchaseOrdersRoute
@@ -1798,6 +1807,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/hq-login'
     | '/process'
+    | '/projects'
     | '/services'
     | '/accounting'
     | '/accounts'
@@ -1846,6 +1856,7 @@ export interface FileRouteTypes {
     | '/email-campaigns'
     | '/email-support'
     | '/employees'
+    | '/eng-projects'
     | '/expenses'
     | '/factory-live'
     | '/feed'
@@ -1921,7 +1932,6 @@ export interface FileRouteTypes {
     | '/product-releases'
     | '/production'
     | '/profile'
-    | '/projects'
     | '/prototypes'
     | '/purchase-history'
     | '/purchase-orders'
@@ -1995,6 +2005,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/hq-login'
     | '/process'
+    | '/projects'
     | '/services'
     | '/accounting'
     | '/accounts'
@@ -2043,6 +2054,7 @@ export interface FileRouteTypes {
     | '/email-campaigns'
     | '/email-support'
     | '/employees'
+    | '/eng-projects'
     | '/expenses'
     | '/factory-live'
     | '/feed'
@@ -2118,7 +2130,6 @@ export interface FileRouteTypes {
     | '/product-releases'
     | '/production'
     | '/profile'
-    | '/projects'
     | '/prototypes'
     | '/purchase-history'
     | '/purchase-orders'
@@ -2193,6 +2204,7 @@ export interface FileRouteTypes {
     | '/help'
     | '/hq-login'
     | '/process'
+    | '/projects'
     | '/services'
     | '/_hq/accounting'
     | '/_hq/accounts'
@@ -2241,6 +2253,7 @@ export interface FileRouteTypes {
     | '/_hq/email-campaigns'
     | '/_hq/email-support'
     | '/_hq/employees'
+    | '/_hq/eng-projects'
     | '/_hq/expenses'
     | '/_hq/factory-live'
     | '/_hq/feed'
@@ -2317,7 +2330,6 @@ export interface FileRouteTypes {
     | '/_hq/product-releases'
     | '/_hq/production'
     | '/_hq/profile'
-    | '/_hq/projects'
     | '/_hq/prototypes'
     | '/_hq/purchase-history'
     | '/_hq/purchase-orders'
@@ -2393,6 +2405,7 @@ export interface RootRouteChildren {
   HelpRoute: typeof HelpRouteWithChildren
   HqLoginRoute: typeof HqLoginRoute
   ProcessRoute: typeof ProcessRoute
+  ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
@@ -2409,6 +2422,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/process': {
@@ -2850,13 +2870,6 @@ declare module '@tanstack/react-router' {
       path: '/prototypes'
       fullPath: '/prototypes'
       preLoaderRoute: typeof HqPrototypesRouteImport
-      parentRoute: typeof HqRoute
-    }
-    '/_hq/projects': {
-      id: '/_hq/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof HqProjectsRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/profile': {
@@ -3391,6 +3404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqExpensesRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/eng-projects': {
+      id: '/_hq/eng-projects'
+      path: '/eng-projects'
+      fullPath: '/eng-projects'
+      preLoaderRoute: typeof HqEngProjectsRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/employees': {
       id: '/_hq/employees'
       path: '/employees'
@@ -3834,6 +3854,7 @@ interface HqRouteChildren {
   HqEmailCampaignsRoute: typeof HqEmailCampaignsRoute
   HqEmailSupportRoute: typeof HqEmailSupportRoute
   HqEmployeesRoute: typeof HqEmployeesRoute
+  HqEngProjectsRoute: typeof HqEngProjectsRoute
   HqExpensesRoute: typeof HqExpensesRoute
   HqFactoryLiveRoute: typeof HqFactoryLiveRoute
   HqFeedRoute: typeof HqFeedRoute
@@ -3910,7 +3931,6 @@ interface HqRouteChildren {
   HqProductReleasesRoute: typeof HqProductReleasesRoute
   HqProductionRoute: typeof HqProductionRoute
   HqProfileRoute: typeof HqProfileRoute
-  HqProjectsRoute: typeof HqProjectsRoute
   HqPrototypesRoute: typeof HqPrototypesRoute
   HqPurchaseHistoryRoute: typeof HqPurchaseHistoryRoute
   HqPurchaseOrdersRoute: typeof HqPurchaseOrdersRoute
@@ -4015,6 +4035,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqEmailCampaignsRoute: HqEmailCampaignsRoute,
   HqEmailSupportRoute: HqEmailSupportRoute,
   HqEmployeesRoute: HqEmployeesRoute,
+  HqEngProjectsRoute: HqEngProjectsRoute,
   HqExpensesRoute: HqExpensesRoute,
   HqFactoryLiveRoute: HqFactoryLiveRoute,
   HqFeedRoute: HqFeedRoute,
@@ -4091,7 +4112,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqProductReleasesRoute: HqProductReleasesRoute,
   HqProductionRoute: HqProductionRoute,
   HqProfileRoute: HqProfileRoute,
-  HqProjectsRoute: HqProjectsRoute,
   HqPrototypesRoute: HqPrototypesRoute,
   HqPurchaseHistoryRoute: HqPurchaseHistoryRoute,
   HqPurchaseOrdersRoute: HqPurchaseOrdersRoute,
@@ -4181,6 +4201,7 @@ const rootRouteChildren: RootRouteChildren = {
   HelpRoute: HelpRouteWithChildren,
   HqLoginRoute: HqLoginRoute,
   ProcessRoute: ProcessRoute,
+  ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
