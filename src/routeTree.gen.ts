@@ -9,50 +9,22 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WorkRouteImport } from './routes/work'
-import { Route as UpgradesRouteImport } from './routes/upgrades'
-import { Route as SupportUsRouteImport } from './routes/support-us'
-import { Route as StoreRouteImport } from './routes/store'
-import { Route as SoftwareRouteImport } from './routes/software'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as QuoteRouteImport } from './routes/quote'
+import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProcessRouteImport } from './routes/process'
-import { Route as PressRouteImport } from './routes/press'
-import { Route as PartsRouteImport } from './routes/parts'
-import { Route as MissionRouteImport } from './routes/mission'
-import { Route as MaterialsRouteImport } from './routes/materials'
-import { Route as LearnRouteImport } from './routes/learn'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
-import { Route as HowItsBuiltRouteImport } from './routes/how-its-built'
 import { Route as HelpRouteImport } from './routes/help'
-import { Route as GetInvolvedRouteImport } from './routes/get-involved'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CompareRouteImport } from './routes/compare'
-import { Route as CommunityRouteImport } from './routes/community'
-import { Route as CheckoutRouteImport } from './routes/checkout'
-import { Route as CartRouteImport } from './routes/cart'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
-import { Route as AccessoriesRouteImport } from './routes/accessories'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as StoreSlugRouteImport } from './routes/store.$slug'
-import { Route as SoftwareSlicerRouteImport } from './routes/software.slicer'
-import { Route as SoftwareFirmwareRouteImport } from './routes/software.firmware'
-import { Route as SoftwareDownloadsRouteImport } from './routes/software.downloads'
-import { Route as SoftwareAppRouteImport } from './routes/software.app'
 import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
-import { Route as MaterialsRecyclingRouteImport } from './routes/materials.recycling'
-import { Route as MaterialsPelletsRouteImport } from './routes/materials.pellets'
-import { Route as MaterialsFilamentRouteImport } from './routes/materials.filament'
-import { Route as LegalWarrantyRouteImport } from './routes/legal.warranty'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
-import { Route as LegalShippingReturnsRouteImport } from './routes/legal.shipping-returns'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
-import { Route as LearnTrackRouteImport } from './routes/learn.$track'
 import { Route as HelpSlugRouteImport } from './routes/help.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as HqWorkOrdersRouteImport } from './routes/_hq.work-orders'
@@ -102,7 +74,6 @@ import { Route as HqPurchasingRouteImport } from './routes/_hq.purchasing'
 import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orders'
 import { Route as HqPurchaseHistoryRouteImport } from './routes/_hq.purchase-history'
 import { Route as HqPrototypesRouteImport } from './routes/_hq.prototypes'
-import { Route as HqProjectsRouteImport } from './routes/_hq.projects'
 import { Route as HqProfileRouteImport } from './routes/_hq.profile'
 import { Route as HqProductionRouteImport } from './routes/_hq.production'
 import { Route as HqProductReleasesRouteImport } from './routes/_hq.product-releases'
@@ -179,6 +150,7 @@ import { Route as HqFilesBackupRouteImport } from './routes/_hq.files-backup'
 import { Route as HqFeedRouteImport } from './routes/_hq.feed'
 import { Route as HqFactoryLiveRouteImport } from './routes/_hq.factory-live'
 import { Route as HqExpensesRouteImport } from './routes/_hq.expenses'
+import { Route as HqEngProjectsRouteImport } from './routes/_hq.eng-projects'
 import { Route as HqEmployeesRouteImport } from './routes/_hq.employees'
 import { Route as HqEmailSupportRouteImport } from './routes/_hq.email-support'
 import { Route as HqEmailCampaignsRouteImport } from './routes/_hq.email-campaigns'
@@ -236,39 +208,14 @@ import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 import { Route as HqAdminBrandingRouteImport } from './routes/_hq.admin.branding'
 import { Route as HqAdminAccessRouteImport } from './routes/_hq.admin.access'
 
-const WorkRoute = WorkRouteImport.update({
-  id: '/work',
-  path: '/work',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UpgradesRoute = UpgradesRouteImport.update({
-  id: '/upgrades',
-  path: '/upgrades',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SupportUsRoute = SupportUsRouteImport.update({
-  id: '/support-us',
-  path: '/support-us',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StoreRoute = StoreRouteImport.update({
-  id: '/store',
-  path: '/store',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SoftwareRoute = SoftwareRouteImport.update({
-  id: '/software',
-  path: '/software',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuoteRoute = QuoteRouteImport.update({
-  id: '/quote',
-  path: '/quote',
+const ProjectsRoute = ProjectsRouteImport.update({
+  id: '/projects',
+  path: '/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProcessRoute = ProcessRouteImport.update({
@@ -276,49 +223,14 @@ const ProcessRoute = ProcessRouteImport.update({
   path: '/process',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PressRoute = PressRouteImport.update({
-  id: '/press',
-  path: '/press',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartsRoute = PartsRouteImport.update({
-  id: '/parts',
-  path: '/parts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MissionRoute = MissionRouteImport.update({
-  id: '/mission',
-  path: '/mission',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MaterialsRoute = MaterialsRouteImport.update({
-  id: '/materials',
-  path: '/materials',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HqLoginRoute = HqLoginRouteImport.update({
   id: '/hq-login',
   path: '/hq-login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HowItsBuiltRoute = HowItsBuiltRouteImport.update({
-  id: '/how-its-built',
-  path: '/how-its-built',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const HelpRoute = HelpRouteImport.update({
   id: '/help',
   path: '/help',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GetInvolvedRoute = GetInvolvedRouteImport.update({
-  id: '/get-involved',
-  path: '/get-involved',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -331,26 +243,6 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompareRoute = CompareRouteImport.update({
-  id: '/compare',
-  path: '/compare',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CommunityRoute = CommunityRouteImport.update({
-  id: '/community',
-  path: '/community',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CartRoute = CartRouteImport.update({
-  id: '/cart',
-  path: '/cart',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CareersRoute = CareersRouteImport.update({
   id: '/careers',
   path: '/careers',
@@ -359,11 +251,6 @@ const CareersRoute = CareersRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccessoriesRoute = AccessoriesRouteImport.update({
-  id: '/accessories',
-  path: '/accessories',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -380,64 +267,14 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StoreSlugRoute = StoreSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => StoreRoute,
-} as any)
-const SoftwareSlicerRoute = SoftwareSlicerRouteImport.update({
-  id: '/slicer',
-  path: '/slicer',
-  getParentRoute: () => SoftwareRoute,
-} as any)
-const SoftwareFirmwareRoute = SoftwareFirmwareRouteImport.update({
-  id: '/firmware',
-  path: '/firmware',
-  getParentRoute: () => SoftwareRoute,
-} as any)
-const SoftwareDownloadsRoute = SoftwareDownloadsRouteImport.update({
-  id: '/downloads',
-  path: '/downloads',
-  getParentRoute: () => SoftwareRoute,
-} as any)
-const SoftwareAppRoute = SoftwareAppRouteImport.update({
-  id: '/app',
-  path: '/app',
-  getParentRoute: () => SoftwareRoute,
-} as any)
 const MeetingIdRoute = MeetingIdRouteImport.update({
   id: '/meeting/$id',
   path: '/meeting/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MaterialsRecyclingRoute = MaterialsRecyclingRouteImport.update({
-  id: '/recycling',
-  path: '/recycling',
-  getParentRoute: () => MaterialsRoute,
-} as any)
-const MaterialsPelletsRoute = MaterialsPelletsRouteImport.update({
-  id: '/pellets',
-  path: '/pellets',
-  getParentRoute: () => MaterialsRoute,
-} as any)
-const MaterialsFilamentRoute = MaterialsFilamentRouteImport.update({
-  id: '/filament',
-  path: '/filament',
-  getParentRoute: () => MaterialsRoute,
-} as any)
-const LegalWarrantyRoute = LegalWarrantyRouteImport.update({
-  id: '/legal/warranty',
-  path: '/legal/warranty',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LegalTermsRoute = LegalTermsRouteImport.update({
   id: '/legal/terms',
   path: '/legal/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LegalShippingReturnsRoute = LegalShippingReturnsRouteImport.update({
-  id: '/legal/shipping-returns',
-  path: '/legal/shipping-returns',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
@@ -449,11 +286,6 @@ const LegalCookiesRoute = LegalCookiesRouteImport.update({
   id: '/legal/cookies',
   path: '/legal/cookies',
   getParentRoute: () => rootRouteImport,
-} as any)
-const LearnTrackRoute = LearnTrackRouteImport.update({
-  id: '/$track',
-  path: '/$track',
-  getParentRoute: () => LearnRoute,
 } as any)
 const HelpSlugRoute = HelpSlugRouteImport.update({
   id: '/$slug',
@@ -698,11 +530,6 @@ const HqPurchaseHistoryRoute = HqPurchaseHistoryRouteImport.update({
 const HqPrototypesRoute = HqPrototypesRouteImport.update({
   id: '/prototypes',
   path: '/prototypes',
-  getParentRoute: () => HqRoute,
-} as any)
-const HqProjectsRoute = HqProjectsRouteImport.update({
-  id: '/projects',
-  path: '/projects',
   getParentRoute: () => HqRoute,
 } as any)
 const HqProfileRoute = HqProfileRouteImport.update({
@@ -1085,6 +912,11 @@ const HqExpensesRoute = HqExpensesRouteImport.update({
   path: '/expenses',
   getParentRoute: () => HqRoute,
 } as any)
+const HqEngProjectsRoute = HqEngProjectsRouteImport.update({
+  id: '/eng-projects',
+  path: '/eng-projects',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqEmployeesRoute = HqEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
@@ -1369,32 +1201,15 @@ const HqAdminAccessRoute = HqAdminAccessRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
-  '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/community': typeof CommunityRoute
-  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HqHelpRoute
-  '/how-its-built': typeof HowItsBuiltRoute
   '/hq-login': typeof HqLoginRoute
-  '/learn': typeof LearnRouteWithChildren
-  '/materials': typeof MaterialsRouteWithChildren
-  '/mission': typeof MissionRoute
-  '/parts': typeof PartsRoute
-  '/press': typeof PressRoute
   '/process': typeof ProcessRoute
-  '/quote': typeof QuoteRoute
+  '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
-  '/software': typeof SoftwareRouteWithChildren
-  '/store': typeof StoreRouteWithChildren
-  '/support-us': typeof SupportUsRoute
-  '/upgrades': typeof UpgradesRoute
-  '/work': typeof WorkRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
   '/analytics': typeof HqAnalyticsRoute
@@ -1442,6 +1257,7 @@ export interface FileRoutesByFullPath {
   '/email-campaigns': typeof HqEmailCampaignsRoute
   '/email-support': typeof HqEmailSupportRoute
   '/employees': typeof HqEmployeesRoute
+  '/eng-projects': typeof HqEngProjectsRoute
   '/expenses': typeof HqExpensesRoute
   '/factory-live': typeof HqFactoryLiveRoute
   '/feed': typeof HqFeedRoute
@@ -1517,7 +1333,6 @@ export interface FileRoutesByFullPath {
   '/product-releases': typeof HqProductReleasesRoute
   '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
-  '/projects': typeof HqProjectsRoute
   '/prototypes': typeof HqPrototypesRoute
   '/purchase-history': typeof HqPurchaseHistoryRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
@@ -1567,21 +1382,10 @@ export interface FileRoutesByFullPath {
   '/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
-  '/learn/$track': typeof LearnTrackRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
-  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/legal/warranty': typeof LegalWarrantyRoute
-  '/materials/filament': typeof MaterialsFilamentRoute
-  '/materials/pellets': typeof MaterialsPelletsRoute
-  '/materials/recycling': typeof MaterialsRecyclingRoute
   '/meeting/$id': typeof MeetingIdRoute
-  '/software/app': typeof SoftwareAppRoute
-  '/software/downloads': typeof SoftwareDownloadsRoute
-  '/software/firmware': typeof SoftwareFirmwareRoute
-  '/software/slicer': typeof SoftwareSlicerRoute
-  '/store/$slug': typeof StoreSlugRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -1595,32 +1399,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
-  '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/community': typeof CommunityRoute
-  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HqHelpRoute
-  '/how-its-built': typeof HowItsBuiltRoute
   '/hq-login': typeof HqLoginRoute
-  '/learn': typeof LearnRouteWithChildren
-  '/materials': typeof MaterialsRouteWithChildren
-  '/mission': typeof MissionRoute
-  '/parts': typeof PartsRoute
-  '/press': typeof PressRoute
   '/process': typeof ProcessRoute
-  '/quote': typeof QuoteRoute
+  '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
-  '/software': typeof SoftwareRouteWithChildren
-  '/store': typeof StoreRouteWithChildren
-  '/support-us': typeof SupportUsRoute
-  '/upgrades': typeof UpgradesRoute
-  '/work': typeof WorkRoute
   '/accounting': typeof HqAccountingRoute
   '/accounts': typeof HqAccountsRoute
   '/analytics': typeof HqAnalyticsRoute
@@ -1668,6 +1455,7 @@ export interface FileRoutesByTo {
   '/email-campaigns': typeof HqEmailCampaignsRoute
   '/email-support': typeof HqEmailSupportRoute
   '/employees': typeof HqEmployeesRoute
+  '/eng-projects': typeof HqEngProjectsRoute
   '/expenses': typeof HqExpensesRoute
   '/factory-live': typeof HqFactoryLiveRoute
   '/feed': typeof HqFeedRoute
@@ -1743,7 +1531,6 @@ export interface FileRoutesByTo {
   '/product-releases': typeof HqProductReleasesRoute
   '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
-  '/projects': typeof HqProjectsRoute
   '/prototypes': typeof HqPrototypesRoute
   '/purchase-history': typeof HqPurchaseHistoryRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
@@ -1793,21 +1580,10 @@ export interface FileRoutesByTo {
   '/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
-  '/learn/$track': typeof LearnTrackRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
-  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/legal/warranty': typeof LegalWarrantyRoute
-  '/materials/filament': typeof MaterialsFilamentRoute
-  '/materials/pellets': typeof MaterialsPelletsRoute
-  '/materials/recycling': typeof MaterialsRecyclingRoute
   '/meeting/$id': typeof MeetingIdRoute
-  '/software/app': typeof SoftwareAppRoute
-  '/software/downloads': typeof SoftwareDownloadsRoute
-  '/software/firmware': typeof SoftwareFirmwareRoute
-  '/software/slicer': typeof SoftwareSlicerRoute
-  '/store/$slug': typeof StoreSlugRoute
   '/admin/access': typeof HqAdminAccessRoute
   '/admin/branding': typeof HqAdminBrandingRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -1823,32 +1599,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_hq': typeof HqRouteWithChildren
   '/about': typeof AboutRoute
-  '/accessories': typeof AccessoriesRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
-  '/cart': typeof CartRoute
-  '/checkout': typeof CheckoutRoute
-  '/community': typeof CommunityRoute
-  '/compare': typeof CompareRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
-  '/get-involved': typeof GetInvolvedRoute
   '/help': typeof HelpRouteWithChildren
-  '/how-its-built': typeof HowItsBuiltRoute
   '/hq-login': typeof HqLoginRoute
-  '/learn': typeof LearnRouteWithChildren
-  '/materials': typeof MaterialsRouteWithChildren
-  '/mission': typeof MissionRoute
-  '/parts': typeof PartsRoute
-  '/press': typeof PressRoute
   '/process': typeof ProcessRoute
-  '/quote': typeof QuoteRoute
+  '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
-  '/software': typeof SoftwareRouteWithChildren
-  '/store': typeof StoreRouteWithChildren
-  '/support-us': typeof SupportUsRoute
-  '/upgrades': typeof UpgradesRoute
-  '/work': typeof WorkRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/accounts': typeof HqAccountsRoute
   '/_hq/analytics': typeof HqAnalyticsRoute
@@ -1896,6 +1655,7 @@ export interface FileRoutesById {
   '/_hq/email-campaigns': typeof HqEmailCampaignsRoute
   '/_hq/email-support': typeof HqEmailSupportRoute
   '/_hq/employees': typeof HqEmployeesRoute
+  '/_hq/eng-projects': typeof HqEngProjectsRoute
   '/_hq/expenses': typeof HqExpensesRoute
   '/_hq/factory-live': typeof HqFactoryLiveRoute
   '/_hq/feed': typeof HqFeedRoute
@@ -1972,7 +1732,6 @@ export interface FileRoutesById {
   '/_hq/product-releases': typeof HqProductReleasesRoute
   '/_hq/production': typeof HqProductionRoute
   '/_hq/profile': typeof HqProfileRoute
-  '/_hq/projects': typeof HqProjectsRoute
   '/_hq/prototypes': typeof HqPrototypesRoute
   '/_hq/purchase-history': typeof HqPurchaseHistoryRoute
   '/_hq/purchase-orders': typeof HqPurchaseOrdersRoute
@@ -2022,21 +1781,10 @@ export interface FileRoutesById {
   '/_hq/work-orders': typeof HqWorkOrdersRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/help/$slug': typeof HelpSlugRoute
-  '/learn/$track': typeof LearnTrackRoute
   '/legal/cookies': typeof LegalCookiesRoute
   '/legal/privacy': typeof LegalPrivacyRoute
-  '/legal/shipping-returns': typeof LegalShippingReturnsRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/legal/warranty': typeof LegalWarrantyRoute
-  '/materials/filament': typeof MaterialsFilamentRoute
-  '/materials/pellets': typeof MaterialsPelletsRoute
-  '/materials/recycling': typeof MaterialsRecyclingRoute
   '/meeting/$id': typeof MeetingIdRoute
-  '/software/app': typeof SoftwareAppRoute
-  '/software/downloads': typeof SoftwareDownloadsRoute
-  '/software/firmware': typeof SoftwareFirmwareRoute
-  '/software/slicer': typeof SoftwareSlicerRoute
-  '/store/$slug': typeof StoreSlugRoute
   '/_hq/admin/access': typeof HqAdminAccessRoute
   '/_hq/admin/branding': typeof HqAdminBrandingRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
@@ -2052,32 +1800,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/accessories'
     | '/blog'
     | '/careers'
-    | '/cart'
-    | '/checkout'
-    | '/community'
-    | '/compare'
     | '/contact'
     | '/faq'
-    | '/get-involved'
     | '/help'
-    | '/how-its-built'
     | '/hq-login'
-    | '/learn'
-    | '/materials'
-    | '/mission'
-    | '/parts'
-    | '/press'
     | '/process'
-    | '/quote'
+    | '/projects'
     | '/services'
-    | '/software'
-    | '/store'
-    | '/support-us'
-    | '/upgrades'
-    | '/work'
     | '/accounting'
     | '/accounts'
     | '/analytics'
@@ -2125,6 +1856,7 @@ export interface FileRouteTypes {
     | '/email-campaigns'
     | '/email-support'
     | '/employees'
+    | '/eng-projects'
     | '/expenses'
     | '/factory-live'
     | '/feed'
@@ -2200,7 +1932,6 @@ export interface FileRouteTypes {
     | '/product-releases'
     | '/production'
     | '/profile'
-    | '/projects'
     | '/prototypes'
     | '/purchase-history'
     | '/purchase-orders'
@@ -2250,21 +1981,10 @@ export interface FileRouteTypes {
     | '/work-orders'
     | '/blog/$slug'
     | '/help/$slug'
-    | '/learn/$track'
     | '/legal/cookies'
     | '/legal/privacy'
-    | '/legal/shipping-returns'
     | '/legal/terms'
-    | '/legal/warranty'
-    | '/materials/filament'
-    | '/materials/pellets'
-    | '/materials/recycling'
     | '/meeting/$id'
-    | '/software/app'
-    | '/software/downloads'
-    | '/software/firmware'
-    | '/software/slicer'
-    | '/store/$slug'
     | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
@@ -2278,32 +1998,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/accessories'
     | '/blog'
     | '/careers'
-    | '/cart'
-    | '/checkout'
-    | '/community'
-    | '/compare'
     | '/contact'
     | '/faq'
-    | '/get-involved'
     | '/help'
-    | '/how-its-built'
     | '/hq-login'
-    | '/learn'
-    | '/materials'
-    | '/mission'
-    | '/parts'
-    | '/press'
     | '/process'
-    | '/quote'
+    | '/projects'
     | '/services'
-    | '/software'
-    | '/store'
-    | '/support-us'
-    | '/upgrades'
-    | '/work'
     | '/accounting'
     | '/accounts'
     | '/analytics'
@@ -2351,6 +2054,7 @@ export interface FileRouteTypes {
     | '/email-campaigns'
     | '/email-support'
     | '/employees'
+    | '/eng-projects'
     | '/expenses'
     | '/factory-live'
     | '/feed'
@@ -2426,7 +2130,6 @@ export interface FileRouteTypes {
     | '/product-releases'
     | '/production'
     | '/profile'
-    | '/projects'
     | '/prototypes'
     | '/purchase-history'
     | '/purchase-orders'
@@ -2476,21 +2179,10 @@ export interface FileRouteTypes {
     | '/work-orders'
     | '/blog/$slug'
     | '/help/$slug'
-    | '/learn/$track'
     | '/legal/cookies'
     | '/legal/privacy'
-    | '/legal/shipping-returns'
     | '/legal/terms'
-    | '/legal/warranty'
-    | '/materials/filament'
-    | '/materials/pellets'
-    | '/materials/recycling'
     | '/meeting/$id'
-    | '/software/app'
-    | '/software/downloads'
-    | '/software/firmware'
-    | '/software/slicer'
-    | '/store/$slug'
     | '/admin/access'
     | '/admin/branding'
     | '/admin/company'
@@ -2505,32 +2197,15 @@ export interface FileRouteTypes {
     | '/'
     | '/_hq'
     | '/about'
-    | '/accessories'
     | '/blog'
     | '/careers'
-    | '/cart'
-    | '/checkout'
-    | '/community'
-    | '/compare'
     | '/contact'
     | '/faq'
-    | '/get-involved'
     | '/help'
-    | '/how-its-built'
     | '/hq-login'
-    | '/learn'
-    | '/materials'
-    | '/mission'
-    | '/parts'
-    | '/press'
     | '/process'
-    | '/quote'
+    | '/projects'
     | '/services'
-    | '/software'
-    | '/store'
-    | '/support-us'
-    | '/upgrades'
-    | '/work'
     | '/_hq/accounting'
     | '/_hq/accounts'
     | '/_hq/analytics'
@@ -2578,6 +2253,7 @@ export interface FileRouteTypes {
     | '/_hq/email-campaigns'
     | '/_hq/email-support'
     | '/_hq/employees'
+    | '/_hq/eng-projects'
     | '/_hq/expenses'
     | '/_hq/factory-live'
     | '/_hq/feed'
@@ -2654,7 +2330,6 @@ export interface FileRouteTypes {
     | '/_hq/product-releases'
     | '/_hq/production'
     | '/_hq/profile'
-    | '/_hq/projects'
     | '/_hq/prototypes'
     | '/_hq/purchase-history'
     | '/_hq/purchase-orders'
@@ -2704,21 +2379,10 @@ export interface FileRouteTypes {
     | '/_hq/work-orders'
     | '/blog/$slug'
     | '/help/$slug'
-    | '/learn/$track'
     | '/legal/cookies'
     | '/legal/privacy'
-    | '/legal/shipping-returns'
     | '/legal/terms'
-    | '/legal/warranty'
-    | '/materials/filament'
-    | '/materials/pellets'
-    | '/materials/recycling'
     | '/meeting/$id'
-    | '/software/app'
-    | '/software/downloads'
-    | '/software/firmware'
-    | '/software/slicer'
-    | '/store/$slug'
     | '/_hq/admin/access'
     | '/_hq/admin/branding'
     | '/_hq/admin/company'
@@ -2734,37 +2398,18 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HqRoute: typeof HqRouteWithChildren
   AboutRoute: typeof AboutRoute
-  AccessoriesRoute: typeof AccessoriesRoute
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
-  CartRoute: typeof CartRoute
-  CheckoutRoute: typeof CheckoutRoute
-  CommunityRoute: typeof CommunityRoute
-  CompareRoute: typeof CompareRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
-  GetInvolvedRoute: typeof GetInvolvedRoute
   HelpRoute: typeof HelpRouteWithChildren
-  HowItsBuiltRoute: typeof HowItsBuiltRoute
   HqLoginRoute: typeof HqLoginRoute
-  LearnRoute: typeof LearnRouteWithChildren
-  MaterialsRoute: typeof MaterialsRouteWithChildren
-  MissionRoute: typeof MissionRoute
-  PartsRoute: typeof PartsRoute
-  PressRoute: typeof PressRoute
   ProcessRoute: typeof ProcessRoute
-  QuoteRoute: typeof QuoteRoute
+  ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
-  SoftwareRoute: typeof SoftwareRouteWithChildren
-  StoreRoute: typeof StoreRouteWithChildren
-  SupportUsRoute: typeof SupportUsRoute
-  UpgradesRoute: typeof UpgradesRoute
-  WorkRoute: typeof WorkRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
-  LegalShippingReturnsRoute: typeof LegalShippingReturnsRoute
   LegalTermsRoute: typeof LegalTermsRoute
-  LegalWarrantyRoute: typeof LegalWarrantyRoute
   MeetingIdRoute: typeof MeetingIdRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
   ApiPublicResendInboundRoute: typeof ApiPublicResendInboundRoute
@@ -2772,41 +2417,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/work': {
-      id: '/work'
-      path: '/work'
-      fullPath: '/work'
-      preLoaderRoute: typeof WorkRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/upgrades': {
-      id: '/upgrades'
-      path: '/upgrades'
-      fullPath: '/upgrades'
-      preLoaderRoute: typeof UpgradesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/support-us': {
-      id: '/support-us'
-      path: '/support-us'
-      fullPath: '/support-us'
-      preLoaderRoute: typeof SupportUsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/store': {
-      id: '/store'
-      path: '/store'
-      fullPath: '/store'
-      preLoaderRoute: typeof StoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/software': {
-      id: '/software'
-      path: '/software'
-      fullPath: '/software'
-      preLoaderRoute: typeof SoftwareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -2814,11 +2424,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quote': {
-      id: '/quote'
-      path: '/quote'
-      fullPath: '/quote'
-      preLoaderRoute: typeof QuoteRouteImport
+    '/projects': {
+      id: '/projects'
+      path: '/projects'
+      fullPath: '/projects'
+      preLoaderRoute: typeof ProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/process': {
@@ -2828,41 +2438,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/press': {
-      id: '/press'
-      path: '/press'
-      fullPath: '/press'
-      preLoaderRoute: typeof PressRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/parts': {
-      id: '/parts'
-      path: '/parts'
-      fullPath: '/parts'
-      preLoaderRoute: typeof PartsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mission': {
-      id: '/mission'
-      path: '/mission'
-      fullPath: '/mission'
-      preLoaderRoute: typeof MissionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/materials': {
-      id: '/materials'
-      path: '/materials'
-      fullPath: '/materials'
-      preLoaderRoute: typeof MaterialsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/hq-login': {
       id: '/hq-login'
       path: '/hq-login'
@@ -2870,25 +2445,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/how-its-built': {
-      id: '/how-its-built'
-      path: '/how-its-built'
-      fullPath: '/how-its-built'
-      preLoaderRoute: typeof HowItsBuiltRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/help': {
       id: '/help'
       path: '/help'
       fullPath: '/help'
       preLoaderRoute: typeof HelpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/get-involved': {
-      id: '/get-involved'
-      path: '/get-involved'
-      fullPath: '/get-involved'
-      preLoaderRoute: typeof GetInvolvedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -2905,34 +2466,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/compare': {
-      id: '/compare'
-      path: '/compare'
-      fullPath: '/compare'
-      preLoaderRoute: typeof CompareRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/community': {
-      id: '/community'
-      path: '/community'
-      fullPath: '/community'
-      preLoaderRoute: typeof CommunityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/cart': {
-      id: '/cart'
-      path: '/cart'
-      fullPath: '/cart'
-      preLoaderRoute: typeof CartRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/careers': {
       id: '/careers'
       path: '/careers'
@@ -2945,13 +2478,6 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/accessories': {
-      id: '/accessories'
-      path: '/accessories'
-      fullPath: '/accessories'
-      preLoaderRoute: typeof AccessoriesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -2975,41 +2501,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/store/$slug': {
-      id: '/store/$slug'
-      path: '/$slug'
-      fullPath: '/store/$slug'
-      preLoaderRoute: typeof StoreSlugRouteImport
-      parentRoute: typeof StoreRoute
-    }
-    '/software/slicer': {
-      id: '/software/slicer'
-      path: '/slicer'
-      fullPath: '/software/slicer'
-      preLoaderRoute: typeof SoftwareSlicerRouteImport
-      parentRoute: typeof SoftwareRoute
-    }
-    '/software/firmware': {
-      id: '/software/firmware'
-      path: '/firmware'
-      fullPath: '/software/firmware'
-      preLoaderRoute: typeof SoftwareFirmwareRouteImport
-      parentRoute: typeof SoftwareRoute
-    }
-    '/software/downloads': {
-      id: '/software/downloads'
-      path: '/downloads'
-      fullPath: '/software/downloads'
-      preLoaderRoute: typeof SoftwareDownloadsRouteImport
-      parentRoute: typeof SoftwareRoute
-    }
-    '/software/app': {
-      id: '/software/app'
-      path: '/app'
-      fullPath: '/software/app'
-      preLoaderRoute: typeof SoftwareAppRouteImport
-      parentRoute: typeof SoftwareRoute
-    }
     '/meeting/$id': {
       id: '/meeting/$id'
       path: '/meeting/$id'
@@ -3017,46 +2508,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MeetingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/materials/recycling': {
-      id: '/materials/recycling'
-      path: '/recycling'
-      fullPath: '/materials/recycling'
-      preLoaderRoute: typeof MaterialsRecyclingRouteImport
-      parentRoute: typeof MaterialsRoute
-    }
-    '/materials/pellets': {
-      id: '/materials/pellets'
-      path: '/pellets'
-      fullPath: '/materials/pellets'
-      preLoaderRoute: typeof MaterialsPelletsRouteImport
-      parentRoute: typeof MaterialsRoute
-    }
-    '/materials/filament': {
-      id: '/materials/filament'
-      path: '/filament'
-      fullPath: '/materials/filament'
-      preLoaderRoute: typeof MaterialsFilamentRouteImport
-      parentRoute: typeof MaterialsRoute
-    }
-    '/legal/warranty': {
-      id: '/legal/warranty'
-      path: '/legal/warranty'
-      fullPath: '/legal/warranty'
-      preLoaderRoute: typeof LegalWarrantyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/legal/terms': {
       id: '/legal/terms'
       path: '/legal/terms'
       fullPath: '/legal/terms'
       preLoaderRoute: typeof LegalTermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/legal/shipping-returns': {
-      id: '/legal/shipping-returns'
-      path: '/legal/shipping-returns'
-      fullPath: '/legal/shipping-returns'
-      preLoaderRoute: typeof LegalShippingReturnsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/privacy': {
@@ -3072,13 +2528,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/legal/cookies'
       preLoaderRoute: typeof LegalCookiesRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/learn/$track': {
-      id: '/learn/$track'
-      path: '/$track'
-      fullPath: '/learn/$track'
-      preLoaderRoute: typeof LearnTrackRouteImport
-      parentRoute: typeof LearnRoute
     }
     '/help/$slug': {
       id: '/help/$slug'
@@ -3421,13 +2870,6 @@ declare module '@tanstack/react-router' {
       path: '/prototypes'
       fullPath: '/prototypes'
       preLoaderRoute: typeof HqPrototypesRouteImport
-      parentRoute: typeof HqRoute
-    }
-    '/_hq/projects': {
-      id: '/_hq/projects'
-      path: '/projects'
-      fullPath: '/projects'
-      preLoaderRoute: typeof HqProjectsRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/profile': {
@@ -3962,6 +3404,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqExpensesRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/eng-projects': {
+      id: '/_hq/eng-projects'
+      path: '/eng-projects'
+      fullPath: '/eng-projects'
+      preLoaderRoute: typeof HqEngProjectsRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/employees': {
       id: '/_hq/employees'
       path: '/employees'
@@ -4405,6 +3854,7 @@ interface HqRouteChildren {
   HqEmailCampaignsRoute: typeof HqEmailCampaignsRoute
   HqEmailSupportRoute: typeof HqEmailSupportRoute
   HqEmployeesRoute: typeof HqEmployeesRoute
+  HqEngProjectsRoute: typeof HqEngProjectsRoute
   HqExpensesRoute: typeof HqExpensesRoute
   HqFactoryLiveRoute: typeof HqFactoryLiveRoute
   HqFeedRoute: typeof HqFeedRoute
@@ -4481,7 +3931,6 @@ interface HqRouteChildren {
   HqProductReleasesRoute: typeof HqProductReleasesRoute
   HqProductionRoute: typeof HqProductionRoute
   HqProfileRoute: typeof HqProfileRoute
-  HqProjectsRoute: typeof HqProjectsRoute
   HqPrototypesRoute: typeof HqPrototypesRoute
   HqPurchaseHistoryRoute: typeof HqPurchaseHistoryRoute
   HqPurchaseOrdersRoute: typeof HqPurchaseOrdersRoute
@@ -4586,6 +4035,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqEmailCampaignsRoute: HqEmailCampaignsRoute,
   HqEmailSupportRoute: HqEmailSupportRoute,
   HqEmployeesRoute: HqEmployeesRoute,
+  HqEngProjectsRoute: HqEngProjectsRoute,
   HqExpensesRoute: HqExpensesRoute,
   HqFactoryLiveRoute: HqFactoryLiveRoute,
   HqFeedRoute: HqFeedRoute,
@@ -4662,7 +4112,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqProductReleasesRoute: HqProductReleasesRoute,
   HqProductionRoute: HqProductionRoute,
   HqProfileRoute: HqProfileRoute,
-  HqProjectsRoute: HqProjectsRoute,
   HqPrototypesRoute: HqPrototypesRoute,
   HqPurchaseHistoryRoute: HqPurchaseHistoryRoute,
   HqPurchaseOrdersRoute: HqPurchaseOrdersRoute,
@@ -4741,95 +4190,22 @@ const HelpRouteChildren: HelpRouteChildren = {
 
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
-interface LearnRouteChildren {
-  LearnTrackRoute: typeof LearnTrackRoute
-}
-
-const LearnRouteChildren: LearnRouteChildren = {
-  LearnTrackRoute: LearnTrackRoute,
-}
-
-const LearnRouteWithChildren = LearnRoute._addFileChildren(LearnRouteChildren)
-
-interface MaterialsRouteChildren {
-  MaterialsFilamentRoute: typeof MaterialsFilamentRoute
-  MaterialsPelletsRoute: typeof MaterialsPelletsRoute
-  MaterialsRecyclingRoute: typeof MaterialsRecyclingRoute
-}
-
-const MaterialsRouteChildren: MaterialsRouteChildren = {
-  MaterialsFilamentRoute: MaterialsFilamentRoute,
-  MaterialsPelletsRoute: MaterialsPelletsRoute,
-  MaterialsRecyclingRoute: MaterialsRecyclingRoute,
-}
-
-const MaterialsRouteWithChildren = MaterialsRoute._addFileChildren(
-  MaterialsRouteChildren,
-)
-
-interface SoftwareRouteChildren {
-  SoftwareAppRoute: typeof SoftwareAppRoute
-  SoftwareDownloadsRoute: typeof SoftwareDownloadsRoute
-  SoftwareFirmwareRoute: typeof SoftwareFirmwareRoute
-  SoftwareSlicerRoute: typeof SoftwareSlicerRoute
-}
-
-const SoftwareRouteChildren: SoftwareRouteChildren = {
-  SoftwareAppRoute: SoftwareAppRoute,
-  SoftwareDownloadsRoute: SoftwareDownloadsRoute,
-  SoftwareFirmwareRoute: SoftwareFirmwareRoute,
-  SoftwareSlicerRoute: SoftwareSlicerRoute,
-}
-
-const SoftwareRouteWithChildren = SoftwareRoute._addFileChildren(
-  SoftwareRouteChildren,
-)
-
-interface StoreRouteChildren {
-  StoreSlugRoute: typeof StoreSlugRoute
-}
-
-const StoreRouteChildren: StoreRouteChildren = {
-  StoreSlugRoute: StoreSlugRoute,
-}
-
-const StoreRouteWithChildren = StoreRoute._addFileChildren(StoreRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HqRoute: HqRouteWithChildren,
   AboutRoute: AboutRoute,
-  AccessoriesRoute: AccessoriesRoute,
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
-  CartRoute: CartRoute,
-  CheckoutRoute: CheckoutRoute,
-  CommunityRoute: CommunityRoute,
-  CompareRoute: CompareRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
-  GetInvolvedRoute: GetInvolvedRoute,
   HelpRoute: HelpRouteWithChildren,
-  HowItsBuiltRoute: HowItsBuiltRoute,
   HqLoginRoute: HqLoginRoute,
-  LearnRoute: LearnRouteWithChildren,
-  MaterialsRoute: MaterialsRouteWithChildren,
-  MissionRoute: MissionRoute,
-  PartsRoute: PartsRoute,
-  PressRoute: PressRoute,
   ProcessRoute: ProcessRoute,
-  QuoteRoute: QuoteRoute,
+  ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
-  SoftwareRoute: SoftwareRouteWithChildren,
-  StoreRoute: StoreRouteWithChildren,
-  SupportUsRoute: SupportUsRoute,
-  UpgradesRoute: UpgradesRoute,
-  WorkRoute: WorkRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
-  LegalShippingReturnsRoute: LegalShippingReturnsRoute,
   LegalTermsRoute: LegalTermsRoute,
-  LegalWarrantyRoute: LegalWarrantyRoute,
   MeetingIdRoute: MeetingIdRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
   ApiPublicResendInboundRoute: ApiPublicResendInboundRoute,
@@ -4837,13 +4213,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

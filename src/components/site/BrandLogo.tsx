@@ -1,21 +1,38 @@
 import { brand } from "@/config/brand";
-import { Cloud } from "lucide-react";
 
-export function BrandLogo({ className = "", tone = "auto" }: { className?: string; tone?: "auto" | "light" | "dark" }) {
-  if (brand.logoUrl) {
-    return <img src={brand.logoUrl} alt={brand.name} className={className} />;
-  }
-  const textColor = tone === "light" ? "text-white" : tone === "dark" ? "text-ink" : "";
-  const iconBg = tone === "light" ? "bg-white/10 text-white" : "bg-sky text-primary";
+export function BrandLogo({
+  className = "",
+  tone = "auto",
+}: {
+  className?: string;
+  tone?: "auto" | "light" | "dark";
+}) {
+  const textColor = tone === "light" ? "text-white" : tone === "dark" ? "text-ink" : "text-ink";
+  const markStyle =
+    tone === "light"
+      ? "border-white/40 text-white"
+      : "border-ink/25 text-ink";
+
   return (
-    <span className={`inline-flex items-center gap-2 font-display text-[1.1rem] font-semibold tracking-tight ${textColor} ${className}`}>
+    <span className={`inline-flex items-center gap-3 ${className}`}>
       <span
         aria-hidden
-        className={`grid h-8 w-8 place-items-center rounded-xl ${iconBg}`}
+        className={`grid h-9 w-9 place-items-center border ${markStyle} font-display text-sm font-bold tracking-tight`}
       >
-        <Cloud className="h-4 w-4" strokeWidth={2.5} />
+        MC
       </span>
-      <span>{brand.name}</span>
+      <span className="leading-none">
+        <span className={`block font-display text-[0.95rem] font-bold uppercase tracking-[0.12em] ${textColor}`}>
+          McGuire
+        </span>
+        <span
+          className={`mt-1 block text-[0.6rem] font-medium uppercase tracking-[0.22em] ${
+            tone === "light" ? "text-white/60" : "text-muted-foreground"
+          }`}
+        >
+          Construction · Est. {brand.established}
+        </span>
+      </span>
     </span>
   );
 }

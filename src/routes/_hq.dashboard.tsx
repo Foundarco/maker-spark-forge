@@ -120,7 +120,7 @@ function DashboardPage() {
     }
     if (teams.includes("product")) {
       cards.push({ label: "Open work orders", value: String(kpis.openWork || 0), icon: Factory, to: "/production", tone: "text-blue-600 bg-blue-500/10" });
-      cards.push({ label: "Active projects", value: "—", icon: Package, to: "/projects", tone: "text-primary bg-primary/10" });
+      cards.push({ label: "Active projects", value: "—", icon: Package, to: "/eng-projects", tone: "text-primary bg-primary/10" });
     }
     if (teams.includes("customer")) {
       cards.push({ label: "Open tickets", value: String(kpis.openTickets || 0), icon: LifeBuoy, to: "/tickets", tone: "text-rose-600 bg-rose-500/10" });

@@ -79,12 +79,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: brand.shortMission },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { title: "Lovable App" },
-      { property: "og:title", content: "Lovable App" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "description", content: "Builds a community-focused marketing website and online store for a 3D printer company." },
-      { property: "og:description", content: "Builds a community-focused marketing website and online store for a 3D printer company." },
-      { name: "twitter:description", content: "Builds a community-focused marketing website and online store for a 3D printer company." },
+      { title: "McGuire Construction — Built right. Built to last." },
+      { property: "og:title", content: "McGuire Construction — Built right. Built to last." },
+      { name: "twitter:title", content: "McGuire Construction — Built right. Built to last." },
+      { name: "description", content: "Family-run general contractor since 1995. Custom homes, additions, renovations, and carpentry built with disciplined craftsmanship." },
+      { property: "og:description", content: "Family-run general contractor since 1995. Custom homes, additions, renovations, and carpentry built with disciplined craftsmanship." },
+      { name: "twitter:description", content: "Family-run general contractor since 1995. Custom homes, additions, renovations, and carpentry built with disciplined craftsmanship." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/97b1e340-ca1a-4b16-917d-e703ed744b95/id-preview-80a225ab--bb3b707d-fecc-4a18-be12-c9ddea559f35.lovable.app-1783935210969.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/97b1e340-ca1a-4b16-917d-e703ed744b95/id-preview-80a225ab--bb3b707d-fecc-4a18-be12-c9ddea559f35.lovable.app-1783935210969.png" },
     ],
@@ -95,7 +95,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600;700&display=swap",
       },
     ],
   }),
@@ -159,7 +159,8 @@ function RootComponent() {
       {isHQ || isChromeless ? (
         <Outlet />
       ) : (
-        <div className="flex min-h-dvh flex-col">
+        <div className="site-theme flex min-h-dvh flex-col bg-background text-foreground">
+
           <Header />
           <main className="flex-1">
             <Outlet />

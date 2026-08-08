@@ -3,7 +3,7 @@ import { FolderKanban, CheckCircle2, AlertCircle, TrendingUp } from "lucide-reac
 import { ResourcePage, StatusBadge, UserCell, DateCell } from "@/components/hq/ResourcePage";
 import type { ResourceConfig } from "@/components/hq/ResourcePage";
 
-export const Route = createFileRoute("/_hq/projects")({
+export const Route = createFileRoute("/_hq/eng-projects")({
   head: () => ({ meta: [{ title: "Projects — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={config} />,
 });

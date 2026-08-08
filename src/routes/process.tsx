@@ -1,119 +1,96 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Section, PageHeader, Eyebrow } from "@/components/site/Section";
+import { Section, PageHeader } from "@/components/site/Section";
 import { CTAButton } from "@/components/site/CTAButton";
-import { CloudBackdrop } from "@/components/site/CloudBackdrop";
 import { brand } from "@/config/brand";
+import { processSteps } from "@/config/site-content";
 import { ArrowRight } from "lucide-react";
+import plansAsset from "@/assets/mg-plans.jpg.asset.json";
+
+const desc =
+  "How McGuire Construction runs a job: site assessment, line-item estimate, milestone schedule, weekly updates, documented change orders, inspections, and a written warranty.";
 
 export const Route = createFileRoute("/process")({
   head: () => ({
     meta: [
       { title: `Our Process — ${brand.name}` },
-      { name: "description", content: "Five steps, no handoffs — how we turn hardware ideas into shipped products." },
+      { name: "description", content: desc },
       { property: "og:title", content: `Our Process — ${brand.name}` },
-      { property: "og:description", content: "Five steps, no handoffs — how we turn hardware ideas into shipped products." },
+      { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://clovrlab.com/process" },
+      { property: "og:image", content: plansAsset.url },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: plansAsset.url },
     ],
+    links: [{ rel: "canonical", href: "https://clovrlab.com/process" }],
   }),
   component: ProcessPage,
 });
 
-const steps = [
-  {
-    n: "01",
-    title: "Discovery",
-    duration: "1–2 weeks",
-    body: "We start with a working session: what's the product, who's the customer, what does success look like? By the end, you have a scoped brief, a milestone plan, and a fixed-fee number.",
-    deliverables: ["Product brief & scope", "Feasibility assessment", "Milestone plan & pricing"],
-  },
-  {
-    n: "02",
-    title: "Design",
-    duration: "3–6 weeks",
-    body: "Industrial design and mechanical/electrical engineering happen in parallel. Weekly check-ins with working models — no month-long silences.",
-    deliverables: ["Industrial design (CMF)", "CAD & engineering package", "First BOM estimate"],
-  },
-  {
-    n: "03",
-    title: "Prototype",
-    duration: "1–3 weeks per iteration",
-    body: "Working prototypes in your hands within days. We iterate on real hardware — 3D printed housings, CNC parts, and functional PCBs — not renders.",
-    deliverables: ["Alpha prototype (looks like)", "Beta prototype (works like)", "DFM prototype (ships like)"],
-  },
-  {
-    n: "04",
-    title: "Manufacture",
-    duration: "6–16 weeks",
-    body: "Tooling, first article inspection, and ramp. We own the factory relationships and give you full visibility into every step.",
-    deliverables: ["Tooling & fixtures", "First article approval", "Production ramp"],
-  },
-  {
-    n: "05",
-    title: "Ship",
-    duration: "Ongoing",
-    body: "QA, packaging, and fulfillment. Every unit shipped is logged in the cloud with photos, test data, and traceability.",
-    deliverables: ["Retail packaging", "3PL & fulfillment", "Ongoing QA & support"],
-  },
+const commitments = [
+  { label: "Response to new inquiries", value: "2 business days" },
+  { label: "Written progress updates", value: "Weekly" },
+  { label: "Change orders approved in writing", value: "Always" },
+  { label: "Site cleaned at end of day", value: "Every day" },
 ];
 
 function ProcessPage() {
   return (
     <>
-      <section className="relative overflow-hidden">
-        <CloudBackdrop variant="dawn" />
-        <div className="relative mx-auto w-full max-w-7xl px-5 pb-8 pt-20 sm:px-8 sm:pt-28">
+      <div className="border-b border-border">
+        <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:items-end">
           <PageHeader
-            eyebrow="Our process"
-            title={<>Five steps. <span className="text-primary">No handoffs.</span></>}
-            lede="Traditional hardware development bounces between an agency, a factory, and a certification lab. We do all three, in one building, on one timeline."
+            eyebrow="Process"
+            title="Predictable by design."
+            lede="Construction goes wrong in the gaps — between the estimate and the contract, the contract and the crew, the crew and the client. We closed those gaps with a sequence we run every time."
+          />
+          <img
+            src={plansAsset.url}
+            alt="Construction drawings, a tape measure and a level on a work table"
+            width={1600}
+            height={1200}
+            className="aspect-[4/3] w-full object-cover"
           />
         </div>
-      </section>
+      </div>
 
       <Section wide>
-        <ol className="space-y-6">
-          {steps.map((s) => (
-            <li
-              key={s.n}
-              className="grid gap-8 rounded-3xl border border-sky-200/60 bg-white p-8 sm:p-10 md:grid-cols-[auto_1fr_1fr] md:gap-14"
-            >
-              <div>
-                <p className="font-display text-5xl font-semibold text-primary">{s.n}</p>
-                <p className="mt-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                  {s.duration}
-                </p>
-              </div>
-              <div>
-                <h3 className="font-display text-2xl font-semibold text-ink">{s.title}</h3>
-                <p className="mt-3 text-base leading-relaxed text-muted-foreground">{s.body}</p>
-              </div>
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                  Deliverables
-                </p>
-                <ul className="space-y-2">
-                  {s.deliverables.map((d) => (
-                    <li key={d} className="flex items-start gap-2 text-sm text-foreground">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-primary" />
-                      {d}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        <ol className="border-t border-border">
+          {processSteps.map((s) => (
+            <li key={s.n} className="grid gap-6 border-b border-border py-10 md:grid-cols-[7rem_1fr_1.4fr]">
+              <p className="font-display text-3xl font-bold text-ink/25">{s.n}</p>
+              <h2 className="font-display text-xl font-bold text-ink">{s.title}</h2>
+              <p className="text-base leading-relaxed text-muted-foreground">{s.body}</p>
             </li>
           ))}
         </ol>
       </Section>
 
+      <section className="border-y border-border bg-warm">
+        <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+          <h2 className="rule-label text-muted-foreground">Our standing commitments</h2>
+          <dl className="mt-8 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+            {commitments.map((c) => (
+              <div key={c.label} className="bg-card p-8">
+                <dt className="text-sm text-muted-foreground">{c.label}</dt>
+                <dd className="mt-3 font-display text-xl font-bold text-ink">{c.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       <Section wide>
-        <div className="rounded-[2rem] border border-sky-200/60 bg-sky-50/60 px-8 py-14 sm:px-14">
-          <Eyebrow>Ready to start?</Eyebrow>
-          <h2 className="mt-4 max-w-2xl font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
-            Tell us about your project. We'll come back with scope, timeline, and price within a week.
-          </h2>
-          <div className="mt-8">
-            <CTAButton to="/quote" variant="primary">
-              Request a quote <ArrowRight className="h-4 w-4" />
+        <div className="grid gap-10 bg-ink px-8 py-16 text-white sm:px-14 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+          <div>
+            <p className="rule-label text-white/50">Next step</p>
+            <h2 className="mt-4 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+              Step one is a conversation. It costs nothing.
+            </h2>
+          </div>
+          <div className="lg:justify-self-end">
+            <CTAButton to="/contact" variant="light">
+              Request an estimate <ArrowRight className="h-4 w-4" />
             </CTAButton>
           </div>
         </div>

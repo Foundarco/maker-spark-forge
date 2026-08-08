@@ -4,19 +4,17 @@ import { brand } from "@/config/brand";
 
 const cols = [
   {
-    title: "Studio",
+    title: "Work",
     links: [
       { to: "/services", label: "Services" },
+      { to: "/projects", label: "Projects" },
       { to: "/process", label: "Process" },
-      { to: "/work", label: "Work" },
-      { to: "/quote", label: "Request a quote" },
     ],
   },
   {
     title: "Company",
     links: [
       { to: "/about", label: "About" },
-      { to: "/mission", label: "Mission" },
       { to: "/careers", label: "Careers" },
       { to: "/contact", label: "Contact" },
     ],
@@ -24,9 +22,9 @@ const cols = [
   {
     title: "Resources",
     links: [
-      { to: "/blog", label: "Journal" },
-      { to: "/press", label: "Press" },
       { to: "/faq", label: "FAQ" },
+      { to: "/blog", label: "Journal" },
+      { to: "/help", label: "Homeowner help" },
     ],
   },
   {
@@ -41,39 +39,44 @@ const cols = [
 
 export function Footer() {
   return (
-    <footer
-      className="mt-24 text-white"
-      style={{ background: "linear-gradient(180deg, #0f172a 0%, #1e3a5f 100%)" }}
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none h-24 w-full"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 100% at 50% 0%, rgba(255,255,255,0.14), transparent 60%)",
-        }}
-      />
-      <div className="mx-auto w-full max-w-7xl px-5 pb-16 pt-6 sm:px-8">
-        <div className="grid gap-12 md:grid-cols-[1.6fr_repeat(4,1fr)]">
+    <footer className="mt-24 bg-ink text-white">
+      <div className="mx-auto w-full max-w-7xl px-5 pb-16 pt-20 sm:px-8">
+        <div className="grid gap-14 md:grid-cols-[1.6fr_repeat(4,1fr)]">
           <div>
             <BrandLogo tone="light" />
-            <p className="mt-5 max-w-xs text-sm text-white/70">{brand.tagline}</p>
-            <p className="mt-4 max-w-xs text-sm text-white/50">
-              A hardware product studio. Design, prototype, and manufacture — under one cloud.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-4 text-xs text-white/60">
-              <a href={brand.socials.linkedin} className="hover:text-white">LinkedIn</a>
+            <p className="mt-6 max-w-xs text-sm leading-relaxed text-white/70">{brand.shortMission}</p>
+            <dl className="mt-7 space-y-2 text-sm text-white/70">
+              <div>
+                <dt className="sr-only">Phone</dt>
+                <dd>
+                  <a className="hover:text-white" href={`tel:${brand.phone.replace(/[^0-9+]/g, "")}`}>
+                    {brand.phone}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="sr-only">Email</dt>
+                <dd>
+                  <a className="hover:text-white" href={`mailto:${brand.contact.estimates}`}>
+                    {brand.contact.estimates}
+                  </a>
+                </dd>
+              </div>
+              <div>
+                <dt className="sr-only">Hours</dt>
+                <dd>{brand.hours}</dd>
+              </div>
+            </dl>
+            <div className="mt-6 flex flex-wrap gap-5 text-xs text-white/50">
               <a href={brand.socials.instagram} className="hover:text-white">Instagram</a>
-              <a href={brand.socials.youtube} className="hover:text-white">YouTube</a>
-              <a href={brand.socials.github} className="hover:text-white">GitHub</a>
+              <a href={brand.socials.facebook} className="hover:text-white">Facebook</a>
+              <a href={brand.socials.linkedin} className="hover:text-white">LinkedIn</a>
             </div>
           </div>
           {cols.map((col) => (
             <div key={col.title}>
-              <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest text-white/40">
-                {col.title}
-              </h3>
-              <ul className="space-y-2.5">
+              <h3 className="rule-label mb-5 text-white/40">{col.title}</h3>
+              <ul className="space-y-3">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link to={l.to} className="text-sm text-white/70 hover:text-white">
@@ -85,9 +88,9 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <div className="mt-14 flex flex-col items-start justify-between gap-2 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} {brand.name}. All rights reserved.</p>
-          <p>From idea to shelf — one team, one cloud.</p>
+        <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row sm:items-center">
+          <p>© {new Date().getFullYear()} {brand.name}. Licensed &amp; insured. All rights reserved.</p>
+          <p>{brand.serviceArea}</p>
         </div>
       </div>
     </footer>

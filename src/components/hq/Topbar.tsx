@@ -19,7 +19,7 @@ const APPS = [
   { to: "/channels", label: "Channels", icon: MessagesSquare },
   { to: "/phone", label: "Phone", icon: Phone },
   { to: "/calendar", label: "Calendar", icon: CalendarIcon },
-  { to: "/files", label: "Files", icon: FolderOpen },
+  { to: "/drive", label: "Drive", icon: FolderOpen },
   { to: "/employees", label: "People", icon: Users },
   { to: "/assistant", label: "Assistant", icon: Bot },
 ] as const;

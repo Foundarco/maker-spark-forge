@@ -1,47 +1,48 @@
-// Single source of truth for brand identity across the whole site.
-// Nimbus Forge — a hardware product studio: design, prototype, manufacture, ship.
+// Single source of truth for brand identity across the public website.
+// McGuire Construction — a family-run general contractor, established 1995.
 
 export const brand = {
-  name: "Nimbus Forge",
-  tagline: "From idea to shelf. One team, one cloud.",
+  name: "McGuire Construction",
+  shortName: "McGuire",
+  established: 1995,
+  tagline: "Built right. Built to last.",
   shortMission:
-    "Nimbus Forge is a hardware product studio. We take your idea from a sketch to a working prototype to a manufactured product on the shelf — under one roof, without the handoffs.",
-  // Set logoUrl to a path once available. Until then, a typographic cloud
-  // wordmark is rendered via BrandLogo.
-  logoUrl: null as string | null,
+    "McGuire Construction is a family-run general contractor building homes, additions, and renovations with disciplined craftsmanship, clear communication, and schedules that hold. Serving homeowners since 1995.",
+  phone: "(555) 018-4429",
+  serviceArea: "Greater metro area and surrounding counties",
+  hours: "Monday–Friday, 7:00am – 5:00pm",
   contact: {
     general: "hello@clovrlab.com",
+    estimates: "estimates@clovrlab.com",
     support: "support@clovrlab.com",
-    press: "press@clovrlab.com",
-    partnerships: "partnerships@clovrlab.com",
+    careers: "careers@clovrlab.com",
   },
   socials: {
-    discord: "#",
-    youtube: "#",
     instagram: "#",
-    github: "#",
+    facebook: "#",
     linkedin: "#",
+    youtube: "#",
   },
-  pillars: [
+  values: [
     {
-      title: "One team, end to end",
-      body: "Designers, engineers, and manufacturing sit in one room. No lost translation between concept and factory floor.",
+      title: "Craftsmanship",
+      body: "Work is measured, squared, and finished properly the first time. If it isn't right, it gets redone.",
     },
     {
-      title: "Prototype in days",
-      body: "In-house 3D printing, CNC, and electronics prototyping means a working v1 in a week — not a quarter.",
+      title: "Reliability",
+      body: "Crews show up when we say. Schedules are published, tracked, and honored.",
     },
     {
-      title: "Manufacturing that scales",
-      body: "From a batch of 50 to a run of 50,000. We own the supply chain, tooling, and QA so you don't have to.",
+      title: "Transparency",
+      body: "Line-item estimates, documented change orders, and no surprise invoices at the end.",
     },
     {
-      title: "Transparent by default",
-      body: "Real-time dashboards on every build, every unit cost, every timeline. You see what we see.",
+      title: "Systems",
+      body: "Three decades of checklists, inspections, and process — so quality doesn't depend on who shows up.",
     },
     {
-      title: "Cloud-native operations",
-      body: "Every file, drawing, BOM, and inspection lives in one place — accessible to you and your team from anywhere.",
+      title: "Long-term thinking",
+      body: "We build for the next thirty years, not the next walkthrough. Most of our work comes from past clients.",
     },
   ],
 } as const;
