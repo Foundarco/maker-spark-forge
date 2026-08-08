@@ -18,6 +18,19 @@ export const Route = createFileRoute("/blog")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/blog" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Blog",
+          name: `The Job Site Journal — ${brand.name}`,
+          description: "Build notes, material choices, and division updates from McGuire crews.",
+          url: "https://clovrlab.com/blog",
+          publisher: { "@type": "Organization", name: brand.name },
+        }),
+      },
+    ],
   }),
   component: BlogPage,
 });

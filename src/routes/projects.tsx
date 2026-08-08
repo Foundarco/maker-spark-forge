@@ -19,11 +19,33 @@ export const Route = createFileRoute("/projects")({
       { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/projects" },
-      { property: "og:image", content: heroAsset.url },
+      { property: "og:image", content: `https://clovrlab.com${heroAsset.url}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: heroAsset.url },
+      { name: "twitter:image", content: `https://clovrlab.com${heroAsset.url}` },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/projects" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: `Projects — ${brand.name}`,
+          description: desc,
+          url: "https://clovrlab.com/projects",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: projects.map((p, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              name: p.title,
+              image: p.image,
+              description: p.summary,
+            })),
+          },
+        }),
+      },
+    ],
   }),
   component: ProjectsPage,
 });

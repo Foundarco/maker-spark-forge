@@ -10,8 +10,8 @@ import remodelAsset from "@/assets/mg-remodel.jpg.asset.json";
 import founderAsset from "@/assets/mg-founder.jpg.asset.json";
 import presidentAsset from "@/assets/mg-president.jpg.asset.json";
 
-const title = `About & Leadership — Family-Run Since ${brand.established} | ${brand.name}`;
-const desc = `Meet the family behind McGuire Construction: founder Michael McGuire, who started the company in ${brand.established}, and Ryan McGuire, who runs the five divisions today.`;
+const title = `About & Leadership — ${brand.name}`;
+const desc = `Meet the family behind McGuire Construction: founder Michael McGuire, who started the company in ${brand.established}, and Ryan McGuire, who runs it today.`;
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -22,9 +22,9 @@ export const Route = createFileRoute("/about")({
       { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/about" },
-      { property: "og:image", content: founderAsset.url },
+      { property: "og:image", content: `https://clovrlab.com${founderAsset.url}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: founderAsset.url },
+      { name: "twitter:image", content: `https://clovrlab.com${founderAsset.url}` },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/about" }],
     scripts: [

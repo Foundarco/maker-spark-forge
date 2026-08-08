@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -553,7 +554,8 @@ function IdeaDetail(props: {
   const reviewer = idea.reviewed_by ? teammates.find((t) => t.id === idea.reviewed_by) : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label="Details">
+      <EscapeKey onEscape={onClose} />
       <div role="dialog" aria-modal="true" className="flex max-h-[90vh] w-full max-w-3xl flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between gap-4 border-b border-border p-6 pb-4">
           <div className="min-w-0 flex-1">

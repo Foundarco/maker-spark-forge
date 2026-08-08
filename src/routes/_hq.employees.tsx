@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -179,7 +180,8 @@ function EmployeeEditor({ employee, profiles, onClose, onSaved }: { employee: Em
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={onClose} role="dialog" aria-modal="true" aria-label="Employee details">
+      <EscapeKey onEscape={onClose} />
       <div role="dialog" aria-modal="true" className="w-full max-w-2xl rounded-xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold">{form.id ? "Edit person" : "Add person"}</h3>
@@ -374,7 +376,8 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
       </section>
 
       {showInvite && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowInvite(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowInvite(false)} role="dialog" aria-modal="true" aria-label="Invite user">
+          <EscapeKey onEscape={() => setShowInvite(false)} />
           <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Invite a new user</h3>
@@ -401,7 +404,8 @@ function InvitesRoles({ me }: { me: { id: string; isAdmin: boolean } | null }) {
       )}
 
       {editUser && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setEditUser(null)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setEditUser(null)} role="dialog" aria-modal="true" aria-label="Edit user">
+          <EscapeKey onEscape={() => setEditUser(null)} />
           <div role="dialog" aria-modal="true" className="w-full max-w-lg rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">Edit roles</h3>

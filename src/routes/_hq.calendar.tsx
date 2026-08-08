@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Calendar as CalIcon, ChevronLeft, ChevronRight, Plus, X, MapPin, Clock, Trash2, Users, User as UserIcon, StickyNote, Video } from "lucide-react";
@@ -283,7 +284,8 @@ function CalendarPage() {
       </aside>
 
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowForm(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowForm(false)} role="dialog" aria-modal="true" aria-label="New event">
+          <EscapeKey onEscape={() => setShowForm(false)} />
           <div role="dialog" aria-modal="true" className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4 flex items-center justify-between">
               <h3 className="font-semibold">{draft.id ? "Edit event" : "New event"}</h3>

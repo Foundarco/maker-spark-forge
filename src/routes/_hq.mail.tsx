@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useState } from "react";
 import {
   Inbox, Send, FileEdit, Archive, Flag, Trash2, Users, Filter, FileText,
@@ -324,7 +325,8 @@ function MailClient() {
       </aside>
 
       {showSettings && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-6" onClick={() => setShowSettings(false)}>
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 p-6" onClick={() => setShowSettings(false)} role="dialog" aria-modal="true" aria-label="Mail settings">
+          <EscapeKey onEscape={() => setShowSettings(false)} />
           <div role="dialog" aria-modal="true" className="w-full max-w-2xl overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <header className="flex items-center justify-between border-b border-border px-5 py-3">
               <div>
@@ -453,7 +455,8 @@ function MailClient() {
       </section>
 
       {compose && (
-        <div className="fixed inset-0 z-40 flex items-end justify-end bg-black/30 p-6" onClick={() => setCompose(null)}>
+        <div className="fixed inset-0 z-40 flex items-end justify-end bg-black/30 p-6" onClick={() => setCompose(null)} role="dialog" aria-modal="true" aria-label="Compose message">
+          <EscapeKey onEscape={() => setCompose(null)} />
           <div role="dialog" aria-modal="true" className="flex h-[560px] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <header className="flex items-center justify-between border-b border-border bg-muted/40 px-4 py-2.5">
               <p className="text-sm font-semibold">New message</p>
@@ -586,7 +589,8 @@ function ManageView({ view, rules, templates, onRefresh, onUseTemplate }: { view
       </div>
 
       {showForm && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 p-6" onClick={() => setShowForm(false)}>
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/30 p-6" onClick={() => setShowForm(false)} role="dialog" aria-modal="true" aria-label="Form">
+          <EscapeKey onEscape={() => setShowForm(false)} />
           <form onSubmit={view === "rules" ? saveRule : saveTpl} className="w-full max-w-lg space-y-3 rounded-2xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-lg font-semibold">New {view === "rules" ? "rule" : "template"}</h2>
             {view === "rules" ? (

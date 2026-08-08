@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -379,7 +380,8 @@ function DrivePage() {
 function RenameDialog({ item, onClose, onSave }: { item: Item; onClose: () => void; onSave: (name: string) => void }) {
   const [name, setName] = useState(item.name);
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose} role="dialog" aria-modal="true" aria-label="Dialog">
+      <EscapeKey onEscape={onClose} />
       <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="w-full max-w-md rounded-xl border border-border bg-background p-5 shadow-2xl">
         <h3 className="text-lg font-semibold">Rename</h3>
         <input autoFocus value={name} onChange={(e) => setName(e.target.value)} className="mt-4 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
@@ -426,7 +428,8 @@ function ShareDialog({ item, me, onClose }: { item: Item; me: string; onClose: (
   const sharedProfiles = shares.map((s) => profiles.find((p) => p.id === s.user_id)).filter(Boolean);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm" onClick={onClose} role="dialog" aria-modal="true" aria-label="Dialog">
+      <EscapeKey onEscape={onClose} />
       <div role="dialog" aria-modal="true" onClick={(e) => e.stopPropagation()} className="w-full max-w-lg rounded-xl border border-border bg-background p-5 shadow-2xl">
         <h3 className="text-lg font-semibold">Share "{item.name}"</h3>
         <div className="mt-4 space-y-3">

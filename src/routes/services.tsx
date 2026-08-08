@@ -18,11 +18,36 @@ export const Route = createFileRoute("/services")({
       { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://clovrlab.com/services" },
-      { property: "og:image", content: divisions[0].image },
+      { property: "og:image", content: `https://clovrlab.com${divisions[0].image}` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: divisions[0].image },
+      { name: "twitter:image", content: `https://clovrlab.com${divisions[0].image}` },
     ],
     links: [{ rel: "canonical", href: "https://clovrlab.com/services" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: `Services — ${brand.name}`,
+          description: desc,
+          url: "https://clovrlab.com/services",
+          mainEntity: {
+            "@type": "ItemList",
+            itemListElement: services.map((s, i) => ({
+              "@type": "ListItem",
+              position: i + 1,
+              item: {
+                "@type": "Service",
+                name: s.title,
+                description: s.summary,
+                provider: { "@type": "GeneralContractor", name: brand.name },
+              },
+            })),
+          },
+        }),
+      },
+    ],
   }),
   component: ServicesPage,
 });

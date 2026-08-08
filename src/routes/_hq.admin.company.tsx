@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail, KeyRound, Layers } from "lucide-react";
@@ -691,7 +692,8 @@ function RolesManager() {
       </section>
 
       {creating && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setCreating(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setCreating(false)} role="dialog" aria-modal="true" aria-label="Create">
+          <EscapeKey onEscape={() => setCreating(false)} />
           <form onSubmit={createRole} className="w-full max-w-sm rounded-xl border border-border bg-card p-5 shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
               <h3 className="font-semibold">New role</h3>
@@ -707,7 +709,8 @@ function RolesManager() {
       )}
 
       {showAssign && selectedRole && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowAssign(false)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowAssign(false)} role="dialog" aria-modal="true" aria-label="Assign">
+          <EscapeKey onEscape={() => setShowAssign(false)} />
           <div role="dialog" aria-modal="true" className="flex w-full max-w-md flex-col rounded-xl border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-border p-4">
               <h3 className="font-semibold">Add members to <span style={{ color: selectedRole.color }}>{selectedRole.name}</span></h3>
