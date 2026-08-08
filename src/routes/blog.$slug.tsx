@@ -8,11 +8,45 @@ export const Route = createFileRoute("/blog/$slug")({
   loader: async ({ params, context }) => {
     const p = await context.queryClient.ensureQueryData(postQuery(params.slug));
     if (!p) throw notFound();
-    return { slug: params.slug };
+    return {
+      slug: params.slug,
+      title: p.title as string,
+      excerpt: (p.excerpt as string | null) ?? "",
+      author: (p.author as string | null) ?? brand.name,
+      publishedAt: p.published_at as string,
+    };
   },
-  head: ({ loaderData }) => {
+  head: ({ loaderData, params }) => {
     if (!loaderData) return { meta: [{ title: `Post — ${brand.name}` }, { name: "robots", content: "noindex" }] };
-    return { meta: [{ title: `${loaderData.slug} — ${brand.name}` }] };
+    const url = `https://clovrlab.com/blog/${params.slug}`;
+    const desc = loaderData.excerpt || `${loaderData.title} — build notes from ${brand.name}.`;
+    return {
+      meta: [
+        { title: `${loaderData.title} — ${brand.name}` },
+        { name: "description", content: desc.slice(0, 158) },
+        { property: "og:title", content: loaderData.title },
+        { property: "og:description", content: desc.slice(0, 158) },
+        { property: "og:type", content: "article" },
+        { property: "og:url", content: url },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+      links: [{ rel: "canonical", href: url }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: loaderData.title,
+            description: desc,
+            datePublished: loaderData.publishedAt,
+            author: { "@type": "Person", name: loaderData.author },
+            publisher: { "@type": "Organization", name: brand.name },
+            mainEntityOfPage: url,
+          }),
+        },
+      ],
+    };
   },
   component: PostPage,
   notFoundComponent: () => (
