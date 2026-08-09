@@ -141,8 +141,8 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
   const Icon = config.icon;
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-6 py-8">
-      <div className="mb-6 flex items-start justify-between gap-4">
+    <div className="mx-auto w-full max-w-[1600px] px-8 py-8">
+      <div className="mb-7 flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary"><Icon className="h-5 w-5" /></div>
           <div>
@@ -159,9 +159,9 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
       </div>
 
       {kpis.length > 0 && (
-        <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="mb-7 grid grid-cols-2 gap-4 md:grid-cols-4">
           {kpis.map((k) => (
-            <div key={k.label} className="rounded-xl border border-border bg-card p-4">
+            <div key={k.label} className="rounded-2xl border border-border bg-card p-5 shadow-sm">
               <div className="flex items-center justify-between">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground">{k.label}</p>
                 <k.icon className="h-4 w-4 text-muted-foreground" />
@@ -185,7 +185,7 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
         </div>
       ) : null}
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
         {loading ? (
           <div className="p-12 text-center text-muted-foreground"><Loader2 className="mx-auto h-6 w-6 animate-spin" /></div>
         ) : filtered.length === 0 ? (
@@ -199,20 +199,20 @@ export function ResourcePage<T extends { id: string }>({ config }: { config: Res
               <thead className="bg-muted/40 text-left text-xs uppercase tracking-wider text-muted-foreground">
                 <tr>
                   {config.columns.map((c) => (
-                    <th key={c.key} className={`px-4 py-3 font-medium ${c.className ?? ""}`}>{c.label}</th>
+                    <th key={c.key} className={`px-5 py-3.5 font-medium ${c.className ?? ""}`}>{c.label}</th>
                   ))}
-                  <th className="px-4 py-3 w-24" />
+                  <th className="px-5 py-3.5 w-24" />
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((r) => (
                   <tr key={r.id} className="border-t border-border hover:bg-muted/20">
                     {config.columns.map((c) => (
-                      <td key={c.key} className={`px-4 py-3 ${c.className ?? ""}`}>
+                      <td key={c.key} className={`px-5 py-3.5 ${c.className ?? ""}`}>
                         {c.render ? c.render(r, ctx) : String((r as any)[c.key] ?? "—")}
                       </td>
                     ))}
-                    <td className="px-4 py-3">
+                    <td className="px-5 py-3.5">
                       <div className="flex items-center justify-end gap-1">
                         <button onClick={() => setEditing(r)} className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3.5 w-3.5" /></button>
                         <button onClick={() => remove(r.id)} className="rounded p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3.5 w-3.5" /></button>
