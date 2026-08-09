@@ -41,6 +41,8 @@ const config: ResourceConfig<any> = {
   columns: [
     { key: "invoice_number", label: "#", render: (r) => <span className="font-mono text-xs">{r.invoice_number || r.id.slice(0, 8)}</span> },
     { key: "customer_name", label: "Customer", render: (r) => <div className="text-xs"><div className="font-medium">{r.customer_name}</div>{r.customer_email && <div className="text-muted-foreground">{r.customer_email}</div>}</div> },
+    { key: "client_id", label: "Client", render: (r, c) => <ClientCell clientId={r.client_id} clients={c.clients} /> },
+    { key: "job_id", label: "Job", render: (r, c) => <JobCell jobId={r.job_id} jobs={c.jobs} /> },
     { key: "total", label: "Total", render: (r) => r.total != null ? <span className="tabular-nums font-medium">${Number(r.total).toFixed(2)}</span> : "—" },
     { key: "tax", label: "Tax", render: (r) => r.tax != null ? <span className="tabular-nums text-xs text-muted-foreground">${Number(r.tax).toFixed(2)}</span> : "—" },
     { key: "status", label: "Status", render: (r) => <StatusBadge value={r.status} palette={STATUS_PALETTE} /> },

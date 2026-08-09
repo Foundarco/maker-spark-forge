@@ -52,7 +52,6 @@ import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orde
 import { Route as HqPunchListRouteImport } from './routes/_hq.punch-list'
 import { Route as HqProposalsRouteImport } from './routes/_hq.proposals'
 import { Route as HqProfileRouteImport } from './routes/_hq.profile'
-import { Route as HqProductionRouteImport } from './routes/_hq.production'
 import { Route as HqPlansRouteImport } from './routes/_hq.plans'
 import { Route as HqPipelineRouteImport } from './routes/_hq.pipeline'
 import { Route as HqPhoneRouteImport } from './routes/_hq.phone'
@@ -317,11 +316,6 @@ const HqProposalsRoute = HqProposalsRouteImport.update({
 const HqProfileRoute = HqProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => HqRoute,
-} as any)
-const HqProductionRoute = HqProductionRouteImport.update({
-  id: '/production',
-  path: '/production',
   getParentRoute: () => HqRoute,
 } as any)
 const HqPlansRoute = HqPlansRouteImport.update({
@@ -635,7 +629,6 @@ export interface FileRoutesByFullPath {
   '/phone': typeof HqPhoneRoute
   '/pipeline': typeof HqPipelineRoute
   '/plans': typeof HqPlansRoute
-  '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
@@ -728,7 +721,6 @@ export interface FileRoutesByTo {
   '/phone': typeof HqPhoneRoute
   '/pipeline': typeof HqPipelineRoute
   '/plans': typeof HqPlansRoute
-  '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
@@ -826,7 +818,6 @@ export interface FileRoutesById {
   '/_hq/phone': typeof HqPhoneRoute
   '/_hq/pipeline': typeof HqPipelineRoute
   '/_hq/plans': typeof HqPlansRoute
-  '/_hq/production': typeof HqProductionRoute
   '/_hq/profile': typeof HqProfileRoute
   '/_hq/proposals': typeof HqProposalsRoute
   '/_hq/punch-list': typeof HqPunchListRoute
@@ -923,7 +914,6 @@ export interface FileRouteTypes {
     | '/phone'
     | '/pipeline'
     | '/plans'
-    | '/production'
     | '/profile'
     | '/proposals'
     | '/punch-list'
@@ -1016,7 +1006,6 @@ export interface FileRouteTypes {
     | '/phone'
     | '/pipeline'
     | '/plans'
-    | '/production'
     | '/profile'
     | '/proposals'
     | '/punch-list'
@@ -1113,7 +1102,6 @@ export interface FileRouteTypes {
     | '/_hq/phone'
     | '/_hq/pipeline'
     | '/_hq/plans'
-    | '/_hq/production'
     | '/_hq/profile'
     | '/_hq/proposals'
     | '/_hq/punch-list'
@@ -1479,13 +1467,6 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof HqProfileRouteImport
-      parentRoute: typeof HqRoute
-    }
-    '/_hq/production': {
-      id: '/_hq/production'
-      path: '/production'
-      fullPath: '/production'
-      preLoaderRoute: typeof HqProductionRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/plans': {
@@ -1919,7 +1900,6 @@ interface HqRouteChildren {
   HqPhoneRoute: typeof HqPhoneRoute
   HqPipelineRoute: typeof HqPipelineRoute
   HqPlansRoute: typeof HqPlansRoute
-  HqProductionRoute: typeof HqProductionRoute
   HqProfileRoute: typeof HqProfileRoute
   HqProposalsRoute: typeof HqProposalsRoute
   HqPunchListRoute: typeof HqPunchListRoute
@@ -1990,7 +1970,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqPhoneRoute: HqPhoneRoute,
   HqPipelineRoute: HqPipelineRoute,
   HqPlansRoute: HqPlansRoute,
-  HqProductionRoute: HqProductionRoute,
   HqProfileRoute: HqProfileRoute,
   HqProposalsRoute: HqProposalsRoute,
   HqPunchListRoute: HqPunchListRoute,
