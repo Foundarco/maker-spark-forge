@@ -1275,39 +1275,57 @@ export type Database = {
           category: string | null
           created_at: string
           description: string
+          equipment_cost: number
           estimate_id: string
           id: string
+          labor_cost: number
+          lead_time: string | null
+          material_cost: number
+          notes: string | null
           quantity: number | null
           sort_order: number | null
           total: number | null
           unit: string | null
           unit_cost: number | null
+          unit_price: number
           updated_at: string
         }
         Insert: {
           category?: string | null
           created_at?: string
           description: string
+          equipment_cost?: number
           estimate_id: string
           id?: string
+          labor_cost?: number
+          lead_time?: string | null
+          material_cost?: number
+          notes?: string | null
           quantity?: number | null
           sort_order?: number | null
           total?: number | null
           unit?: string | null
           unit_cost?: number | null
+          unit_price?: number
           updated_at?: string
         }
         Update: {
           category?: string | null
           created_at?: string
           description?: string
+          equipment_cost?: number
           estimate_id?: string
           id?: string
+          labor_cost?: number
+          lead_time?: string | null
+          material_cost?: number
+          notes?: string | null
           quantity?: number | null
           sort_order?: number | null
           total?: number | null
           unit?: string | null
           unit_cost?: number | null
+          unit_price?: number
           updated_at?: string
         }
         Relationships: [
@@ -1323,57 +1341,102 @@ export type Database = {
       con_estimates: {
         Row: {
           approved_at: string | null
+          billing_address: string | null
           client_id: string | null
+          contact_email: string | null
+          contact_name: string | null
+          cost_total: number
           created_at: string
           created_by: string | null
+          currency: string
+          discount_pct: number
           estimate_number: string | null
           estimator_id: string | null
           id: string
           job_id: string | null
           markup_pct: number | null
+          note_to_customer: string | null
+          payment_terms: string | null
+          priority: string
+          quoted_date: string | null
+          revision_of: string | null
           scope: string | null
+          sent_at: string | null
           status: string
           subtotal: number | null
+          tax_rate: number
+          taxable: boolean
           title: string
           total: number | null
           updated_at: string
           valid_until: string | null
+          version: number
         }
         Insert: {
           approved_at?: string | null
+          billing_address?: string | null
           client_id?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          cost_total?: number
           created_at?: string
           created_by?: string | null
+          currency?: string
+          discount_pct?: number
           estimate_number?: string | null
           estimator_id?: string | null
           id?: string
           job_id?: string | null
           markup_pct?: number | null
+          note_to_customer?: string | null
+          payment_terms?: string | null
+          priority?: string
+          quoted_date?: string | null
+          revision_of?: string | null
           scope?: string | null
+          sent_at?: string | null
           status?: string
           subtotal?: number | null
+          tax_rate?: number
+          taxable?: boolean
           title: string
           total?: number | null
           updated_at?: string
           valid_until?: string | null
+          version?: number
         }
         Update: {
           approved_at?: string | null
+          billing_address?: string | null
           client_id?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          cost_total?: number
           created_at?: string
           created_by?: string | null
+          currency?: string
+          discount_pct?: number
           estimate_number?: string | null
           estimator_id?: string | null
           id?: string
           job_id?: string | null
           markup_pct?: number | null
+          note_to_customer?: string | null
+          payment_terms?: string | null
+          priority?: string
+          quoted_date?: string | null
+          revision_of?: string | null
           scope?: string | null
+          sent_at?: string | null
           status?: string
           subtotal?: number | null
+          tax_rate?: number
+          taxable?: boolean
           title?: string
           total?: number | null
           updated_at?: string
           valid_until?: string | null
+          version?: number
         }
         Relationships: [
           {
@@ -1402,6 +1465,13 @@ export type Database = {
             columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_estimates_revision_of_fkey"
+            columns: ["revision_of"]
+            isOneToOne: false
+            referencedRelation: "con_estimates"
             referencedColumns: ["id"]
           },
         ]

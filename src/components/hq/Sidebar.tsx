@@ -1,11 +1,12 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose } from "lucide-react";
-import { navGroups } from "./nav-config";
+import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose, Check } from "lucide-react";
+import { navGroups, divisions, type DivisionId } from "./nav-config";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "hq.sidebar.collapsed";
+const DIVISION_KEY = "hq.sidebar.division";
 
 const ALWAYS_VISIBLE = new Set<string>([
   "/dashboard", "/assistant", "/settings", "/profile", "/notifications", "/search",
@@ -19,21 +20,52 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [profile, setProfile] = useState<Profile | null>(null);
   const [query, setQuery] = useState("");
+  const [division, setDivision] = useState<DivisionId>("core");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const access = useRouteAccess();
 
-  const filteredGroups = useMemo(() => {
+  const permittedGroups = useMemo(() => {
     if (access.isAdmin || access.allowed === null) return navGroups;
     return navGroups
       .map((g) => ({ ...g, items: g.items.filter((i) => ALWAYS_VISIBLE.has(i.to) || access.allowed!.has(i.to)) }))
       .filter((g) => g.items.length > 0);
   }, [access]);
 
+  const availableDivisions = useMemo(
+    () => divisions.filter((d) => permittedGroups.some((g) => g.division === d.id)),
+    [permittedGroups],
+  );
+
+  // Follow the current route into its division so deep links land in context.
+  useEffect(() => {
+    const owner = permittedGroups.find((g) => g.items.some((i) => pathname.startsWith(i.to)));
+    if (owner && owner.division !== "core") setDivision(owner.division);
+  }, [pathname, permittedGroups]);
+
+  const filteredGroups = useMemo(() => {
+    const core = permittedGroups.filter((g) => g.division === "core");
+    if (division === "core") return core;
+    return [...core, ...permittedGroups.filter((g) => g.division === division)];
+  }, [permittedGroups, division]);
+
+  const activeDivision = divisions.find((d) => d.id === division) ?? divisions[0];
+
+
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setCollapsed(JSON.parse(raw));
+      const d = localStorage.getItem(DIVISION_KEY) as DivisionId | null;
+      if (d && divisions.some((x) => x.id === d)) setDivision(d);
     } catch {}
   }, []);
+
+  const pickDivision = (id: DivisionId) => {
+    setDivision(id);
+    setPickerOpen(false);
+    try { localStorage.setItem(DIVISION_KEY, id); } catch {}
+  };
+
 
   useEffect(() => {
     (async () => {
@@ -70,19 +102,49 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
       className="flex h-full flex-col text-sidebar-foreground"
       style={{ background: "var(--sidebar-gradient)" }}
     >
-      {/* Workspace card */}
+      {/* Workspace + division switcher */}
       <div className="px-3 pt-4">
         <div className="flex items-center gap-2">
-          <button className="flex h-11 flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3 text-left hover:bg-white/[0.10]">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-bold text-sidebar-accent-foreground">
-              {initials || "CL"}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Lab</p>
-              <p className="truncate text-[11px] text-sidebar-muted">Internal Workspace</p>
-            </div>
-            <ChevronDown className="h-3.5 w-3.5 text-sidebar-muted" />
-          </button>
+          <div className="relative flex-1">
+            <button
+              onClick={() => setPickerOpen((v) => !v)}
+              aria-expanded={pickerOpen}
+              aria-haspopup="listbox"
+              className="flex h-11 w-full items-center gap-3 rounded-xl bg-white/[0.06] px-3 text-left hover:bg-white/[0.10]"
+            >
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
+                <activeDivision.icon className="h-4 w-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-semibold text-sidebar-foreground">{activeDivision.label}</p>
+                <p className="truncate text-[11px] text-sidebar-muted">{activeDivision.blurb}</p>
+              </div>
+              <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-sidebar-muted transition ${pickerOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {pickerOpen && (
+              <div
+                role="listbox"
+                className="absolute left-0 right-0 top-[52px] z-30 overflow-hidden rounded-xl border border-sidebar-border bg-[#0d1526] p-1 shadow-2xl"
+              >
+                {availableDivisions.map((d) => (
+                  <button
+                    key={d.id}
+                    role="option"
+                    aria-selected={d.id === division}
+                    onClick={() => pickDivision(d.id)}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] ${
+                      d.id === division ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/85 hover:bg-sidebar-hover"
+                    }`}
+                  >
+                    <d.icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="min-w-0 flex-1 truncate">{d.label}</span>
+                    {d.id === division && <Check className="h-3.5 w-3.5" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           {onCollapse && (
             <button
               onClick={onCollapse}
@@ -94,6 +156,8 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
           )}
         </div>
       </div>
+
+
 
 
 

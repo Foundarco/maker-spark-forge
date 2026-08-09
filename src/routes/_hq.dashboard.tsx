@@ -189,8 +189,8 @@ function DashboardPage() {
     }
     if (has("finance")) c.push({ label: "Outstanding AR", value: money(d.outstanding), icon: DollarSign, to: "/invoices", tone: "text-rose-600 bg-rose-500/10" });
     if (has("precon")) {
-      c.push({ label: "Bids out", value: money(d.estimateValue), icon: ClipboardList, to: "/estimates", tone: "text-blue-600 bg-blue-500/10" });
-      c.push({ label: "Open estimates", value: String(d.pendingEstimates?.length || 0), icon: ClipboardList, to: "/estimates", tone: "text-primary bg-primary/10" });
+      c.push({ label: "Bids out", value: money(d.estimateValue), icon: ClipboardList, to: "/quotes", tone: "text-blue-600 bg-blue-500/10" });
+      c.push({ label: "Open estimates", value: String(d.pendingEstimates?.length || 0), icon: ClipboardList, to: "/quotes", tone: "text-primary bg-primary/10" });
     }
     if (has("field") || has("pm")) {
       c.push({ label: "Crews on site", value: String(d.crewsOnSite || 0), icon: HardHat, to: "/crews", tone: "text-orange-600 bg-orange-500/10" });

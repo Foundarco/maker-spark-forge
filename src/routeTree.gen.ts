@@ -55,6 +55,7 @@ import { Route as HqReviewsRouteImport } from './routes/_hq.reviews'
 import { Route as HqResourcePlanningRouteImport } from './routes/_hq.resource-planning'
 import { Route as HqReceivingRouteImport } from './routes/_hq.receiving'
 import { Route as HqRdIdeasRouteImport } from './routes/_hq.rd-ideas'
+import { Route as HqQuotesRouteImport } from './routes/_hq.quotes'
 import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orders'
 import { Route as HqPunchListRouteImport } from './routes/_hq.punch-list'
 import { Route as HqProposalsRouteImport } from './routes/_hq.proposals'
@@ -81,7 +82,6 @@ import { Route as HqHiringRouteImport } from './routes/_hq.hiring'
 import { Route as HqHelpRouteImport } from './routes/_hq.help'
 import { Route as HqFinancialReportsRouteImport } from './routes/_hq.financial-reports'
 import { Route as HqExpensesRouteImport } from './routes/_hq.expenses'
-import { Route as HqEstimatesRouteImport } from './routes/_hq.estimates'
 import { Route as HqEquipmentRouteImport } from './routes/_hq.equipment'
 import { Route as HqEngProjectsRouteImport } from './routes/_hq.eng-projects'
 import { Route as HqEmployeesRouteImport } from './routes/_hq.employees'
@@ -102,9 +102,11 @@ import { Route as HqAssistantRouteImport } from './routes/_hq.assistant'
 import { Route as HqApplicantsRouteImport } from './routes/_hq.applicants'
 import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
+import { Route as HqQuotesIndexRouteImport } from './routes/_hq.quotes.index'
 import { Route as HqJobsIndexRouteImport } from './routes/_hq.jobs.index'
 import { Route as HqClientsIndexRouteImport } from './routes/_hq.clients.index'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
+import { Route as HqQuotesIdRouteImport } from './routes/_hq.quotes.$id'
 import { Route as HqJobsIdRouteImport } from './routes/_hq.jobs.$id'
 import { Route as HqClientsIdRouteImport } from './routes/_hq.clients.$id'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
@@ -339,6 +341,11 @@ const HqRdIdeasRoute = HqRdIdeasRouteImport.update({
   path: '/rd-ideas',
   getParentRoute: () => HqRoute,
 } as any)
+const HqQuotesRoute = HqQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqPurchaseOrdersRoute = HqPurchaseOrdersRouteImport.update({
   id: '/purchase-orders',
   path: '/purchase-orders',
@@ -469,11 +476,6 @@ const HqExpensesRoute = HqExpensesRouteImport.update({
   path: '/expenses',
   getParentRoute: () => HqRoute,
 } as any)
-const HqEstimatesRoute = HqEstimatesRouteImport.update({
-  id: '/estimates',
-  path: '/estimates',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqEquipmentRoute = HqEquipmentRouteImport.update({
   id: '/equipment',
   path: '/equipment',
@@ -574,6 +576,11 @@ const HqAccountingRoute = HqAccountingRouteImport.update({
   path: '/accounting',
   getParentRoute: () => HqRoute,
 } as any)
+const HqQuotesIndexRoute = HqQuotesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HqQuotesRoute,
+} as any)
 const HqJobsIndexRoute = HqJobsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -588,6 +595,11 @@ const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   id: '/api/hq/assistant',
   path: '/api/hq/assistant',
   getParentRoute: () => rootRouteImport,
+} as any)
+const HqQuotesIdRoute = HqQuotesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => HqQuotesRoute,
 } as any)
 const HqJobsIdRoute = HqJobsIdRouteImport.update({
   id: '/$id',
@@ -645,7 +657,6 @@ export interface FileRoutesByFullPath {
   '/employees': typeof HqEmployeesRoute
   '/eng-projects': typeof HqEngProjectsRoute
   '/equipment': typeof HqEquipmentRoute
-  '/estimates': typeof HqEstimatesRoute
   '/expenses': typeof HqExpensesRoute
   '/financial-reports': typeof HqFinancialReportsRoute
   '/hiring': typeof HqHiringRoute
@@ -671,6 +682,7 @@ export interface FileRoutesByFullPath {
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/quotes': typeof HqQuotesRouteWithChildren
   '/rd-ideas': typeof HqRdIdeasRoute
   '/receiving': typeof HqReceivingRoute
   '/resource-planning': typeof HqResourcePlanningRoute
@@ -706,9 +718,11 @@ export interface FileRoutesByFullPath {
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/clients/$id': typeof HqClientsIdRoute
   '/jobs/$id': typeof HqJobsIdRoute
+  '/quotes/$id': typeof HqQuotesIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
   '/clients/': typeof HqClientsIndexRoute
   '/jobs/': typeof HqJobsIndexRoute
+  '/quotes/': typeof HqQuotesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -743,7 +757,6 @@ export interface FileRoutesByTo {
   '/employees': typeof HqEmployeesRoute
   '/eng-projects': typeof HqEngProjectsRoute
   '/equipment': typeof HqEquipmentRoute
-  '/estimates': typeof HqEstimatesRoute
   '/expenses': typeof HqExpensesRoute
   '/financial-reports': typeof HqFinancialReportsRoute
   '/hiring': typeof HqHiringRoute
@@ -803,9 +816,11 @@ export interface FileRoutesByTo {
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/clients/$id': typeof HqClientsIdRoute
   '/jobs/$id': typeof HqJobsIdRoute
+  '/quotes/$id': typeof HqQuotesIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
   '/clients': typeof HqClientsIndexRoute
   '/jobs': typeof HqJobsIndexRoute
+  '/quotes': typeof HqQuotesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -844,7 +859,6 @@ export interface FileRoutesById {
   '/_hq/employees': typeof HqEmployeesRoute
   '/_hq/eng-projects': typeof HqEngProjectsRoute
   '/_hq/equipment': typeof HqEquipmentRoute
-  '/_hq/estimates': typeof HqEstimatesRoute
   '/_hq/expenses': typeof HqExpensesRoute
   '/_hq/financial-reports': typeof HqFinancialReportsRoute
   '/_hq/help': typeof HqHelpRoute
@@ -871,6 +885,7 @@ export interface FileRoutesById {
   '/_hq/proposals': typeof HqProposalsRoute
   '/_hq/punch-list': typeof HqPunchListRoute
   '/_hq/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/_hq/quotes': typeof HqQuotesRouteWithChildren
   '/_hq/rd-ideas': typeof HqRdIdeasRoute
   '/_hq/receiving': typeof HqReceivingRoute
   '/_hq/resource-planning': typeof HqResourcePlanningRoute
@@ -906,9 +921,11 @@ export interface FileRoutesById {
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
   '/_hq/clients/$id': typeof HqClientsIdRoute
   '/_hq/jobs/$id': typeof HqJobsIdRoute
+  '/_hq/quotes/$id': typeof HqQuotesIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
   '/_hq/clients/': typeof HqClientsIndexRoute
   '/_hq/jobs/': typeof HqJobsIndexRoute
+  '/_hq/quotes/': typeof HqQuotesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -947,7 +964,6 @@ export interface FileRouteTypes {
     | '/employees'
     | '/eng-projects'
     | '/equipment'
-    | '/estimates'
     | '/expenses'
     | '/financial-reports'
     | '/hiring'
@@ -973,6 +989,7 @@ export interface FileRouteTypes {
     | '/proposals'
     | '/punch-list'
     | '/purchase-orders'
+    | '/quotes'
     | '/rd-ideas'
     | '/receiving'
     | '/resource-planning'
@@ -1008,9 +1025,11 @@ export interface FileRouteTypes {
     | '/admin/departments'
     | '/clients/$id'
     | '/jobs/$id'
+    | '/quotes/$id'
     | '/api/hq/assistant'
     | '/clients/'
     | '/jobs/'
+    | '/quotes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1045,7 +1064,6 @@ export interface FileRouteTypes {
     | '/employees'
     | '/eng-projects'
     | '/equipment'
-    | '/estimates'
     | '/expenses'
     | '/financial-reports'
     | '/hiring'
@@ -1105,9 +1123,11 @@ export interface FileRouteTypes {
     | '/admin/departments'
     | '/clients/$id'
     | '/jobs/$id'
+    | '/quotes/$id'
     | '/api/hq/assistant'
     | '/clients'
     | '/jobs'
+    | '/quotes'
   id:
     | '__root__'
     | '/'
@@ -1145,7 +1165,6 @@ export interface FileRouteTypes {
     | '/_hq/employees'
     | '/_hq/eng-projects'
     | '/_hq/equipment'
-    | '/_hq/estimates'
     | '/_hq/expenses'
     | '/_hq/financial-reports'
     | '/_hq/help'
@@ -1172,6 +1191,7 @@ export interface FileRouteTypes {
     | '/_hq/proposals'
     | '/_hq/punch-list'
     | '/_hq/purchase-orders'
+    | '/_hq/quotes'
     | '/_hq/rd-ideas'
     | '/_hq/receiving'
     | '/_hq/resource-planning'
@@ -1207,9 +1227,11 @@ export interface FileRouteTypes {
     | '/_hq/admin/departments'
     | '/_hq/clients/$id'
     | '/_hq/jobs/$id'
+    | '/_hq/quotes/$id'
     | '/api/hq/assistant'
     | '/_hq/clients/'
     | '/_hq/jobs/'
+    | '/_hq/quotes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1561,6 +1583,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqRdIdeasRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/quotes': {
+      id: '/_hq/quotes'
+      path: '/quotes'
+      fullPath: '/quotes'
+      preLoaderRoute: typeof HqQuotesRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/purchase-orders': {
       id: '/_hq/purchase-orders'
       path: '/purchase-orders'
@@ -1743,13 +1772,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqExpensesRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/estimates': {
-      id: '/_hq/estimates'
-      path: '/estimates'
-      fullPath: '/estimates'
-      preLoaderRoute: typeof HqEstimatesRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/equipment': {
       id: '/_hq/equipment'
       path: '/equipment'
@@ -1890,6 +1912,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqAccountingRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/quotes/': {
+      id: '/_hq/quotes/'
+      path: '/'
+      fullPath: '/quotes/'
+      preLoaderRoute: typeof HqQuotesIndexRouteImport
+      parentRoute: typeof HqQuotesRoute
+    }
     '/_hq/jobs/': {
       id: '/_hq/jobs/'
       path: '/'
@@ -1910,6 +1939,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/hq/assistant'
       preLoaderRoute: typeof ApiHqAssistantRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_hq/quotes/$id': {
+      id: '/_hq/quotes/$id'
+      path: '/$id'
+      fullPath: '/quotes/$id'
+      preLoaderRoute: typeof HqQuotesIdRouteImport
+      parentRoute: typeof HqQuotesRoute
     }
     '/_hq/jobs/$id': {
       id: '/_hq/jobs/$id'
@@ -1969,6 +2005,20 @@ const HqJobsRouteChildren: HqJobsRouteChildren = {
 const HqJobsRouteWithChildren =
   HqJobsRoute._addFileChildren(HqJobsRouteChildren)
 
+interface HqQuotesRouteChildren {
+  HqQuotesIdRoute: typeof HqQuotesIdRoute
+  HqQuotesIndexRoute: typeof HqQuotesIndexRoute
+}
+
+const HqQuotesRouteChildren: HqQuotesRouteChildren = {
+  HqQuotesIdRoute: HqQuotesIdRoute,
+  HqQuotesIndexRoute: HqQuotesIndexRoute,
+}
+
+const HqQuotesRouteWithChildren = HqQuotesRoute._addFileChildren(
+  HqQuotesRouteChildren,
+)
+
 interface HqRouteChildren {
   HqAccountingRoute: typeof HqAccountingRoute
   HqAnalyticsRoute: typeof HqAnalyticsRoute
@@ -1990,7 +2040,6 @@ interface HqRouteChildren {
   HqEmployeesRoute: typeof HqEmployeesRoute
   HqEngProjectsRoute: typeof HqEngProjectsRoute
   HqEquipmentRoute: typeof HqEquipmentRoute
-  HqEstimatesRoute: typeof HqEstimatesRoute
   HqExpensesRoute: typeof HqExpensesRoute
   HqFinancialReportsRoute: typeof HqFinancialReportsRoute
   HqHelpRoute: typeof HqHelpRoute
@@ -2017,6 +2066,7 @@ interface HqRouteChildren {
   HqProposalsRoute: typeof HqProposalsRoute
   HqPunchListRoute: typeof HqPunchListRoute
   HqPurchaseOrdersRoute: typeof HqPurchaseOrdersRoute
+  HqQuotesRoute: typeof HqQuotesRouteWithChildren
   HqRdIdeasRoute: typeof HqRdIdeasRoute
   HqReceivingRoute: typeof HqReceivingRoute
   HqResourcePlanningRoute: typeof HqResourcePlanningRoute
@@ -2060,7 +2110,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqEmployeesRoute: HqEmployeesRoute,
   HqEngProjectsRoute: HqEngProjectsRoute,
   HqEquipmentRoute: HqEquipmentRoute,
-  HqEstimatesRoute: HqEstimatesRoute,
   HqExpensesRoute: HqExpensesRoute,
   HqFinancialReportsRoute: HqFinancialReportsRoute,
   HqHelpRoute: HqHelpRoute,
@@ -2087,6 +2136,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqProposalsRoute: HqProposalsRoute,
   HqPunchListRoute: HqPunchListRoute,
   HqPurchaseOrdersRoute: HqPurchaseOrdersRoute,
+  HqQuotesRoute: HqQuotesRouteWithChildren,
   HqRdIdeasRoute: HqRdIdeasRoute,
   HqReceivingRoute: HqReceivingRoute,
   HqResourcePlanningRoute: HqResourcePlanningRoute,

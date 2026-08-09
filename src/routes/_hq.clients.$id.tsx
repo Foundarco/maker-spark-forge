@@ -138,7 +138,7 @@ function ClientDetail() {
           )}
 
           {tab === "Estimates" && (
-            <Panel title={`Estimates (${estimates.length})`} action={<Link to="/estimates" className="text-xs text-primary hover:underline">Open module</Link>}>
+            <Panel title={`Estimates (${estimates.length})`} action={<Link to="/quotes" className="text-xs text-primary hover:underline">Open module</Link>}>
               {estimates.length === 0 ? <p className="text-xs text-muted-foreground">No estimates yet.</p> : (
                 <ul className="divide-y divide-border">
                   {estimates.map((e) => (
