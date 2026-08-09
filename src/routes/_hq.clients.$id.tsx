@@ -4,9 +4,10 @@ import { ArrowLeft, HardHat, Calculator, Loader2, FileSignature } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { RecordLayout, ProfileCard, ActivityRail, type ActivityEvent } from "@/components/hq/RecordLayout";
 import { ContextThread } from "@/components/hq/ContextThread";
+import { ClientPortalPanel, ClientMessagesPanel } from "@/components/hq/ClientPortalPanel";
 
 type Row = Record<string, any>;
-const TABS = ["Overview", "Jobs", "Estimates", "Thread"] as const;
+const TABS = ["Overview", "Jobs", "Estimates", "Messages", "Portal", "Thread"] as const;
 type Tab = (typeof TABS)[number];
 
 const money = (n: any) => `$${Number(n || 0).toLocaleString()}`;
@@ -102,6 +103,8 @@ function ClientDetail() {
     >
       {tab === "Thread" ? (
         <div className="h-full"><ContextThread entityType="client" entityId={client.id} title={`Client thread · ${client.company || client.name}`} /></div>
+      ) : tab === "Messages" ? (
+        <div className="p-5"><ClientMessagesPanel clientId={client.id} clientName={client.company || client.name} /></div>
       ) : (
         <div className="space-y-6 p-5">
           {tab === "Overview" && (
@@ -151,6 +154,8 @@ function ClientDetail() {
               )}
             </Panel>
           )}
+
+          {tab === "Portal" && <ClientPortalPanel clientId={client.id} />}
         </div>
       )}
     </RecordLayout>

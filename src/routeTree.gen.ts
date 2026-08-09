@@ -13,16 +13,23 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProcessRouteImport } from './routes/process'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ClientLoginRouteImport } from './routes/client-login'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
+import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
+import { Route as PortalJobsRouteImport } from './routes/portal.jobs'
+import { Route as PortalInvoicesRouteImport } from './routes/portal.invoices'
+import { Route as PortalDocumentsRouteImport } from './routes/portal.documents'
 import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
@@ -52,7 +59,6 @@ import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orde
 import { Route as HqPunchListRouteImport } from './routes/_hq.punch-list'
 import { Route as HqProposalsRouteImport } from './routes/_hq.proposals'
 import { Route as HqProfileRouteImport } from './routes/_hq.profile'
-import { Route as HqProductionRouteImport } from './routes/_hq.production'
 import { Route as HqPlansRouteImport } from './routes/_hq.plans'
 import { Route as HqPipelineRouteImport } from './routes/_hq.pipeline'
 import { Route as HqPhoneRouteImport } from './routes/_hq.phone'
@@ -125,6 +131,11 @@ const ProcessRoute = ProcessRouteImport.update({
   path: '/process',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HqLoginRoute = HqLoginRouteImport.update({
   id: '/hq-login',
   path: '/hq-login',
@@ -143,6 +154,11 @@ const FaqRoute = FaqRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientLoginRoute = ClientLoginRouteImport.update({
+  id: '/client-login',
+  path: '/client-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareersRoute = CareersRouteImport.update({
@@ -169,10 +185,35 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalRoute,
+} as any)
 const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
   id: '/divisions/',
   path: '/divisions/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PortalMessagesRoute = PortalMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalJobsRoute = PortalJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalInvoicesRoute = PortalInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalDocumentsRoute = PortalDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => PortalRoute,
 } as any)
 const MeetingIdRoute = MeetingIdRouteImport.update({
   id: '/meeting/$id',
@@ -317,11 +358,6 @@ const HqProposalsRoute = HqProposalsRouteImport.update({
 const HqProfileRoute = HqProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => HqRoute,
-} as any)
-const HqProductionRoute = HqProductionRouteImport.update({
-  id: '/production',
-  path: '/production',
   getParentRoute: () => HqRoute,
 } as any)
 const HqPlansRoute = HqPlansRouteImport.update({
@@ -585,10 +621,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
+  '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
+  '/portal': typeof PortalRouteWithChildren
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -635,7 +673,6 @@ export interface FileRoutesByFullPath {
   '/phone': typeof HqPhoneRoute
   '/pipeline': typeof HqPipelineRoute
   '/plans': typeof HqPlansRoute
-  '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
@@ -665,7 +702,12 @@ export interface FileRoutesByFullPath {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/portal/documents': typeof PortalDocumentsRoute
+  '/portal/invoices': typeof PortalInvoicesRoute
+  '/portal/jobs': typeof PortalJobsRoute
+  '/portal/messages': typeof PortalMessagesRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/clients/$id': typeof HqClientsIdRoute
@@ -680,6 +722,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
+  '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
@@ -728,7 +771,6 @@ export interface FileRoutesByTo {
   '/phone': typeof HqPhoneRoute
   '/pipeline': typeof HqPipelineRoute
   '/plans': typeof HqPlansRoute
-  '/production': typeof HqProductionRoute
   '/profile': typeof HqProfileRoute
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
@@ -758,7 +800,12 @@ export interface FileRoutesByTo {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/portal/documents': typeof PortalDocumentsRoute
+  '/portal/invoices': typeof PortalInvoicesRoute
+  '/portal/jobs': typeof PortalJobsRoute
+  '/portal/messages': typeof PortalMessagesRoute
   '/divisions': typeof DivisionsIndexRoute
+  '/portal': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/clients/$id': typeof HqClientsIdRoute
@@ -775,10 +822,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
+  '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRouteWithChildren
   '/hq-login': typeof HqLoginRoute
+  '/portal': typeof PortalRouteWithChildren
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -826,7 +875,6 @@ export interface FileRoutesById {
   '/_hq/phone': typeof HqPhoneRoute
   '/_hq/pipeline': typeof HqPipelineRoute
   '/_hq/plans': typeof HqPlansRoute
-  '/_hq/production': typeof HqProductionRoute
   '/_hq/profile': typeof HqProfileRoute
   '/_hq/proposals': typeof HqProposalsRoute
   '/_hq/punch-list': typeof HqPunchListRoute
@@ -856,7 +904,12 @@ export interface FileRoutesById {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
+  '/portal/documents': typeof PortalDocumentsRoute
+  '/portal/invoices': typeof PortalInvoicesRoute
+  '/portal/jobs': typeof PortalJobsRoute
+  '/portal/messages': typeof PortalMessagesRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/': typeof PortalIndexRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
   '/_hq/clients/$id': typeof HqClientsIdRoute
@@ -873,10 +926,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/careers'
+    | '/client-login'
     | '/contact'
     | '/faq'
     | '/help'
     | '/hq-login'
+    | '/portal'
     | '/process'
     | '/projects'
     | '/services'
@@ -923,7 +978,6 @@ export interface FileRouteTypes {
     | '/phone'
     | '/pipeline'
     | '/plans'
-    | '/production'
     | '/profile'
     | '/proposals'
     | '/punch-list'
@@ -953,7 +1007,12 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/portal/documents'
+    | '/portal/invoices'
+    | '/portal/jobs'
+    | '/portal/messages'
     | '/divisions/'
+    | '/portal/'
     | '/admin/company'
     | '/admin/departments'
     | '/clients/$id'
@@ -968,6 +1027,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/careers'
+    | '/client-login'
     | '/contact'
     | '/faq'
     | '/help'
@@ -1016,7 +1076,6 @@ export interface FileRouteTypes {
     | '/phone'
     | '/pipeline'
     | '/plans'
-    | '/production'
     | '/profile'
     | '/proposals'
     | '/punch-list'
@@ -1046,7 +1105,12 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/portal/documents'
+    | '/portal/invoices'
+    | '/portal/jobs'
+    | '/portal/messages'
     | '/divisions'
+    | '/portal'
     | '/admin/company'
     | '/admin/departments'
     | '/clients/$id'
@@ -1062,10 +1126,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/careers'
+    | '/client-login'
     | '/contact'
     | '/faq'
     | '/help'
     | '/hq-login'
+    | '/portal'
     | '/process'
     | '/projects'
     | '/services'
@@ -1113,7 +1179,6 @@ export interface FileRouteTypes {
     | '/_hq/phone'
     | '/_hq/pipeline'
     | '/_hq/plans'
-    | '/_hq/production'
     | '/_hq/profile'
     | '/_hq/proposals'
     | '/_hq/punch-list'
@@ -1143,7 +1208,12 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/meeting/$id'
+    | '/portal/documents'
+    | '/portal/invoices'
+    | '/portal/jobs'
+    | '/portal/messages'
     | '/divisions/'
+    | '/portal/'
     | '/_hq/admin/company'
     | '/_hq/admin/departments'
     | '/_hq/clients/$id'
@@ -1160,10 +1230,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
+  ClientLoginRoute: typeof ClientLoginRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRouteWithChildren
   HqLoginRoute: typeof HqLoginRoute
+  PortalRoute: typeof PortalRouteWithChildren
   ProcessRoute: typeof ProcessRoute
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
@@ -1208,6 +1280,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProcessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/hq-login': {
       id: '/hq-login'
       path: '/hq-login'
@@ -1234,6 +1313,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client-login': {
+      id: '/client-login'
+      path: '/client-login'
+      fullPath: '/client-login'
+      preLoaderRoute: typeof ClientLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/careers': {
@@ -1271,12 +1357,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/': {
+      id: '/portal/'
+      path: '/'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/divisions/': {
       id: '/divisions/'
       path: '/divisions'
       fullPath: '/divisions/'
       preLoaderRoute: typeof DivisionsIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/portal/messages': {
+      id: '/portal/messages'
+      path: '/messages'
+      fullPath: '/portal/messages'
+      preLoaderRoute: typeof PortalMessagesRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/jobs': {
+      id: '/portal/jobs'
+      path: '/jobs'
+      fullPath: '/portal/jobs'
+      preLoaderRoute: typeof PortalJobsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/invoices': {
+      id: '/portal/invoices'
+      path: '/invoices'
+      fullPath: '/portal/invoices'
+      preLoaderRoute: typeof PortalInvoicesRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/documents': {
+      id: '/portal/documents'
+      path: '/documents'
+      fullPath: '/portal/documents'
+      preLoaderRoute: typeof PortalDocumentsRouteImport
+      parentRoute: typeof PortalRoute
     }
     '/meeting/$id': {
       id: '/meeting/$id'
@@ -1479,13 +1600,6 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof HqProfileRouteImport
-      parentRoute: typeof HqRoute
-    }
-    '/_hq/production': {
-      id: '/_hq/production'
-      path: '/production'
-      fullPath: '/production'
-      preLoaderRoute: typeof HqProductionRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/plans': {
@@ -1919,7 +2033,6 @@ interface HqRouteChildren {
   HqPhoneRoute: typeof HqPhoneRoute
   HqPipelineRoute: typeof HqPipelineRoute
   HqPlansRoute: typeof HqPlansRoute
-  HqProductionRoute: typeof HqProductionRoute
   HqProfileRoute: typeof HqProfileRoute
   HqProposalsRoute: typeof HqProposalsRoute
   HqPunchListRoute: typeof HqPunchListRoute
@@ -1990,7 +2103,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqPhoneRoute: HqPhoneRoute,
   HqPipelineRoute: HqPipelineRoute,
   HqPlansRoute: HqPlansRoute,
-  HqProductionRoute: HqProductionRoute,
   HqProfileRoute: HqProfileRoute,
   HqProposalsRoute: HqProposalsRoute,
   HqPunchListRoute: HqPunchListRoute,
@@ -2039,16 +2151,37 @@ const HelpRouteChildren: HelpRouteChildren = {
 
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
+interface PortalRouteChildren {
+  PortalDocumentsRoute: typeof PortalDocumentsRoute
+  PortalInvoicesRoute: typeof PortalInvoicesRoute
+  PortalJobsRoute: typeof PortalJobsRoute
+  PortalMessagesRoute: typeof PortalMessagesRoute
+  PortalIndexRoute: typeof PortalIndexRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalDocumentsRoute: PortalDocumentsRoute,
+  PortalInvoicesRoute: PortalInvoicesRoute,
+  PortalJobsRoute: PortalJobsRoute,
+  PortalMessagesRoute: PortalMessagesRoute,
+  PortalIndexRoute: PortalIndexRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HqRoute: HqRouteWithChildren,
   AboutRoute: AboutRoute,
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
+  ClientLoginRoute: ClientLoginRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   HelpRoute: HelpRouteWithChildren,
   HqLoginRoute: HqLoginRoute,
+  PortalRoute: PortalRouteWithChildren,
   ProcessRoute: ProcessRoute,
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
@@ -2065,13 +2198,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

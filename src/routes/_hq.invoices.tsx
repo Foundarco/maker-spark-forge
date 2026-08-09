@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FileSpreadsheet, DollarSign, Clock, AlertTriangle } from "lucide-react";
-import { ResourcePage, StatusBadge, DateCell } from "@/components/hq/ResourcePage";
+import { ResourcePage, StatusBadge, DateCell, ClientCell, JobCell } from "@/components/hq/ResourcePage";
 import type { ResourceConfig } from "@/components/hq/ResourcePage";
 
 export const Route = createFileRoute("/_hq/invoices")({
@@ -41,6 +41,8 @@ const config: ResourceConfig<any> = {
   columns: [
     { key: "invoice_number", label: "#", render: (r) => <span className="font-mono text-xs">{r.invoice_number || r.id.slice(0, 8)}</span> },
     { key: "customer_name", label: "Customer", render: (r) => <div className="text-xs"><div className="font-medium">{r.customer_name}</div>{r.customer_email && <div className="text-muted-foreground">{r.customer_email}</div>}</div> },
+    { key: "client_id", label: "Client", render: (r, c) => <ClientCell clientId={r.client_id} clients={c.clients} /> },
+    { key: "job_id", label: "Job", render: (r, c) => <JobCell jobId={r.job_id} jobs={c.jobs} /> },
     { key: "total", label: "Total", render: (r) => r.total != null ? <span className="tabular-nums font-medium">${Number(r.total).toFixed(2)}</span> : "—" },
     { key: "tax", label: "Tax", render: (r) => r.tax != null ? <span className="tabular-nums text-xs text-muted-foreground">${Number(r.tax).toFixed(2)}</span> : "—" },
     { key: "status", label: "Status", render: (r) => <StatusBadge value={r.status} palette={STATUS_PALETTE} /> },
@@ -52,6 +54,8 @@ const config: ResourceConfig<any> = {
     { key: "invoice_number", label: "Invoice #", type: "text" },
     { key: "customer_name", label: "Customer", type: "text", required: true },
     { key: "customer_email", label: "Customer email", type: "text" },
+    { key: "client_id", label: "Client", type: "client" },
+    { key: "job_id", label: "Job", type: "job" },
     { key: "issue_date", label: "Issue date", type: "date" },
     { key: "due_date", label: "Due date", type: "date" },
     { key: "subtotal", label: "Subtotal ($)", type: "number" },

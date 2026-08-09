@@ -646,6 +646,101 @@ export type Database = {
           },
         ]
       }
+      con_client_messages: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          body: string
+          client_id: string
+          created_at: string
+          from_client: boolean
+          id: string
+          job_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          body: string
+          client_id: string
+          created_at?: string
+          from_client?: boolean
+          id?: string
+          job_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          body?: string
+          client_id?: string
+          created_at?: string
+          from_client?: boolean
+          id?: string
+          job_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_client_messages_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "con_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_client_messages_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_client_portal_users: {
+        Row: {
+          client_id: string
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          invited_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_id: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          invited_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_id?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          invited_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_client_portal_users_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "con_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       con_clients: {
         Row: {
           address: string | null
@@ -1486,6 +1581,93 @@ export type Database = {
             columns: ["superintendent_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_leads: {
+        Row: {
+          bid_due_date: string | null
+          client_id: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          estimate_id: string | null
+          estimated_value: number | null
+          id: string
+          lead_number: string | null
+          location: string | null
+          notes: string | null
+          owner_id: string | null
+          probability: number | null
+          project_type: string | null
+          source: string | null
+          stage: string
+          title: string
+          updated_at: string
+          walkthrough_date: string | null
+        }
+        Insert: {
+          bid_due_date?: string | null
+          client_id?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          estimate_id?: string | null
+          estimated_value?: number | null
+          id?: string
+          lead_number?: string | null
+          location?: string | null
+          notes?: string | null
+          owner_id?: string | null
+          probability?: number | null
+          project_type?: string | null
+          source?: string | null
+          stage?: string
+          title: string
+          updated_at?: string
+          walkthrough_date?: string | null
+        }
+        Update: {
+          bid_due_date?: string | null
+          client_id?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          estimate_id?: string | null
+          estimated_value?: number | null
+          id?: string
+          lead_number?: string | null
+          location?: string | null
+          notes?: string | null
+          owner_id?: string | null
+          probability?: number | null
+          project_type?: string | null
+          source?: string | null
+          stage?: string
+          title?: string
+          updated_at?: string
+          walkthrough_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_leads_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "con_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_leads_estimate_id_fkey"
+            columns: ["estimate_id"]
+            isOneToOne: false
+            referencedRelation: "con_estimates"
             referencedColumns: ["id"]
           },
         ]
@@ -3325,6 +3507,7 @@ export type Database = {
       }
       fin_invoices: {
         Row: {
+          client_id: string | null
           created_at: string
           created_by: string | null
           customer_email: string | null
@@ -3333,6 +3516,7 @@ export type Database = {
           id: string
           invoice_number: string | null
           issue_date: string | null
+          job_id: string | null
           notes: string | null
           paid_at: string | null
           status: string
@@ -3342,6 +3526,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          client_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_email?: string | null
@@ -3350,6 +3535,7 @@ export type Database = {
           id?: string
           invoice_number?: string | null
           issue_date?: string | null
+          job_id?: string | null
           notes?: string | null
           paid_at?: string | null
           status?: string
@@ -3359,6 +3545,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          client_id?: string | null
           created_at?: string
           created_by?: string | null
           customer_email?: string | null
@@ -3367,6 +3554,7 @@ export type Database = {
           id?: string
           invoice_number?: string | null
           issue_date?: string | null
+          job_id?: string | null
           notes?: string | null
           paid_at?: string | null
           status?: string
@@ -3375,7 +3563,22 @@ export type Database = {
           total?: number | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fin_invoices_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "con_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fin_invoices_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       fin_transactions: {
         Row: {
