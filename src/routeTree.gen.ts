@@ -24,6 +24,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as MeetingIdRouteImport } from './routes/meeting.$id'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
@@ -179,6 +180,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalRoute,
 } as any)
 const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
   id: '/divisions/',
@@ -596,7 +602,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -673,6 +679,7 @@ export interface FileRoutesByFullPath {
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/clients/$id': typeof HqClientsIdRoute
@@ -692,7 +699,6 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
-  '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -767,6 +773,7 @@ export interface FileRoutesByTo {
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
   '/divisions': typeof DivisionsIndexRoute
+  '/portal': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
   '/clients/$id': typeof HqClientsIdRoute
@@ -788,7 +795,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/help': typeof HelpRouteWithChildren
   '/hq-login': typeof HqLoginRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -866,6 +873,7 @@ export interface FileRoutesById {
   '/legal/terms': typeof LegalTermsRoute
   '/meeting/$id': typeof MeetingIdRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/': typeof PortalIndexRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
   '/_hq/clients/$id': typeof HqClientsIdRoute
@@ -964,6 +972,7 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/meeting/$id'
     | '/divisions/'
+    | '/portal/'
     | '/admin/company'
     | '/admin/departments'
     | '/clients/$id'
@@ -983,7 +992,6 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help'
     | '/hq-login'
-    | '/portal'
     | '/process'
     | '/projects'
     | '/services'
@@ -1058,6 +1066,7 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/meeting/$id'
     | '/divisions'
+    | '/portal'
     | '/admin/company'
     | '/admin/departments'
     | '/clients/$id'
@@ -1156,6 +1165,7 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/meeting/$id'
     | '/divisions/'
+    | '/portal/'
     | '/_hq/admin/company'
     | '/_hq/admin/departments'
     | '/_hq/clients/$id'
@@ -1177,7 +1187,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRouteWithChildren
   HqLoginRoute: typeof HqLoginRoute
-  PortalRoute: typeof PortalRoute
+  PortalRoute: typeof PortalRouteWithChildren
   ProcessRoute: typeof ProcessRoute
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
@@ -1298,6 +1308,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/portal/': {
+      id: '/portal/'
+      path: '/'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof PortalRoute
     }
     '/divisions/': {
       id: '/divisions/'
@@ -2058,6 +2075,17 @@ const HelpRouteChildren: HelpRouteChildren = {
 
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
+interface PortalRouteChildren {
+  PortalIndexRoute: typeof PortalIndexRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalIndexRoute: PortalIndexRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HqRoute: HqRouteWithChildren,
@@ -2069,7 +2097,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   HelpRoute: HelpRouteWithChildren,
   HqLoginRoute: HqLoginRoute,
-  PortalRoute: PortalRoute,
+  PortalRoute: PortalRouteWithChildren,
   ProcessRoute: ProcessRoute,
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
