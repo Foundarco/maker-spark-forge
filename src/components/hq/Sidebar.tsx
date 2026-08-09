@@ -1,11 +1,12 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose } from "lucide-react";
-import { navGroups } from "./nav-config";
+import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose, Check } from "lucide-react";
+import { navGroups, divisions, type DivisionId } from "./nav-config";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "hq.sidebar.collapsed";
+const DIVISION_KEY = "hq.sidebar.division";
 
 const ALWAYS_VISIBLE = new Set<string>([
   "/dashboard", "/assistant", "/settings", "/profile", "/notifications", "/search",
@@ -19,14 +20,36 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [profile, setProfile] = useState<Profile | null>(null);
   const [query, setQuery] = useState("");
+  const [division, setDivision] = useState<DivisionId>("core");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const access = useRouteAccess();
 
-  const filteredGroups = useMemo(() => {
+  const permittedGroups = useMemo(() => {
     if (access.isAdmin || access.allowed === null) return navGroups;
     return navGroups
       .map((g) => ({ ...g, items: g.items.filter((i) => ALWAYS_VISIBLE.has(i.to) || access.allowed!.has(i.to)) }))
       .filter((g) => g.items.length > 0);
   }, [access]);
+
+  const availableDivisions = useMemo(
+    () => divisions.filter((d) => permittedGroups.some((g) => g.division === d.id)),
+    [permittedGroups],
+  );
+
+  // Follow the current route into its division so deep links land in context.
+  useEffect(() => {
+    const owner = permittedGroups.find((g) => g.items.some((i) => pathname.startsWith(i.to)));
+    if (owner && owner.division !== "core") setDivision(owner.division);
+  }, [pathname, permittedGroups]);
+
+  const filteredGroups = useMemo(() => {
+    const core = permittedGroups.filter((g) => g.division === "core");
+    if (division === "core") return core;
+    return [...core, ...permittedGroups.filter((g) => g.division === division)];
+  }, [permittedGroups, division]);
+
+  const activeDivision = divisions.find((d) => d.id === division) ?? divisions[0];
+
 
   useEffect(() => {
     try {
