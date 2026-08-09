@@ -20,16 +20,23 @@ export type OutgoingMail = {
 
 const CRLF = "\r\n";
 
+function isComplete(buffer: string) {
+  if (!/\r?\n$/.test(buffer)) return false;
+  const lines = buffer.replace(/\r?\n$/, "").split(/\r?\n/);
+  return /^\d{3} /.test(lines[lines.length - 1] ?? "");
+}
+
 async function command(socket: MailSocket, line: string | null, expect: number[]) {
   if (line !== null) await socket.write(line + CRLF);
-  const response = await readUntil(socket, (b) => /^\d{3} [^\n]*\r?\n$|\r?\n\d{3} [^\n]*\r?\n$/m.test(b) || /^\d{3} .*\r?\n$/m.test(b.split(/\r?\n/).slice(-2).join("\n") + "\n"));
-  const codeMatch = response.trim().split(/\r?\n/).pop()!.match(/^(\d{3})/);
-  const code = codeMatch ? Number(codeMatch[1]) : 0;
+  const response = await readUntil(socket, isComplete);
+  const lastLine = response.trim().split(/\r?\n/).pop() ?? "";
+  const code = Number(lastLine.slice(0, 3));
   if (!expect.includes(code)) {
     throw new Error(`SMTP error (expected ${expect.join("/")}, got ${code}): ${response.trim().slice(-300)}`);
   }
   return response;
 }
+
 
 function b64(value: string) {
   return Buffer.from(value, "utf8").toString("base64");
