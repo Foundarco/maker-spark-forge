@@ -102,19 +102,49 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
       className="flex h-full flex-col text-sidebar-foreground"
       style={{ background: "var(--sidebar-gradient)" }}
     >
-      {/* Workspace card */}
+      {/* Workspace + division switcher */}
       <div className="px-3 pt-4">
         <div className="flex items-center gap-2">
-          <button className="flex h-11 flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3 text-left hover:bg-white/[0.10]">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-bold text-sidebar-accent-foreground">
-              {initials || "CL"}
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Lab</p>
-              <p className="truncate text-[11px] text-sidebar-muted">Internal Workspace</p>
-            </div>
-            <ChevronDown className="h-3.5 w-3.5 text-sidebar-muted" />
-          </button>
+          <div className="relative flex-1">
+            <button
+              onClick={() => setPickerOpen((v) => !v)}
+              aria-expanded={pickerOpen}
+              aria-haspopup="listbox"
+              className="flex h-11 w-full items-center gap-3 rounded-xl bg-white/[0.06] px-3 text-left hover:bg-white/[0.10]"
+            >
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
+                <activeDivision.icon className="h-4 w-4" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[13px] font-semibold text-sidebar-foreground">{activeDivision.label}</p>
+                <p className="truncate text-[11px] text-sidebar-muted">{activeDivision.blurb}</p>
+              </div>
+              <ChevronDown className={`h-3.5 w-3.5 flex-shrink-0 text-sidebar-muted transition ${pickerOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {pickerOpen && (
+              <div
+                role="listbox"
+                className="absolute left-0 right-0 top-[52px] z-30 overflow-hidden rounded-xl border border-sidebar-border bg-[#0d1526] p-1 shadow-2xl"
+              >
+                {availableDivisions.map((d) => (
+                  <button
+                    key={d.id}
+                    role="option"
+                    aria-selected={d.id === division}
+                    onClick={() => pickDivision(d.id)}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-[13px] ${
+                      d.id === division ? "bg-sidebar-accent text-sidebar-accent-foreground" : "text-sidebar-foreground/85 hover:bg-sidebar-hover"
+                    }`}
+                  >
+                    <d.icon className="h-4 w-4 flex-shrink-0" />
+                    <span className="min-w-0 flex-1 truncate">{d.label}</span>
+                    {d.id === division && <Check className="h-3.5 w-3.5" />}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
           {onCollapse && (
             <button
               onClick={onCollapse}
@@ -126,6 +156,8 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
           )}
         </div>
       </div>
+
+
 
 
 
