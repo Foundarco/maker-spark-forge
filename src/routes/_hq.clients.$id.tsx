@@ -154,6 +154,8 @@ function ClientDetail() {
               )}
             </Panel>
           )}
+
+          {tab === "Portal" && <ClientPortalPanel clientId={client.id} />}
         </div>
       )}
     </RecordLayout>
