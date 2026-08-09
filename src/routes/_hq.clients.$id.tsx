@@ -6,7 +6,7 @@ import { RecordLayout, ProfileCard, ActivityRail, type ActivityEvent } from "@/c
 import { ContextThread } from "@/components/hq/ContextThread";
 
 type Row = Record<string, any>;
-const TABS = ["Overview", "Jobs", "Estimates", "Thread"] as const;
+const TABS = ["Overview", "Jobs", "Estimates", "Messages", "Portal", "Thread"] as const;
 type Tab = (typeof TABS)[number];
 
 const money = (n: any) => `$${Number(n || 0).toLocaleString()}`;
