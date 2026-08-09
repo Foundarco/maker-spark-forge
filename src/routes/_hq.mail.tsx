@@ -283,27 +283,8 @@ function MailClient() {
       if (error) { alert(error.message); return; }
       const inserted = data as Email;
 
-      if (!asDraft) {
-        try {
-          const bodyText = compose.body || "";
-          const html = `<div style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap;">${escapeHtml(bodyText)}</div>`;
-          await sendFn({
-            data: {
-              from: fromAddr,
-              to: compose.to,
-              cc: compose.cc || null,
-              subject: compose.subject || "(no subject)",
-              html,
-              text: bodyText,
-              inReplyTo: compose.inReplyTo ?? null,
-              emailRowId: inserted.id,
-            },
-          });
-        } catch (err: any) {
-          console.error(err);
-          alert(`Saved to Sent, but delivery failed: ${err?.message ?? err}`);
-        }
-      }
+
+
 
       if (inserted) setEmails((prev) => [inserted, ...prev]);
       setCompose(null);
