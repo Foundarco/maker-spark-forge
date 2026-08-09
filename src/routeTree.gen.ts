@@ -55,6 +55,7 @@ import { Route as HqReviewsRouteImport } from './routes/_hq.reviews'
 import { Route as HqResourcePlanningRouteImport } from './routes/_hq.resource-planning'
 import { Route as HqReceivingRouteImport } from './routes/_hq.receiving'
 import { Route as HqRdIdeasRouteImport } from './routes/_hq.rd-ideas'
+import { Route as HqQuotesRouteImport } from './routes/_hq.quotes'
 import { Route as HqPurchaseOrdersRouteImport } from './routes/_hq.purchase-orders'
 import { Route as HqPunchListRouteImport } from './routes/_hq.punch-list'
 import { Route as HqProposalsRouteImport } from './routes/_hq.proposals'
@@ -337,6 +338,11 @@ const HqReceivingRoute = HqReceivingRouteImport.update({
 const HqRdIdeasRoute = HqRdIdeasRouteImport.update({
   id: '/rd-ideas',
   path: '/rd-ideas',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqQuotesRoute = HqQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
   getParentRoute: () => HqRoute,
 } as any)
 const HqPurchaseOrdersRoute = HqPurchaseOrdersRouteImport.update({
@@ -671,6 +677,7 @@ export interface FileRoutesByFullPath {
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/quotes': typeof HqQuotesRoute
   '/rd-ideas': typeof HqRdIdeasRoute
   '/receiving': typeof HqReceivingRoute
   '/resource-planning': typeof HqResourcePlanningRoute
@@ -768,6 +775,7 @@ export interface FileRoutesByTo {
   '/proposals': typeof HqProposalsRoute
   '/punch-list': typeof HqPunchListRoute
   '/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/quotes': typeof HqQuotesRoute
   '/rd-ideas': typeof HqRdIdeasRoute
   '/receiving': typeof HqReceivingRoute
   '/resource-planning': typeof HqResourcePlanningRoute
@@ -871,6 +879,7 @@ export interface FileRoutesById {
   '/_hq/proposals': typeof HqProposalsRoute
   '/_hq/punch-list': typeof HqPunchListRoute
   '/_hq/purchase-orders': typeof HqPurchaseOrdersRoute
+  '/_hq/quotes': typeof HqQuotesRoute
   '/_hq/rd-ideas': typeof HqRdIdeasRoute
   '/_hq/receiving': typeof HqReceivingRoute
   '/_hq/resource-planning': typeof HqResourcePlanningRoute
@@ -973,6 +982,7 @@ export interface FileRouteTypes {
     | '/proposals'
     | '/punch-list'
     | '/purchase-orders'
+    | '/quotes'
     | '/rd-ideas'
     | '/receiving'
     | '/resource-planning'
@@ -1070,6 +1080,7 @@ export interface FileRouteTypes {
     | '/proposals'
     | '/punch-list'
     | '/purchase-orders'
+    | '/quotes'
     | '/rd-ideas'
     | '/receiving'
     | '/resource-planning'
@@ -1172,6 +1183,7 @@ export interface FileRouteTypes {
     | '/_hq/proposals'
     | '/_hq/punch-list'
     | '/_hq/purchase-orders'
+    | '/_hq/quotes'
     | '/_hq/rd-ideas'
     | '/_hq/receiving'
     | '/_hq/resource-planning'
@@ -1559,6 +1571,13 @@ declare module '@tanstack/react-router' {
       path: '/rd-ideas'
       fullPath: '/rd-ideas'
       preLoaderRoute: typeof HqRdIdeasRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/quotes': {
+      id: '/_hq/quotes'
+      path: '/quotes'
+      fullPath: '/quotes'
+      preLoaderRoute: typeof HqQuotesRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/purchase-orders': {
@@ -2017,6 +2036,7 @@ interface HqRouteChildren {
   HqProposalsRoute: typeof HqProposalsRoute
   HqPunchListRoute: typeof HqPunchListRoute
   HqPurchaseOrdersRoute: typeof HqPurchaseOrdersRoute
+  HqQuotesRoute: typeof HqQuotesRoute
   HqRdIdeasRoute: typeof HqRdIdeasRoute
   HqReceivingRoute: typeof HqReceivingRoute
   HqResourcePlanningRoute: typeof HqResourcePlanningRoute
@@ -2087,6 +2107,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqProposalsRoute: HqProposalsRoute,
   HqPunchListRoute: HqPunchListRoute,
   HqPurchaseOrdersRoute: HqPurchaseOrdersRoute,
+  HqQuotesRoute: HqQuotesRoute,
   HqRdIdeasRoute: HqRdIdeasRoute,
   HqReceivingRoute: HqReceivingRoute,
   HqResourcePlanningRoute: HqResourcePlanningRoute,
