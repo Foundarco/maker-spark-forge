@@ -36,6 +36,9 @@ function JobDetail() {
   const [punch, setPunch] = useState<Row[]>([]);
   const [permits, setPermits] = useState<Row[]>([]);
   const [incidents, setIncidents] = useState<Row[]>([]);
+  const [sched, setSched] = useState<Row[]>([]);
+  const [crews, setCrews] = useState<Row[]>([]);
+  const [equipment, setEquipment] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("Overview");
 
@@ -44,7 +47,7 @@ function JobDetail() {
     (async () => {
       setLoading(true);
       const t = (name: string) => (supabase.from(name as any) as any).select("*").eq("job_id", id);
-      const [j, p, dl, tk, rf, co, pu, pm, si] = await Promise.all([
+      const [j, p, dl, tk, rf, co, pu, pm, si, sb, cr, eq] = await Promise.all([
         (supabase.from("con_jobs") as any).select("*").eq("id", id).maybeSingle(),
         supabase.from("profiles").select("id, full_name, email"),
         t("con_daily_logs").order("log_date", { ascending: false }),
@@ -54,12 +57,16 @@ function JobDetail() {
         t("con_punch_items").order("created_at", { ascending: false }),
         t("con_permits").order("created_at", { ascending: false }),
         t("con_safety_incidents").order("incident_date", { ascending: false }),
+        t("con_schedule_blocks").order("scheduled_date", { ascending: true }),
+        (supabase.from("con_crews") as any).select("id, name"),
+        (supabase.from("con_equipment") as any).select("id, name"),
       ]);
       if (!alive) return;
       setJob(j.data ?? null);
       setProfiles((p.data ?? []) as Row[]);
       setLogs(dl.data ?? []); setTasks(tk.data ?? []); setRfis(rf.data ?? []);
       setCos(co.data ?? []); setPunch(pu.data ?? []); setPermits(pm.data ?? []); setIncidents(si.data ?? []);
+      setSched(sb.data ?? []); setCrews(cr.data ?? []); setEquipment(eq.data ?? []);
       if (j.data?.client_id) {
         const { data: cl } = await (supabase.from("con_clients") as any).select("*").eq("id", j.data.client_id).maybeSingle();
         if (alive) setClient(cl ?? null);
@@ -96,7 +103,27 @@ function JobDetail() {
     );
   }
 
-  const margin = Number(job.contract_value || 0) - Number(job.actual_cost || 0);
+  const labor = Number(job.actual_labor_cost || 0);
+  const materials = Number(job.actual_material_cost || 0);
+  const equipCost = Number(job.actual_equipment_cost || 0);
+  const other = Number(job.actual_other_cost || 0);
+  const totalCost = labor + materials + equipCost + other || Number(job.actual_cost || 0);
+  const revenue = Number(job.contract_value || 0);
+  const margin = revenue - totalCost;
+  const estLabor = Number(job.est_labor_cost || 0);
+  const estMaterials = Number(job.est_material_cost || 0);
+  const estEquip = Number(job.est_equipment_cost || 0);
+  const estTotal = estLabor + estMaterials + estEquip || Number(job.estimated_cost || 0);
+
+  const costCards = [
+    { label: "Labor", value: labor, budget: estLabor, grad: "from-sky-400 to-blue-500" },
+    { label: "Materials", value: materials, budget: estMaterials, grad: "from-teal-400 to-cyan-500" },
+    { label: "Total cost", value: totalCost, budget: estTotal, grad: "from-amber-400 to-orange-500" },
+    { label: "Margin", value: margin, budget: revenue - estTotal, grad: "from-violet-500 to-purple-600" },
+    { label: "Revenue", value: revenue, budget: null as number | null, grad: "from-pink-500 to-rose-500" },
+  ];
+
+  const stageIndex = Math.max(0, STAGE_SEQUENCE.indexOf(job.stage));
 
   return (
     <RecordLayout
@@ -155,9 +182,38 @@ function JobDetail() {
         <div className="space-y-6 p-5">
           {tab === "Overview" && (
             <>
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+                {costCards.map((c) => (
+                  <div key={c.label} className={`rounded-2xl bg-gradient-to-br ${c.grad} p-4 text-white shadow-sm`}>
+                    <p className="text-[11px] font-medium uppercase tracking-wider text-white/85">{c.label}</p>
+                    <p className="mt-2 text-2xl font-semibold tabular-nums">{money(c.value)}</p>
+                    {c.budget != null && (
+                      <p className="mt-0.5 text-xs text-white/85">
+                        {c.label === "Margin" ? "Est." : "Budget"} {money(c.budget)}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h2 className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Stage timeline</h2>
+                  <span className="text-xs text-muted-foreground">Start {fmt(job.start_date)} · Due {fmt(job.target_end_date)}</span>
+                </div>
+                <div className="mt-3 grid gap-1" style={{ gridTemplateColumns: `repeat(${STAGE_SEQUENCE.length}, minmax(0,1fr))` }}>
+                  {STAGE_SEQUENCE.map((s, i) => (
+                    <div key={s}>
+                      <p className={`truncate text-[10px] font-semibold uppercase tracking-wider ${i <= stageIndex ? "text-foreground" : "text-muted-foreground"}`}>{s}</p>
+                      <div className={`mt-1 h-1.5 rounded-full ${i < stageIndex ? "bg-primary" : i === stageIndex ? "bg-primary/60" : "bg-muted"}`} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-                <Kpi icon={Coins} label="Contract" value={money(job.contract_value)} />
-                <Kpi icon={Coins} label="Cost to date" value={money(job.actual_cost)} />
+                <Kpi icon={Coins} label="Billed" value={money(job.billed)} />
+                <Kpi icon={Coins} label="Scheduled hrs" value={`${sched.reduce((s2, b) => s2 + Number(b.duration_hours || 0), 0)}`} />
                 <Kpi icon={CheckSquare} label="Open tasks" value={tasks.filter((t) => t.status !== "done").length} />
                 <Kpi icon={ListChecks} label="Open punch" value={punch.filter((p) => p.status !== "closed" && p.status !== "verified").length} />
               </div>
@@ -173,6 +229,22 @@ function JobDetail() {
                 </Panel>
               </div>
             </>
+          )}
+
+          {tab === "Schedule" && (
+            <Panel title={`Scheduled work (${sched.length})`} action={<Link to="/scheduling" className="text-xs text-primary hover:underline">Open scheduling board</Link>}>
+              <MiniList rows={sched} empty="Nothing scheduled for this job yet." render={(b) => (
+                <Row2
+                  left={b.title}
+                  right={b.status}
+                  sub={`${fmt(b.scheduled_date)} · ${Number(b.duration_hours || 0)} hrs · ${
+                    b.resource_type === "equipment"
+                      ? equipment.find((e) => e.id === b.equipment_id)?.name ?? "Equipment"
+                      : crews.find((c) => c.id === b.crew_id)?.name ?? "Crew"
+                  }${b.phase ? ` · ${b.phase}` : ""}`}
+                />
+              )} />
+            </Panel>
           )}
 
           {tab === "Daily Logs" && (
