@@ -103,6 +103,8 @@ function ClientDetail() {
     >
       {tab === "Thread" ? (
         <div className="h-full"><ContextThread entityType="client" entityId={client.id} title={`Client thread · ${client.company || client.name}`} /></div>
+      ) : tab === "Messages" ? (
+        <div className="p-5"><ClientMessagesPanel clientId={client.id} clientName={client.company || client.name} /></div>
       ) : (
         <div className="space-y-6 p-5">
           {tab === "Overview" && (
