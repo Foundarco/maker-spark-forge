@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Hash, MessagesSquare, Video, StickyNote, Phone, Bot } from "lucide-react";
+import { Hash, MessagesSquare, Video, StickyNote, Phone, Bot, Users2 } from "lucide-react";
 
 const items = [
   { to: "/channels", label: "Channels", icon: Hash },
@@ -7,6 +7,7 @@ const items = [
   { to: "/phone", label: "Calls", icon: Phone },
   { to: "/meetings", label: "Meetings", icon: Video },
   { to: "/meeting-notes", label: "Notes", icon: StickyNote },
+  { to: "/client-comms", label: "Clients", icon: Users2 },
 ];
 
 const apps = [{ to: "/assistant", label: "Assistant", icon: Bot }];

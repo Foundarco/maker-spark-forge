@@ -110,7 +110,8 @@ export const navGroups: NavGroup[] = [
     division: "clients",
     items: [
       { label: "Service Requests", to: "/tickets", icon: LifeBuoy },
-      { label: "Conversations", to: "/live-chat", icon: MessageCircle },
+      { label: "Client Comms", to: "/client-comms", icon: MessageCircle },
+      { label: "Live Chat", to: "/live-chat", icon: MessageSquareWarning },
       { label: "Client Timeline", to: "/customer-timeline", icon: Timer },
       { label: "Warranty Claims", to: "/warranty-claims", icon: ShieldCheck },
       { label: "Knowledge Base", to: "/kb", icon: BookOpen },
