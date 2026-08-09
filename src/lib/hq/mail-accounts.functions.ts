@@ -217,7 +217,7 @@ export const sendMailViaAccount = createServerFn({ method: "POST" })
         cc: split(data.cc),
         subject: data.subject,
         text: data.body,
-        html: data.html ?? null ?? undefined,
+        html: data.html ?? undefined,
         inReplyTo: data.inReplyTo ?? null,
       },
     );
