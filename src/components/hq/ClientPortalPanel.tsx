@@ -3,7 +3,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { createPortalUser, setPortalUserStatus } from "@/lib/hq/portal.functions";
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2, Send, UserPlus, ShieldOff, ShieldCheck, Copy } from "lucide-react";
-import { toast } from "sonner";
 
 type Row = Record<string, any>;
 
@@ -21,6 +20,7 @@ export function ClientPortalPanel({ clientId }: { clientId: string }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ fullName: "", email: "", password: randomPassword() });
   const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const load = async () => {
     const { data } = await supabase.from("con_client_portal_users").select("*").eq("client_id", clientId).order("created_at", { ascending: false });
@@ -34,12 +34,12 @@ export function ClientPortalPanel({ clientId }: { clientId: string }) {
     setBusy(true);
     try {
       await create({ data: { clientId, email: form.email.trim(), fullName: form.fullName.trim(), password: form.password } });
-      toast.success("Portal access created", { description: "Share the temporary password with the client." });
+      setNotice("Portal access created — share the temporary password with the client.");
       setOpen(false);
       setForm({ fullName: "", email: "", password: randomPassword() });
       load();
     } catch (err: any) {
-      toast.error(err?.message ?? "Could not create portal access.");
+      setNotice(err?.message ?? "Could not create portal access.");
     } finally {
       setBusy(false);
     }
@@ -51,7 +51,7 @@ export function ClientPortalPanel({ clientId }: { clientId: string }) {
       await setStatus({ data: { id: row.id, status: next } });
       setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, status: next } : r)));
     } catch (err: any) {
-      toast.error(err?.message ?? "Update failed.");
+      setNotice(err?.message ?? "Update failed.");
     }
   };
 
@@ -64,6 +64,7 @@ export function ClientPortalPanel({ clientId }: { clientId: string }) {
         </button>
       </div>
       <div className="p-4">
+        {notice && <p className="mb-3 rounded-lg border border-border bg-muted/40 px-3 py-2 text-xs">{notice}</p>}
         {loading ? (
           <div className="flex justify-center py-6"><Loader2 className="h-4 w-4 animate-spin text-muted-foreground" /></div>
         ) : rows.length === 0 ? (
@@ -103,7 +104,7 @@ export function ClientPortalPanel({ clientId }: { clientId: string }) {
               <label className="block text-xs font-medium">Temporary password
                 <div className="mt-1 flex gap-2">
                   <input aria-label="Temporary password" required minLength={10} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm" />
-                  <button type="button" aria-label="Copy password" onClick={() => { navigator.clipboard.writeText(form.password); toast.success("Copied"); }} className="rounded-lg border border-border px-2.5 hover:bg-muted"><Copy className="h-3.5 w-3.5" /></button>
+                  <button type="button" aria-label="Copy password" onClick={() => { navigator.clipboard.writeText(form.password); setNotice("Password copied"); }} className="rounded-lg border border-border px-2.5 hover:bg-muted"><Copy className="h-3.5 w-3.5" /></button>
                 </div>
               </label>
             </div>
@@ -123,6 +124,7 @@ export function ClientMessagesPanel({ clientId, clientName }: { clientId: string
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [body, setBody] = useState("");
+  const [err, setErr] = useState<string | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -157,7 +159,7 @@ export function ClientMessagesPanel({ clientId, clientName }: { clientId: string
       author_name: prof?.full_name ?? null,
       from_client: false,
     });
-    if (error) toast.error(error.message);
+    if (error) setErr(error.message);
   };
 
   return (
@@ -182,6 +184,7 @@ export function ClientMessagesPanel({ clientId, clientName }: { clientId: string
         ))}
         <div ref={endRef} />
       </div>
+      {err && <p className="border-t border-border px-4 py-2 text-xs text-destructive">{err}</p>}
       <form onSubmit={send} className="flex items-center gap-2 border-t border-border p-3">
         <input aria-label="Message to client" value={body} onChange={(e) => setBody(e.target.value)} placeholder="Reply to the client…" className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm" />
         <button type="submit" disabled={!body.trim()} aria-label="Send message" className="rounded-lg bg-primary p-2 text-primary-foreground disabled:opacity-50"><Send className="h-4 w-4" /></button>
