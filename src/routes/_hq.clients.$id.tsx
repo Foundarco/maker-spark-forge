@@ -4,6 +4,7 @@ import { ArrowLeft, HardHat, Calculator, Loader2, FileSignature } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { RecordLayout, ProfileCard, ActivityRail, type ActivityEvent } from "@/components/hq/RecordLayout";
 import { ContextThread } from "@/components/hq/ContextThread";
+import { ClientPortalPanel, ClientMessagesPanel } from "@/components/hq/ClientPortalPanel";
 
 type Row = Record<string, any>;
 const TABS = ["Overview", "Jobs", "Estimates", "Messages", "Portal", "Thread"] as const;
