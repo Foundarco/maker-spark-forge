@@ -1,12 +1,12 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose, Check } from "lucide-react";
-import { navGroups, divisions, type DivisionId } from "./nav-config";
+import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, PanelLeftClose } from "lucide-react";
+import { navGroups } from "./nav-config";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { supabase } from "@/integrations/supabase/client";
+import logo from "@/assets/mcguire-logo.png.asset.json";
 
 const STORAGE_KEY = "hq.sidebar.collapsed";
-const DIVISION_KEY = "hq.sidebar.division";
 
 const ALWAYS_VISIBLE = new Set<string>([
   "/dashboard", "/assistant", "/settings", "/profile", "/notifications", "/search",
