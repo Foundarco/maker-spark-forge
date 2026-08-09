@@ -257,6 +257,11 @@ function MailClient() {
         return;
       }
 
+      if (!asDraft) {
+        alert("No mailbox connected. Ask an admin to connect an IMAP/SMTP mailbox in Settings → Company → Mailboxes.");
+        return;
+      }
+
       const fromAddr = MAILBOX_FROM[compose.mailbox] ?? MAILBOX_FROM.personal;
       const row = {
         folder: asDraft ? "drafts" : "sent",
