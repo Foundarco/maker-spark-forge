@@ -2,8 +2,9 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { EscapeKey } from "@/components/hq/EscapeKey";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail, KeyRound, Layers } from "lucide-react";
+import { Building, Settings as SettingsIcon, Shield, ClipboardCheck, Plus, Trash2, ArrowUp, ArrowDown, Users, X, Check, Save, Mail, KeyRound, Layers, Inbox } from "lucide-react";
 import { navGroups } from "@/components/hq/nav-config";
+import { MailboxesAdmin } from "@/components/hq/MailboxesAdmin";
 
 export const Route = createFileRoute("/_hq/admin/company")({
   head: () => ({ meta: [{ title: "Company Settings — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/_hq/admin/company")({
   component: CompanyPage,
 });
 
-type Tab = "general" | "roles" | "access" | "overrides" | "onboarding" | "email";
+type Tab = "general" | "roles" | "access" | "overrides" | "onboarding" | "email" | "mailboxes";
 
 const TAB_LIST: Array<[Tab, string, any]> = [
   ["general", "General", SettingsIcon],
@@ -26,6 +27,7 @@ const TAB_LIST: Array<[Tab, string, any]> = [
   ["overrides", "Overrides", KeyRound],
   ["onboarding", "Onboarding", ClipboardCheck],
   ["email", "Email", Mail],
+  ["mailboxes", "Mailboxes", Inbox],
 ];
 
 function CompanyPage() {
@@ -54,6 +56,7 @@ function CompanyPage() {
       {tab === "overrides" && <PermissionOverrides />}
       {tab === "onboarding" && <OnboardingTemplates />}
       {tab === "email" && <EmailSettings />}
+      {tab === "mailboxes" && <MailboxesAdmin />}
     </div>
   );
 }
