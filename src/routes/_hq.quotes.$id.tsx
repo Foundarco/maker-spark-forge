@@ -149,7 +149,7 @@ function QuoteDetail() {
           subtitle={quote.contact_name || client?.email || "Assign a customer to this quote"}
           tags={[
             { label: quote.status, tone: ["won", "approved"].includes(quote.status) ? "success" : "primary" },
-            { label: `${totals.marginPct}% margin`, tone: totals.margin < 0 ? "warn" : "muted" },
+            { label: `${totals.marginPct}% margin`, tone: "muted" },
           ]}
           email={quote.contact_email || client?.email}
           phone={client?.phone}
