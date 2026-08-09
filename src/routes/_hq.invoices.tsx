@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FileSpreadsheet, DollarSign, Clock, AlertTriangle } from "lucide-react";
-import { ResourcePage, StatusBadge, DateCell } from "@/components/hq/ResourcePage";
+import { ResourcePage, StatusBadge, DateCell, ClientCell, JobCell } from "@/components/hq/ResourcePage";
 import type { ResourceConfig } from "@/components/hq/ResourcePage";
 
 export const Route = createFileRoute("/_hq/invoices")({
