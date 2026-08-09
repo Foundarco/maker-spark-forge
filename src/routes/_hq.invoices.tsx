@@ -54,6 +54,8 @@ const config: ResourceConfig<any> = {
     { key: "invoice_number", label: "Invoice #", type: "text" },
     { key: "customer_name", label: "Customer", type: "text", required: true },
     { key: "customer_email", label: "Customer email", type: "text" },
+    { key: "client_id", label: "Client", type: "client" },
+    { key: "job_id", label: "Job", type: "job" },
     { key: "issue_date", label: "Issue date", type: "date" },
     { key: "due_date", label: "Due date", type: "date" },
     { key: "subtotal", label: "Subtotal ($)", type: "number" },
