@@ -48,6 +48,7 @@ import { Route as HqSuppliersRouteImport } from './routes/_hq.suppliers'
 import { Route as HqSubcontractorsRouteImport } from './routes/_hq.subcontractors'
 import { Route as HqSettingsRouteImport } from './routes/_hq.settings'
 import { Route as HqSearchRouteImport } from './routes/_hq.search'
+import { Route as HqSchedulingRouteImport } from './routes/_hq.scheduling'
 import { Route as HqSalesAnalyticsRouteImport } from './routes/_hq.sales-analytics'
 import { Route as HqSafetyRouteImport } from './routes/_hq.safety'
 import { Route as HqRfisRouteImport } from './routes/_hq.rfis'
@@ -304,6 +305,11 @@ const HqSettingsRoute = HqSettingsRouteImport.update({
 const HqSearchRoute = HqSearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => HqRoute,
+} as any)
+const HqSchedulingRoute = HqSchedulingRouteImport.update({
+  id: '/scheduling',
+  path: '/scheduling',
   getParentRoute: () => HqRoute,
 } as any)
 const HqSalesAnalyticsRoute = HqSalesAnalyticsRouteImport.update({
@@ -690,6 +696,7 @@ export interface FileRoutesByFullPath {
   '/rfis': typeof HqRfisRoute
   '/safety': typeof HqSafetyRoute
   '/sales-analytics': typeof HqSalesAnalyticsRoute
+  '/scheduling': typeof HqSchedulingRoute
   '/search': typeof HqSearchRoute
   '/settings': typeof HqSettingsRoute
   '/subcontractors': typeof HqSubcontractorsRoute
@@ -788,6 +795,7 @@ export interface FileRoutesByTo {
   '/rfis': typeof HqRfisRoute
   '/safety': typeof HqSafetyRoute
   '/sales-analytics': typeof HqSalesAnalyticsRoute
+  '/scheduling': typeof HqSchedulingRoute
   '/search': typeof HqSearchRoute
   '/settings': typeof HqSettingsRoute
   '/subcontractors': typeof HqSubcontractorsRoute
@@ -893,6 +901,7 @@ export interface FileRoutesById {
   '/_hq/rfis': typeof HqRfisRoute
   '/_hq/safety': typeof HqSafetyRoute
   '/_hq/sales-analytics': typeof HqSalesAnalyticsRoute
+  '/_hq/scheduling': typeof HqSchedulingRoute
   '/_hq/search': typeof HqSearchRoute
   '/_hq/settings': typeof HqSettingsRoute
   '/_hq/subcontractors': typeof HqSubcontractorsRoute
@@ -997,6 +1006,7 @@ export interface FileRouteTypes {
     | '/rfis'
     | '/safety'
     | '/sales-analytics'
+    | '/scheduling'
     | '/search'
     | '/settings'
     | '/subcontractors'
@@ -1095,6 +1105,7 @@ export interface FileRouteTypes {
     | '/rfis'
     | '/safety'
     | '/sales-analytics'
+    | '/scheduling'
     | '/search'
     | '/settings'
     | '/subcontractors'
@@ -1199,6 +1210,7 @@ export interface FileRouteTypes {
     | '/_hq/rfis'
     | '/_hq/safety'
     | '/_hq/sales-analytics'
+    | '/_hq/scheduling'
     | '/_hq/search'
     | '/_hq/settings'
     | '/_hq/subcontractors'
@@ -1532,6 +1544,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof HqSearchRouteImport
+      parentRoute: typeof HqRoute
+    }
+    '/_hq/scheduling': {
+      id: '/_hq/scheduling'
+      path: '/scheduling'
+      fullPath: '/scheduling'
+      preLoaderRoute: typeof HqSchedulingRouteImport
       parentRoute: typeof HqRoute
     }
     '/_hq/sales-analytics': {
@@ -2074,6 +2093,7 @@ interface HqRouteChildren {
   HqRfisRoute: typeof HqRfisRoute
   HqSafetyRoute: typeof HqSafetyRoute
   HqSalesAnalyticsRoute: typeof HqSalesAnalyticsRoute
+  HqSchedulingRoute: typeof HqSchedulingRoute
   HqSearchRoute: typeof HqSearchRoute
   HqSettingsRoute: typeof HqSettingsRoute
   HqSubcontractorsRoute: typeof HqSubcontractorsRoute
@@ -2144,6 +2164,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqRfisRoute: HqRfisRoute,
   HqSafetyRoute: HqSafetyRoute,
   HqSalesAnalyticsRoute: HqSalesAnalyticsRoute,
+  HqSchedulingRoute: HqSchedulingRoute,
   HqSearchRoute: HqSearchRoute,
   HqSettingsRoute: HqSettingsRoute,
   HqSubcontractorsRoute: HqSubcontractorsRoute,

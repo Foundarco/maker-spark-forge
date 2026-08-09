@@ -11,8 +11,11 @@ import { UserMention } from "@/components/hq/UserMention";
 
 type Row = Record<string, any>;
 
-const TABS = ["Overview", "Daily Logs", "Tasks", "RFIs", "Change Orders", "Punch List", "Thread"] as const;
+const TABS = ["Overview", "Schedule", "Daily Logs", "Tasks", "RFIs", "Change Orders", "Punch List", "Thread"] as const;
 type Tab = (typeof TABS)[number];
+
+const STAGE_SEQUENCE = ["lead", "preconstruction", "contract", "active", "closeout", "complete"] as const;
+
 
 function money(n: any) {
   return `$${Number(n || 0).toLocaleString()}`;
