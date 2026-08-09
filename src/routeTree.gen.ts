@@ -104,7 +104,6 @@ import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
 import { Route as HqJobsIndexRouteImport } from './routes/_hq.jobs.index'
 import { Route as HqClientsIndexRouteImport } from './routes/_hq.clients.index'
-import { Route as ApiPublicResendInboundRouteImport } from './routes/api/public/resend-inbound'
 import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
 import { Route as HqJobsIdRouteImport } from './routes/_hq.jobs.$id'
 import { Route as HqClientsIdRouteImport } from './routes/_hq.clients.$id'
@@ -585,11 +584,6 @@ const HqClientsIndexRoute = HqClientsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HqClientsRoute,
 } as any)
-const ApiPublicResendInboundRoute = ApiPublicResendInboundRouteImport.update({
-  id: '/api/public/resend-inbound',
-  path: '/api/public/resend-inbound',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiHqAssistantRoute = ApiHqAssistantRouteImport.update({
   id: '/api/hq/assistant',
   path: '/api/hq/assistant',
@@ -713,7 +707,6 @@ export interface FileRoutesByFullPath {
   '/clients/$id': typeof HqClientsIdRoute
   '/jobs/$id': typeof HqJobsIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
-  '/api/public/resend-inbound': typeof ApiPublicResendInboundRoute
   '/clients/': typeof HqClientsIndexRoute
   '/jobs/': typeof HqJobsIndexRoute
 }
@@ -811,7 +804,6 @@ export interface FileRoutesByTo {
   '/clients/$id': typeof HqClientsIdRoute
   '/jobs/$id': typeof HqJobsIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
-  '/api/public/resend-inbound': typeof ApiPublicResendInboundRoute
   '/clients': typeof HqClientsIndexRoute
   '/jobs': typeof HqJobsIndexRoute
 }
@@ -915,7 +907,6 @@ export interface FileRoutesById {
   '/_hq/clients/$id': typeof HqClientsIdRoute
   '/_hq/jobs/$id': typeof HqJobsIdRoute
   '/api/hq/assistant': typeof ApiHqAssistantRoute
-  '/api/public/resend-inbound': typeof ApiPublicResendInboundRoute
   '/_hq/clients/': typeof HqClientsIndexRoute
   '/_hq/jobs/': typeof HqJobsIndexRoute
 }
@@ -1018,7 +1009,6 @@ export interface FileRouteTypes {
     | '/clients/$id'
     | '/jobs/$id'
     | '/api/hq/assistant'
-    | '/api/public/resend-inbound'
     | '/clients/'
     | '/jobs/'
   fileRoutesByTo: FileRoutesByTo
@@ -1116,7 +1106,6 @@ export interface FileRouteTypes {
     | '/clients/$id'
     | '/jobs/$id'
     | '/api/hq/assistant'
-    | '/api/public/resend-inbound'
     | '/clients'
     | '/jobs'
   id:
@@ -1219,7 +1208,6 @@ export interface FileRouteTypes {
     | '/_hq/clients/$id'
     | '/_hq/jobs/$id'
     | '/api/hq/assistant'
-    | '/api/public/resend-inbound'
     | '/_hq/clients/'
     | '/_hq/jobs/'
   fileRoutesById: FileRoutesById
@@ -1247,7 +1235,6 @@ export interface RootRouteChildren {
   MeetingIdRoute: typeof MeetingIdRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   ApiHqAssistantRoute: typeof ApiHqAssistantRoute
-  ApiPublicResendInboundRoute: typeof ApiPublicResendInboundRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1917,13 +1904,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqClientsIndexRouteImport
       parentRoute: typeof HqClientsRoute
     }
-    '/api/public/resend-inbound': {
-      id: '/api/public/resend-inbound'
-      path: '/api/public/resend-inbound'
-      fullPath: '/api/public/resend-inbound'
-      preLoaderRoute: typeof ApiPublicResendInboundRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/hq/assistant': {
       id: '/api/hq/assistant'
       path: '/api/hq/assistant'
@@ -2193,7 +2173,6 @@ const rootRouteChildren: RootRouteChildren = {
   MeetingIdRoute: MeetingIdRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
   ApiHqAssistantRoute: ApiHqAssistantRoute,
-  ApiPublicResendInboundRoute: ApiPublicResendInboundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

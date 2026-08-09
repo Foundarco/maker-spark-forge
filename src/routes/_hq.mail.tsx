@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
-import { sendEmailViaResend } from "@/lib/hq/mail.functions";
 import { syncMailAccount, sendMailViaAccount } from "@/lib/hq/mail-accounts.functions";
 import { RefreshCw, Loader2 } from "lucide-react";
 
@@ -87,7 +86,6 @@ function MailClient() {
   const [query, setQuery] = useState("");
   const [compose, setCompose] = useState<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo?: string | null } | null>(null);
   const [sending, setSending] = useState(false);
-  const sendFn = useServerFn(sendEmailViaResend);
   const sendViaAccount = useServerFn(sendMailViaAccount);
   const syncFn = useServerFn(syncMailAccount);
   const [accounts, setAccounts] = useState<MailAccount[]>([]);
@@ -257,6 +255,11 @@ function MailClient() {
         return;
       }
 
+      if (!asDraft) {
+        alert("No mailbox connected. Ask an admin to connect an IMAP/SMTP mailbox in Settings → Company → Mailboxes.");
+        return;
+      }
+
       const fromAddr = MAILBOX_FROM[compose.mailbox] ?? MAILBOX_FROM.personal;
       const row = {
         folder: asDraft ? "drafts" : "sent",
@@ -278,27 +281,8 @@ function MailClient() {
       if (error) { alert(error.message); return; }
       const inserted = data as Email;
 
-      if (!asDraft) {
-        try {
-          const bodyText = compose.body || "";
-          const html = `<div style="font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;white-space:pre-wrap;">${escapeHtml(bodyText)}</div>`;
-          await sendFn({
-            data: {
-              from: fromAddr,
-              to: compose.to,
-              cc: compose.cc || null,
-              subject: compose.subject || "(no subject)",
-              html,
-              text: bodyText,
-              inReplyTo: compose.inReplyTo ?? null,
-              emailRowId: inserted.id,
-            },
-          });
-        } catch (err: any) {
-          console.error(err);
-          alert(`Saved to Sent, but delivery failed: ${err?.message ?? err}`);
-        }
-      }
+
+
 
       if (inserted) setEmails((prev) => [inserted, ...prev]);
       setCompose(null);
@@ -308,9 +292,6 @@ function MailClient() {
     }
   };
 
-  function escapeHtml(s: string) {
-    return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c] as string));
-  }
 
 
   const setFlag = async (id: string, status: string) => {
