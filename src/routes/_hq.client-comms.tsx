@@ -159,7 +159,7 @@ function ClientComms() {
       const v = (form as any)[f.key];
       patch[f.key as string] = v === "" ? null : f.type === "number" ? Number(v) || 0 : v;
     }
-    const { data, error } = await supabase.from("con_clients").update(patch).eq("id", active.id).select().single();
+    const { data, error } = await supabase.from("con_clients").update(patch as never).eq("id", active.id).select().single();
     if (!error && data) {
       setClients((prev) => prev.map((c) => (c.id === active.id ? (data as Client) : c)));
       setEditing(false);
