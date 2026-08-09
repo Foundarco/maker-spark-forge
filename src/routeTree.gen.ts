@@ -26,6 +26,7 @@ import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
+import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
 import { Route as PortalJobsRouteImport } from './routes/portal.jobs'
 import { Route as PortalInvoicesRouteImport } from './routes/portal.invoices'
 import { Route as PortalDocumentsRouteImport } from './routes/portal.documents'
@@ -193,6 +194,11 @@ const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
   id: '/divisions/',
   path: '/divisions/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PortalMessagesRoute = PortalMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => PortalRoute,
 } as any)
 const PortalJobsRoute = PortalJobsRouteImport.update({
   id: '/jobs',
@@ -699,6 +705,7 @@ export interface FileRoutesByFullPath {
   '/portal/documents': typeof PortalDocumentsRoute
   '/portal/invoices': typeof PortalInvoicesRoute
   '/portal/jobs': typeof PortalJobsRoute
+  '/portal/messages': typeof PortalMessagesRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -796,6 +803,7 @@ export interface FileRoutesByTo {
   '/portal/documents': typeof PortalDocumentsRoute
   '/portal/invoices': typeof PortalInvoicesRoute
   '/portal/jobs': typeof PortalJobsRoute
+  '/portal/messages': typeof PortalMessagesRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
@@ -899,6 +907,7 @@ export interface FileRoutesById {
   '/portal/documents': typeof PortalDocumentsRoute
   '/portal/invoices': typeof PortalInvoicesRoute
   '/portal/jobs': typeof PortalJobsRoute
+  '/portal/messages': typeof PortalMessagesRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
@@ -1001,6 +1010,7 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/invoices'
     | '/portal/jobs'
+    | '/portal/messages'
     | '/divisions/'
     | '/portal/'
     | '/admin/company'
@@ -1098,6 +1108,7 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/invoices'
     | '/portal/jobs'
+    | '/portal/messages'
     | '/divisions'
     | '/portal'
     | '/admin/company'
@@ -1200,6 +1211,7 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/invoices'
     | '/portal/jobs'
+    | '/portal/messages'
     | '/divisions/'
     | '/portal/'
     | '/_hq/admin/company'
@@ -1358,6 +1370,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/divisions/'
       preLoaderRoute: typeof DivisionsIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/portal/messages': {
+      id: '/portal/messages'
+      path: '/messages'
+      fullPath: '/portal/messages'
+      preLoaderRoute: typeof PortalMessagesRouteImport
+      parentRoute: typeof PortalRoute
     }
     '/portal/jobs': {
       id: '/portal/jobs'
@@ -2136,6 +2155,7 @@ interface PortalRouteChildren {
   PortalDocumentsRoute: typeof PortalDocumentsRoute
   PortalInvoicesRoute: typeof PortalInvoicesRoute
   PortalJobsRoute: typeof PortalJobsRoute
+  PortalMessagesRoute: typeof PortalMessagesRoute
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
@@ -2143,6 +2163,7 @@ const PortalRouteChildren: PortalRouteChildren = {
   PortalDocumentsRoute: PortalDocumentsRoute,
   PortalInvoicesRoute: PortalInvoicesRoute,
   PortalJobsRoute: PortalJobsRoute,
+  PortalMessagesRoute: PortalMessagesRoute,
   PortalIndexRoute: PortalIndexRoute,
 }
 
