@@ -95,6 +95,7 @@ import { Route as HqCustomerTimelineRouteImport } from './routes/_hq.customer-ti
 import { Route as HqCrewsRouteImport } from './routes/_hq.crews'
 import { Route as HqCompanyTasksRouteImport } from './routes/_hq.company-tasks'
 import { Route as HqClientsRouteImport } from './routes/_hq.clients'
+import { Route as HqClientCommsRouteImport } from './routes/_hq.client-comms'
 import { Route as HqChannelsRouteImport } from './routes/_hq.channels'
 import { Route as HqChangeOrdersRouteImport } from './routes/_hq.change-orders'
 import { Route as HqCertificationsRouteImport } from './routes/_hq.certifications'
@@ -542,6 +543,11 @@ const HqClientsRoute = HqClientsRouteImport.update({
   path: '/clients',
   getParentRoute: () => HqRoute,
 } as any)
+const HqClientCommsRoute = HqClientCommsRouteImport.update({
+  id: '/client-comms',
+  path: '/client-comms',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqChannelsRoute = HqChannelsRouteImport.update({
   id: '/channels',
   path: '/channels',
@@ -651,6 +657,7 @@ export interface FileRoutesByFullPath {
   '/certifications': typeof HqCertificationsRoute
   '/change-orders': typeof HqChangeOrdersRoute
   '/channels': typeof HqChannelsRoute
+  '/client-comms': typeof HqClientCommsRoute
   '/clients': typeof HqClientsRouteWithChildren
   '/company-tasks': typeof HqCompanyTasksRoute
   '/crews': typeof HqCrewsRoute
@@ -753,6 +760,7 @@ export interface FileRoutesByTo {
   '/certifications': typeof HqCertificationsRoute
   '/change-orders': typeof HqChangeOrdersRoute
   '/channels': typeof HqChannelsRoute
+  '/client-comms': typeof HqClientCommsRoute
   '/company-tasks': typeof HqCompanyTasksRoute
   '/crews': typeof HqCrewsRoute
   '/customer-timeline': typeof HqCustomerTimelineRoute
@@ -855,6 +863,7 @@ export interface FileRoutesById {
   '/_hq/certifications': typeof HqCertificationsRoute
   '/_hq/change-orders': typeof HqChangeOrdersRoute
   '/_hq/channels': typeof HqChannelsRoute
+  '/_hq/client-comms': typeof HqClientCommsRoute
   '/_hq/clients': typeof HqClientsRouteWithChildren
   '/_hq/company-tasks': typeof HqCompanyTasksRoute
   '/_hq/crews': typeof HqCrewsRoute
@@ -961,6 +970,7 @@ export interface FileRouteTypes {
     | '/certifications'
     | '/change-orders'
     | '/channels'
+    | '/client-comms'
     | '/clients'
     | '/company-tasks'
     | '/crews'
@@ -1063,6 +1073,7 @@ export interface FileRouteTypes {
     | '/certifications'
     | '/change-orders'
     | '/channels'
+    | '/client-comms'
     | '/company-tasks'
     | '/crews'
     | '/customer-timeline'
@@ -1164,6 +1175,7 @@ export interface FileRouteTypes {
     | '/_hq/certifications'
     | '/_hq/change-orders'
     | '/_hq/channels'
+    | '/_hq/client-comms'
     | '/_hq/clients'
     | '/_hq/company-tasks'
     | '/_hq/crews'
@@ -1875,6 +1887,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqClientsRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/client-comms': {
+      id: '/_hq/client-comms'
+      path: '/client-comms'
+      fullPath: '/client-comms'
+      preLoaderRoute: typeof HqClientCommsRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/channels': {
       id: '/_hq/channels'
       path: '/channels'
@@ -2047,6 +2066,7 @@ interface HqRouteChildren {
   HqCertificationsRoute: typeof HqCertificationsRoute
   HqChangeOrdersRoute: typeof HqChangeOrdersRoute
   HqChannelsRoute: typeof HqChannelsRoute
+  HqClientCommsRoute: typeof HqClientCommsRoute
   HqClientsRoute: typeof HqClientsRouteWithChildren
   HqCompanyTasksRoute: typeof HqCompanyTasksRoute
   HqCrewsRoute: typeof HqCrewsRoute
@@ -2118,6 +2138,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqCertificationsRoute: HqCertificationsRoute,
   HqChangeOrdersRoute: HqChangeOrdersRoute,
   HqChannelsRoute: HqChannelsRoute,
+  HqClientCommsRoute: HqClientCommsRoute,
   HqClientsRoute: HqClientsRouteWithChildren,
   HqCompanyTasksRoute: HqCompanyTasksRoute,
   HqCrewsRoute: HqCrewsRoute,
