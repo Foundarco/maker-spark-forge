@@ -82,7 +82,6 @@ import { Route as HqHiringRouteImport } from './routes/_hq.hiring'
 import { Route as HqHelpRouteImport } from './routes/_hq.help'
 import { Route as HqFinancialReportsRouteImport } from './routes/_hq.financial-reports'
 import { Route as HqExpensesRouteImport } from './routes/_hq.expenses'
-import { Route as HqEstimatesRouteImport } from './routes/_hq.estimates'
 import { Route as HqEquipmentRouteImport } from './routes/_hq.equipment'
 import { Route as HqEngProjectsRouteImport } from './routes/_hq.eng-projects'
 import { Route as HqEmployeesRouteImport } from './routes/_hq.employees'
@@ -477,11 +476,6 @@ const HqExpensesRoute = HqExpensesRouteImport.update({
   path: '/expenses',
   getParentRoute: () => HqRoute,
 } as any)
-const HqEstimatesRoute = HqEstimatesRouteImport.update({
-  id: '/estimates',
-  path: '/estimates',
-  getParentRoute: () => HqRoute,
-} as any)
 const HqEquipmentRoute = HqEquipmentRouteImport.update({
   id: '/equipment',
   path: '/equipment',
@@ -663,7 +657,6 @@ export interface FileRoutesByFullPath {
   '/employees': typeof HqEmployeesRoute
   '/eng-projects': typeof HqEngProjectsRoute
   '/equipment': typeof HqEquipmentRoute
-  '/estimates': typeof HqEstimatesRoute
   '/expenses': typeof HqExpensesRoute
   '/financial-reports': typeof HqFinancialReportsRoute
   '/hiring': typeof HqHiringRoute
@@ -764,7 +757,6 @@ export interface FileRoutesByTo {
   '/employees': typeof HqEmployeesRoute
   '/eng-projects': typeof HqEngProjectsRoute
   '/equipment': typeof HqEquipmentRoute
-  '/estimates': typeof HqEstimatesRoute
   '/expenses': typeof HqExpensesRoute
   '/financial-reports': typeof HqFinancialReportsRoute
   '/hiring': typeof HqHiringRoute
@@ -867,7 +859,6 @@ export interface FileRoutesById {
   '/_hq/employees': typeof HqEmployeesRoute
   '/_hq/eng-projects': typeof HqEngProjectsRoute
   '/_hq/equipment': typeof HqEquipmentRoute
-  '/_hq/estimates': typeof HqEstimatesRoute
   '/_hq/expenses': typeof HqExpensesRoute
   '/_hq/financial-reports': typeof HqFinancialReportsRoute
   '/_hq/help': typeof HqHelpRoute
@@ -973,7 +964,6 @@ export interface FileRouteTypes {
     | '/employees'
     | '/eng-projects'
     | '/equipment'
-    | '/estimates'
     | '/expenses'
     | '/financial-reports'
     | '/hiring'
@@ -1074,7 +1064,6 @@ export interface FileRouteTypes {
     | '/employees'
     | '/eng-projects'
     | '/equipment'
-    | '/estimates'
     | '/expenses'
     | '/financial-reports'
     | '/hiring'
@@ -1176,7 +1165,6 @@ export interface FileRouteTypes {
     | '/_hq/employees'
     | '/_hq/eng-projects'
     | '/_hq/equipment'
-    | '/_hq/estimates'
     | '/_hq/expenses'
     | '/_hq/financial-reports'
     | '/_hq/help'
@@ -1784,13 +1772,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqExpensesRouteImport
       parentRoute: typeof HqRoute
     }
-    '/_hq/estimates': {
-      id: '/_hq/estimates'
-      path: '/estimates'
-      fullPath: '/estimates'
-      preLoaderRoute: typeof HqEstimatesRouteImport
-      parentRoute: typeof HqRoute
-    }
     '/_hq/equipment': {
       id: '/_hq/equipment'
       path: '/equipment'
@@ -2059,7 +2040,6 @@ interface HqRouteChildren {
   HqEmployeesRoute: typeof HqEmployeesRoute
   HqEngProjectsRoute: typeof HqEngProjectsRoute
   HqEquipmentRoute: typeof HqEquipmentRoute
-  HqEstimatesRoute: typeof HqEstimatesRoute
   HqExpensesRoute: typeof HqExpensesRoute
   HqFinancialReportsRoute: typeof HqFinancialReportsRoute
   HqHelpRoute: typeof HqHelpRoute
@@ -2130,7 +2110,6 @@ const HqRouteChildren: HqRouteChildren = {
   HqEmployeesRoute: HqEmployeesRoute,
   HqEngProjectsRoute: HqEngProjectsRoute,
   HqEquipmentRoute: HqEquipmentRoute,
-  HqEstimatesRoute: HqEstimatesRoute,
   HqExpensesRoute: HqExpensesRoute,
   HqFinancialReportsRoute: HqFinancialReportsRoute,
   HqHelpRoute: HqHelpRoute,
@@ -2248,3 +2227,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
