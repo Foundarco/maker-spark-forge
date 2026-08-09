@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as ProjectsRouteImport } from './routes/projects'
 import { Route as ProcessRouteImport } from './routes/process'
+import { Route as PortalRouteImport } from './routes/portal'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -123,6 +124,11 @@ const ProjectsRoute = ProjectsRouteImport.update({
 const ProcessRoute = ProcessRouteImport.update({
   id: '/process',
   path: '/process',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HqLoginRoute = HqLoginRouteImport.update({
@@ -590,6 +596,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
+  '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -685,6 +692,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
   '/hq-login': typeof HqLoginRoute
+  '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -780,6 +788,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/help': typeof HelpRouteWithChildren
   '/hq-login': typeof HqLoginRoute
+  '/portal': typeof PortalRoute
   '/process': typeof ProcessRoute
   '/projects': typeof ProjectsRoute
   '/services': typeof ServicesRoute
@@ -878,6 +887,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help'
     | '/hq-login'
+    | '/portal'
     | '/process'
     | '/projects'
     | '/services'
@@ -973,6 +983,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help'
     | '/hq-login'
+    | '/portal'
     | '/process'
     | '/projects'
     | '/services'
@@ -1067,6 +1078,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/help'
     | '/hq-login'
+    | '/portal'
     | '/process'
     | '/projects'
     | '/services'
@@ -1165,6 +1177,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRouteWithChildren
   HqLoginRoute: typeof HqLoginRoute
+  PortalRoute: typeof PortalRoute
   ProcessRoute: typeof ProcessRoute
   ProjectsRoute: typeof ProjectsRoute
   ServicesRoute: typeof ServicesRoute
@@ -1207,6 +1220,13 @@ declare module '@tanstack/react-router' {
       path: '/process'
       fullPath: '/process'
       preLoaderRoute: typeof ProcessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hq-login': {
@@ -2049,6 +2069,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   HelpRoute: HelpRouteWithChildren,
   HqLoginRoute: HqLoginRoute,
+  PortalRoute: PortalRoute,
   ProcessRoute: ProcessRoute,
   ProjectsRoute: ProjectsRoute,
   ServicesRoute: ServicesRoute,
