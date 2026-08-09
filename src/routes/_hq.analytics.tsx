@@ -19,7 +19,7 @@ function Dashboards() {
   useEffect(() => {
     let alive = true;
     (async () => {
-      const t = (name: string, cols = "*") => (supabase.from(name) as any).select(cols).limit(1000);
+      const t = (name: string, cols = "*") => (supabase.from(name as never) as any).select(cols).limit(1000);
       const [j, e, i, x, s, l, emp] = await Promise.all([
         t("con_jobs"), t("con_estimates"), t("fin_invoices"), t("fin_expenses"),
         t("con_safety_incidents"), t("con_leads"), t("hr_employees"),
