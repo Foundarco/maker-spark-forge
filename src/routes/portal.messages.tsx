@@ -46,7 +46,7 @@ function PortalMessages() {
     await supabase.from("con_client_messages").insert({
       client_id: portal.clientId,
       body: text,
-      sender_id: u.user?.id ?? null,
+      author_id: u.user?.id ?? null,
       from_client: true,
     });
     setBody("");
