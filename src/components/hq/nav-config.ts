@@ -6,7 +6,7 @@ import {
   Users2, LifeBuoy, MessageCircle, Timer, ShieldCheck, BookOpen,
   Coins, FileSpreadsheet, GitPullRequestArrow, Landmark, Receipt, FileBarChart, Filter,
   IdCard, UserSearch, FileText, GraduationCap, Award, Star, Network, CalendarDays,
-  Building2, BarChart3, Compass,
+  Building2, BarChart3, CalendarRange, Compass,
 } from "lucide-react";
 
 export type NavItem = {
@@ -83,6 +83,7 @@ export const navGroups: NavGroup[] = [
     division: "field",
     items: [
       { label: "Jobs", to: "/jobs", icon: HardHat },
+      { label: "Scheduling", to: "/scheduling", icon: CalendarRange },
       { label: "Daily Logs", to: "/daily-logs", icon: ClipboardList },
       { label: "Crews & Dispatch", to: "/crews", icon: Users },
       { label: "Time & Attendance", to: "/time-tracking", icon: Clock },
