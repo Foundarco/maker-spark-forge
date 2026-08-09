@@ -8,6 +8,18 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { sendEmailViaResend } from "@/lib/hq/mail.functions";
+import { syncMailAccount, sendMailViaAccount } from "@/lib/hq/mail-accounts.functions";
+import { RefreshCw, Loader2 } from "lucide-react";
+
+type MailAccount = {
+  id: string;
+  label: string;
+  email_address: string;
+  is_shared: boolean;
+  active: boolean;
+  assigned_user_id: string | null;
+  last_sync_at: string | null;
+};
 
 const DEFAULT_FROM_DOMAIN = "clovrlab.com";
 const MAILBOX_FROM: Record<string, string> = {
@@ -76,6 +88,10 @@ function MailClient() {
   const [compose, setCompose] = useState<{ to: string; cc: string; subject: string; body: string; mailbox: string; inReplyTo?: string | null } | null>(null);
   const [sending, setSending] = useState(false);
   const sendFn = useServerFn(sendEmailViaResend);
+  const sendViaAccount = useServerFn(sendMailViaAccount);
+  const syncFn = useServerFn(syncMailAccount);
+  const [accounts, setAccounts] = useState<MailAccount[]>([]);
+  const [syncing, setSyncing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userSettings, setUserSettings] = useState<{ signature: string; auto_reply_enabled: boolean; auto_reply_subject: string; auto_reply_body: string; notify_on_new: boolean; notify_on_mention: boolean; digest_frequency: string; display_name: string }>({
     signature: "", auto_reply_enabled: false, auto_reply_subject: "", auto_reply_body: "", notify_on_new: true, notify_on_mention: true, digest_frequency: "off", display_name: "",
@@ -114,6 +130,8 @@ function MailClient() {
       supabase.from("hq_email_rules").select("*").order("created_at", { ascending: false }),
       supabase.from("hq_email_templates").select("*").order("updated_at", { ascending: false }),
     ]);
+    const { data: accts } = await supabase.from("email_accounts").select("*").eq("active", true).order("label");
+    setAccounts((accts ?? []) as MailAccount[]);
     setEmails((em ?? []) as Email[]);
     setRules((rl ?? []) as Rule[]);
     setTemplates((tp ?? []) as Template[]);
@@ -121,6 +139,28 @@ function MailClient() {
   };
 
   useEffect(() => { refresh(); }, []);
+
+  const syncAll = async () => {
+    if (syncing || accounts.length === 0) return;
+    setSyncing(true);
+    try {
+      let imported = 0;
+      const failures: string[] = [];
+      for (const a of accounts) {
+        try {
+          const res = await syncFn({ data: { accountId: a.id } });
+          imported += res.imported;
+        } catch (err) {
+          failures.push(`${a.email_address}: ${err instanceof Error ? err.message : String(err)}`);
+        }
+      }
+      await refresh();
+      if (failures.length) alert(`Sync finished with errors:\n${failures.join("\n")}`);
+      else if (imported === 0) alert("Mailboxes are up to date.");
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const counts = useMemo(() => {
     const c = { inbox: 0, unread: 0, sent: 0, drafts: 0, archived: 0, flagged: 0 } as Record<string, number>;
@@ -138,7 +178,7 @@ function MailClient() {
   const sharedCounts = useMemo(() => {
     const map: Record<string, number> = {};
     for (const e of emails) {
-      if (SHARED_BOXES.includes(e.mailbox) && !e.is_read) map[e.mailbox] = (map[e.mailbox] ?? 0) + 1;
+      if (!e.is_read && e.mailbox && e.mailbox !== "personal") map[e.mailbox] = (map[e.mailbox] ?? 0) + 1;
     }
     return map;
   }, [emails]);
@@ -194,6 +234,29 @@ function MailClient() {
     setSending(true);
     try {
       const { data: u } = await supabase.auth.getUser();
+      const account = accounts.find((a) => a.email_address === compose.mailbox);
+
+      if (account && !asDraft) {
+        try {
+          await sendViaAccount({
+            data: {
+              accountId: account.id,
+              to: compose.to,
+              cc: compose.cc || null,
+              subject: compose.subject || "(no subject)",
+              body: compose.body || "",
+              inReplyTo: compose.inReplyTo ?? null,
+            },
+          });
+          await refresh();
+          setCompose(null);
+          setActive({ kind: "folder", folder: "sent", label: "Sent" });
+        } catch (err: any) {
+          alert(`Delivery failed: ${err?.message ?? err}`);
+        }
+        return;
+      }
+
       const fromAddr = MAILBOX_FROM[compose.mailbox] ?? MAILBOX_FROM.personal;
       const row = {
         folder: asDraft ? "drafts" : "sent",
@@ -303,7 +366,7 @@ function MailClient() {
             <p className="px-3 pb-1 pt-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               <span className="inline-flex items-center gap-1.5"><Users className="h-3 w-3" /> Shared mailboxes</span>
             </p>
-            {SHARED_BOXES.map((mb) => (
+            {accounts.length === 0 && SHARED_BOXES.map((mb) => (
               <NavItem
                 key={mb}
                 icon={Inbox}
@@ -313,6 +376,26 @@ function MailClient() {
                 onClick={() => setActive({ kind: "shared", mailbox: mb, label: `${mb}@` })}
               />
             ))}
+            {accounts.map((a) => (
+              <NavItem
+                key={a.id}
+                icon={Inbox}
+                label={a.label}
+                count={sharedCounts[a.email_address]}
+                isActive={active.kind === "shared" && active.mailbox === a.email_address}
+                onClick={() => setActive({ kind: "shared", mailbox: a.email_address, label: a.label })}
+              />
+            ))}
+            {accounts.length > 0 && (
+              <button
+                onClick={syncAll}
+                disabled={syncing}
+                className="mt-1 flex w-full items-center gap-2.5 rounded-lg px-3 py-1.5 text-left text-[13px] text-foreground/80 transition hover:bg-muted disabled:opacity-60"
+              >
+                {syncing ? <Loader2 className="h-4 w-4 shrink-0 animate-spin" /> : <RefreshCw className="h-4 w-4 shrink-0" />}
+                <span className="flex-1 truncate">{syncing ? "Syncing…" : "Sync mail"}</span>
+              </button>
+            )}
           </div>
 
           <div>
@@ -466,7 +549,8 @@ function MailClient() {
               <span className="pt-1.5 text-muted-foreground">From</span>
               <select value={compose.mailbox} onChange={(e) => setCompose({ ...compose, mailbox: e.target.value })} className="rounded border border-border bg-background px-2 py-1 outline-none">
                 <option value="personal">Personal</option>
-                {SHARED_BOXES.map((m) => <option key={m} value={m}>{m}@</option>)}
+                {accounts.map((a) => <option key={a.id} value={a.email_address}>{a.label} — {a.email_address}</option>)}
+                {accounts.length === 0 && SHARED_BOXES.map((m) => <option key={m} value={m}>{m}@</option>)}
               </select>
               <span className="pt-1.5 text-muted-foreground">To</span>
               <input value={compose.to} onChange={(e) => setCompose({ ...compose, to: e.target.value })} placeholder="recipient@example.com" className="rounded border border-border bg-background px-2 py-1 outline-none" />

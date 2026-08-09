@@ -68,6 +68,7 @@ function ChannelsPage() {
   const [editingMsg, setEditingMsg] = useState<{ id: string; body: string } | null>(null);
   const [openProfile, setOpenProfile] = useState<{ userId: string; x: number; y: number } | null>(null);
   const [replyingTo, setReplyingTo] = useState<ChannelMessage | null>(null);
+  const [threadOpen, setThreadOpen] = useState<string | null>(null);
   const [showAccess, setShowAccess] = useState(false);
   const [callSessions, setCallSessions] = useState<Record<string, ChannelCallSession>>({});
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -197,6 +198,17 @@ function ChannelsPage() {
     if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as ChannelMessage) : m));
   };
 
+  const sendThreadReply = async (body: string, attachments: Attachment[], mentions: string[]) => {
+    if ((!body && attachments.length === 0) || !me || !active || !threadOpen) return;
+    const tempId = `tmp-${crypto.randomUUID()}`;
+    const optimistic: ChannelMessage = { id: tempId, channel_id: active, author_id: me, body, created_at: new Date().toISOString(), edited_at: null, deleted_at: null, attachments, reply_to_id: threadOpen };
+    setMessages((prev) => [...prev, optimistic]);
+    await ensureProfile(me);
+    const { data, error } = await supabase.from("channel_messages").insert({ channel_id: active, author_id: me, body, attachments: attachments as any, reply_to_id: threadOpen, mentions } as any).select().single();
+    if (error) { setMessages((prev) => prev.filter((m) => m.id !== tempId)); alert(error.message); return; }
+    if (data) setMessages((prev) => prev.map((m) => m.id === tempId ? (data as any as ChannelMessage) : m));
+  };
+
   const scrollToMessage = (mid: string) => {
     const el = msgRefs.current[mid];
     if (!el) return;
@@ -269,6 +281,20 @@ function ChannelsPage() {
     }
   });
 
+  const repliesByParent = useMemo(() => {
+    const map = new Map<string, ChannelMessage[]>();
+    for (const m of messages) {
+      if (!m.reply_to_id) continue;
+      const arr = map.get(m.reply_to_id) ?? [];
+      arr.push(m);
+      map.set(m.reply_to_id, arr);
+    }
+    return map;
+  }, [messages]);
+
+  const threadParent = useMemo(() => (threadOpen ? messages.find((m) => m.id === threadOpen) ?? null : null), [threadOpen, messages]);
+  const threadReplies = threadOpen ? (repliesByParent.get(threadOpen) ?? []) : [];
+
   const rendered = useMemo(() => {
     const out: Array<
       | { kind: "day"; key: string; label: string }
@@ -276,6 +302,7 @@ function ChannelsPage() {
     > = [];
     let lastDay = ""; let lastAuthor = ""; let lastTs = 0;
     for (const m of messages) {
+      if (m.reply_to_id) continue;
       const day = new Date(m.created_at).toDateString();
       if (day !== lastDay) { out.push({ kind: "day", key: `d-${day}`, label: dayLabel(m.created_at) }); lastDay = day; lastAuthor = ""; lastTs = 0; }
       const ts = new Date(m.created_at).getTime();
@@ -287,8 +314,8 @@ function ChannelsPage() {
   }, [messages]);
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-7xl gap-4 px-4 py-6">
-      <aside className="flex w-64 shrink-0 flex-col rounded-xl border border-border bg-card">
+    <div className="flex h-full w-full min-h-0">
+      <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-card/60">
         <div className="flex items-center justify-between border-b border-border p-4">
           <div className="flex items-center gap-2">
             <Hash className="h-4 w-4 text-primary" />
@@ -349,7 +376,7 @@ function ChannelsPage() {
         </div>
       </aside>
 
-      <section className="flex flex-1 flex-col rounded-xl border border-border bg-card">
+      <section className="flex min-w-0 flex-1 flex-col bg-background">
         {!activeChannel ? (
           <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">Select a channel.</div>
         ) : (
@@ -481,12 +508,25 @@ function ChannelsPage() {
                           </div>
                           {m.edited_at && !isDeleted && <span className="text-[10px] text-muted-foreground">(edited)</span>}
                           {!optimistic && !isDeleted && <MessageReactions messageType="channel" messageId={m.id} me={me} />}
+                          {(repliesByParent.get(m.id)?.length ?? 0) > 0 && (
+                            <button onClick={() => setThreadOpen(m.id)} className="mt-1 flex items-center gap-2 rounded-md px-1.5 py-1 text-[11px] font-semibold text-primary hover:bg-primary/10">
+                              <div className="flex -space-x-1.5">
+                                {Array.from(new Set((repliesByParent.get(m.id) ?? []).map((x) => x.author_id))).slice(0, 3).map((uid) => (
+                                  <span key={uid} className="flex h-4 w-4 items-center justify-center rounded-full border border-card bg-primary/15 text-[7px] font-bold text-primary">
+                                    {initials(profiles[uid]?.full_name || profiles[uid]?.email || "?")}
+                                  </span>
+                                ))}
+                              </div>
+                              {repliesByParent.get(m.id)!.length} {repliesByParent.get(m.id)!.length === 1 ? "reply" : "replies"}
+                              <span className="font-normal text-muted-foreground">View thread</span>
+                            </button>
+                          )}
                         </>
                       )}
                     </div>
                     {!optimistic && !isDeleted && editingMsg?.id !== m.id && (
                       <div className="absolute right-2 top-0 hidden gap-1 rounded-md border border-border bg-card p-0.5 shadow-sm group-hover:flex">
-                        <button onClick={() => setReplyingTo(m)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Reply"><Reply className="h-3 w-3" /></button>
+                        <button onClick={() => setThreadOpen(m.id)} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Reply in thread"><Reply className="h-3 w-3" /></button>
                         {canEdit && <button onClick={() => setEditingMsg({ id: m.id, body: m.body })} className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground" aria-label="Edit"><Pencil className="h-3 w-3" /></button>}
                         {canDelete && <button onClick={() => softDeleteMsg(m.id)} className="rounded p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive" aria-label="Delete"><Trash2 className="h-3 w-3" /></button>}
                       </div>
@@ -499,6 +539,38 @@ function ChannelsPage() {
           </>
         )}
       </section>
+
+      {threadOpen && threadParent && (
+        <aside className="flex w-[360px] shrink-0 flex-col border-l border-border bg-card/60">
+          <header className="flex items-center justify-between border-b border-border px-4 py-3">
+            <div>
+              <h3 className="text-sm font-semibold">Thread</h3>
+              <p className="text-[11px] text-muted-foreground">#{activeChannel?.name}</p>
+            </div>
+            <button onClick={() => setThreadOpen(null)} className="rounded p-1 hover:bg-muted" aria-label="Close thread"><X className="h-4 w-4" /></button>
+          </header>
+          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
+            {[threadParent, ...threadReplies].map((tm) => {
+              const tp = profiles[tm.author_id];
+              const tname = tp?.full_name || tp?.email || "Someone";
+              return (
+                <div key={tm.id} className="flex gap-2">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">{initials(tname)}</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-[13px] font-semibold">{tname}</span>
+                      <span className="text-[10px] text-muted-foreground">{new Date(tm.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                    </div>
+                    <MessageBody body={tm.body} attachments={tm.attachments} deleted={!!tm.deleted_at} currentUserId={me ?? undefined} />
+                  </div>
+                </div>
+              );
+            })}
+            {threadReplies.length === 0 && <p className="pt-4 text-center text-xs text-muted-foreground">No replies yet. Start the thread.</p>}
+          </div>
+          {me && <MessageComposer userId={me} onSend={sendThreadReply} placeholder="Reply in thread…" />}
+        </aside>
+      )}
 
       {showNewCat && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowNewCat(false)} role="dialog" aria-modal="true" aria-label="New category">

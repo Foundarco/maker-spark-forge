@@ -182,8 +182,8 @@ function DMPage() {
   };
 
   return (
-    <div className="mx-auto flex h-full w-full max-w-7xl gap-4 px-4 py-6">
-      <aside className="flex w-72 shrink-0 flex-col rounded-xl border border-border bg-card">
+    <div className="flex h-full w-full min-h-0">
+      <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-card/60">
         <div className="border-b border-border p-4">
           <div className="mb-3 flex items-center gap-2">
             <MessagesSquare className="h-4 w-4 text-primary" />
@@ -219,7 +219,7 @@ function DMPage() {
         </div>
       </aside>
 
-      <section className="flex flex-1 flex-col rounded-xl border border-border bg-card">
+      <section className="flex min-w-0 flex-1 flex-col bg-background">
         {!active ? (
           <div className="flex flex-1 flex-col items-center justify-center text-center text-sm text-muted-foreground">
             <UserIcon className="mb-3 h-10 w-10 text-muted-foreground/40" />
