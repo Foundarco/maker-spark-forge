@@ -307,7 +307,7 @@ function EmailSettings() {
       </Field>
       <Field label="Sender domain">
         <input aria-label="Sender domain" value={s.sender_domain} onChange={(e) => setS({ ...s, sender_domain: e.target.value })} className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
-        <p className="mt-1 text-xs text-muted-foreground">Verified in Resend. Shared mailboxes (support@, sales@, etc.) send from this domain.</p>
+        <p className="mt-1 text-xs text-muted-foreground">Shared mailboxes (support@, sales@, etc.) send from this domain.</p>
       </Field>
       <Field label="Default footer">
         <textarea aria-label="Default footer" value={s.default_footer} onChange={(e) => setS({ ...s, default_footer: e.target.value })} rows={4} placeholder="Appended to outbound company email." className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary" />
