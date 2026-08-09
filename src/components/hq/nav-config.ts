@@ -1,5 +1,5 @@
 import {
-  LayoutDashboard, Bot, Settings, Hash, Calendar, HardDrive, Inbox, Lightbulb, Bell, CheckSquare,
+  LayoutDashboard, Settings, Hash, Calendar, HardDrive, Inbox, Lightbulb, Bell, CheckSquare,
   Target, Calculator, Ruler, FileSignature, Map, MessageSquareWarning, Stamp,
   HardHat, ClipboardList, Users, Clock, Truck, ShieldAlert, ClipboardCheck, ListChecks,
   Store, Handshake, ShoppingCart, Boxes, PackageCheck, PackageOpen,
@@ -26,7 +26,6 @@ export const navGroups: NavGroup[] = [
     label: "Core",
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
-      { label: "Assistant", to: "/assistant", icon: Bot },
       { label: "Communication", to: "/channels", icon: Hash },
       { label: "Email", to: "/mail", icon: Inbox },
       { label: "Calendar", to: "/calendar", icon: Calendar },

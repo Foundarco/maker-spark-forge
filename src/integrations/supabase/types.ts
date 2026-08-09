@@ -2837,6 +2837,92 @@ export type Database = {
           },
         ]
       }
+      email_account_secrets: {
+        Row: {
+          account_id: string
+          password_ciphertext: string
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          password_ciphertext: string
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          password_ciphertext?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_account_secrets_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: true
+            referencedRelation: "email_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      email_accounts: {
+        Row: {
+          active: boolean
+          assigned_user_id: string | null
+          created_at: string
+          created_by: string | null
+          display_name: string | null
+          email_address: string
+          id: string
+          imap_host: string
+          imap_port: number
+          is_shared: boolean
+          label: string
+          last_sync_at: string | null
+          last_sync_error: string | null
+          smtp_host: string
+          smtp_port: number
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          active?: boolean
+          assigned_user_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          display_name?: string | null
+          email_address: string
+          id?: string
+          imap_host: string
+          imap_port?: number
+          is_shared?: boolean
+          label: string
+          last_sync_at?: string | null
+          last_sync_error?: string | null
+          smtp_host: string
+          smtp_port?: number
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          active?: boolean
+          assigned_user_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          display_name?: string | null
+          email_address?: string
+          id?: string
+          imap_host?: string
+          imap_port?: number
+          is_shared?: boolean
+          label?: string
+          last_sync_at?: string | null
+          last_sync_error?: string | null
+          smtp_host?: string
+          smtp_port?: number
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
       eng_bom_items: {
         Row: {
           created_at: string
