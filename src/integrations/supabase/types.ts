@@ -1540,6 +1540,10 @@ export type Database = {
         Row: {
           actual_cost: number | null
           actual_end_date: string | null
+          actual_equipment_cost: number
+          actual_labor_cost: number
+          actual_material_cost: number
+          actual_other_cost: number
           address: string | null
           billed: number | null
           city: string | null
@@ -1549,6 +1553,9 @@ export type Database = {
           created_by: string | null
           description: string | null
           division: string | null
+          est_equipment_cost: number
+          est_labor_cost: number
+          est_material_cost: number
           estimated_cost: number | null
           id: string
           job_number: string | null
@@ -1569,6 +1576,10 @@ export type Database = {
         Insert: {
           actual_cost?: number | null
           actual_end_date?: string | null
+          actual_equipment_cost?: number
+          actual_labor_cost?: number
+          actual_material_cost?: number
+          actual_other_cost?: number
           address?: string | null
           billed?: number | null
           city?: string | null
@@ -1578,6 +1589,9 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           division?: string | null
+          est_equipment_cost?: number
+          est_labor_cost?: number
+          est_material_cost?: number
           estimated_cost?: number | null
           id?: string
           job_number?: string | null
@@ -1598,6 +1612,10 @@ export type Database = {
         Update: {
           actual_cost?: number | null
           actual_end_date?: string | null
+          actual_equipment_cost?: number
+          actual_labor_cost?: number
+          actual_material_cost?: number
+          actual_other_cost?: number
           address?: string | null
           billed?: number | null
           city?: string | null
@@ -1607,6 +1625,9 @@ export type Database = {
           created_by?: string | null
           description?: string | null
           division?: string | null
+          est_equipment_cost?: number
+          est_labor_cost?: number
+          est_material_cost?: number
           estimated_cost?: number | null
           id?: string
           job_number?: string | null
@@ -1933,6 +1954,91 @@ export type Database = {
             columns: ["reported_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      con_schedule_blocks: {
+        Row: {
+          assignee_id: string | null
+          created_at: string
+          created_by: string | null
+          crew_id: string | null
+          duration_hours: number
+          equipment_id: string | null
+          id: string
+          job_id: string | null
+          notes: string | null
+          phase: string | null
+          priority: string
+          resource_type: string
+          scheduled_date: string
+          sort_order: number
+          start_time: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assignee_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_id?: string | null
+          duration_hours?: number
+          equipment_id?: string | null
+          id?: string
+          job_id?: string | null
+          notes?: string | null
+          phase?: string | null
+          priority?: string
+          resource_type?: string
+          scheduled_date?: string
+          sort_order?: number
+          start_time?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assignee_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          crew_id?: string | null
+          duration_hours?: number
+          equipment_id?: string | null
+          id?: string
+          job_id?: string | null
+          notes?: string | null
+          phase?: string | null
+          priority?: string
+          resource_type?: string
+          scheduled_date?: string
+          sort_order?: number
+          start_time?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "con_schedule_blocks_crew_id_fkey"
+            columns: ["crew_id"]
+            isOneToOne: false
+            referencedRelation: "con_crews"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_schedule_blocks_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "con_equipment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "con_schedule_blocks_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
             referencedColumns: ["id"]
           },
         ]
