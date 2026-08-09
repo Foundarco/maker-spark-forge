@@ -17,6 +17,7 @@ import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ClientLoginRouteImport } from './routes/client-login'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AboutRouteImport } from './routes/about'
@@ -142,6 +143,11 @@ const FaqRoute = FaqRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientLoginRoute = ClientLoginRouteImport.update({
+  id: '/client-login',
+  path: '/client-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CareersRoute = CareersRouteImport.update({
@@ -579,6 +585,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
+  '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
@@ -673,6 +680,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
+  '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/help': typeof HqHelpRoute
@@ -767,6 +775,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/blog': typeof BlogRouteWithChildren
   '/careers': typeof CareersRoute
+  '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
   '/help': typeof HelpRouteWithChildren
@@ -864,6 +873,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/careers'
+    | '/client-login'
     | '/contact'
     | '/faq'
     | '/help'
@@ -958,6 +968,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/careers'
+    | '/client-login'
     | '/contact'
     | '/faq'
     | '/help'
@@ -1051,6 +1062,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/blog'
     | '/careers'
+    | '/client-login'
     | '/contact'
     | '/faq'
     | '/help'
@@ -1148,6 +1160,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BlogRoute: typeof BlogRouteWithChildren
   CareersRoute: typeof CareersRoute
+  ClientLoginRoute: typeof ClientLoginRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
   HelpRoute: typeof HelpRouteWithChildren
@@ -1222,6 +1235,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/client-login': {
+      id: '/client-login'
+      path: '/client-login'
+      fullPath: '/client-login'
+      preLoaderRoute: typeof ClientLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/careers': {
@@ -2024,6 +2044,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BlogRoute: BlogRouteWithChildren,
   CareersRoute: CareersRoute,
+  ClientLoginRoute: ClientLoginRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
   HelpRoute: HelpRouteWithChildren,
