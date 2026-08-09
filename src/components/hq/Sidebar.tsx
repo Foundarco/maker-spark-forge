@@ -55,8 +55,17 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setCollapsed(JSON.parse(raw));
+      const d = localStorage.getItem(DIVISION_KEY) as DivisionId | null;
+      if (d && divisions.some((x) => x.id === d)) setDivision(d);
     } catch {}
   }, []);
+
+  const pickDivision = (id: DivisionId) => {
+    setDivision(id);
+    setPickerOpen(false);
+    try { localStorage.setItem(DIVISION_KEY, id); } catch {}
+  };
+
 
   useEffect(() => {
     (async () => {
