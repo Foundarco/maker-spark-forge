@@ -6,7 +6,7 @@ import {
   Users2, LifeBuoy, MessageCircle, Timer, ShieldCheck, BookOpen,
   Coins, FileSpreadsheet, GitPullRequestArrow, Landmark, Receipt, FileBarChart, Filter,
   IdCard, UserSearch, FileText, GraduationCap, Award, Star, Network, CalendarDays,
-  Building2, BarChart3,
+  Building2, BarChart3, Compass,
 } from "lucide-react";
 
 export type NavItem = {
@@ -18,12 +18,34 @@ export type NavItem = {
 
 export type NavGroup = {
   label: string;
+  division: DivisionId;
   items: NavItem[];
 };
+
+export type DivisionId = "core" | "sales" | "field" | "materials" | "clients" | "finance" | "people";
+
+export type Division = {
+  id: DivisionId;
+  label: string;
+  blurb: string;
+  icon: any;
+};
+
+/** Divisions shown in the sidebar switcher. "Core" is always visible on top. */
+export const divisions: Division[] = [
+  { id: "core", label: "My Workspace", blurb: "Everyday tools", icon: Compass },
+  { id: "sales", label: "Sales & Preconstruction", blurb: "Leads, quotes, contracts", icon: Target },
+  { id: "field", label: "Field Operations", blurb: "Jobs, crews, safety", icon: HardHat },
+  { id: "materials", label: "Materials & Procurement", blurb: "Suppliers, POs, inventory", icon: Boxes },
+  { id: "clients", label: "Client Services", blurb: "Support and warranty", icon: Users2 },
+  { id: "finance", label: "Finance", blurb: "Costing, invoices, reports", icon: Landmark },
+  { id: "people", label: "People & Operations", blurb: "HR and administration", icon: IdCard },
+];
 
 export const navGroups: NavGroup[] = [
   {
     label: "Core",
+    division: "core",
     items: [
       { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
       { label: "Communication", to: "/channels", icon: Hash },
@@ -36,12 +58,21 @@ export const navGroups: NavGroup[] = [
     ],
   },
   {
-    label: "Preconstruction",
+    label: "Sales & Quoting",
+    division: "sales",
     items: [
       { label: "Leads & Bids", to: "/leads", icon: Target },
-      { label: "Estimates", to: "/estimates", icon: Calculator },
-      { label: "Takeoffs & RFQs", to: "/takeoffs", icon: Ruler },
+      { label: "Quotes", to: "/quotes", icon: Calculator },
       { label: "Proposals & Contracts", to: "/proposals", icon: FileSignature },
+      { label: "Pipeline", to: "/pipeline", icon: Filter },
+      { label: "Client Directory", to: "/clients", icon: Users2 },
+    ],
+  },
+  {
+    label: "Preconstruction",
+    division: "sales",
+    items: [
+      { label: "Takeoffs & RFQs", to: "/takeoffs", icon: Ruler },
       { label: "Plans & Drawings", to: "/plans", icon: Map },
       { label: "RFIs & Submittals", to: "/rfis", icon: MessageSquareWarning },
       { label: "Permits & Approvals", to: "/permits", icon: Stamp },
@@ -49,6 +80,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Field Ops",
+    division: "field",
     items: [
       { label: "Jobs", to: "/jobs", icon: HardHat },
       { label: "Daily Logs", to: "/daily-logs", icon: ClipboardList },
@@ -62,6 +94,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Materials",
+    division: "materials",
     items: [
       { label: "Suppliers", to: "/suppliers", icon: Store },
       { label: "Subcontractors", to: "/subcontractors", icon: Handshake },
@@ -73,8 +106,8 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Clients",
+    division: "clients",
     items: [
-      { label: "Client Directory", to: "/clients", icon: Users2 },
       { label: "Service Requests", to: "/tickets", icon: LifeBuoy },
       { label: "Conversations", to: "/live-chat", icon: MessageCircle },
       { label: "Client Timeline", to: "/customer-timeline", icon: Timer },
@@ -84,6 +117,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Finance",
+    division: "finance",
     items: [
       { label: "Job Costing", to: "/job-costing", icon: Coins },
       { label: "Invoices & Draws", to: "/invoices", icon: FileSpreadsheet },
@@ -91,11 +125,11 @@ export const navGroups: NavGroup[] = [
       { label: "Accounting", to: "/accounting", icon: Landmark },
       { label: "Expenses", to: "/expenses", icon: Receipt },
       { label: "Reports", to: "/financial-reports", icon: FileBarChart },
-      { label: "Pipeline", to: "/pipeline", icon: Filter },
     ],
   },
   {
     label: "People",
+    division: "people",
     items: [
       { label: "Employee Directory", to: "/employees", icon: IdCard },
       { label: "Hiring", to: "/hiring", icon: UserSearch },
@@ -110,6 +144,7 @@ export const navGroups: NavGroup[] = [
   },
   {
     label: "Operations",
+    division: "people",
     items: [
       { label: "Departments", to: "/admin/departments", icon: Building2 },
       { label: "Company Tasks", to: "/company-tasks", icon: CheckSquare },
