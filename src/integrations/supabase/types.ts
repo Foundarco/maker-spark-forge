@@ -745,55 +745,85 @@ export type Database = {
         Row: {
           address: string | null
           city: string | null
+          client_since: string | null
           client_type: string | null
           company: string | null
           created_at: string
           created_by: string | null
           email: string | null
           id: string
+          lifetime_value: number
           name: string
           notes: string | null
           owner_id: string | null
           phone: string | null
+          preferred_contact: string | null
+          property_photo_url: string | null
+          property_type: string | null
+          source: string | null
           state: string | null
           status: string
+          tags: string[]
           updated_at: string
+          urgency: string | null
+          wants: string | null
+          work_address: string | null
           zip: string | null
         }
         Insert: {
           address?: string | null
           city?: string | null
+          client_since?: string | null
           client_type?: string | null
           company?: string | null
           created_at?: string
           created_by?: string | null
           email?: string | null
           id?: string
+          lifetime_value?: number
           name: string
           notes?: string | null
           owner_id?: string | null
           phone?: string | null
+          preferred_contact?: string | null
+          property_photo_url?: string | null
+          property_type?: string | null
+          source?: string | null
           state?: string | null
           status?: string
+          tags?: string[]
           updated_at?: string
+          urgency?: string | null
+          wants?: string | null
+          work_address?: string | null
           zip?: string | null
         }
         Update: {
           address?: string | null
           city?: string | null
+          client_since?: string | null
           client_type?: string | null
           company?: string | null
           created_at?: string
           created_by?: string | null
           email?: string | null
           id?: string
+          lifetime_value?: number
           name?: string
           notes?: string | null
           owner_id?: string | null
           phone?: string | null
+          preferred_contact?: string | null
+          property_photo_url?: string | null
+          property_type?: string | null
+          source?: string | null
           state?: string | null
           status?: string
+          tags?: string[]
           updated_at?: string
+          urgency?: string | null
+          wants?: string | null
+          work_address?: string | null
           zip?: string | null
         }
         Relationships: [
