@@ -55,6 +55,7 @@ export const navGroups: NavGroup[] = [
       { label: "Notes", to: "/rd-ideas", icon: Lightbulb },
       { label: "Notifications", to: "/notifications", icon: Bell },
       { label: "My Tasks", to: "/tasks", icon: CheckSquare },
+      { label: "My Time", to: "/my-time", icon: Timer },
     ],
   },
   {
@@ -137,6 +138,7 @@ export const navGroups: NavGroup[] = [
       { label: "Hiring", to: "/hiring", icon: UserSearch },
       { label: "Applications", to: "/applicants", icon: FileText },
       { label: "Onboarding", to: "/onboarding", icon: GraduationCap },
+      { label: "Attendance & Leave", to: "/attendance", icon: Clock },
       { label: "Time Off", to: "/time-off", icon: CalendarDays },
       { label: "Certifications", to: "/certifications", icon: Award },
       { label: "Training", to: "/training", icon: GraduationCap },

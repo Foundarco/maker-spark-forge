@@ -101,6 +101,7 @@ import { Route as HqChannelsRouteImport } from './routes/_hq.channels'
 import { Route as HqChangeOrdersRouteImport } from './routes/_hq.change-orders'
 import { Route as HqCertificationsRouteImport } from './routes/_hq.certifications'
 import { Route as HqCalendarRouteImport } from './routes/_hq.calendar'
+import { Route as HqAttendanceRouteImport } from './routes/_hq.attendance'
 import { Route as HqAssistantRouteImport } from './routes/_hq.assistant'
 import { Route as HqApplicantsRouteImport } from './routes/_hq.applicants'
 import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
@@ -574,6 +575,11 @@ const HqCalendarRoute = HqCalendarRouteImport.update({
   path: '/calendar',
   getParentRoute: () => HqRoute,
 } as any)
+const HqAttendanceRoute = HqAttendanceRouteImport.update({
+  id: '/attendance',
+  path: '/attendance',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqAssistantRoute = HqAssistantRouteImport.update({
   id: '/assistant',
   path: '/assistant',
@@ -659,6 +665,7 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof HqAnalyticsRoute
   '/applicants': typeof HqApplicantsRoute
   '/assistant': typeof HqAssistantRoute
+  '/attendance': typeof HqAttendanceRoute
   '/calendar': typeof HqCalendarRoute
   '/certifications': typeof HqCertificationsRoute
   '/change-orders': typeof HqChangeOrdersRoute
@@ -763,6 +770,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof HqAnalyticsRoute
   '/applicants': typeof HqApplicantsRoute
   '/assistant': typeof HqAssistantRoute
+  '/attendance': typeof HqAttendanceRoute
   '/calendar': typeof HqCalendarRoute
   '/certifications': typeof HqCertificationsRoute
   '/change-orders': typeof HqChangeOrdersRoute
@@ -867,6 +875,7 @@ export interface FileRoutesById {
   '/_hq/analytics': typeof HqAnalyticsRoute
   '/_hq/applicants': typeof HqApplicantsRoute
   '/_hq/assistant': typeof HqAssistantRoute
+  '/_hq/attendance': typeof HqAttendanceRoute
   '/_hq/calendar': typeof HqCalendarRoute
   '/_hq/certifications': typeof HqCertificationsRoute
   '/_hq/change-orders': typeof HqChangeOrdersRoute
@@ -975,6 +984,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/applicants'
     | '/assistant'
+    | '/attendance'
     | '/calendar'
     | '/certifications'
     | '/change-orders'
@@ -1079,6 +1089,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/applicants'
     | '/assistant'
+    | '/attendance'
     | '/calendar'
     | '/certifications'
     | '/change-orders'
@@ -1182,6 +1193,7 @@ export interface FileRouteTypes {
     | '/_hq/analytics'
     | '/_hq/applicants'
     | '/_hq/assistant'
+    | '/_hq/attendance'
     | '/_hq/calendar'
     | '/_hq/certifications'
     | '/_hq/change-orders'
@@ -1941,6 +1953,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqCalendarRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/attendance': {
+      id: '/_hq/attendance'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof HqAttendanceRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/assistant': {
       id: '/_hq/assistant'
       path: '/assistant'
@@ -2081,6 +2100,7 @@ interface HqRouteChildren {
   HqAnalyticsRoute: typeof HqAnalyticsRoute
   HqApplicantsRoute: typeof HqApplicantsRoute
   HqAssistantRoute: typeof HqAssistantRoute
+  HqAttendanceRoute: typeof HqAttendanceRoute
   HqCalendarRoute: typeof HqCalendarRoute
   HqCertificationsRoute: typeof HqCertificationsRoute
   HqChangeOrdersRoute: typeof HqChangeOrdersRoute
@@ -2154,6 +2174,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqAnalyticsRoute: HqAnalyticsRoute,
   HqApplicantsRoute: HqApplicantsRoute,
   HqAssistantRoute: HqAssistantRoute,
+  HqAttendanceRoute: HqAttendanceRoute,
   HqCalendarRoute: HqCalendarRoute,
   HqCertificationsRoute: HqCertificationsRoute,
   HqChangeOrdersRoute: HqChangeOrdersRoute,
