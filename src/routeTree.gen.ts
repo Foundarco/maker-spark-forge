@@ -68,6 +68,7 @@ import { Route as HqPermitsRouteImport } from './routes/_hq.permits'
 import { Route as HqOrgChartRouteImport } from './routes/_hq.org-chart'
 import { Route as HqOnboardingRouteImport } from './routes/_hq.onboarding'
 import { Route as HqNotificationsRouteImport } from './routes/_hq.notifications'
+import { Route as HqMyTimeRouteImport } from './routes/_hq.my-time'
 import { Route as HqMeetingsRouteImport } from './routes/_hq.meetings'
 import { Route as HqMeetingNotesRouteImport } from './routes/_hq.meeting-notes'
 import { Route as HqMailRouteImport } from './routes/_hq.mail'
@@ -408,6 +409,11 @@ const HqNotificationsRoute = HqNotificationsRouteImport.update({
   path: '/notifications',
   getParentRoute: () => HqRoute,
 } as any)
+const HqMyTimeRoute = HqMyTimeRouteImport.update({
+  id: '/my-time',
+  path: '/my-time',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqMeetingsRoute = HqMeetingsRouteImport.update({
   id: '/meetings',
   path: '/meetings',
@@ -684,6 +690,7 @@ export interface FileRoutesByFullPath {
   '/mail': typeof HqMailRoute
   '/meeting-notes': typeof HqMeetingNotesRoute
   '/meetings': typeof HqMeetingsRoute
+  '/my-time': typeof HqMyTimeRoute
   '/notifications': typeof HqNotificationsRoute
   '/onboarding': typeof HqOnboardingRoute
   '/org-chart': typeof HqOrgChartRoute
@@ -785,6 +792,7 @@ export interface FileRoutesByTo {
   '/mail': typeof HqMailRoute
   '/meeting-notes': typeof HqMeetingNotesRoute
   '/meetings': typeof HqMeetingsRoute
+  '/my-time': typeof HqMyTimeRoute
   '/notifications': typeof HqNotificationsRoute
   '/onboarding': typeof HqOnboardingRoute
   '/org-chart': typeof HqOrgChartRoute
@@ -891,6 +899,7 @@ export interface FileRoutesById {
   '/_hq/mail': typeof HqMailRoute
   '/_hq/meeting-notes': typeof HqMeetingNotesRoute
   '/_hq/meetings': typeof HqMeetingsRoute
+  '/_hq/my-time': typeof HqMyTimeRoute
   '/_hq/notifications': typeof HqNotificationsRoute
   '/_hq/onboarding': typeof HqOnboardingRoute
   '/_hq/org-chart': typeof HqOrgChartRoute
@@ -997,6 +1006,7 @@ export interface FileRouteTypes {
     | '/mail'
     | '/meeting-notes'
     | '/meetings'
+    | '/my-time'
     | '/notifications'
     | '/onboarding'
     | '/org-chart'
@@ -1098,6 +1108,7 @@ export interface FileRouteTypes {
     | '/mail'
     | '/meeting-notes'
     | '/meetings'
+    | '/my-time'
     | '/notifications'
     | '/onboarding'
     | '/org-chart'
@@ -1203,6 +1214,7 @@ export interface FileRouteTypes {
     | '/_hq/mail'
     | '/_hq/meeting-notes'
     | '/_hq/meetings'
+    | '/_hq/my-time'
     | '/_hq/notifications'
     | '/_hq/onboarding'
     | '/_hq/org-chart'
@@ -1698,6 +1710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqNotificationsRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/my-time': {
+      id: '/_hq/my-time'
+      path: '/my-time'
+      fullPath: '/my-time'
+      preLoaderRoute: typeof HqMyTimeRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/meetings': {
       id: '/_hq/meetings'
       path: '/meetings'
@@ -2094,6 +2113,7 @@ interface HqRouteChildren {
   HqMailRoute: typeof HqMailRoute
   HqMeetingNotesRoute: typeof HqMeetingNotesRoute
   HqMeetingsRoute: typeof HqMeetingsRoute
+  HqMyTimeRoute: typeof HqMyTimeRoute
   HqNotificationsRoute: typeof HqNotificationsRoute
   HqOnboardingRoute: typeof HqOnboardingRoute
   HqOrgChartRoute: typeof HqOrgChartRoute
@@ -2166,6 +2186,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqMailRoute: HqMailRoute,
   HqMeetingNotesRoute: HqMeetingNotesRoute,
   HqMeetingsRoute: HqMeetingsRoute,
+  HqMyTimeRoute: HqMyTimeRoute,
   HqNotificationsRoute: HqNotificationsRoute,
   HqOnboardingRoute: HqOnboardingRoute,
   HqOrgChartRoute: HqOrgChartRoute,
