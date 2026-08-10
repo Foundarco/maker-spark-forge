@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Timer, Pause, Play, LogOut, CalendarDays, Plus, Clock } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/hq/notify";
 
 type Punch = {
   id: string;
