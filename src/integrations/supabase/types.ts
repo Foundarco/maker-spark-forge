@@ -4758,6 +4758,59 @@ export type Database = {
         }
         Relationships: []
       }
+      hr_time_clock: {
+        Row: {
+          break_minutes: number
+          break_started_at: string | null
+          clock_in: string
+          clock_out: string | null
+          created_at: string
+          id: string
+          job_id: string | null
+          notes: string | null
+          project: string | null
+          source: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          break_minutes?: number
+          break_started_at?: string | null
+          clock_in?: string
+          clock_out?: string | null
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          notes?: string | null
+          project?: string | null
+          source?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          break_minutes?: number
+          break_started_at?: string | null
+          clock_in?: string
+          clock_out?: string | null
+          created_at?: string
+          id?: string
+          job_id?: string | null
+          notes?: string | null
+          project?: string | null
+          source?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hr_time_clock_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "con_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hr_time_entries: {
         Row: {
           billable: boolean | null
