@@ -444,7 +444,7 @@
 
 /* Thermal concept rendering used in the RGB/thermal comparison */
 .thermal-view {
-  filter: grayscale(1) contrast(1.45) brightness(1.05) sepia(1) hue-rotate(200deg) saturate(7);
+  filter: grayscale(1) contrast(1.5) brightness(1.08) sepia(1) hue-rotate(-22deg) saturate(6);
 }
 
 @utility scanlines {
