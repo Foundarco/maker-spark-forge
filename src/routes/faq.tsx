@@ -1,20 +1,92 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Section, PageHeader, Eyebrow } from "@/components/site/Section";
-import { Card } from "@/components/site/Card";
+import { Section, PageHeader } from "@/components/site/Section";
+import { CTAButton } from "@/components/site/CTAButton";
 import { brand } from "@/config/brand";
+import { SITE_URL } from "@/lib/seo";
+
+const desc =
+  "Answers about how Clovr Relief decides where to respond, how quickly aid arrives, how donations are used, and how to request help or volunteer.";
+const title = `FAQ — ${brand.name}`;
+
+const groups = [
+  {
+    heading: "Responding",
+    items: [
+      {
+        q: "How do you decide where to respond?",
+        a: "Hazard severity, population exposure, and whether local capacity is already overwhelmed. Activation thresholds are set in advance so the decision isn't driven by media attention.",
+      },
+      {
+        q: "How fast do you actually arrive?",
+        a: "Our median time from activation to first delivery is six hours in regions with a nearby cache. Where access is destroyed, air and marine transport partners extend that window, and we say so publicly in the response report.",
+      },
+      {
+        q: "Do you replace local responders?",
+        a: "No. Local agencies and community organizations keep command of their own response. We supply capacity, supply, and logistics behind them.",
+      },
+    ],
+  },
+  {
+    heading: "Getting help",
+    items: [
+      {
+        q: "How do I request assistance?",
+        a: "Use the request form. It routes directly into the operations queue and is monitored continuously. If life is in immediate danger, contact local emergency services first.",
+      },
+      {
+        q: "Is aid free?",
+        a: "Always. We never charge affected households for supplies, medical care, shelter, or repair work.",
+      },
+      {
+        q: "What information should I include?",
+        a: "Location, number of people affected, primary need, access conditions, and any other agencies already involved. Photos of site conditions help planning considerably.",
+      },
+    ],
+  },
+  {
+    heading: "Giving",
+    items: [
+      {
+        q: "Where does my donation go?",
+        a: "Ninety-one cents of every dollar funds programs. The largest single use is pre-positioned supply, bought out of season when it is cheapest and staged where it will be needed.",
+      },
+      {
+        q: "Can I direct my gift to a specific disaster?",
+        a: "You can express a preference, and we honour it wherever the funds can be used responsibly. Unrestricted gifts are more valuable because they let us buy before an event, not after.",
+      },
+      {
+        q: "Do you publish financials?",
+        a: "Yes. Allocation figures are published on the impact page and restated each year with the audited annual report.",
+      },
+    ],
+  },
+  {
+    heading: "Volunteering",
+    items: [
+      {
+        q: "Can I deploy without prior experience?",
+        a: "Not to a field role. Deployable volunteers complete screening and readiness training first. Cache shifts and remote operations roles are open to newcomers immediately.",
+      },
+      {
+        q: "How often would I be called?",
+        a: "Only when your role, credentials, and region match an active response. Most field volunteers deploy one to three times a year.",
+      },
+    ],
+  },
+];
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
     meta: [
-      { title: `Homeowner FAQ — Estimates, Timelines & Warranty | ${brand.name}` },
-      { name: "description", content: "Answers to the questions homeowners ask most: how estimates are built, what a realistic timeline looks like, change orders, permits, payment schedules, and our warranty." },
-      { property: "og:title", content: `Homeowner FAQ | ${brand.name}` },
-      { property: "og:description", content: "Estimates, timelines, change orders, permits, payments, and warranty — answered plainly." },
+      { title },
+      { name: "description", content: desc },
+      { property: "og:title", content: title },
+      { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://clovrlab.com/faq" },
+      { property: "og:url", content: `${SITE_URL}/faq` },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://clovrlab.com/faq" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/faq` }],
     scripts: [
       {
         type: "application/ld+json",
@@ -22,126 +94,54 @@ export const Route = createFileRoute("/faq")({
           "@context": "https://schema.org",
           "@type": "FAQPage",
           mainEntity: groups.flatMap((g) =>
-            g.items.map(([q, a]) => ({
+            g.items.map((i) => ({
               "@type": "Question",
-              name: q,
-              acceptedAnswer: { "@type": "Answer", text: a },
+              name: i.q,
+              acceptedAnswer: { "@type": "Answer", text: i.a },
             })),
           ),
         }),
       },
     ],
   }),
-  component: FAQPage,
+  component: FaqPage,
 });
 
-const groups: { title: string; items: [string, string][] }[] = [
-  {
-    title: "Estimates & pricing",
-    items: [
-      [
-        "How do you build an estimate?",
-        "We walk the site, take measurements, and price the work line by line — labor, materials, equipment, permits, and disposal are each listed separately. You get a written scope alongside the number so you can see exactly what is and isn't included.",
-      ],
-      [
-        "Is the estimate free?",
-        "Yes. The site visit and written estimate are free for projects in our service area. For design-heavy remodels that need drawings before anyone can price them accurately, we'll quote a separate design fee up front and credit it toward the build if you move forward.",
-      ],
-      [
-        "How firm is the price?",
-        "Fixed-price for everything in the written scope. The number only changes through a signed change order — typically for owner-requested additions or genuine unknowns behind a wall, like failed framing or out-of-code wiring.",
-      ],
-      [
-        "What does the payment schedule look like?",
-        "A deposit at contract signing, then progress payments tied to completed milestones such as demo, rough-in, and drywall, with a final payment after the punch list is signed off. No large payments are due before matching work is finished.",
-      ],
-    ],
-  },
-  {
-    title: "Schedule & timeline",
-    items: [
-      [
-        "How long will my project take?",
-        "A bathroom typically runs three to five weeks, a kitchen six to ten, and an addition three to six months depending on size and permitting. You get a published schedule before we start, and we track against it weekly.",
-      ],
-      [
-        "How far out are you booking?",
-        "Most projects start four to eight weeks after the contract is signed. Emergency repairs and warranty work for past clients are handled sooner.",
-      ],
-      [
-        "Will crews be on site every day?",
-        "Yes, during active phases. Our crews are in-house rather than day-to-day subs, so we don't disappear mid-project to chase another job. Inspection waits are the main scheduled pause, and they're marked on your schedule ahead of time.",
-      ],
-    ],
-  },
-  {
-    title: "Permits, change orders & the job site",
-    items: [
-      [
-        "Do you handle permits and inspections?",
-        "We pull the permits, coordinate with the building department, and meet every inspector on site. Permit fees are shown as a separate line on your estimate rather than buried in the labor number.",
-      ],
-      [
-        "How are change orders handled?",
-        "In writing, before the work happens. Each one states the added scope, the cost, and the schedule impact, and it needs your signature. You'll never see a surprise charge on the final invoice.",
-      ],
-      [
-        "How do you keep the site livable?",
-        "Dust barriers at work-area boundaries, floor protection on every path, daily cleanup, and a locked dumpster or bin. For occupied homes we agree on working hours and bathroom and entry access before day one.",
-      ],
-      [
-        "Are you licensed and insured?",
-        "Yes — general liability and workers' compensation, with certificates sent directly to you before work begins. Every crew member on your property works for us or for a subcontractor carrying the same coverage.",
-      ],
-    ],
-  },
-  {
-    title: "Warranty & after the build",
-    items: [
-      [
-        "What's the warranty?",
-        "One year of full workmanship coverage from substantial completion, on top of whatever the manufacturer warranties cover for materials and appliances. Structural work carries longer coverage, spelled out in your contract.",
-      ],
-      [
-        "How do I make a warranty claim?",
-        "Submit it through the help center or call the office. We schedule an assessment within a few business days, and warranty visits are prioritized ahead of new work.",
-      ],
-      [
-        "Do you come back for punch-list items?",
-        "Always. We walk the finished project with you, write the punch list together, and complete it before requesting final payment.",
-      ],
-    ],
-  },
-];
-
-function FAQPage() {
+function FaqPage() {
   return (
     <>
+      <div className="border-b border-border">
+        <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+          <PageHeader
+            eyebrow="FAQ"
+            title="Questions we get most."
+            lede="If something here doesn't answer what you need, the operations center will."
+          />
+        </div>
+      </div>
+
       <Section>
-        <PageHeader eyebrow="FAQ" title="The questions we hear most." />
-      </Section>
-      <Section className="py-6">
-        <div className="space-y-12">
+        <div className="space-y-16">
           {groups.map((g) => (
-            <div key={g.title}>
-              <Eyebrow as="h2">{g.title}</Eyebrow>
-              <div className="mt-4 space-y-3">
-                {g.items.map(([q, a]) => (
-                  <Card key={q}>
-                    <details className="group">
-                      <summary className="cursor-pointer list-none text-lg font-semibold">
-                        <span className="flex items-center justify-between gap-4">
-                          {q}
-                          <span aria-hidden className="text-primary transition group-open:rotate-45">＋</span>
-                        </span>
-                      </summary>
-                      <p className="mt-3 text-muted-foreground">{a}</p>
-                    </details>
-                  </Card>
+            <section key={g.heading}>
+              <h2 className="rule-label text-primary">{g.heading}</h2>
+              <dl className="mt-6 divide-y divide-border border-y border-border">
+                {g.items.map((i) => (
+                  <div key={i.q} className="py-6">
+                    <dt className="font-display text-lg font-semibold text-ink">{i.q}</dt>
+                    <dd className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">{i.a}</dd>
+                  </div>
                 ))}
-              </div>
-            </div>
+              </dl>
+            </section>
           ))}
+        </div>
+
+        <div className="mt-16 flex flex-wrap gap-3">
+          <CTAButton to="/request-help" variant="primary">Request help</CTAButton>
+          <CTAButton to="/contact" variant="ghost" className="border border-border text-ink hover:bg-surface">
+            Contact us
+          </CTAButton>
         </div>
       </Section>
     </>

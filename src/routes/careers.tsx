@@ -1,167 +1,95 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { Section, PageHeader, SectionLabel, DisplayHeading } from "@/components/site/Section";
-import { CTAButton } from "@/components/site/CTAButton";
-import { Reveal } from "@/components/site/Reveal";
+import { createFileRoute } from "@tanstack/react-router";
+import { Section, PageHeader, SectionLabel } from "@/components/site/Section";
+import { CTAButtonA } from "@/components/site/CTAButton";
 import { brand } from "@/config/brand";
-import { divisions } from "@/config/divisions";
-import carpentryAsset from "@/assets/mg-carpentry.jpg.asset.json";
-import { absoluteUrl } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
 
-const title = `Careers — Join the Crew | ${brand.name}`;
-const description =
-  "Trade jobs at McGuire Construction: carpenters, concrete finishers, equipment operators, landscape crews, and project managers. Year-round work.";
-const ogImage = absoluteUrl(carpentryAsset.url);
+const desc =
+  "Careers at Clovr Relief — operations, logistics, field response, clinical, and recovery roles at a disaster-response nonprofit that deploys within hours.";
+const title = `Careers — ${brand.name}`;
 
 export const Route = createFileRoute("/careers")({
   head: () => ({
     meta: [
       { title },
-      { name: "description", content: description },
+      { name: "description", content: desc },
       { property: "og:title", content: title },
-      { property: "og:description", content: description },
+      { property: "og:description", content: desc },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://clovrlab.com/careers" },
-      { property: "og:image", content: ogImage },
+      { property: "og:url", content: `${SITE_URL}/careers` },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: ogImage },
     ],
-    links: [{ rel: "canonical", href: "https://clovrlab.com/careers" }],
+    links: [{ rel: "canonical", href: `${SITE_URL}/careers` }],
   }),
   component: CareersPage,
 });
 
-const roles = [
-  { title: "Lead Carpenter", division: "Construction", type: "Full-time", note: "Framing through finish. Crew of three." },
-  { title: "Finish Carpenter", division: "Construction", type: "Full-time", note: "Trim, stairs, and custom millwork install." },
-  { title: "Concrete Finisher", division: "Concrete", type: "Full-time", note: "Flatwork, foundations, architectural finishes." },
-  { title: "Form Setter", division: "Concrete", type: "Full-time", note: "Footings, walls, and structural pours." },
-  { title: "Equipment Operator", division: "Excavation", type: "Full-time", note: "Excavator and skid steer. Grading experience preferred." },
-  { title: "Site Foreman", division: "Excavation", type: "Full-time", note: "Utilities, drainage, and final grade." },
-  { title: "Hardscape Crew Lead", division: "Landscape", type: "Full-time", note: "Pavers, retaining walls, exterior finishing." },
-  { title: "Project Manager", division: "Development", type: "Full-time", note: "Schedule, budget, and client communication." },
+const openings = [
+  { title: "Duty Officer, Operations Center", team: "Detect", location: "Hybrid · rotating shifts", type: "Full time" },
+  { title: "Logistics Manager, Regional Caches", team: "Deploy", location: "Gulf Coast, US", type: "Full time" },
+  { title: "Field Response Lead", team: "Deliver", location: "Deployable · 60% travel", type: "Full time" },
+  { title: "Clinical Coordinator", team: "Deliver", location: "Remote + deployments", type: "Full time" },
+  { title: "Recovery Program Manager", team: "Rebuild", location: "Eastern Caribbean", type: "Fixed term" },
+  { title: "Data & Impact Analyst", team: "Operations", location: "Remote", type: "Full time" },
 ];
 
 const benefits = [
-  { title: "Year-round work", body: "Five divisions means the calendar stays full through the off-season — not layoffs in November." },
-  { title: "Real coverage", body: "Health coverage, paid time off, and a retirement match after ninety days." },
-  { title: "Paid training", body: "Certifications, licenses, and equipment tickets paid for. We'd rather train than rehire." },
-  { title: "Tools and trucks", body: "Company trucks, maintained equipment, and a tool allowance every year." },
-  { title: "Move between divisions", body: "Cross-train across concrete, excavation, and landscape. Your skills stack, your pay follows." },
-  { title: "A safe site", body: "Documented safety program, weekly toolbox talks, and no pressure to cut a corner." },
+  "Deployment insurance, medical cover, and post-deployment decompression leave",
+  "Paid readiness training and certifications",
+  "Flexible schedules between activations",
+  "Transparent pay bands published internally",
 ];
 
 function CareersPage() {
   return (
     <>
-      <section className="relative overflow-hidden border-b border-border bg-warm">
-        <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-24 lg:grid-cols-[1.15fr_1fr] lg:items-end">
+      <div className="border-b border-border">
+        <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
           <PageHeader
             eyebrow="Careers"
-            title={
-              <span className="display-cond block text-[clamp(2.5rem,7vw,5rem)]">
-                Build with a crew that
-                <br />
-                <span className="gradient-text">stays together.</span>
-              </span>
-            }
-            lede="McGuire runs its own crews across all five divisions — no rotating subs, no scrambling for winter work. If you take the trade seriously, there's a long career here."
-          />
-          <img
-            src={carpentryAsset.url}
-            alt="A McGuire carpenter hand-fitting white oak casework in the millwork shop"
-            width={1600}
-            height={1200}
-            className="aspect-[4/3] w-full rounded-2xl object-cover shadow-[0_40px_80px_-50px_rgba(0,0,0,0.6)]"
+            title="Hard work, unusually clear purpose."
+            lede="Small permanent team, big rostered capacity. If you want your operational skills pointed at the worst days people have, this is the place."
           />
         </div>
-      </section>
+      </div>
 
       <Section wide>
-        <Reveal>
-          <SectionLabel n="01">Open roles</SectionLabel>
-          <DisplayHeading className="mt-6 text-ink">Hiring now</DisplayHeading>
-        </Reveal>
-        <ul className="mt-12 grid gap-4 md:grid-cols-2">
-          {roles.map((r, i) => {
-            const d = divisions.find((x) => x.short === r.division) ?? divisions[0];
-            return (
-              <Reveal as="li" key={r.title} delay={i * 50}>
-                <Link
-                  to="/contact"
-                  style={{ ["--accent-color" as string]: d.accent }}
-                  className="group flex h-full items-start justify-between gap-6 rounded-2xl bg-card p-7 lift-card accent-ring"
-                >
-                  <div>
-                    <span className="rule-label inline-flex rounded-full accent-wash px-2.5 py-1 accent-ink">
-                      {r.division}
-                    </span>
-                    <h2 className="mt-3 font-display text-xl font-bold text-ink">{r.title}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{r.note}</p>
-                    <p className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                      {r.type} · {brand.serviceArea}
-                    </p>
-                  </div>
-                  <ArrowRight className="mt-1 h-5 w-5 shrink-0 accent-ink transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Reveal>
-            );
-          })}
+        <SectionLabel n="01" tone="light">Open roles</SectionLabel>
+        <ul className="mt-10 divide-y divide-border border-y border-border">
+          {openings.map((o) => (
+            <li key={o.title} className="grid gap-2 py-6 md:grid-cols-[1.6fr_1fr_1fr_auto] md:items-center md:gap-8">
+              <h2 className="font-display text-lg font-semibold text-ink">{o.title}</h2>
+              <p className="text-sm text-muted-foreground">{o.team}</p>
+              <p className="text-sm text-muted-foreground">{o.location}</p>
+              <a
+                className="justify-self-start text-xs font-semibold uppercase tracking-[0.14em] text-primary hover:underline"
+                href={`mailto:${brand.contact.careers}?subject=${encodeURIComponent(o.title)}`}
+              >
+                Apply
+              </a>
+            </li>
+          ))}
         </ul>
       </Section>
 
-      <section className="border-y border-border bg-warm">
-        <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
-          <Reveal>
-            <SectionLabel n="02">Why McGuire</SectionLabel>
-            <DisplayHeading className="mt-6 text-ink">What you get</DisplayHeading>
-          </Reveal>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((b, i) => {
-              const accent = divisions[i % divisions.length].accent;
-              return (
-                <Reveal key={b.title} delay={i * 60}>
-                  <div
-                    style={{ ["--accent-color" as string]: accent }}
-                    className="h-full rounded-2xl bg-card p-8 lift-card accent-ring"
-                  >
-                    <span className="display-cond text-sm accent-ink">{String(i + 1).padStart(2, "0")}</span>
-                    <h3 className="mt-3 font-display text-lg font-bold text-ink">{b.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{b.body}</p>
-                  </div>
-                </Reveal>
-              );
-            })}
+      <div className="border-t border-border bg-[var(--night)]">
+        <Section wide>
+          <SectionLabel n="02" tone="light">What we offer</SectionLabel>
+          <ul className="mt-10 grid gap-px bg-border sm:grid-cols-2">
+            {benefits.map((b) => (
+              <li key={b} className="bg-[var(--night)] p-6 text-sm leading-relaxed text-foreground/80">{b}</li>
+            ))}
+          </ul>
+          <div className="mt-12">
+            <CTAButtonA
+              variant="primary"
+              href={`mailto:${brand.contact.careers}?subject=${encodeURIComponent("General application")}`}
+            >
+              Send a general application
+            </CTAButtonA>
           </div>
-        </div>
-      </section>
-
-      <Section wide>
-        <div className="relative overflow-hidden rounded-3xl bg-ink px-8 py-16 text-white sm:px-14 sm:py-20">
-          <div className="pointer-events-none absolute inset-0 blueprint-grid text-white opacity-60" aria-hidden />
-          <div className="relative">
-            <SectionLabel tone="light">No open role that fits?</SectionLabel>
-            <DisplayHeading className="mt-6 max-w-3xl text-white">
-              Send us your name anyway.
-            </DisplayHeading>
-            <p className="mt-6 max-w-xl text-white/70">
-              We hire good people before we need them. Tell us the trade you run, where you&rsquo;ve worked, and how
-              soon you&rsquo;re available — someone from the office will call you back.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <CTAButton to="/contact" variant="light" className="rounded-full">
-                Apply now <ArrowRight className="h-4 w-4" />
-              </CTAButton>
-              <a
-                href={`tel:${brand.phone.replace(/[^0-9+]/g, "")}`}
-                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-white/10"
-              >
-                Call {brand.phone}
-              </a>
-            </div>
-          </div>
-        </div>
-      </Section>
+        </Section>
+      </div>
     </>
   );
 }
