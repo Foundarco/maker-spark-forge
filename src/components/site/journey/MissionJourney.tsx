@@ -19,10 +19,7 @@ function supports3D() {
   }
 }
 
-/** Scroll ranges (0 → 1) for the DOM overlays that sit on top of the scene. */
 const N = beats.length;
-const slice = (i: number) => [i / N, (i + 1) / N] as const;
-const inBeat = (b: number, i: number) => b === i;
 
 /**
  * The homepage mission flight. One tall scroll track drives one sticky scene:
