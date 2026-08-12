@@ -159,6 +159,23 @@ function AlertBeam({ progress }: { progress: Progress }) {
 }
 
 /** Fire event: glow disc, ember particles and drifting smoke column. */
+/** Soft round sprite used for smoke and haze particles. */
+let softTex: THREE.Texture | null = null;
+function soft() {
+  if (softTex) return softTex;
+  const c = document.createElement("canvas");
+  c.width = c.height = 64;
+  const ctx = c.getContext("2d")!;
+  const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, "rgba(255,255,255,1)");
+  g.addColorStop(0.45, "rgba(255,255,255,0.42)");
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, 64, 64);
+  softTex = new THREE.CanvasTexture(c);
+  return softTex;
+}
+
 function FireEvent({ progress }: { progress: Progress }) {
   const glow = useRef<THREE.Mesh>(null);
   const smoke = useRef<THREE.Points>(null);
@@ -189,7 +206,7 @@ function FireEvent({ progress }: { progress: Progress }) {
     }
     if (light.current) light.current.intensity = on * (26 + Math.sin(t * 3) * 6);
     if (smoke.current) {
-      (smoke.current.material as THREE.PointsMaterial).opacity = on * 0.16;
+      (smoke.current.material as THREE.PointsMaterial).opacity = on * 0.3;
       smoke.current.rotation.y = t * 0.02;
     }
   });
@@ -202,7 +219,7 @@ function FireEvent({ progress }: { progress: Progress }) {
       </mesh>
       <pointLight ref={light} position={[FIRE.x, FIRE.y + 6, FIRE.z]} color="#ff8a3c" distance={90} intensity={0} />
       <points ref={smoke} geometry={smokeGeo}>
-        <pointsMaterial color="#8a8f98" size={2.6} sizeAttenuation transparent opacity={0} depthWrite={false} />
+        <pointsMaterial map={soft()} color="#9aa2ad" size={9} sizeAttenuation transparent opacity={0} depthWrite={false} alphaTest={0.01} />
       </points>
     </group>
   );
@@ -385,7 +402,7 @@ function Atmosphere() {
   });
   return (
     <points ref={dust} geometry={geo}>
-      <pointsMaterial color="#b9c2cc" size={0.5} transparent opacity={0.22} depthWrite={false} />
+      <pointsMaterial map={soft()} color="#c3ccd7" size={1.1} sizeAttenuation transparent opacity={0.25} depthWrite={false} />
     </points>
   );
 }
