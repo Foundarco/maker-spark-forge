@@ -1,15 +1,21 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { Section, PageHeader, SectionLabel } from "@/components/site/Section";
-import { CTAButtonBtn } from "@/components/site/CTAButton";
-import { giveTiers } from "@/config/programs";
+import { Reveal } from "@/components/site/Reveal";
+import { CTAButton, CTAButtonA } from "@/components/site/CTAButton";
+import { media } from "@/config/system";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
-import { Check } from "lucide-react";
 
+const title = `Support the Mission | ${brand.name}`;
 const desc =
-  "Give to Clovr Relief. Donations fund pre-positioned emergency supplies, medical resupply, shelter kits, and long-term recovery crews — 91% of every dollar goes to programs.";
-const title = `Give — ${brand.name}`;
+  "Support an early-stage nonprofit building autonomous wildfire detection and UAV investigation technology. Funding goes to prototype hardware, field testing, and the software behind the Operations Center.";
+
+const uses = [
+  { title: "Prototype hardware", body: "Sensor node enclosures, radios, boards, airframe components, and payload sensors on the bench." },
+  { title: "Field testing", body: "Getting hardware outside the lab: transport, test sites, instrumentation, and repeat runs." },
+  { title: "Software development", body: "Mission control, geospatial tooling, alerting, and the Operations Center stack." },
+  { title: "Operations Center", body: "Keeping continuous monitoring and coordination running as the system grows." },
+];
 
 export const Route = createFileRoute("/donate")({
   head: () => ({
@@ -28,121 +34,88 @@ export const Route = createFileRoute("/donate")({
 });
 
 function DonatePage() {
-  const [selected, setSelected] = useState(giveTiers[1]?.amount ?? "");
-  const [frequency, setFrequency] = useState<"once" | "monthly">("monthly");
-
   return (
     <>
-      <div className="border-b border-border">
-        <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
+      <section className="relative isolate overflow-hidden border-b border-border">
+        <img
+          src={media.heroImg}
+          alt="Prototype UAV over smoke-covered ridgelines"
+          className="absolute inset-0 h-full w-full object-cover opacity-35"
+          width={1920}
+          height={1088}
+        />
+        <div className="scrim-full absolute inset-0" aria-hidden />
+        <div className="relative mx-auto w-full max-w-7xl px-5 py-24 sm:px-8 sm:py-32">
           <PageHeader
-            eyebrow="Give"
-            title="Fund the hours before the storm."
-            lede="Recurring gifts are what keep caches stocked out of season — the single highest-leverage way to shorten a response."
+            eyebrow="Support the mission"
+            title="Fund the prototype, not the press release."
+            lede="We are building Mission 01 — autonomous wildfire detection and UAV investigation. Support at this stage buys parts, test days, and engineering time."
           />
         </div>
-      </div>
+      </section>
 
       <Section wide>
-        <div className="grid gap-14 lg:grid-cols-[1fr_1fr]">
-          <div>
-            <SectionLabel n="01" tone="light">Choose a gift</SectionLabel>
+        <SectionLabel n="01" tone="light">Where support goes</SectionLabel>
+        <ul className="mt-10 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          {uses.map((u) => (
+            <li key={u.title} className="bg-[var(--night)] px-6 py-7">
+              <p className="text-base font-semibold text-ink">{u.title}</p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{u.body}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-6 text-xs text-muted-foreground">
+          We do not publish impact statistics we have not measured. Reporting will describe what was built and tested.
+        </p>
+      </Section>
 
-            <div className="mt-8 inline-flex border border-border">
-              {(["monthly", "once"] as const).map((f) => (
-                <button
-                  key={f}
-                  type="button"
-                  onClick={() => setFrequency(f)}
-                  aria-pressed={frequency === f}
-                  className={`min-h-[44px] px-6 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
-                    frequency === f ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:text-ink"
-                  }`}
-                >
-                  {f === "monthly" ? "Monthly" : "One time"}
-                </button>
-              ))}
-            </div>
-
-            <ul className="mt-8 grid gap-px bg-border sm:grid-cols-2">
-              {giveTiers.map((t) => {
-                const active = selected === t.amount;
-                return (
-                  <li key={t.amount}>
-                    <button
-                      type="button"
-                      onClick={() => setSelected(t.amount)}
-                      aria-pressed={active}
-                      className={`flex h-full w-full flex-col items-start p-6 text-left transition-colors ${
-                        active ? "bg-surface" : "bg-background hover:bg-surface"
-                      }`}
-                    >
-                      <span className="flex w-full items-center justify-between">
-                        <span className="display-cond text-3xl text-ink">{t.amount}</span>
-                        {active ? <Check className="h-4 w-4 text-primary" aria-hidden /> : null}
-                      </span>
-                      <span className="rule-label mt-3 text-primary">{t.label}</span>
-                      <span className="mt-2 text-sm leading-relaxed text-muted-foreground">{t.effect}</span>
-                    </button>
+      <div className="border-y border-border bg-[var(--night)]">
+        <Section wide>
+          <div className="grid gap-12 lg:grid-cols-[1fr_1fr]">
+            <Reveal>
+              <SectionLabel n="02" tone="light">Ways to give</SectionLabel>
+              <ul className="mt-8 grid gap-px border border-border bg-border">
+                {[
+                  { k: "One-time gift", v: "Direct support for current prototype and test work." },
+                  { k: "Recurring support", v: "Predictable funding that lets us plan test campaigns." },
+                  { k: "Equipment & in-kind", v: "Components, tooling, fabrication, or lab access." },
+                  { k: "Grants & institutional", v: "Foundation and programme funding for the wildfire system." },
+                ].map((r) => (
+                  <li key={r.k} className="bg-[var(--night)] px-5 py-4">
+                    <p className="text-sm font-semibold text-ink">{r.k}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{r.v}</p>
                   </li>
-                );
-              })}
-            </ul>
-
-            <div className="mt-8">
-              <CTAButtonBtn
-                variant="primary"
-                onClick={() => {
-                  window.location.href = `mailto:${brand.contact.general}?subject=${encodeURIComponent(
-                    `${frequency === "monthly" ? "Monthly" : "One-time"} gift — ${selected}`,
-                  )}`;
-                }}
-              >
-                Continue with {selected} {frequency === "monthly" ? "per month" : "once"}
-              </CTAButtonBtn>
-              <p className="mt-4 max-w-md text-sm text-muted-foreground">
-                Online card processing is being finalized. Until then, continue here and our development
-                team will complete your gift directly.
+                ))}
+              </ul>
+            </Reveal>
+            <Reveal delay={120} className="flex flex-col justify-center">
+              <h2 className="display-cond text-[clamp(1.9rem,4.2vw,3.4rem)] text-ink">Talk to us about giving.</h2>
+              <p className="mt-5 text-base text-muted-foreground">
+                Online giving is being set up. In the meantime, email us and we will arrange it directly and tell you
+                exactly what your support is buying.
               </p>
-            </div>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <CTAButtonA href={`mailto:${brand.contact.general}`} variant="primary">
+                  {brand.contact.general}
+                </CTAButtonA>
+                <CTAButton to="/development" variant="ghost" className="border border-border text-ink hover:bg-surface">
+                  See where we are
+                </CTAButton>
+              </div>
+            </Reveal>
           </div>
+        </Section>
+      </div>
 
-          <aside className="border border-border bg-surface p-8">
-            <SectionLabel n="02" tone="light">Other ways to give</SectionLabel>
-            <dl className="mt-8 space-y-7">
-              <div>
-                <dt className="font-display text-lg font-bold text-ink">Wire or check</dt>
-                <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Contact{" "}
-                  <a className="text-primary hover:underline" href={`mailto:${brand.contact.general}`}>
-                    {brand.contact.general}
-                  </a>{" "}
-                  for banking details and acknowledgement letters.
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display text-lg font-bold text-ink">Corporate matching</dt>
-                <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  Most employers will match a gift dollar for dollar. Our{" "}
-                  <a className="text-primary hover:underline" href={`mailto:${brand.contact.partners}`}>
-                    partnerships team
-                  </a>{" "}
-                  will handle the paperwork.
-                </dd>
-              </div>
-              <div>
-                <dt className="font-display text-lg font-bold text-ink">In-kind supply</dt>
-                <dd className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  We accept water treatment, medical, shelter, and power equipment that matches cache
-                  standards. Transport capacity is equally welcome.
-                </dd>
-              </div>
-            </dl>
-            <p className="mt-9 border-t border-border pt-6 text-xs leading-relaxed text-muted-foreground">
-              {brand.legalName} is a nonprofit organization. Gifts are acknowledged in writing; tax
-              treatment depends on your jurisdiction.
-            </p>
-          </aside>
+      <Section wide className="text-center">
+        <h2 className="display-cond mx-auto max-w-3xl text-[clamp(2rem,5vw,4rem)] text-ink">
+          Other ways to help.
+        </h2>
+        <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <CTAButton to="/join" variant="primary">Join the team</CTAButton>
+          <CTAButton to="/partners" variant="ghost" className="border border-border text-ink hover:bg-surface">
+            Partner with us
+          </CTAButton>
         </div>
       </Section>
     </>
