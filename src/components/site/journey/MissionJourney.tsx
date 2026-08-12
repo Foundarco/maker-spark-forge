@@ -84,7 +84,7 @@ export function MissionJourney() {
   return (
     <section
       ref={track}
-      className="relative bg-[#0b0f14]"
+      className="relative bg-[#131c27]"
       style={{ height: `${beats.length * 85}vh` }}
       aria-label="Mission journey: from sensor detection to responder"
     >
@@ -110,7 +110,7 @@ export function MissionJourney() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "linear-gradient(100deg, rgba(8,11,16,0.88) 0%, rgba(8,11,16,0.62) 34%, rgba(8,11,16,0.05) 58%, transparent 78%), radial-gradient(130% 90% at 60% 45%, transparent 55%, rgba(6,9,13,0.5) 100%)",
+              "linear-gradient(100deg, rgba(8,11,16,0.82) 0%, rgba(8,11,16,0.5) 32%, rgba(8,11,16,0.04) 56%, transparent 74%), radial-gradient(140% 100% at 62% 45%, transparent 62%, rgba(6,9,13,0.42) 100%)",
           }}
           aria-hidden
         />

@@ -406,9 +406,9 @@ function Sky() {
           varying vec3 vP;
           void main(){
             float h = clamp(normalize(vP).y * 0.5 + 0.5, 0.0, 1.0);
-            vec3 low = vec3(0.42, 0.24, 0.13);
-            vec3 mid = vec3(0.14, 0.17, 0.24);
-            vec3 top = vec3(0.04, 0.06, 0.10);
+            vec3 low = vec3(0.62, 0.34, 0.16);
+            vec3 mid = vec3(0.20, 0.26, 0.36);
+            vec3 top = vec3(0.05, 0.08, 0.14);
             vec3 c = mix(low, mid, smoothstep(0.42, 0.56, h));
             c = mix(c, top, smoothstep(0.56, 0.85, h));
             gl_FragColor = vec4(c, 1.0);
@@ -428,8 +428,8 @@ export default function MissionScene({ progress }: { progress: Progress }) {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ fov: 42, near: 0.5, far: 900, position: [-64, 22, 74] }}
       onCreated={({ scene, gl }) => {
-        scene.fog = new THREE.FogExp2("#1a2331", 0.0042);
-        gl.setClearColor("#0e131b", 1);
+        scene.fog = new THREE.FogExp2("#2b394d", 0.0032);
+        gl.setClearColor("#131c27", 1);
       }}
     >
       <ambientLight intensity={0.35} color="#8fa8c4" />
