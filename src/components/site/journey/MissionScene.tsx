@@ -681,10 +681,12 @@ const KEYS: Key[] = [
   { p: 0.46, pos: [-120, 300, 320], look: [40, 40, -80], fov: 44 }, // ops center backdrop
   { p: 0.54, chase: [-34, 9, 22], fov: 38 }, // dispatch
   { p: 0.62, chase: [-22, 4, 8], fov: 34 }, // flight to incident
-  { p: 0.7, chase: [6, 2.4, 9], fov: 30 }, // sensor perspective, fire ahead
-  { p: 0.78, chase: [4, 3, 11], fov: 32 }, // RGB / thermal on target
-  { p: 0.85, pos: [FIRE.x + 150, FIRE.y + 130, FIRE.z + 190], look: [FIRE.x, FIRE.y + 20, FIRE.z], fov: 40 }, // intelligence
+  { p: 0.63, chase: [6, 2.4, 9], fov: 30 }, // sensor perspective, fire ahead (RGB)
+  { p: 0.7, chase: [4, 2.6, 10], fov: 32 }, // thermal pass
+  { p: 0.78, pos: [FIRE.x + 150, FIRE.y + 130, FIRE.z + 190], look: [FIRE.x, FIRE.y + 20, FIRE.z], fov: 40 }, // intelligence / mapping
+  { p: 0.86, pos: [FIRE.x - 210, FIRE.y + 90, FIRE.z + 260], look: [FIRE.x - 20, FIRE.y + 20, FIRE.z], fov: 44 }, // responder view
   { p: 0.93, pos: [40, 430, 430], look: [20, 10, -60], fov: 46 }, // whole system
+
   { p: 1.0, pos: [0, 700, 760], look: [0, 0, -80], fov: 50 }, // future
 ];
 
