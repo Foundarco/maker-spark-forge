@@ -115,29 +115,7 @@ function HomePage() {
       </Section>
 
 
-      {/* 05 — WHY THE SYSTEM IS DIFFERENT */}
-      <div className="border-y border-border bg-[var(--night)]">
-        <Section wide>
-          <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-            <Reveal>
-              <SectionLabel n="04" tone="light">Integration</SectionLabel>
-              <h2 className="display-cond mt-6 text-[clamp(2.2rem,5vw,4rem)] text-ink">
-                A drone alone isn't the system.
-              </h2>
-            </Reveal>
-            <Reveal delay={120}>
-              <ul className="grid gap-px bg-border">
-                {pillars.map((r) => (
-                  <li key={r.k} className="grid gap-2 bg-[var(--night)] px-6 py-5 sm:grid-cols-[11rem_1fr] sm:gap-6">
-                    <p className="font-mono text-[0.66rem] uppercase tracking-[0.2em] text-[var(--signal)]">{r.k}</p>
-                    <p className="text-base text-foreground/85">{r.v}</p>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
-        </Section>
-      </div>
+
 
       {/* 06 — DEVELOPMENT STATUS */}
       <Section wide>
