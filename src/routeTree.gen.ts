@@ -9,27 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as WhereWeWorkRouteImport } from './routes/where-we-work'
-import { Route as VolunteerRouteImport } from './routes/volunteer'
-import { Route as StoriesRouteImport } from './routes/stories'
+import { Route as TechnologyRouteImport } from './routes/technology'
+import { Route as SystemRouteImport } from './routes/system'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as ResponseRouteImport } from './routes/response'
-import { Route as RequestHelpRouteImport } from './routes/request-help'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as OperationsRouteImport } from './routes/operations'
 import { Route as MissionRouteImport } from './routes/mission'
-import { Route as ImpactRouteImport } from './routes/impact'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as DevelopmentRouteImport } from './routes/development'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ClientLoginRouteImport } from './routes/client-login'
-import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as HqRouteImport } from './routes/_hq'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal.index'
-import { Route as StoriesSlugRouteImport } from './routes/stories.$slug'
 import { Route as PortalMessagesRouteImport } from './routes/portal.messages'
 import { Route as PortalJobsRouteImport } from './routes/portal.jobs'
 import { Route as PortalInvoicesRouteImport } from './routes/portal.invoices'
@@ -117,34 +113,19 @@ import { Route as HqClientsIdRouteImport } from './routes/_hq.clients.$id'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
 import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 
-const WhereWeWorkRoute = WhereWeWorkRouteImport.update({
-  id: '/where-we-work',
-  path: '/where-we-work',
+const TechnologyRoute = TechnologyRouteImport.update({
+  id: '/technology',
+  path: '/technology',
   getParentRoute: () => rootRouteImport,
 } as any)
-const VolunteerRoute = VolunteerRouteImport.update({
-  id: '/volunteer',
-  path: '/volunteer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StoriesRoute = StoriesRouteImport.update({
-  id: '/stories',
-  path: '/stories',
+const SystemRoute = SystemRouteImport.update({
+  id: '/system',
+  path: '/system',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResponseRoute = ResponseRouteImport.update({
-  id: '/response',
-  path: '/response',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RequestHelpRoute = RequestHelpRouteImport.update({
-  id: '/request-help',
-  path: '/request-help',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalRoute = PortalRouteImport.update({
@@ -157,14 +138,14 @@ const PartnersRoute = PartnersRouteImport.update({
   path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OperationsRoute = OperationsRouteImport.update({
+  id: '/operations',
+  path: '/operations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MissionRoute = MissionRouteImport.update({
   id: '/mission',
   path: '/mission',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ImpactRoute = ImpactRouteImport.update({
-  id: '/impact',
-  path: '/impact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HqLoginRoute = HqLoginRouteImport.update({
@@ -182,6 +163,11 @@ const DonateRoute = DonateRouteImport.update({
   path: '/donate',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevelopmentRoute = DevelopmentRouteImport.update({
+  id: '/development',
+  path: '/development',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -190,11 +176,6 @@ const ContactRoute = ContactRouteImport.update({
 const ClientLoginRoute = ClientLoginRouteImport.update({
   id: '/client-login',
   path: '/client-login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CareersRoute = CareersRouteImport.update({
-  id: '/careers',
-  path: '/careers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -215,11 +196,6 @@ const PortalIndexRoute = PortalIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => PortalRoute,
-} as any)
-const StoriesSlugRoute = StoriesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => StoriesRoute,
 } as any)
 const PortalMessagesRoute = PortalMessagesRouteImport.update({
   id: '/messages',
@@ -655,22 +631,19 @@ const HqAdminCompanyRoute = HqAdminCompanyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/careers': typeof CareersRoute
   '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
+  '/development': typeof DevelopmentRoute
   '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/hq-login': typeof HqLoginRoute
-  '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
+  '/operations': typeof OperationsRoute
   '/partners': typeof PartnersRoute
   '/portal': typeof PortalRouteWithChildren
-  '/request-help': typeof RequestHelpRoute
-  '/response': typeof ResponseRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/stories': typeof StoriesRouteWithChildren
-  '/volunteer': typeof VolunteerRoute
-  '/where-we-work': typeof WhereWeWorkRoute
+  '/system': typeof SystemRoute
+  '/technology': typeof TechnologyRoute
   '/accounting': typeof HqAccountingRoute
   '/analytics': typeof HqAnalyticsRoute
   '/applicants': typeof HqApplicantsRoute
@@ -748,7 +721,6 @@ export interface FileRoutesByFullPath {
   '/portal/invoices': typeof PortalInvoicesRoute
   '/portal/jobs': typeof PortalJobsRoute
   '/portal/messages': typeof PortalMessagesRoute
-  '/stories/$slug': typeof StoriesSlugRoute
   '/portal/': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
@@ -763,21 +735,18 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/careers': typeof CareersRoute
   '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
+  '/development': typeof DevelopmentRoute
   '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/hq-login': typeof HqLoginRoute
-  '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
+  '/operations': typeof OperationsRoute
   '/partners': typeof PartnersRoute
-  '/request-help': typeof RequestHelpRoute
-  '/response': typeof ResponseRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/stories': typeof StoriesRouteWithChildren
-  '/volunteer': typeof VolunteerRoute
-  '/where-we-work': typeof WhereWeWorkRoute
+  '/system': typeof SystemRoute
+  '/technology': typeof TechnologyRoute
   '/accounting': typeof HqAccountingRoute
   '/analytics': typeof HqAnalyticsRoute
   '/applicants': typeof HqApplicantsRoute
@@ -852,7 +821,6 @@ export interface FileRoutesByTo {
   '/portal/invoices': typeof PortalInvoicesRoute
   '/portal/jobs': typeof PortalJobsRoute
   '/portal/messages': typeof PortalMessagesRoute
-  '/stories/$slug': typeof StoriesSlugRoute
   '/portal': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
@@ -869,22 +837,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_hq': typeof HqRouteWithChildren
   '/about': typeof AboutRoute
-  '/careers': typeof CareersRoute
   '/client-login': typeof ClientLoginRoute
   '/contact': typeof ContactRoute
+  '/development': typeof DevelopmentRoute
   '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/hq-login': typeof HqLoginRoute
-  '/impact': typeof ImpactRoute
   '/mission': typeof MissionRoute
+  '/operations': typeof OperationsRoute
   '/partners': typeof PartnersRoute
   '/portal': typeof PortalRouteWithChildren
-  '/request-help': typeof RequestHelpRoute
-  '/response': typeof ResponseRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/stories': typeof StoriesRouteWithChildren
-  '/volunteer': typeof VolunteerRoute
-  '/where-we-work': typeof WhereWeWorkRoute
+  '/system': typeof SystemRoute
+  '/technology': typeof TechnologyRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/analytics': typeof HqAnalyticsRoute
   '/_hq/applicants': typeof HqApplicantsRoute
@@ -962,7 +927,6 @@ export interface FileRoutesById {
   '/portal/invoices': typeof PortalInvoicesRoute
   '/portal/jobs': typeof PortalJobsRoute
   '/portal/messages': typeof PortalMessagesRoute
-  '/stories/$slug': typeof StoriesSlugRoute
   '/portal/': typeof PortalIndexRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
@@ -979,22 +943,19 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/careers'
     | '/client-login'
     | '/contact'
+    | '/development'
     | '/donate'
     | '/faq'
     | '/hq-login'
-    | '/impact'
     | '/mission'
+    | '/operations'
     | '/partners'
     | '/portal'
-    | '/request-help'
-    | '/response'
     | '/sitemap.xml'
-    | '/stories'
-    | '/volunteer'
-    | '/where-we-work'
+    | '/system'
+    | '/technology'
     | '/accounting'
     | '/analytics'
     | '/applicants'
@@ -1072,7 +1033,6 @@ export interface FileRouteTypes {
     | '/portal/invoices'
     | '/portal/jobs'
     | '/portal/messages'
-    | '/stories/$slug'
     | '/portal/'
     | '/admin/company'
     | '/admin/departments'
@@ -1087,21 +1047,18 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/careers'
     | '/client-login'
     | '/contact'
+    | '/development'
     | '/donate'
     | '/faq'
     | '/hq-login'
-    | '/impact'
     | '/mission'
+    | '/operations'
     | '/partners'
-    | '/request-help'
-    | '/response'
     | '/sitemap.xml'
-    | '/stories'
-    | '/volunteer'
-    | '/where-we-work'
+    | '/system'
+    | '/technology'
     | '/accounting'
     | '/analytics'
     | '/applicants'
@@ -1176,7 +1133,6 @@ export interface FileRouteTypes {
     | '/portal/invoices'
     | '/portal/jobs'
     | '/portal/messages'
-    | '/stories/$slug'
     | '/portal'
     | '/admin/company'
     | '/admin/departments'
@@ -1192,22 +1148,19 @@ export interface FileRouteTypes {
     | '/'
     | '/_hq'
     | '/about'
-    | '/careers'
     | '/client-login'
     | '/contact'
+    | '/development'
     | '/donate'
     | '/faq'
     | '/hq-login'
-    | '/impact'
     | '/mission'
+    | '/operations'
     | '/partners'
     | '/portal'
-    | '/request-help'
-    | '/response'
     | '/sitemap.xml'
-    | '/stories'
-    | '/volunteer'
-    | '/where-we-work'
+    | '/system'
+    | '/technology'
     | '/_hq/accounting'
     | '/_hq/analytics'
     | '/_hq/applicants'
@@ -1285,7 +1238,6 @@ export interface FileRouteTypes {
     | '/portal/invoices'
     | '/portal/jobs'
     | '/portal/messages'
-    | '/stories/$slug'
     | '/portal/'
     | '/_hq/admin/company'
     | '/_hq/admin/departments'
@@ -1302,22 +1254,19 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HqRoute: typeof HqRouteWithChildren
   AboutRoute: typeof AboutRoute
-  CareersRoute: typeof CareersRoute
   ClientLoginRoute: typeof ClientLoginRoute
   ContactRoute: typeof ContactRoute
+  DevelopmentRoute: typeof DevelopmentRoute
   DonateRoute: typeof DonateRoute
   FaqRoute: typeof FaqRoute
   HqLoginRoute: typeof HqLoginRoute
-  ImpactRoute: typeof ImpactRoute
   MissionRoute: typeof MissionRoute
+  OperationsRoute: typeof OperationsRoute
   PartnersRoute: typeof PartnersRoute
   PortalRoute: typeof PortalRouteWithChildren
-  RequestHelpRoute: typeof RequestHelpRoute
-  ResponseRoute: typeof ResponseRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  StoriesRoute: typeof StoriesRouteWithChildren
-  VolunteerRoute: typeof VolunteerRoute
-  WhereWeWorkRoute: typeof WhereWeWorkRoute
+  SystemRoute: typeof SystemRoute
+  TechnologyRoute: typeof TechnologyRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
@@ -1327,25 +1276,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/where-we-work': {
-      id: '/where-we-work'
-      path: '/where-we-work'
-      fullPath: '/where-we-work'
-      preLoaderRoute: typeof WhereWeWorkRouteImport
+    '/technology': {
+      id: '/technology'
+      path: '/technology'
+      fullPath: '/technology'
+      preLoaderRoute: typeof TechnologyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/volunteer': {
-      id: '/volunteer'
-      path: '/volunteer'
-      fullPath: '/volunteer'
-      preLoaderRoute: typeof VolunteerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/stories': {
-      id: '/stories'
-      path: '/stories'
-      fullPath: '/stories'
-      preLoaderRoute: typeof StoriesRouteImport
+    '/system': {
+      id: '/system'
+      path: '/system'
+      fullPath: '/system'
+      preLoaderRoute: typeof SystemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sitemap.xml': {
@@ -1353,20 +1295,6 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/response': {
-      id: '/response'
-      path: '/response'
-      fullPath: '/response'
-      preLoaderRoute: typeof ResponseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/request-help': {
-      id: '/request-help'
-      path: '/request-help'
-      fullPath: '/request-help'
-      preLoaderRoute: typeof RequestHelpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal': {
@@ -1383,18 +1311,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/operations': {
+      id: '/operations'
+      path: '/operations'
+      fullPath: '/operations'
+      preLoaderRoute: typeof OperationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mission': {
       id: '/mission'
       path: '/mission'
       fullPath: '/mission'
       preLoaderRoute: typeof MissionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/impact': {
-      id: '/impact'
-      path: '/impact'
-      fullPath: '/impact'
-      preLoaderRoute: typeof ImpactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hq-login': {
@@ -1418,6 +1346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/development': {
+      id: '/development'
+      path: '/development'
+      fullPath: '/development'
+      preLoaderRoute: typeof DevelopmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -1430,13 +1365,6 @@ declare module '@tanstack/react-router' {
       path: '/client-login'
       fullPath: '/client-login'
       preLoaderRoute: typeof ClientLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/careers': {
-      id: '/careers'
-      path: '/careers'
-      fullPath: '/careers'
-      preLoaderRoute: typeof CareersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -1466,13 +1394,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/'
       preLoaderRoute: typeof PortalIndexRouteImport
       parentRoute: typeof PortalRoute
-    }
-    '/stories/$slug': {
-      id: '/stories/$slug'
-      path: '/$slug'
-      fullPath: '/stories/$slug'
-      preLoaderRoute: typeof StoriesSlugRouteImport
-      parentRoute: typeof StoriesRoute
     }
     '/portal/messages': {
       id: '/portal/messages'
@@ -2289,37 +2210,23 @@ const PortalRouteChildren: PortalRouteChildren = {
 const PortalRouteWithChildren =
   PortalRoute._addFileChildren(PortalRouteChildren)
 
-interface StoriesRouteChildren {
-  StoriesSlugRoute: typeof StoriesSlugRoute
-}
-
-const StoriesRouteChildren: StoriesRouteChildren = {
-  StoriesSlugRoute: StoriesSlugRoute,
-}
-
-const StoriesRouteWithChildren =
-  StoriesRoute._addFileChildren(StoriesRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HqRoute: HqRouteWithChildren,
   AboutRoute: AboutRoute,
-  CareersRoute: CareersRoute,
   ClientLoginRoute: ClientLoginRoute,
   ContactRoute: ContactRoute,
+  DevelopmentRoute: DevelopmentRoute,
   DonateRoute: DonateRoute,
   FaqRoute: FaqRoute,
   HqLoginRoute: HqLoginRoute,
-  ImpactRoute: ImpactRoute,
   MissionRoute: MissionRoute,
+  OperationsRoute: OperationsRoute,
   PartnersRoute: PartnersRoute,
   PortalRoute: PortalRouteWithChildren,
-  RequestHelpRoute: RequestHelpRoute,
-  ResponseRoute: ResponseRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  StoriesRoute: StoriesRouteWithChildren,
-  VolunteerRoute: VolunteerRoute,
-  WhereWeWorkRoute: WhereWeWorkRoute,
+  SystemRoute: SystemRoute,
+  TechnologyRoute: TechnologyRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,

@@ -1,59 +1,60 @@
 // Single source of truth for brand identity across the public website.
-// Clovr Relief — a mission-driven natural-disaster response nonprofit.
+// Clovr Labs — an early-stage nonprofit building autonomous wildfire
+// detection and UAV investigation technology.
 
 export const brand = {
-  name: "Clovr Relief",
+  name: "Clovr Labs",
   shortName: "Clovr",
-  legalName: "Clovr Relief Foundation",
-  established: 2015,
-  tagline: "First light in the worst hours.",
+  legalName: "Clovr Labs",
+  mission01: "Mission 01 — Autonomous wildfire detection + UAV investigation",
+  tagline: "See the fire sooner.",
+  status: "Currently in development",
   mission:
-    "Clovr Relief moves emergency supplies, medical capacity, and skilled responders into disaster zones within hours — then stays through recovery.",
+    "We're developing an autonomous wildfire detection and aerial response system designed to identify potential fires, investigate them quickly, and give responders better information.",
   shortMission:
-    "A disaster-response nonprofit that reaches cut-off communities in hours, not weeks — and stays until they're rebuilt.",
-  phone: "(555) 018-4429",
-  serviceArea: "Operating across North America, the Caribbean, and the Pacific",
-  hours: "Operations center staffed 24/7, 365 days a year",
+    "An early-stage nonprofit developing distributed wildfire sensing, autonomous UAV investigation, and the software that connects them.",
+  opsCenter: "24/7/365 Operations Center",
+  hours: "Operations Center staffed 24/7/365",
   contact: {
     general: "hello@clovrlab.com",
     press: "press@clovrlab.com",
     partners: "partners@clovrlab.com",
-    careers: "careers@clovrlab.com",
-    emergency: "response@clovrlab.com",
+    join: "join@clovrlab.com",
+    research: "research@clovrlab.com",
   },
   socials: {
     instagram: "#",
-    facebook: "#",
     linkedin: "#",
     youtube: "#",
+    github: "#",
   },
-  /** Headline operating numbers shown across the site. */
-  stats: [
-    { label: "Hours to first delivery", value: "6" },
-    { label: "People reached", value: "1,240,000" },
-    { label: "Responses launched", value: "318" },
-    { label: "Of every dollar to programs", value: "91%" },
+  /** Honest, non-numeric statements about where the organization actually is. */
+  statusPoints: [
+    { label: "Mission 01", value: "Wildfire detection + UAV investigation" },
+    { label: "Stage", value: "Prototype in progress" },
+    { label: "Operations Center", value: "24/7/365" },
+    { label: "Structure", value: "Mission-driven nonprofit" },
   ],
   values: [
     {
-      title: "Speed is survival",
-      body: "The first 72 hours decide outcomes. Everything we build — staging, logistics, dispatch — is engineered to compress that window.",
+      title: "Early information matters",
+      body: "The gap between a fire starting and someone knowing exactly what is happening is where the system should do its work. Every design decision is measured against that gap.",
     },
     {
-      title: "Local first",
-      body: "We deploy alongside local responders and hire locally wherever we work. Communities lead their own recovery; we supply the capacity.",
+      title: "Build it, then claim it",
+      body: "We describe what exists as built, what's on the bench as prototype, and what's ahead as intent. Nothing gets promoted before it is tested.",
     },
     {
-      title: "Engineered, not improvised",
-      body: "Pre-positioned caches, standardized load plans, and live routing mean a response starts already rehearsed.",
+      title: "One system, not one gadget",
+      body: "Sensors, communications, the Operations Center, the aircraft, and the software are designed together. The architecture is the product.",
     },
     {
-      title: "Accountable to the dollar",
-      body: "Every response publishes what was delivered, where, and what it cost. Impact reporting is a product, not a press release.",
+      title: "Responders decide",
+      body: "We're building an information tool. Fire professionals make the calls; our job is to make the picture arrive earlier and clearer.",
     },
     {
-      title: "We stay",
-      body: "Relief without recovery is a headline. We remain through rebuilding, resilience work, and readiness training.",
+      title: "Engineered for the field",
+      body: "Heat, smoke, dust, wind, remote terrain, and thin connectivity are the design environment — not edge cases discovered later.",
     },
   ],
 } as const;

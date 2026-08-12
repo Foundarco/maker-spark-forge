@@ -1,25 +1,25 @@
 import { Link } from "@tanstack/react-router";
 import { BrandLogo } from "./BrandLogo";
 import { brand } from "@/config/brand";
-import { programs } from "@/config/programs";
+import { stages } from "@/config/system";
 
 const cols = [
   {
-    title: "Response",
+    title: "The system",
     links: [
-      { to: "/response", label: "How we respond" },
-      { to: "/where-we-work", label: "Where we work" },
-      { to: "/impact", label: "Impact" },
-      { to: "/request-help", label: "Request help" },
+      { to: "/system", label: "Architecture" },
+      { to: "/technology", label: "Technology" },
+      { to: "/operations", label: "Operations Center" },
+      { to: "/development", label: "Development status" },
     ],
   },
   {
     title: "Get involved",
     links: [
-      { to: "/donate", label: "Give" },
-      { to: "/volunteer", label: "Volunteer" },
+      { to: "/join", label: "Join the team" },
       { to: "/partners", label: "Partner with us" },
-      { to: "/careers", label: "Careers" },
+      { to: "/donate", label: "Support the mission" },
+      { to: "/contact", label: "Contact" },
     ],
   },
   {
@@ -27,15 +27,13 @@ const cols = [
     links: [
       { to: "/mission", label: "Mission" },
       { to: "/about", label: "About" },
-      { to: "/stories", label: "Field stories" },
-      { to: "/contact", label: "Contact" },
+      { to: "/faq", label: "FAQ" },
+      { to: "/client-login", label: "Portal" },
     ],
   },
-
   {
     title: "Legal",
     links: [
-      { to: "/faq", label: "FAQ" },
       { to: "/legal/privacy", label: "Privacy" },
       { to: "/legal/terms", label: "Terms" },
       { to: "/legal/cookies", label: "Cookies" },
@@ -53,14 +51,6 @@ export function Footer() {
             <p className="mt-6 max-w-xs text-sm leading-relaxed text-muted-foreground">{brand.shortMission}</p>
             <dl className="mt-7 space-y-2 text-sm text-muted-foreground">
               <div>
-                <dt className="sr-only">Emergency line</dt>
-                <dd>
-                  <a className="hover:text-primary" href={`tel:${brand.phone.replace(/[^0-9+]/g, "")}`}>
-                    {brand.phone}
-                  </a>
-                </dd>
-              </div>
-              <div>
                 <dt className="sr-only">Email</dt>
                 <dd>
                   <a className="hover:text-primary" href={`mailto:${brand.contact.general}`}>
@@ -69,14 +59,18 @@ export function Footer() {
                 </dd>
               </div>
               <div>
-                <dt className="sr-only">Hours</dt>
+                <dt className="sr-only">Operations Center</dt>
                 <dd>{brand.hours}</dd>
+              </div>
+              <div>
+                <dt className="sr-only">Status</dt>
+                <dd>{brand.status}</dd>
               </div>
             </dl>
             <div className="mt-6 flex flex-wrap gap-5 text-xs text-muted-foreground">
-              <a href={brand.socials.instagram} className="hover:text-foreground">Instagram</a>
-              <a href={brand.socials.facebook} className="hover:text-foreground">Facebook</a>
               <a href={brand.socials.linkedin} className="hover:text-foreground">LinkedIn</a>
+              <a href={brand.socials.github} className="hover:text-foreground">GitHub</a>
+              <a href={brand.socials.instagram} className="hover:text-foreground">Instagram</a>
             </div>
           </div>
           {cols.map((col) => (
@@ -95,20 +89,19 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Program index */}
+        {/* Architecture index */}
         <div className="mt-20 border-t border-border pt-10">
-          <h3 className="rule-label mb-6 text-muted-foreground">The response cycle</h3>
-          <ul className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {programs.map((p) => (
+          <h3 className="rule-label mb-6 text-muted-foreground">Detection to responder</h3>
+          <ul className="grid gap-px bg-border sm:grid-cols-3 lg:grid-cols-9">
+            {stages.map((p) => (
               <li key={p.slug}>
                 <Link
-                  to="/response"
+                  to="/system"
                   hash={p.slug}
-                  className="group flex h-full flex-col bg-[var(--night)] px-5 py-6 transition-colors hover:bg-surface"
+                  className="group flex h-full flex-col bg-[var(--night)] px-4 py-5 transition-colors hover:bg-surface"
                 >
-                  <span className="display-cond text-2xl" style={{ color: p.accent }}>{p.n}</span>
-                  <span className="mt-3 text-sm font-semibold text-ink">{p.name}</span>
-                  <span className="mt-1 text-xs text-muted-foreground">{p.discipline}</span>
+                  <span className="font-mono text-xs tabular-nums" style={{ color: p.accent }}>{p.n}</span>
+                  <span className="mt-2 text-xs font-semibold uppercase tracking-[0.08em] text-ink">{p.title}</span>
                 </Link>
               </li>
             ))}
@@ -116,8 +109,8 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-2 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} {brand.legalName}. A registered nonprofit organization.</p>
-          <p>{brand.serviceArea}</p>
+          <p>© {new Date().getFullYear()} {brand.legalName}. A mission-driven nonprofit organization.</p>
+          <p>{brand.status} · {brand.opsCenter}</p>
         </div>
       </div>
     </footer>
