@@ -57,13 +57,20 @@ export function Reveal({
   }, []);
 
 
+  const T = Tag as React.ComponentType<{
+    ref?: unknown;
+    className?: string;
+    style?: React.CSSProperties;
+    children?: ReactNode;
+  }>;
+
   return (
-    <Tag
+    <T
       ref={ref as never}
       className={`reveal ${className}`}
       style={{ "--reveal-delay": `${delay}ms` } as React.CSSProperties}
     >
       {children}
-    </Tag>
+    </T>
   );
 }
