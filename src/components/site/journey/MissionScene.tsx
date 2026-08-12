@@ -202,7 +202,7 @@ function FireEvent({ progress }: { progress: Progress }) {
     if (glow.current) {
       (glow.current.material as THREE.SpriteMaterial).opacity =
         on * (0.4 + Math.sin(t * 2.1) * 0.08);
-      glow.current.scale.setScalar(1 + Math.sin(t * 1.4) * 0.06);
+      glow.current.scale.setScalar(16 * (1 + Math.sin(t * 1.4) * 0.06));
     }
     if (light.current) light.current.intensity = on * (26 + Math.sin(t * 3) * 6);
     if (smoke.current) {

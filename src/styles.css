@@ -461,7 +461,7 @@
 .journey-thermal {
   background:
     radial-gradient(60% 45% at 62% 52%, rgba(255, 214, 120, 0.55), rgba(255, 96, 0, 0.35) 38%, transparent 72%),
-    linear-gradient(180deg, rgba(10, 20, 60, 0.55), rgba(80, 0, 90, 0.45));
+    linear-gradient(180deg, rgba(12, 24, 58, 0.5), rgba(120, 26, 10, 0.45));
   mix-blend-mode: screen;
   transition: opacity 220ms linear;
 }
