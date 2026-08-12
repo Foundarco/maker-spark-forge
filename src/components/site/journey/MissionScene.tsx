@@ -68,7 +68,7 @@ function Terrain() {
   return (
     <group>
       <mesh geometry={geo} receiveShadow={false}>
-        <meshLambertMaterial color="#6f8093" flatShading />
+        <meshLambertMaterial color="#5c6b7f" flatShading />
       </mesh>
       <lineSegments geometry={wire}>
         <lineBasicMaterial color={DATA} transparent opacity={0.16} />
@@ -113,7 +113,7 @@ function SensorNodes({ progress }: { progress: Progress }) {
     if (group.current) group.current.visible = appear > 0.01;
     if (dots.current) (dots.current.material as THREE.PointsMaterial).opacity = appear;
     if (links.current)
-      (links.current.material as THREE.LineBasicMaterial).opacity = linked * 0.28;
+      (links.current.material as THREE.LineBasicMaterial).opacity = linked * 0.55;
     if (alert.current) {
       const t = clock.elapsedTime;
       const s = alerted * (1.6 + Math.sin(t * 3.2) * 0.5);
@@ -125,7 +125,7 @@ function SensorNodes({ progress }: { progress: Progress }) {
   return (
     <group ref={group}>
       <points ref={dots} geometry={pointsGeo}>
-        <pointsMaterial color={DATA} size={1.5} sizeAttenuation transparent opacity={0} />
+        <pointsMaterial color={DATA} size={2.4} sizeAttenuation transparent opacity={0} />
       </points>
       <lineSegments ref={links} geometry={linksGeo}>
         <lineBasicMaterial color={DATA} transparent opacity={0} />
