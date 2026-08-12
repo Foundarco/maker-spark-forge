@@ -78,7 +78,7 @@ function Hero() {
         <div className="scrim-full absolute inset-0" aria-hidden />
       </div>
 
-      <div className="mx-auto w-full max-w-7xl px-5 pb-16 pt-32 sm:px-8">
+      <div className="hero-reveal mx-auto w-full max-w-7xl px-5 pb-16 pt-32 sm:px-8">
         <Reveal>
           <p className="rule-label flex items-center gap-3 text-[var(--aid)]">
             <span className="live-pulse h-1.5 w-1.5 rounded-full bg-[var(--alive)]" aria-hidden />
