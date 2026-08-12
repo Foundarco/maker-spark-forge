@@ -68,7 +68,7 @@ function Terrain() {
   return (
     <group>
       <mesh geometry={geo} receiveShadow={false}>
-        <meshBasicMaterial color="#ff0000" />
+        <meshLambertMaterial color="#ffffff" />
       </mesh>
       <lineSegments geometry={wire}>
         <lineBasicMaterial color={DATA} transparent opacity={0.16} />
