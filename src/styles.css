@@ -441,3 +441,18 @@
   opacity: 1;
   transform: none;
 }
+
+/* Thermal concept rendering used in the RGB/thermal comparison */
+.thermal-view {
+  filter: grayscale(1) contrast(1.45) brightness(1.05) sepia(1) hue-rotate(200deg) saturate(7);
+}
+
+@utility scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.05) 0px,
+    rgb(255 255 255 / 0.05) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
