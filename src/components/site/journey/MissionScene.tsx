@@ -177,7 +177,7 @@ function soft() {
 }
 
 function FireEvent({ progress }: { progress: Progress }) {
-  const glow = useRef<THREE.Mesh>(null);
+  const glow = useRef<THREE.Sprite>(null);
   const smoke = useRef<THREE.Points>(null);
   const light = useRef<THREE.PointLight>(null);
 
@@ -200,7 +200,7 @@ function FireEvent({ progress }: { progress: Progress }) {
     const on = ramp(p, 0.22, 0.36);
     const t = clock.elapsedTime;
     if (glow.current) {
-      (glow.current.material as THREE.MeshBasicMaterial).opacity =
+      (glow.current.material as THREE.SpriteMaterial).opacity =
         on * (0.4 + Math.sin(t * 2.1) * 0.08);
       glow.current.scale.setScalar(1 + Math.sin(t * 1.4) * 0.06);
     }
@@ -213,10 +213,16 @@ function FireEvent({ progress }: { progress: Progress }) {
 
   return (
     <group>
-      <mesh ref={glow} position={[FIRE.x, FIRE.y + 0.4, FIRE.z]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[5.5, 32]} />
-        <meshBasicMaterial color={SIGNAL} transparent opacity={0} />
-      </mesh>
+      <sprite ref={glow as never} position={[FIRE.x, FIRE.y + 2.6, FIRE.z]} scale={[16, 16, 1]}>
+        <spriteMaterial
+          map={soft()}
+          color="#ff9a3c"
+          transparent
+          opacity={0}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </sprite>
       <pointLight ref={light} position={[FIRE.x, FIRE.y + 6, FIRE.z]} color="#ff8a3c" distance={90} intensity={0} />
       <points ref={smoke} geometry={smokeGeo}>
         <pointsMaterial map={soft()} color="#9aa2ad" size={9} sizeAttenuation transparent opacity={0} depthWrite={false} alphaTest={0.01} />
