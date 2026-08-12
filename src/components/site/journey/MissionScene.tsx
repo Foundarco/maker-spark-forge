@@ -619,8 +619,9 @@ function flightT(p: number) {
   if (p < 0.12) return lerp(0.0, 0.1, ramp(p, 0, 0.12)); // establishing cruise
   if (p < 0.3) return lerp(0.1, 0.2, ramp(p, 0.12, 0.3)); // slow pass over the network
   if (p < 0.46) return 0.2 + ramp(p, 0.3, 0.46) * 0.02; // holding while ops reviews
-  if (p < 0.78) return lerp(0.22, 0.82, ramp(p, 0.46, 0.78)); // dispatch → on scene
-  return lerp(0.82, 1, ramp(p, 0.78, 1)); // orbit
+  if (p < 0.6) return lerp(0.22, 0.66, ramp(p, 0.46, 0.6)); // dispatch → transit
+  if (p < 0.74) return lerp(0.66, 0.88, ramp(p, 0.6, 0.74)); // on scene, sensor pass
+  return lerp(0.88, 1, ramp(p, 0.74, 1)); // orbit
 }
 
 function Aircraft({
@@ -677,6 +678,8 @@ type Key = {
   chase?: [number, number, number];
   pos?: [number, number, number];
   look?: [number, number, number];
+  /** chase keys can aim the frame at the fire instead of ahead of the aircraft */
+  fire?: boolean;
   fov?: number;
 };
 
@@ -694,8 +697,8 @@ const KEYS: Key[] = [
   { p: 0.46, pos: [-120, 300, 320], look: [40, 40, -80], fov: 44 }, // ops center backdrop
   { p: 0.54, chase: [-54, 13, 34], fov: 38 }, // dispatch
   { p: 0.62, chase: [-42, 9, 18], fov: 34 }, // flight to incident
-  { p: 0.63, chase: [11, 4.5, 18], fov: 30 }, // sensor perspective, fire ahead (RGB)
-  { p: 0.7, chase: [10, 4.5, 19], fov: 32 }, // thermal pass
+  { p: 0.63, chase: [-30, 14, 22], fire: true, fov: 34 }, // sensor perspective, fire ahead (RGB)
+  { p: 0.7, chase: [-22, 10, 14], fire: true, fov: 30 }, // thermal pass
   { p: 0.78, pos: [FIRE.x + 150, FIRE.y + 130, FIRE.z + 190], look: [FIRE.x, FIRE.y + 20, FIRE.z], fov: 40 }, // intelligence / mapping
   { p: 0.86, pos: [FIRE.x - 210, FIRE.y + 90, FIRE.z + 260], look: [FIRE.x - 20, FIRE.y + 20, FIRE.z], fov: 44 }, // responder view
   { p: 0.93, pos: [40, 430, 430], look: [20, 10, -60], fov: 46 }, // whole system
@@ -716,10 +719,14 @@ function Rig({ progress, uavRef }: { progress: Progress; uavRef: React.RefObject
     const uav = uavRef.current;
     if (k.chase && uav) {
       outPos.set(k.chase[0], k.chase[1], k.chase[2]).applyQuaternion(uav.quaternion).add(uav.position);
-      outLook.copy(uav.position);
-      // look slightly ahead of the aircraft so the nose leads the frame
-      tmpB.set(24, 0, 0).applyQuaternion(uav.quaternion);
-      outLook.add(tmpB);
+      if (k.fire) {
+        outLook.set(FIRE.x, FIRE.y + 14, FIRE.z);
+      } else {
+        outLook.copy(uav.position);
+        // look slightly ahead of the aircraft so the nose leads the frame
+        tmpB.set(24, 0, 0).applyQuaternion(uav.quaternion);
+        outLook.add(tmpB);
+      }
     } else {
       outPos.set(k.pos![0], k.pos![1], k.pos![2]);
       outLook.set(k.look![0], k.look![1], k.look![2]);
