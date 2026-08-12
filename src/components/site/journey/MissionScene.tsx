@@ -68,10 +68,10 @@ function Terrain() {
   return (
     <group>
       <mesh geometry={geo} receiveShadow={false}>
-        <meshStandardMaterial color="#12161c" roughness={1} metalness={0} flatShading />
+        <meshStandardMaterial color="#1c232c" roughness={1} metalness={0} flatShading />
       </mesh>
       <lineSegments geometry={wire}>
-        <lineBasicMaterial color={DATA} transparent opacity={0.07} />
+        <lineBasicMaterial color={DATA} transparent opacity={0.11} />
       </lineSegments>
     </group>
   );
@@ -250,8 +250,8 @@ function buildUAV() {
 function useFlightPath() {
   return useMemo(() => {
     const pts = [
-      new THREE.Vector3(-96, 30, 58),
-      new THREE.Vector3(-54, 26, 30),
+      new THREE.Vector3(-78, 30, 48),
+      new THREE.Vector3(-50, 26, 28),
       new THREE.Vector3(-22, 24, 8),
       new THREE.Vector3(-30, 20, -20),
       new THREE.Vector3(-4, 19, -34),
@@ -313,8 +313,8 @@ function Aircraft({ progress, uavRef }: { progress: Progress; uavRef: React.RefO
 type Key = { p: number; pos: [number, number, number]; look: [number, number, number] };
 
 const KEYS: Key[] = [
-  { p: 0.0, pos: [-64, 22, 74], look: [-20, 14, 8] },
-  { p: 0.1, pos: [-30, 26, 62], look: [0, 10, 0] },
+  { p: 0.0, pos: [-6, 26, 96], look: [-44, 26, 44] },
+  { p: 0.1, pos: [-24, 28, 68], look: [-4, 12, 4] },
   { p: 0.2, pos: [-6, 30, 52], look: [4, 6, -4] },
   { p: 0.3, pos: [18, 14, 12], look: [22, 4, -6] },
   { p: 0.42, pos: [14, 96, 44], look: [10, 0, -8] },
@@ -390,6 +390,36 @@ function Atmosphere() {
   );
 }
 
+
+/** Dusk gradient dome — atmosphere and depth behind the ridgelines. */
+function Sky() {
+  const mat = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        side: THREE.BackSide,
+        depthWrite: false,
+        fog: false,
+        uniforms: {},
+        vertexShader:
+          "varying vec3 vP; void main(){ vP = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }",
+        fragmentShader: `
+          varying vec3 vP;
+          void main(){
+            float h = clamp(normalize(vP).y * 0.5 + 0.5, 0.0, 1.0);
+            vec3 low = vec3(0.42, 0.24, 0.13);
+            vec3 mid = vec3(0.14, 0.17, 0.24);
+            vec3 top = vec3(0.04, 0.06, 0.10);
+            vec3 c = mix(low, mid, smoothstep(0.42, 0.56, h));
+            c = mix(c, top, smoothstep(0.56, 0.85, h));
+            gl_FragColor = vec4(c, 1.0);
+          }
+        `,
+      }),
+    [],
+  );
+  return <mesh material={mat} scale={[1, 1, 1]}><sphereGeometry args={[420, 32, 24]} /></mesh>;
+}
+
 export default function MissionScene({ progress }: { progress: Progress }) {
   const uavRef = useRef<THREE.Group>(null);
   return (
@@ -398,12 +428,14 @@ export default function MissionScene({ progress }: { progress: Progress }) {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ fov: 42, near: 0.5, far: 900, position: [-64, 22, 74] }}
       onCreated={({ scene, gl }) => {
-        scene.fog = new THREE.FogExp2("#0b0f14", 0.0075);
-        gl.setClearColor("#0b0f14", 1);
+        scene.fog = new THREE.FogExp2("#1a2331", 0.0042);
+        gl.setClearColor("#0e131b", 1);
       }}
     >
-      <hemisphereLight args={["#33465e", "#0a0d11", 0.9]} />
-      <directionalLight position={[-60, 50, 40]} intensity={0.85} color="#ffd9a8" />
+      <hemisphereLight args={["#5b7796", "#171a1f", 1.5]} />
+      <directionalLight position={[-70, 48, 46]} intensity={1.9} color="#ffcf9a" />
+      <directionalLight position={[60, 26, -60]} intensity={0.5} color="#7fb6ff" />
+      <Sky />
       <Terrain />
       <Atmosphere />
       <SensorNodes progress={progress} />

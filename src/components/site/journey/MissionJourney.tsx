@@ -110,7 +110,7 @@ export function MissionJourney() {
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(120% 80% at 50% 40%, transparent 35%, rgba(6,9,13,0.55) 78%, rgba(6,9,13,0.92) 100%)",
+              "linear-gradient(100deg, rgba(8,11,16,0.88) 0%, rgba(8,11,16,0.62) 34%, rgba(8,11,16,0.05) 58%, transparent 78%), radial-gradient(130% 90% at 60% 45%, transparent 55%, rgba(6,9,13,0.5) 100%)",
           }}
           aria-hidden
         />
