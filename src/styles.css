@@ -435,3 +435,9 @@
 @utility glow-orange {
   box-shadow: 0 20px 60px -20px color-mix(in oklab, var(--color-primary) 55%, transparent);
 }
+
+/* Ensure hero-level reveals never trap content at zero opacity */
+.site-theme .reveal:not(.is-in) {
+  opacity: 1;
+  transform: none;
+}
