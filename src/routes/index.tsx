@@ -45,12 +45,6 @@ export const Route = createFileRoute("/")({
 /** Four-word capability chips — labels, not specification lists. */
 const payload = ["Optical", "Thermal", "Autonomy", "Telemetry"];
 
-const pillars = [
-  { k: "Sensors", v: "Distributed detection across terrain, continuously." },
-  { k: "Operations Center", v: "Continuous human monitoring and coordination — 24/7/365." },
-  { k: "UAV", v: "Rapid investigation that turns a signal into an observation." },
-  { k: "Software", v: "Alerts, missions, imagery and one incident record." },
-];
 
 function HomePage() {
   return (
@@ -120,7 +114,7 @@ function HomePage() {
       {/* 06 — DEVELOPMENT STATUS */}
       <Section wide>
         <Reveal>
-          <SectionLabel n="05" tone="light">Where we actually are</SectionLabel>
+          <SectionLabel n="03" tone="light">Where we actually are</SectionLabel>
           <h2 className="display-cond mt-6 max-w-3xl text-[clamp(2.2rem,5vw,4rem)] text-ink">
             Building Mission 01, in public.
           </h2>
@@ -160,7 +154,7 @@ function HomePage() {
       <div className="border-y border-border bg-[var(--night)]">
         <Section>
           <Reveal>
-            <SectionLabel n="06" tone="light">Later, not now</SectionLabel>
+            <SectionLabel n="04" tone="light">Later, not now</SectionLabel>
             <h2 className="mt-5 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
               Wildfire is only the beginning.
             </h2>
