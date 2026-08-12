@@ -16,6 +16,7 @@ import { Route as PortalRouteImport } from './routes/portal'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as OperationsRouteImport } from './routes/operations'
 import { Route as MissionRouteImport } from './routes/mission'
+import { Route as JoinRouteImport } from './routes/join'
 import { Route as HqLoginRouteImport } from './routes/hq-login'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as DonateRouteImport } from './routes/donate'
@@ -146,6 +147,11 @@ const OperationsRoute = OperationsRouteImport.update({
 const MissionRoute = MissionRouteImport.update({
   id: '/mission',
   path: '/mission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinRoute = JoinRouteImport.update({
+  id: '/join',
+  path: '/join',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HqLoginRoute = HqLoginRouteImport.update({
@@ -637,6 +643,7 @@ export interface FileRoutesByFullPath {
   '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/hq-login': typeof HqLoginRoute
+  '/join': typeof JoinRoute
   '/mission': typeof MissionRoute
   '/operations': typeof OperationsRoute
   '/partners': typeof PartnersRoute
@@ -741,6 +748,7 @@ export interface FileRoutesByTo {
   '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/hq-login': typeof HqLoginRoute
+  '/join': typeof JoinRoute
   '/mission': typeof MissionRoute
   '/operations': typeof OperationsRoute
   '/partners': typeof PartnersRoute
@@ -843,6 +851,7 @@ export interface FileRoutesById {
   '/donate': typeof DonateRoute
   '/faq': typeof FaqRoute
   '/hq-login': typeof HqLoginRoute
+  '/join': typeof JoinRoute
   '/mission': typeof MissionRoute
   '/operations': typeof OperationsRoute
   '/partners': typeof PartnersRoute
@@ -949,6 +958,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/faq'
     | '/hq-login'
+    | '/join'
     | '/mission'
     | '/operations'
     | '/partners'
@@ -1053,6 +1063,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/faq'
     | '/hq-login'
+    | '/join'
     | '/mission'
     | '/operations'
     | '/partners'
@@ -1154,6 +1165,7 @@ export interface FileRouteTypes {
     | '/donate'
     | '/faq'
     | '/hq-login'
+    | '/join'
     | '/mission'
     | '/operations'
     | '/partners'
@@ -1260,6 +1272,7 @@ export interface RootRouteChildren {
   DonateRoute: typeof DonateRoute
   FaqRoute: typeof FaqRoute
   HqLoginRoute: typeof HqLoginRoute
+  JoinRoute: typeof JoinRoute
   MissionRoute: typeof MissionRoute
   OperationsRoute: typeof OperationsRoute
   PartnersRoute: typeof PartnersRoute
@@ -1323,6 +1336,13 @@ declare module '@tanstack/react-router' {
       path: '/mission'
       fullPath: '/mission'
       preLoaderRoute: typeof MissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join': {
+      id: '/join'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hq-login': {
@@ -2220,6 +2240,7 @@ const rootRouteChildren: RootRouteChildren = {
   DonateRoute: DonateRoute,
   FaqRoute: FaqRoute,
   HqLoginRoute: HqLoginRoute,
+  JoinRoute: JoinRoute,
   MissionRoute: MissionRoute,
   OperationsRoute: OperationsRoute,
   PartnersRoute: PartnersRoute,
