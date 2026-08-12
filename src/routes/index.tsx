@@ -58,38 +58,12 @@ function HomePage() {
       {/* 01 — THE MISSION FLIGHT (hero + full system story, scroll-driven) */}
       <MissionJourney />
 
-      {/* 02 — WHY EARLY INFORMATION MATTERS */}
-      <Section wide>
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
-          <Reveal>
-            <SectionLabel n="01" tone="light">Why it matters</SectionLabel>
-            <h2 className="display-cond mt-6 text-[clamp(2.2rem,5.6vw,4.4rem)] text-ink">
-              Early information<br />changes the outcome.
-            </h2>
-          </Reveal>
-          <Reveal delay={120}>
-            <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Detection, verification and getting eyes on the situation each cost time — and in remote terrain,
-              each costs more. We are building a system aimed squarely at that gap.
-            </p>
-            <ul className="mt-9 grid gap-px border border-border bg-border sm:grid-cols-3">
-              {["Detection", "Verification", "Eyes on it"].map((k, i) => (
-                <li key={k} className="bg-[var(--night)] px-5 py-6">
-                  <span className="font-mono text-[0.62rem] tracking-[0.2em] text-[var(--signal)]">0{i + 1}</span>
-                  <p className="mt-3 text-sm font-semibold text-ink">{k}</p>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-      </Section>
-
-      {/* 03 — OPERATIONS CENTER / COMMAND LAYER */}
+      {/* 02 — OPERATIONS CENTER / COMMAND LAYER */}
       <div className="border-y border-border bg-[var(--night)]">
         <Section wide>
           <div className="flex flex-wrap items-end justify-between gap-8">
             <Reveal>
-              <SectionLabel n="02" tone="light">{brand.opsCenter}</SectionLabel>
+              <SectionLabel n="01" tone="light">{brand.opsCenter}</SectionLabel>
               <h2 className="display-cond mt-6 max-w-2xl text-[clamp(2.2rem,5.4vw,4.4rem)] text-ink">
                 The command layer.
               </h2>
@@ -108,11 +82,11 @@ function HomePage() {
         </Section>
       </div>
 
-      {/* 04 — UAV PAYLOAD + THERMAL */}
+      {/* 03 — UAV PAYLOAD + THERMAL */}
       <Section wide>
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
           <Reveal>
-            <SectionLabel n="03" tone="light">UAV-01 · Payload</SectionLabel>
+            <SectionLabel n="02" tone="light">UAV-01 · Payload</SectionLabel>
             <h2 className="display-cond mt-6 text-[clamp(2.2rem,5vw,4rem)] text-ink">
               Two ways of seeing the same ridge.
             </h2>
@@ -139,6 +113,7 @@ function HomePage() {
           </Reveal>
         </div>
       </Section>
+
 
       {/* 05 — WHY THE SYSTEM IS DIFFERENT */}
       <div className="border-y border-border bg-[var(--night)]">
