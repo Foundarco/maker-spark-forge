@@ -1,19 +1,22 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+// Public aid-request intake for Clovr Relief. Stored in `project_requests`:
+// project_type = hazard/need category, address = location, timeline = urgency,
+// budget = household size.
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(120),
   email: z.string().trim().email("Enter a valid email").max(255),
   phone: z.string().trim().max(60).optional().default(""),
   address: z.string().trim().max(300).optional().default(""),
   projectType: z.enum([
-    "new-construction",
-    "addition",
-    "renovation",
-    "kitchen-bath",
-    "carpentry",
-    "exterior",
-    "not-sure",
+    "water",
+    "medical",
+    "shelter",
+    "power-comms",
+    "evacuation",
+    "recovery-repair",
+    "other",
   ]),
   budget: z.string().trim().max(60).optional().default(""),
   timeline: z.string().trim().max(60).optional().default(""),
@@ -21,6 +24,7 @@ const schema = z.object({
   additionalInfo: z.string().trim().max(2000).optional().default(""),
   photoUrls: z.array(z.string().trim().max(500)).max(10).optional().default([]),
 });
+
 
 export const submitProjectRequest = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => schema.parse(input))

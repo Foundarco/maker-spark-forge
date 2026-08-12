@@ -70,7 +70,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 const siteDescription =
-  "Family-run general contractor since 1974. Homes, additions, and renovations built with disciplined craftsmanship and schedules that hold.";
+  "Clovr Relief is a disaster-response nonprofit that reaches cut-off communities within hours — water, medical capacity, shelter and power — and stays through recovery.";
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({

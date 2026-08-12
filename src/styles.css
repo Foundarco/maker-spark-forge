@@ -133,36 +133,38 @@
 }
 
 /* ---------------------------------------------------------------
-   Public website theme — McGuire Construction
+   Public website theme — Clovr Relief
    Scoped to .site-theme so the internal HQ workspace is untouched.
-   Palette: off-white paper, charcoal ink, near-black primary,
-   warm stone accents. No orange/black construction clichés.
+   Palette: deep storm night, signal amber for urgency, aid cyan
+   for capability, warm white type. Dark-first, cinematic.
 ---------------------------------------------------------------- */
 .site-theme {
-  --radius: 0.5rem;
-  --background: oklch(0.988 0.003 250);
-  --surface: oklch(0.966 0.007 250);
-  --foreground: oklch(0.28 0.015 255);
-  --ink: oklch(0.17 0.025 258);
-  --warm: oklch(0.962 0.010 250);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.24 0.014 255);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.24 0.014 255);
-  --primary: oklch(0.52 0.185 258);
-  --primary-foreground: oklch(0.99 0.003 250);
-  --primary-soft: oklch(0.955 0.030 258);
-  --secondary: oklch(0.952 0.010 250);
-  --secondary-foreground: oklch(0.22 0.015 255);
-  --muted: oklch(0.958 0.008 250);
-  --muted-foreground: oklch(0.50 0.016 255);
-  --accent: oklch(0.945 0.030 258);
-  --accent-foreground: oklch(0.36 0.15 258);
-  --border: oklch(0.912 0.010 250);
-  --input: oklch(0.928 0.010 250);
-  --ring: oklch(0.52 0.185 258);
-  --stone: oklch(0.89 0.018 250);
-  --stone-deep: oklch(0.63 0.022 252);
+  --radius: 0.25rem;
+  --background: oklch(0.16 0.018 250);
+  --surface: oklch(0.21 0.020 250);
+  --foreground: oklch(0.93 0.008 250);
+  --ink: oklch(0.97 0.004 250);
+  --warm: oklch(0.24 0.018 250);
+  --card: oklch(0.21 0.020 250);
+  --card-foreground: oklch(0.94 0.006 250);
+  --popover: oklch(0.19 0.020 250);
+  --popover-foreground: oklch(0.94 0.006 250);
+  --primary: oklch(0.78 0.155 72);
+  --primary-foreground: oklch(0.17 0.020 250);
+  --primary-soft: oklch(0.30 0.060 72);
+  --secondary: oklch(0.26 0.020 250);
+  --secondary-foreground: oklch(0.94 0.006 250);
+  --muted: oklch(0.25 0.018 250);
+  --muted-foreground: oklch(0.70 0.014 250);
+  --accent: oklch(0.28 0.040 220);
+  --accent-foreground: oklch(0.86 0.090 210);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.78 0.155 72);
+  --signal: oklch(0.78 0.155 72);
+  --aid: oklch(0.80 0.115 210);
+  --alive: oklch(0.78 0.170 150);
+  --night: oklch(0.12 0.016 250);
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   background-color: var(--background);
   color: var(--foreground);
@@ -175,13 +177,13 @@
 .site-theme h3,
 .site-theme h4 {
   font-family: "Archivo", ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   font-weight: 700;
 }
 
 .site-theme .display-cond {
   font-family: "Oswald", "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
-  letter-spacing: -0.005em;
+  letter-spacing: 0.005em;
 }
 
 @utility rule-label {
@@ -191,16 +193,16 @@
   text-transform: uppercase;
 }
 
-/* Large architectural condensed display type for the public site */
+/* Large condensed display type for the public site */
 @utility display-cond {
   font-family: "Oswald", "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
   text-transform: uppercase;
   font-weight: 600;
   line-height: 0.9;
-  letter-spacing: -0.005em;
+  letter-spacing: 0.005em;
 }
 
-/* Faint blueprint grid used behind dark sections */
+/* Faint coordinate grid used behind dark sections */
 @utility blueprint-grid {
   background-image:
     linear-gradient(to right, color-mix(in oklab, currentColor 8%, transparent) 1px, transparent 1px),
@@ -214,17 +216,65 @@
 }
 
 /* ---------------------------------------------------------------
-   Playful layer — color, motion, texture for the public site
+   Motion & atmosphere layer for the public site
 ---------------------------------------------------------------- */
 
 .site-theme {
-  --acc-construction: #2563eb;
-  --acc-concrete: #1e3a8a;
-  --acc-excavation: #0ea5e9;
-  --acc-landscape: #0891b2;
-  --acc-development: #4f46e5;
+  --acc-detect: #38bdf8;
+  --acc-deploy: #f59e0b;
+  --acc-deliver: #22d3ee;
+  --acc-rebuild: #4ade80;
   --acc-live: #22c55e;
 }
+
+/* Cinematic image scrim so type stays legible over photography */
+@utility scrim-bottom {
+  background-image: linear-gradient(
+    to top,
+    oklch(0.12 0.016 250 / 0.96) 0%,
+    oklch(0.12 0.016 250 / 0.72) 34%,
+    oklch(0.12 0.016 250 / 0.15) 72%,
+    transparent 100%
+  );
+}
+
+@utility scrim-full {
+  background-image:
+    linear-gradient(to right, oklch(0.12 0.016 250 / 0.9), oklch(0.12 0.016 250 / 0.45) 60%, transparent),
+    linear-gradient(to top, oklch(0.12 0.016 250 / 0.9), transparent 60%);
+}
+
+/* Slow pan applied to hero photography */
+@utility slow-pan {
+  animation: slow-pan-k 26s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes slow-pan-k {
+  from { transform: scale(1.06) translate3d(-1.2%, 0.6%, 0); }
+  to { transform: scale(1.14) translate3d(1.2%, -0.8%, 0); }
+}
+
+/* Pulsing live-status dot */
+@utility live-pulse {
+  animation: live-pulse-k 2.4s ease-in-out infinite;
+}
+
+@keyframes live-pulse-k {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.82); }
+}
+
+@utility radar-sweep {
+  animation: radar-sweep-k 8s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@keyframes radar-sweep-k {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 
 
 @utility accent-ink {
@@ -236,7 +286,7 @@
 }
 
 @utility accent-wash {
-  background-color: color-mix(in oklab, var(--accent-color, var(--color-primary)) 10%, white);
+  background-color: color-mix(in oklab, var(--accent-color, var(--color-primary)) 14%, transparent);
 }
 
 @utility accent-ring {
@@ -326,6 +376,9 @@
   .marquee-track { animation: none; }
   .float-slow { animation: none; }
   .gradient-text { animation: none; }
+  .slow-pan { animation: none; transform: none; }
+  .live-pulse { animation: none; }
+  .radar-sweep { animation: none; }
 }
 
 
@@ -381,4 +434,10 @@
 
 @utility glow-orange {
   box-shadow: 0 20px 60px -20px color-mix(in oklab, var(--color-primary) 55%, transparent);
+}
+
+/* Hero content must never be trapped at zero opacity above the fold */
+.site-theme .hero-reveal .reveal:not(.is-in) {
+  opacity: 1;
+  transform: none;
 }
