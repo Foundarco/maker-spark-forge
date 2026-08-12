@@ -68,7 +68,7 @@ function Terrain() {
   return (
     <group>
       <mesh geometry={geo} receiveShadow={false}>
-        <meshLambertMaterial color="#ffffff" />
+        <meshLambertMaterial color="#6f8093" flatShading />
       </mesh>
       <lineSegments geometry={wire}>
         <lineBasicMaterial color={DATA} transparent opacity={0.16} />
@@ -432,9 +432,9 @@ export default function MissionScene({ progress }: { progress: Progress }) {
         gl.setClearColor("#131c27", 1);
       }}
     >
-      <ambientLight intensity={0.35} color="#8fa8c4" />
-      <hemisphereLight args={["#7d9cbe", "#1d222a", 1.6]} />
-      <directionalLight position={[-70, 48, 46]} intensity={1.9} color="#ffcf9a" />
+      <ambientLight intensity={0.5} color="#9db4cc" />
+      <hemisphereLight args={["#93b0cf", "#242a33", 1.1]} />
+      <directionalLight position={[-70, 48, 46]} intensity={1.15} color="#ffd3a3" />
       <directionalLight position={[60, 26, -60]} intensity={0.5} color="#7fb6ff" />
       <Sky />
       <Terrain />
