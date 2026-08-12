@@ -59,11 +59,12 @@ function fbm(x: number, y: number, oct = 5) {
 const SCALE = 0.0075;
 /** Terrain elevation in world units. */
 function height(x: number, z: number) {
-  const base = fbm(x * SCALE, z * SCALE, 5);
+  const base = fbm(x * SCALE, z * SCALE, 7);
   // ridged component builds believable mountain spines
   const ridge = 1 - Math.abs(fbm(x * SCALE * 2.1 + 11, z * SCALE * 2.1 - 7, 3));
   const valley = Math.sin(x * 0.0032) * 0.35;
-  return base * 46 + ridge * ridge * 26 - 16 + valley * 20;
+  const detail = fbm(x * SCALE * 7.3 + 3, z * SCALE * 7.3 - 5, 3) * 3.2;
+  return base * 46 + ridge * ridge * 26 - 16 + valley * 20 + detail;
 }
 
 const GROUND = 900;
@@ -111,29 +112,34 @@ function Terrain() {
 
 /** Instanced conifer cover — scale cue and vegetation realism, one draw call. */
 function Vegetation() {
-  const { geo, mat, count, matrices } = useMemo(() => {
-    const cone = new THREE.ConeGeometry(1, 4.2, 6, 1);
-    cone.translate(0, 2.1, 0);
-    const n = 2600;
+  const { geo, mat, count, matrices, tints } = useMemo(() => {
+    const cone = new THREE.ConeGeometry(1.05, 3.4, 5, 1);
+    cone.translate(0, 1.7, 0);
+    const n = 9000;
     const m: THREE.Matrix4[] = [];
+    const tints: number[] = [];
     const dummy = new THREE.Object3D();
     for (let i = 0; i < n; i++) {
-      const x = (hash2(i, 3.1) - 0.5) * 720;
-      const z = (hash2(i, 7.7) - 0.5) * 720;
+      const x = (hash2(i, 3.1) - 0.5) * 760;
+      const z = (hash2(i, 7.7) - 0.5) * 760;
       const h = height(x, z);
-      if (h < -6 || h > 42) continue;
-      const s = 1.4 + hash2(i, 11.3) * 2.4;
-      dummy.position.set(x, h - 0.4, z);
-      dummy.rotation.y = hash2(i, 5.2) * Math.PI;
-      dummy.scale.set(s * 0.8, s, s * 0.8);
+      if (h < -8 || h > 46) continue;
+      // clumped cover: skip where the vegetation noise field is low
+      if (fbm(x * 0.012, z * 0.012, 3) < -0.05) continue;
+      const s = 0.8 + hash2(i, 11.3) * 1.5;
+      dummy.position.set(x, h - 0.3, z);
+      dummy.rotation.set(hash2(i, 2.2) * 0.08, hash2(i, 5.2) * Math.PI, (hash2(i, 6.4) - 0.5) * 0.12);
+      dummy.scale.set(s * 0.85, s * (0.8 + hash2(i, 4.4) * 0.9), s * 0.85);
       dummy.updateMatrix();
       m.push(dummy.matrix.clone());
+      tints.push(0.6 + hash2(i, 8.8) * 0.7);
     }
     return {
       geo: cone,
-      mat: new THREE.MeshStandardMaterial({ color: "#2f3a2c", roughness: 1, flatShading: true }),
+      mat: new THREE.MeshStandardMaterial({ color: "#4a5238", roughness: 1, flatShading: true }),
       count: m.length,
       matrices: m,
+      tints,
     };
   }, []);
 
@@ -141,8 +147,15 @@ function Vegetation() {
   const set = useRef(false);
   useFrame(() => {
     if (set.current || !ref.current) return;
-    matrices.forEach((mx, i) => ref.current!.setMatrixAt(i, mx));
+    const col = new THREE.Color();
+    matrices.forEach((mx, i) => {
+      ref.current!.setMatrixAt(i, mx);
+      const t = tints[i]!;
+      col.setRGB(0.16 * t, 0.2 * t, 0.13 * t);
+      ref.current!.setColorAt(i, col);
+    });
     ref.current.instanceMatrix.needsUpdate = true;
+    if (ref.current.instanceColor) ref.current.instanceColor.needsUpdate = true;
     set.current = true;
   });
 
@@ -369,12 +382,12 @@ function AlertBeam({ progress }: { progress: Progress }) {
     const a = ramp(p, 0.3, 0.4) * (1 - ramp(p, 0.5, 0.6));
     if (!mesh.current) return;
     const m = mesh.current.material as THREE.MeshBasicMaterial;
-    m.opacity = a * (0.35 + Math.sin(clock.elapsedTime * 4) * 0.12);
+    m.opacity = a * (0.16 + Math.sin(clock.elapsedTime * 4) * 0.06);
     mesh.current.scale.y = Math.max(0.001, a);
   });
   return (
     <mesh ref={mesh} position={[base.x, base.y + 130, base.z]}>
-      <cylinderGeometry args={[0.6, 2.6, 260, 12, 1, true]} />
+      <cylinderGeometry args={[0.4, 1.4, 260, 10, 1, true]} />
       <meshBasicMaterial
         color={SIGNAL}
         transparent
@@ -672,7 +685,7 @@ type Key = {
  * world-anchored establishing / reveal shots. Everything blends smoothly.
  */
 const KEYS: Key[] = [
-  { p: 0.0, pos: [-470, 210, 470], look: [-160, 20, 60], fov: 46 }, // wide California
+  { p: 0.0, pos: [-430, 150, 430], look: [-120, -10, 30], fov: 50 }, // wide California
   { p: 0.08, chase: [-26, 7, 14], fov: 40 }, // alongside the UAV
   { p: 0.18, chase: [-16, 5, -20], fov: 42 }, // over the sensor nodes
   { p: 0.26, pos: [-30, 430, 150], look: [-20, 0, -40], fov: 48 }, // top-down coverage
@@ -763,12 +776,12 @@ export default function MissionScene({ progress }: { progress: Progress }) {
     <Canvas
       dpr={[1, 1.75]}
       gl={{ antialias: true, powerPreference: "high-performance" }}
-      camera={{ fov: 46, near: 1, far: 4000, position: [-470, 210, 470] }}
+      camera={{ fov: 50, near: 1, far: 4000, position: [-430, 150, 430] }}
       onCreated={({ scene, gl }) => {
         scene.fog = new THREE.FogExp2("#9a8c78", 0.0016);
         gl.setClearColor("#7d6d5c", 1);
         gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = 1.05;
+        gl.toneMappingExposure = 1.15;
       }}
     >
       <Damper raw={progress} smooth={smooth} />
