@@ -115,7 +115,7 @@ function Vegetation() {
   const { geo, mat, count, matrices, tints } = useMemo(() => {
     const cone = new THREE.ConeGeometry(1.05, 3.4, 5, 1);
     cone.translate(0, 1.7, 0);
-    const n = 16000;
+    const n = 11000;
     const m: THREE.Matrix4[] = [];
     const tints: number[] = [];
     const dummy = new THREE.Object3D();
