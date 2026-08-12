@@ -67,11 +67,11 @@ function height(x: number, z: number) {
   return base * 46 + ridge * ridge * 26 - 16 + valley * 20 + detail;
 }
 
-const GROUND = 900;
+const GROUND = 1500;
 
 function Terrain() {
   const geo = useMemo(() => {
-    const seg = 220;
+    const seg = 250;
     const g = new THREE.PlaneGeometry(GROUND, GROUND, seg, seg);
     g.rotateX(-Math.PI / 2);
     const pos = g.attributes.position as THREE.BufferAttribute;
@@ -115,13 +115,13 @@ function Vegetation() {
   const { geo, mat, count, matrices, tints } = useMemo(() => {
     const cone = new THREE.ConeGeometry(1.05, 3.4, 5, 1);
     cone.translate(0, 1.7, 0);
-    const n = 9000;
+    const n = 16000;
     const m: THREE.Matrix4[] = [];
     const tints: number[] = [];
     const dummy = new THREE.Object3D();
     for (let i = 0; i < n; i++) {
-      const x = (hash2(i, 3.1) - 0.5) * 760;
-      const z = (hash2(i, 7.7) - 0.5) * 760;
+      const x = (hash2(i, 3.1) - 0.5) * 1200;
+      const z = (hash2(i, 7.7) - 0.5) * 1200;
       const h = height(x, z);
       if (h < -8 || h > 46) continue;
       // clumped cover: skip where the vegetation noise field is low
@@ -686,16 +686,16 @@ type Key = {
  */
 const KEYS: Key[] = [
   { p: 0.0, pos: [-430, 150, 430], look: [-120, -10, 30], fov: 50 }, // wide California
-  { p: 0.08, chase: [-26, 7, 14], fov: 40 }, // alongside the UAV
-  { p: 0.18, chase: [-16, 5, -20], fov: 42 }, // over the sensor nodes
+  { p: 0.08, chase: [-46, 11, 26], fov: 40 }, // alongside the UAV
+  { p: 0.18, chase: [-42, 10, -30], fov: 42 }, // over the sensor nodes
   { p: 0.26, pos: [-30, 430, 150], look: [-20, 0, -40], fov: 48 }, // top-down coverage
   { p: 0.33, pos: [NODE_POS[ALERT_NODE]!.x - 40, NODE_POS[ALERT_NODE]!.y + 22, NODE_POS[ALERT_NODE]!.z + 46], look: [NODE_POS[ALERT_NODE]!.x, NODE_POS[ALERT_NODE]!.y, NODE_POS[ALERT_NODE]!.z], fov: 34 }, // detection
   { p: 0.4, pos: [NODE_POS[ALERT_NODE]!.x - 120, NODE_POS[ALERT_NODE]!.y + 150, NODE_POS[ALERT_NODE]!.z + 170], look: [NODE_POS[ALERT_NODE]!.x, NODE_POS[ALERT_NODE]!.y + 60, NODE_POS[ALERT_NODE]!.z], fov: 42 }, // alert climbs
   { p: 0.46, pos: [-120, 300, 320], look: [40, 40, -80], fov: 44 }, // ops center backdrop
-  { p: 0.54, chase: [-34, 9, 22], fov: 38 }, // dispatch
-  { p: 0.62, chase: [-22, 4, 8], fov: 34 }, // flight to incident
-  { p: 0.63, chase: [6, 2.4, 9], fov: 30 }, // sensor perspective, fire ahead (RGB)
-  { p: 0.7, chase: [4, 2.6, 10], fov: 32 }, // thermal pass
+  { p: 0.54, chase: [-54, 13, 34], fov: 38 }, // dispatch
+  { p: 0.62, chase: [-42, 9, 18], fov: 34 }, // flight to incident
+  { p: 0.63, chase: [11, 4.5, 18], fov: 30 }, // sensor perspective, fire ahead (RGB)
+  { p: 0.7, chase: [10, 4.5, 19], fov: 32 }, // thermal pass
   { p: 0.78, pos: [FIRE.x + 150, FIRE.y + 130, FIRE.z + 190], look: [FIRE.x, FIRE.y + 20, FIRE.z], fov: 40 }, // intelligence / mapping
   { p: 0.86, pos: [FIRE.x - 210, FIRE.y + 90, FIRE.z + 260], look: [FIRE.x - 20, FIRE.y + 20, FIRE.z], fov: 44 }, // responder view
   { p: 0.93, pos: [40, 430, 430], look: [20, 10, -60], fov: 46 }, // whole system
@@ -759,6 +759,18 @@ function Rig({ progress, uavRef }: { progress: Progress; uavRef: React.RefObject
   return null;
 }
 
+/** Soft fill light riding with the camera so the aircraft never silhouettes flat. */
+function CameraFill() {
+  const { camera } = useThree();
+  const ref = useRef<THREE.DirectionalLight>(null);
+  useFrame(() => {
+    if (!ref.current) return;
+    ref.current.position.copy(camera.position);
+    ref.current.target.position.set(0, 0, 0);
+  });
+  return <directionalLight ref={ref} intensity={0.85} color="#cfe0f5" />;
+}
+
 /** Damps the raw scroll value once per frame; everything else reads the result. */
 function Damper({ raw, smooth }: { raw: Progress; smooth: Progress }) {
   useFrame((_, delta) => {
@@ -785,6 +797,7 @@ export default function MissionScene({ progress }: { progress: Progress }) {
       }}
     >
       <Damper raw={progress} smooth={smooth} />
+      <CameraFill />
       <hemisphereLight args={["#9fb6d0", "#3a3427", 1.1]} />
       <directionalLight position={[-600, 180, 340]} intensity={2.1} color="#ffcf9a" />
       <directionalLight position={[420, 220, -400]} intensity={0.45} color="#8fb4ff" />
