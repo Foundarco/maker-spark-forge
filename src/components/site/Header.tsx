@@ -5,19 +5,19 @@ import { Menu, X, ArrowRight } from "lucide-react";
 import { brand } from "@/config/brand";
 
 const nav = [
-  { to: "/response", label: "Response" },
-  { to: "/where-we-work", label: "Where we work" },
-  { to: "/impact", label: "Impact" },
-  { to: "/stories", label: "Stories" },
   { to: "/mission", label: "Mission" },
+  { to: "/system", label: "System" },
+  { to: "/technology", label: "Technology" },
+  { to: "/development", label: "Development" },
+  { to: "/about", label: "About" },
 ] as const;
 
 const secondary = [
-  { to: "/about", label: "About" },
+  { to: "/operations", label: "Operations Center" },
   { to: "/partners", label: "Partners" },
-  { to: "/volunteer", label: "Volunteer" },
-  { to: "/careers", label: "Careers" },
+  { to: "/join", label: "Join the team" },
   { to: "/contact", label: "Contact" },
+  { to: "/faq", label: "FAQ" },
 ] as const;
 
 export function Header() {
@@ -50,14 +50,14 @@ export function Header() {
       <div className="hidden border-b border-border/60 bg-[var(--night)] lg:block">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-2 text-[0.7rem] sm:px-8">
           <p className="flex items-center gap-2 text-foreground/70">
-            <span className="live-pulse h-1.5 w-1.5 rounded-full bg-[var(--alive)]" aria-hidden />
-            Operations center active — monitoring 40+ hazard feeds
+            <span className="live-pulse h-1.5 w-1.5 rounded-full bg-[var(--signal)]" aria-hidden />
+            {brand.mission01}
           </p>
           <div className="flex items-center gap-5 text-muted-foreground">
-            <span>{brand.hours}</span>
+            <span>{brand.status}</span>
             <span aria-hidden>·</span>
-            <Link to="/request-help" className="text-foreground/80 hover:text-primary">
-              Request help
+            <Link to="/operations" className="text-foreground/80 hover:text-primary">
+              {brand.opsCenter}
             </Link>
           </div>
         </div>
@@ -83,16 +83,16 @@ export function Header() {
 
         <div className="hidden items-center gap-3 lg:flex">
           <Link
-            to="/request-help"
+            to="/join"
             className="px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/70 hover:text-foreground"
           >
-            Request help
+            Get involved
           </Link>
           <Link
             to="/donate"
             className="inline-flex min-h-[44px] items-center gap-2 bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-[var(--aid)]"
           >
-            Give now
+            Support the mission
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </Link>
         </div>
@@ -139,14 +139,14 @@ export function Header() {
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex min-h-[48px] items-center justify-center bg-primary px-6 text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground"
               >
-                Give now
+                Support the mission
               </Link>
               <Link
-                to="/request-help"
+                to="/join"
                 onClick={() => setMobileOpen(false)}
                 className="inline-flex min-h-[48px] items-center justify-center border border-border px-6 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
               >
-                Request help
+                Build with us
               </Link>
             </div>
           </nav>

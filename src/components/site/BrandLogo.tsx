@@ -14,18 +14,20 @@ export function BrandLogo({
     <span className={`inline-flex items-center gap-3 ${className}`}>
       <span aria-hidden className="relative grid h-9 w-9 place-items-center">
         <svg viewBox="0 0 36 36" className="h-9 w-9">
-          <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" strokeOpacity="0.35" strokeWidth="1" />
-          <circle cx="18" cy="18" r="9.5" fill="none" stroke="currentColor" strokeOpacity="0.55" strokeWidth="1" />
-          <circle cx="18" cy="18" r="3.2" fill="var(--signal)" />
-          <path d="M18 2v6M18 28v6M2 18h6M28 18h6" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1" />
+          {/* scan ring + detection mark */}
+          <circle cx="18" cy="18" r="16" fill="none" stroke="currentColor" strokeOpacity="0.3" strokeWidth="1" />
+          <circle cx="18" cy="18" r="9.5" fill="none" stroke="currentColor" strokeOpacity="0.5" strokeWidth="1" strokeDasharray="2.4 2.4" />
+          <path d="M18 10.5l6.6 11.4H11.4z" fill="none" stroke="var(--signal)" strokeWidth="1.2" strokeLinejoin="round" />
+          <circle cx="18" cy="18.6" r="1.7" fill="var(--signal)" />
+          <path d="M18 1.5v4M18 30.5v4M1.5 18h4M30.5 18h4" stroke="currentColor" strokeOpacity="0.45" strokeWidth="1" />
         </svg>
       </span>
       <span className="leading-none">
         <span className={`block font-display text-[0.98rem] font-bold uppercase tracking-[0.16em] ${textColor}`}>
-          {brand.shortName} Relief
+          {brand.name}
         </span>
-        <span className={`mt-1.5 block text-[0.58rem] font-medium uppercase tracking-[0.24em] ${subColor}`}>
-          Disaster response · Est. {brand.established}
+        <span className={`mt-1.5 block text-[0.56rem] font-medium uppercase tracking-[0.22em] ${subColor}`}>
+          Mission 01 · Wildfire detection + UAV
         </span>
       </span>
     </span>
