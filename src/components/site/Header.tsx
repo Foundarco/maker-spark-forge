@@ -1,35 +1,44 @@
-import { Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { BrandLogo } from "./BrandLogo";
-import { Menu, X, ArrowRight } from "lucide-react";
-import { brand } from "@/config/brand";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 
 const nav = [
-  { to: "/mission", label: "Mission" },
-  { to: "/system", label: "System" },
   { to: "/technology", label: "Technology" },
+  { to: "/system", label: "System" },
+  { to: "/mission", label: "Mission" },
   { to: "/development", label: "Development" },
-  { to: "/about", label: "About" },
 ] as const;
 
 const secondary = [
   { to: "/operations", label: "Operations Center" },
+  { to: "/about", label: "About" },
   { to: "/partners", label: "Partners" },
   { to: "/join", label: "Join the team" },
   { to: "/contact", label: "Contact" },
   { to: "/faq", label: "FAQ" },
 ] as const;
 
+/**
+ * Floating overlay navigation. Over the film hero it sits wide and
+ * transparent; past the hero it condenses into a compact glass pill.
+ */
 export function Header() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isHome = pathname === "/";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [condensed, setCondensed] = useState(!isHome);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    if (!isHome) {
+      setCondensed(true);
+      return;
+    }
+    const onScroll = () => setCondensed(window.scrollY > window.innerHeight * 0.72);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
@@ -39,112 +48,89 @@ export function Header() {
   }, [mobileOpen]);
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-xl"
-          : "border-b border-transparent bg-gradient-to-b from-background/90 to-transparent"
-      }`}
-    >
-      {/* Status strip */}
-      <div className="hidden border-b border-border/60 bg-[var(--night)] lg:block">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-5 py-2 text-[0.7rem] sm:px-8">
-          <p className="flex items-center gap-2 text-foreground/70">
-            <span className="live-pulse h-1.5 w-1.5 rounded-full bg-[var(--signal)]" aria-hidden />
-            {brand.mission01}
-          </p>
-          <div className="flex items-center gap-5 text-muted-foreground">
-            <span>{brand.status}</span>
-            <span aria-hidden>·</span>
-            <Link to="/operations" className="text-foreground/80 hover:text-primary">
-              {brand.opsCenter}
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
-        <Link to="/" className="shrink-0" aria-label={`${brand.name} home`}>
-          <BrandLogo />
-        </Link>
-
-        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
-          {nav.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              className="text-xs font-semibold uppercase tracking-[0.14em] text-foreground/70 transition-colors hover:text-primary"
-              activeProps={{ className: "text-primary" }}
-            >
-              {n.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            to="/join"
-            className="px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-foreground/70 hover:text-foreground"
-          >
-            Get involved
-          </Link>
-          <Link
-            to="/donate"
-            className="inline-flex min-h-[44px] items-center gap-2 bg-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground transition-colors hover:bg-[var(--aid)]"
-          >
-            Support the mission
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-          </Link>
-        </div>
-
-        <button
-          type="button"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-          aria-expanded={mobileOpen}
-          onClick={() => setMobileOpen((v) => !v)}
-          className="grid h-11 w-11 place-items-center border border-border text-foreground lg:hidden"
+    <>
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4 sm:px-6">
+        <div
+          className={`pointer-events-auto flex w-full items-center justify-between gap-6 transition-all duration-500 ease-out ${
+            condensed
+              ? "max-w-3xl rounded-full border border-white/12 bg-[color-mix(in_oklab,var(--night)_78%,transparent)] px-4 py-2 shadow-[0_18px_50px_-24px_rgb(0_0_0/0.9)] backdrop-blur-xl sm:px-5"
+              : "max-w-7xl rounded-full border border-transparent px-2 py-3 sm:px-4"
+          }`}
         >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
-      </div>
+          <Link to="/" aria-label="Clovr Labs home" className="shrink-0">
+            <BrandLogo className={condensed ? "[&_span:last-child>span:last-child]:hidden" : ""} />
+          </Link>
 
-      {mobileOpen ? (
-        <div className="fixed inset-0 top-20 z-40 overflow-y-auto bg-background px-5 pb-16 pt-8 lg:hidden">
-          <nav aria-label="Mobile" className="flex flex-col">
+          <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
             {nav.map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
-                onClick={() => setMobileOpen(false)}
-                className="display-cond border-b border-border py-5 text-3xl text-ink"
+                className={`text-sm font-medium text-ink/80 transition-colors hover:text-ink ${condensed ? "text-[0.82rem]" : ""}`}
+                activeProps={{ className: "text-[var(--signal)]" }}
               >
                 {n.label}
               </Link>
             ))}
-            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-4">
-              {secondary.map((n) => (
-                <Link
-                  key={n.to}
-                  to={n.to}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-sm text-muted-foreground"
-                >
-                  {n.label}
-                </Link>
-              ))}
-            </div>
-            <div className="mt-10 flex flex-col gap-3">
+          </nav>
+
+          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+            <Link
+              to="/partners"
+              className={`rounded-full border border-white/25 font-medium text-ink transition-colors hover:bg-white/10 ${
+                condensed ? "px-4 py-1.5 text-[0.8rem]" : "px-5 py-2.5 text-sm"
+              }`}
+            >
+              Partner with us
+            </Link>
+            <Link
+              to="/donate"
+              className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--signal)] font-semibold text-[var(--night)] transition-transform hover:scale-[1.03] ${
+                condensed ? "px-4 py-1.5 text-[0.8rem]" : "px-5 py-2.5 text-sm"
+              }`}
+            >
+              Support us
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/25 text-ink lg:hidden"
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </header>
+
+      {mobileOpen ? (
+        <div className="fixed inset-0 z-40 overflow-y-auto bg-[var(--night)] px-6 pb-16 pt-24 lg:hidden">
+          <nav aria-label="Mobile" className="flex flex-col">
+            {[...nav, ...secondary].map((n) => (
+              <Link
+                key={n.to}
+                to={n.to}
+                onClick={() => setMobileOpen(false)}
+                className="display-cond border-b border-white/10 py-4 text-3xl text-ink"
+              >
+                {n.label}
+              </Link>
+            ))}
+            <div className="mt-8 flex flex-col gap-3">
               <Link
                 to="/donate"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex min-h-[48px] items-center justify-center bg-primary px-6 text-xs font-semibold uppercase tracking-[0.14em] text-primary-foreground"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-[var(--signal)] px-6 text-sm font-semibold text-[var(--night)]"
               >
                 Support the mission
               </Link>
               <Link
                 to="/join"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex min-h-[48px] items-center justify-center border border-border px-6 text-xs font-semibold uppercase tracking-[0.14em] text-foreground"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 px-6 text-sm font-semibold text-ink"
               >
                 Build with us
               </Link>
@@ -152,6 +138,8 @@ export function Header() {
           </nav>
         </div>
       ) : null}
-    </header>
+
+      {isHome ? null : <div className="h-24" aria-hidden />}
+    </>
   );
 }
