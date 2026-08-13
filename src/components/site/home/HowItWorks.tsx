@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/site/Reveal";
+import { Reveal, Words } from "@/components/site/Reveal";
 import { UavCanvas } from "@/components/site/uav/UavCanvas";
 
 const left = [
@@ -18,25 +18,25 @@ export function HowItWorks() {
   return (
     <section className="relative overflow-hidden bg-[oklch(0.94_0.014_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
       <div className="mx-auto max-w-7xl px-6 sm:px-10">
-        <Reveal>
+        <Reveal variant="mask">
           <p className="font-mono text-[0.68rem] uppercase tracking-[0.28em] text-[oklch(0.5_0.02_260)]">
             UAV-01 · Operating sequence
           </p>
           <h2 className="display-cond mt-5 max-w-3xl text-[clamp(2.6rem,7vw,6rem)] leading-[0.88] text-[oklch(0.12_0.02_260)]">
-            How the system works
+            <Words text="How the system works" step={90} />
           </h2>
         </Reveal>
 
         <div className="mt-16 grid items-center gap-10 lg:grid-cols-[1fr_1.15fr_1fr]">
           <div className="flex flex-col gap-9">
             {left.map((s, i) => (
-              <Reveal key={s.n} delay={i * 80}>
+              <Reveal key={s.n} delay={i * 80} variant="left">
                 <Step {...s} align="right" />
               </Reveal>
             ))}
           </div>
 
-          <div className="relative order-first h-[46vh] lg:order-none lg:h-[64vh]">
+          <div className="relative order-first h-[46vh] lg:order-none lg:h-[64vh]" data-parallax="-50">
             <div className="absolute inset-[8%] rounded-[999px] bg-[radial-gradient(circle,rgba(255,255,255,0.9),rgba(255,255,255,0)_70%)]" aria-hidden />
             <div className="absolute inset-0 blueprint-grid text-[oklch(0.2_0.02_260)] opacity-[0.18]" aria-hidden />
             <UavCanvas mode="scroll" tone="light" scale={1.05} className="relative h-full w-full" />
@@ -44,7 +44,7 @@ export function HowItWorks() {
 
           <div className="flex flex-col gap-9">
             {right.map((s, i) => (
-              <Reveal key={s.n} delay={i * 80}>
+              <Reveal key={s.n} delay={i * 80} variant="right">
                 <Step {...s} align="left" />
               </Reveal>
             ))}

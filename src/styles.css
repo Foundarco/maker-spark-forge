@@ -368,16 +368,51 @@
 .reveal {
   opacity: 0;
   transform: translateY(22px);
-  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 700ms ease, clip-path 900ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: var(--reveal-delay, 0ms);
 }
 .reveal.is-in {
   opacity: 1;
   transform: none;
+  filter: none;
+  clip-path: inset(0 0 0 0);
+}
+.reveal.fx-left { transform: translate3d(-60px, 0, 0); }
+.reveal.fx-right { transform: translate3d(60px, 0, 0); }
+.reveal.fx-up { transform: translate3d(0, 70px, 0); }
+.reveal.fx-scale { transform: scale(0.9); }
+.reveal.fx-blur { filter: blur(14px); transform: translate3d(0, 26px, 0); }
+.reveal.fx-mask { clip-path: inset(0 0 100% 0); transform: translate3d(0, 40px, 0); }
+.reveal.fx-rise-rotate { transform: perspective(1200px) rotateX(12deg) translate3d(0, 60px, 0); transform-origin: bottom; }
+
+/* Word-by-word headline entrance */
+.fx-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translate3d(0, 0.7em, 0);
+  transition: opacity 620ms ease, transform 780ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--w-delay, 0ms);
+}
+.is-in .fx-word { opacity: 1; transform: none; }
+
+/* Page reading progress */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  background: var(--signal);
+  z-index: 80;
+  pointer-events: none;
 }
 
+[data-parallax], [data-fx-scale] { will-change: transform; }
+
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal { opacity: 1; transform: none; transition: none; filter: none; clip-path: none; }
+  .fx-word { opacity: 1; transform: none; transition: none; }
   .marquee-track { animation: none; }
   .float-slow { animation: none; }
   .gradient-text { animation: none; }
@@ -385,6 +420,7 @@
   .live-pulse { animation: none; }
   .radar-sweep { animation: none; }
 }
+
 
 
 
@@ -563,4 +599,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .journey-node, .journey-alert-ring, .journey-network svg, .journey-scroll-cue { animation: none; }
+}
+
+@keyframes cue {
+  0% { transform: translateY(-100%); }
+  60%, 100% { transform: translateY(250%); }
 }

@@ -1,4 +1,4 @@
-import { Reveal } from "@/components/site/Reveal";
+import { Reveal, Words } from "@/components/site/Reveal";
 import { UavCanvas } from "@/components/site/uav/UavCanvas";
 import aerial from "@/assets/wf-aerial.jpg";
 
@@ -14,26 +14,27 @@ export function Statement() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
-        <Reveal>
+        <Reveal variant="mask">
           <h2 className="display-cond max-w-4xl text-[clamp(2.8rem,8.4vw,7.2rem)] leading-[0.86] text-[oklch(0.12_0.02_260)]">
-            Detection that
-            <span className="mt-2 block pl-[8%] sm:pl-[22%]">saves the hours</span>
-            <span className="mt-2 block">that cost the most</span>
+            <Words text="Detection that" />
+            <span className="mt-2 block pl-[8%] sm:pl-[22%]"><Words text="saves the hours" step={90} /></span>
+            <span className="mt-2 block"><Words text="that cost the most" step={90} /></span>
           </h2>
         </Reveal>
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[300px_1fr] lg:items-end">
-          <Reveal delay={80}>
+          <Reveal delay={80} variant="left">
             <img
               src={aerial}
               alt="Aerial view of a wildland ridge under early smoke"
               className="h-56 w-full rounded-2xl object-cover shadow-[0_30px_60px_-40px_rgb(0_0_0/0.6)]"
+              data-parallax="-40"
               loading="lazy"
               width={640}
               height={420}
             />
           </Reveal>
-          <Reveal delay={140}>
+          <Reveal delay={140} variant="right">
             <p className="max-w-xl text-lg leading-relaxed text-[oklch(0.35_0.02_260)]">
               A fire that is seen in its first minutes is a different fire. We are building the sensing
               layer, the autonomous aircraft and the operations software as one system, so the first

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import { Reveal } from "@/components/site/Reveal";
+import { Reveal, Words } from "@/components/site/Reveal";
 import node from "@/assets/j-node.jpg";
 import system from "@/assets/j-system.jpg";
 import uav from "@/assets/j-uav.jpg";
@@ -18,10 +18,10 @@ export function Newsroom() {
   return (
     <section className="bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
       <div className="mx-auto max-w-7xl px-6 sm:px-10">
-        <Reveal>
+        <Reveal variant="mask">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <h2 className="display-cond text-[clamp(2.4rem,6vw,5rem)] text-[oklch(0.12_0.02_260)]">
-              What&rsquo;s happening
+              <Words text="What’s happening" step={100} />
             </h2>
             <Link
               to="/development"
@@ -35,7 +35,7 @@ export function Newsroom() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {posts.map((p, i) => (
-            <Reveal key={p.title} delay={i * 70}>
+            <Reveal key={p.title} delay={i * 110} variant="rise-rotate">
               <Link to={p.to} className="group block">
                 <div className="overflow-hidden rounded-2xl">
                   <img

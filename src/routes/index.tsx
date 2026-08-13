@@ -9,7 +9,8 @@ import { ImpactCards } from "@/components/site/home/ImpactCards";
 import { Newsroom } from "@/components/site/home/Newsroom";
 import { CTAButton } from "@/components/site/CTAButton";
 import { Section } from "@/components/site/Section";
-import { Reveal } from "@/components/site/Reveal";
+import { Reveal, Words } from "@/components/site/Reveal";
+import { ScrollFx } from "@/components/site/ScrollFx";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
 
@@ -51,6 +52,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <>
+      <ScrollFx />
       <FilmHero />
       <Statement />
       <ScrollStory />
@@ -61,9 +63,9 @@ function HomePage() {
       <Newsroom />
 
       <Section wide className="bg-[var(--night)] text-center">
-        <Reveal>
+        <Reveal variant="mask">
           <h2 className="display-cond mx-auto max-w-4xl text-[clamp(2.2rem,6vw,5rem)] text-ink">
-            Build Mission 01 with us.
+            <Words text="Build Mission 01 with us." step={90} />
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
             {brand.shortMission}
