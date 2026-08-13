@@ -16,10 +16,10 @@ type Cut =
 /** Cut-scene reel: terrain → aircraft → fire → sensing → ops. */
 const cuts: Cut[] = [
   { kind: "video", src: californiaFlight.url, poster: ridge, label: "Sierra ridgeline · dawn", hold: 6200 },
-  { kind: "image", src: fire.src ?? (fire as unknown as string), label: "Ignition · unattended", hold: 3200 },
+  { kind: "image", src: fire, label: "Ignition · unattended", hold: 3200 },
   { kind: "video", src: incidentFlight.url, poster: ops, label: "Aircraft en route", hold: 6200 },
-  { kind: "image", src: node.src ?? (node as unknown as string), label: "Sensor node · ridge", hold: 3000 },
-  { kind: "image", src: ops.src ?? (ops as unknown as string), label: "Operations Center · 24/7", hold: 3000 },
+  { kind: "image", src: node, label: "Sensor node · ridge", hold: 3000 },
+  { kind: "image", src: ops, label: "Operations Center · 24/7", hold: 3000 },
 ];
 
 /** Full-bleed film opener — a cut-scene reel, the only video on the page. */
