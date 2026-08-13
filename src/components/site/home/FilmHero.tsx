@@ -1,33 +1,67 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
+import ridgeDawn from "@/assets/hero-ridgeline-dawn.mp4.asset.json";
+import fireAerial from "@/assets/hero-fire-aerial.mp4.asset.json";
 import californiaFlight from "@/assets/journey-california-flight.mp4.asset.json";
 import incidentFlight from "@/assets/journey-incident-flight.mp4.asset.json";
 import ridge from "@/assets/j-ridge.jpg";
 import fire from "@/assets/j-fire.jpg";
-import node from "@/assets/j-node.jpg";
-import ops from "@/assets/j-ops.jpg";
 import canyon from "@/assets/j-canyon.jpg";
-import responders from "@/assets/j-responders.jpg";
+import ops from "@/assets/j-ops.jpg";
 import { brand } from "@/config/brand";
 
 type Cut =
-  | { kind: "video"; src: string; poster: string; hold: number }
+  | { kind: "video"; src: string; poster: string; hold: number; from: string; to: string }
   | { kind: "image"; src: string; hold: number; from: string; to: string };
 
 /**
- * Continuous cut-scene reel, cinema style: hard-ish cuts, always moving,
- * no chrome over the film — the headline is the only thing that stays.
+ * Continuous cut-scene reel. Long, slow dissolves; every plate keeps moving,
+ * graded and grained so it reads as film rather than a slideshow.
  */
 const cuts: Cut[] = [
-  { kind: "video", src: californiaFlight.url, poster: ridge, hold: 5200 },
-  { kind: "image", src: fire, hold: 2400, from: "scale(1.22) translate3d(3%,2%,0)", to: "scale(1.04) translate3d(-1%,0,0)" },
-  { kind: "video", src: incidentFlight.url, poster: canyon, hold: 5200 },
-  { kind: "image", src: node, hold: 2400, from: "scale(1.05) translate3d(-3%,0,0)", to: "scale(1.24) translate3d(2%,-2%,0)" },
-  { kind: "image", src: canyon, hold: 2400, from: "scale(1.2) translate3d(0,-3%,0)", to: "scale(1.02) translate3d(0,1%,0)" },
-  { kind: "image", src: ops, hold: 2400, from: "scale(1.02) translate3d(2%,0,0)", to: "scale(1.2) translate3d(-2%,-1%,0)" },
-  { kind: "image", src: responders, hold: 2400, from: "scale(1.18) translate3d(-2%,1%,0)", to: "scale(1.02) translate3d(1%,0,0)" },
+  {
+    kind: "video",
+    src: ridgeDawn.url,
+    poster: ridge,
+    hold: 8200,
+    from: "scale(1.06)",
+    to: "scale(1.14) translate3d(-1%,-1%,0)",
+  },
+  {
+    kind: "video",
+    src: californiaFlight.url,
+    poster: canyon,
+    hold: 8200,
+    from: "scale(1.12) translate3d(1%,0,0)",
+    to: "scale(1.02)",
+  },
+  {
+    kind: "video",
+    src: fireAerial.url,
+    poster: fire,
+    hold: 6200,
+    from: "scale(1.04)",
+    to: "scale(1.16) translate3d(1%,-1%,0)",
+  },
+  {
+    kind: "video",
+    src: incidentFlight.url,
+    poster: canyon,
+    hold: 7200,
+    from: "scale(1.14) translate3d(-1%,1%,0)",
+    to: "scale(1.02)",
+  },
+  {
+    kind: "image",
+    src: ops,
+    hold: 4200,
+    from: "scale(1.02) translate3d(2%,0,0)",
+    to: "scale(1.22) translate3d(-2%,-1%,0)",
+  },
 ];
+
+const DISSOLVE = 1400;
 
 export function FilmHero() {
   const inner = useRef<HTMLDivElement>(null);
@@ -37,7 +71,7 @@ export function FilmHero() {
   useEffect(() => {
     const t = window.setTimeout(
       () => setIndex((i) => (i + 1) % cuts.length),
-      cuts[index]?.hold ?? 3200,
+      cuts[index]?.hold ?? 6000,
     );
     return () => window.clearTimeout(t);
   }, [index]);
@@ -49,7 +83,7 @@ export function FilmHero() {
       const p = Math.min(1, Math.max(0, window.scrollY / window.innerHeight));
       if (inner.current) {
         inner.current.style.transform = `translate3d(0, ${(p * 14).toFixed(2)}vh, 0) scale(${(1 + p * 0.1).toFixed(4)})`;
-        inner.current.style.filter = `brightness(${(1 - p * 0.45).toFixed(3)})`;
+        inner.current.style.filter = `brightness(${(1 - p * 0.5).toFixed(3)})`;
       }
       if (copy.current) {
         copy.current.style.transform = `translate3d(0, ${(-p * 22).toFixed(2)}vh, 0)`;
@@ -65,22 +99,32 @@ export function FilmHero() {
       <div ref={inner} className="absolute inset-0 will-change-transform">
         {cuts.map((cut, i) => {
           const active = i === index;
+          const motion = {
+            transform: active ? cut.to : cut.from,
+            transition: active
+              ? `transform ${cut.hold + DISSOLVE * 2}ms linear`
+              : "none",
+          } as const;
           return (
             <div
               key={i}
-              className="absolute inset-0 transition-opacity duration-[420ms] ease-linear"
-              style={{ opacity: active ? 1 : 0 }}
+              className="absolute inset-0"
+              style={{
+                opacity: active ? 1 : 0,
+                transition: `opacity ${DISSOLVE}ms cubic-bezier(0.4,0,0.2,1)`,
+              }}
               aria-hidden={!active}
             >
               {cut.kind === "video" ? (
                 <video
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-cover will-change-transform"
                   autoPlay
                   muted
                   loop
                   playsInline
                   preload={i === 0 ? "auto" : "metadata"}
                   poster={cut.poster}
+                  style={motion}
                 >
                   <source src={cut.src} type="video/mp4" />
                 </video>
@@ -88,18 +132,21 @@ export function FilmHero() {
                 <img
                   src={cut.src}
                   alt=""
-                  className="h-full w-full object-cover"
-                  style={{
-                    transform: active ? cut.to : cut.from,
-                    transition: active ? `transform ${cut.hold + 900}ms linear` : "none",
-                  }}
+                  className="h-full w-full object-cover will-change-transform"
+                  style={motion}
                   loading={i > 1 ? "lazy" : "eager"}
                 />
               )}
             </div>
           );
         })}
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,22,0.5)_0%,rgba(6,12,22,0.08)_40%,rgba(6,12,22,0.88)_100%)]" />
+
+        {/* Colour grade: cool shadows, warm signal highlight */}
+        <div className="pointer-events-none absolute inset-0 mix-blend-soft-light bg-[radial-gradient(120%_90%_at_70%_10%,rgba(255,176,74,0.55)_0%,rgba(255,176,74,0)_45%),linear-gradient(180deg,rgba(10,26,48,0.7)_0%,rgba(10,26,48,0)_55%)]" />
+        {/* Depth + legibility */}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,22,0.62)_0%,rgba(6,12,22,0.06)_38%,rgba(6,12,22,0.55)_74%,rgba(6,12,22,0.96)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(115%_85%_at_50%_45%,transparent_45%,rgba(4,8,16,0.75)_100%)]" />
+        <div className="film-grain pointer-events-none absolute inset-0" aria-hidden />
       </div>
 
       <div
