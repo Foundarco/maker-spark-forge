@@ -5,7 +5,7 @@ import aerial from "@/assets/wf-aerial.jpg";
 /** Bright statement panel — oversized type, the airframe floating in real 3D. */
 export function Statement() {
   return (
-    <section className="relative overflow-hidden bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
+    <section className="section-bridge-top relative overflow-hidden bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
       <UavCanvas
         mode="float"
         tone="light"
