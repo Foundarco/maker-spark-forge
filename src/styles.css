@@ -140,8 +140,8 @@
 ---------------------------------------------------------------- */
 .site-theme {
   --radius: 0.25rem;
-  --background: oklch(0.16 0.018 250);
-  --surface: oklch(0.21 0.020 250);
+  --background: oklch(0.17 0.032 248);
+  --surface: oklch(0.22 0.034 248);
   --foreground: oklch(0.93 0.008 250);
   --ink: oklch(0.97 0.004 250);
   --warm: oklch(0.24 0.018 250);
@@ -164,7 +164,7 @@
   --signal: oklch(0.78 0.155 72);
   --aid: oklch(0.80 0.115 210);
   --alive: oklch(0.78 0.170 150);
-  --night: oklch(0.12 0.016 250);
+  --night: oklch(0.13 0.030 248);
   --font-display: "Archivo", ui-sans-serif, system-ui, sans-serif;
   background-color: var(--background);
   color: var(--foreground);
