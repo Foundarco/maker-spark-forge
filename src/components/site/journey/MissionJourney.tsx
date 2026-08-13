@@ -83,7 +83,7 @@ export function MissionJourney() {
         }
 
         if (text) {
-          const a = clamp01((0.86 - au) / 0.3);
+          const a = clamp01((0.74 - au) / 0.28);
           const e = a * a * (3 - 2 * a);
           text.style.opacity = e.toFixed(3);
           text.style.transform = `translate3d(0, ${(u * -44).toFixed(1)}px, 0)`;
