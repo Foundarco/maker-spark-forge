@@ -23,12 +23,20 @@ export function JourneyFallback() {
                 src={still}
                 alt=""
                 aria-hidden
-                className="absolute inset-0 h-full w-full object-cover opacity-45"
+                className="absolute inset-0 h-full w-full object-cover"
+                style={{ objectPosition: b.focus ?? "50% 50%", filter: b.filter }}
                 loading={i === 0 ? "eager" : "lazy"}
               />
             ) : null}
-            <div className="scrim-full absolute inset-0" aria-hidden />
-            <div className="blueprint-grid absolute inset-0 text-white/25" aria-hidden />
+            <div className="absolute inset-0" style={{ background: b.grade }} aria-hidden />
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(100deg, rgba(6,10,18,0.7) 0%, rgba(6,10,18,0.3) 36%, transparent 66%)",
+              }}
+              aria-hidden
+            />
             <div
               className={`relative mx-auto flex w-full max-w-7xl flex-col justify-end px-5 py-16 sm:px-8 ${
                 i === 0 ? "min-h-[88vh]" : "min-h-[62vh]"
