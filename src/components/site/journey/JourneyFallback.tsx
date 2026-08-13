@@ -1,16 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { beats } from "@/config/journey";
-import { media } from "@/config/system";
-import { SensorNetwork } from "@/components/site/SensorNetwork";
-
-const stills: Record<string, string> = {
-  hero: media.heroImg,
-  terrain: media.aerialImg ?? media.heroImg,
-  network: media.sensorImg,
-  ops: media.opsImg,
-  flight: media.benchImg,
-  thermal: media.aerialImg ?? media.heroImg,
-};
 
 /**
  * Reduced-motion / mobile / no-WebGL presentation of the mission journey.
@@ -20,7 +9,7 @@ export function JourneyFallback() {
   return (
     <section className="bg-[#0b0f14]" aria-label="Mission journey: from sensor detection to responder">
       {beats.map((b, i) => {
-        const still = stills[b.id];
+        const still = b.img;
         const tone = b.tone === "signal" ? "var(--signal)" : b.tone === "data" ? "#38bdf8" : "currentColor";
         return (
           <div
