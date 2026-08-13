@@ -39,7 +39,7 @@ export function HowItWorks() {
           <div className="relative order-first h-[46vh] lg:order-none lg:h-[64vh]">
             <div className="absolute inset-[8%] rounded-[999px] bg-[radial-gradient(circle,rgba(255,255,255,0.9),rgba(255,255,255,0)_70%)]" aria-hidden />
             <div className="absolute inset-0 blueprint-grid text-[oklch(0.2_0.02_260)] opacity-[0.18]" aria-hidden />
-            <UavCanvas mode="scroll" tone="light" scale={1.25} className="relative h-full w-full" />
+            <UavCanvas mode="scroll" tone="light" scale={1.05} className="relative h-full w-full" />
           </div>
 
           <div className="flex flex-col gap-9">

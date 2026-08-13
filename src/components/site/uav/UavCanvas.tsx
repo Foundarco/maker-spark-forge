@@ -115,7 +115,7 @@ export function UavCanvas({
       ? h(
           Canvas,
           {
-            camera: { position: [0, 0.35, 4.6], fov: 34 },
+            camera: { position: [0, 0.4, 6.2], fov: 32 },
             dpr: [1, 1.75],
             gl: { antialias: true, alpha: true, powerPreference: "high-performance" },
           },

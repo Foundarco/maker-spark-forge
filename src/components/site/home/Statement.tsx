@@ -9,7 +9,7 @@ export function Statement() {
       <UavCanvas
         mode="float"
         tone="light"
-        scale={1.05}
+        scale={0.95}
         className="pointer-events-none absolute right-[-6%] top-2 h-[38vh] w-[80%] sm:h-[52vh] sm:w-[60%] lg:right-[-2%] lg:top-6 lg:h-[62vh] lg:w-[52%]"
       />
 
