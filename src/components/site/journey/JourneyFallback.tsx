@@ -50,11 +50,6 @@ export function JourneyFallback() {
                 {b.title}
               </h2>
               <p className="mt-4 max-w-lg text-base leading-relaxed text-white/75">{b.line}</p>
-              {b.id === "network" ? (
-                <div className="mt-6 max-w-md text-white/40">
-                  <SensorNetwork className="aspect-[10/8]" />
-                </div>
-              ) : null}
               {i === 0 ? (
                 <div className="mt-8 flex flex-wrap gap-3">
                   <Link
