@@ -1,7 +1,8 @@
 /**
  * The scroll-driven mission journey. Scroll position is the mission timeline:
- * each beat owns a slice of progress (0 → 1) and drives both the 3D scene and
- * the overlay copy. Text is deliberately short — the visuals carry the story.
+ * each beat owns an equal slice of progress (0 → 1) and drives both the 3D
+ * camera and the overlay copy. Text is deliberately short — the visuals carry
+ * the story.
  */
 export type Beat = {
   id: string;
@@ -18,7 +19,7 @@ export type Beat = {
 
 export const beats: Beat[] = [
   {
-    id: "hero",
+    id: "california",
     code: "00",
     label: "Mission 01 · Wildfire",
     title: "See the fire sooner.",
@@ -26,11 +27,11 @@ export const beats: Beat[] = [
     tone: "signal",
   },
   {
-    id: "terrain",
+    id: "flight",
     code: "01",
-    label: "Environment",
+    label: "In flight",
     title: "Wildfire doesn't wait.",
-    line: "Remote terrain. Minutes pass before anyone knows what is actually happening.",
+    line: "Remote terrain, dry fuel, wind. Minutes pass before anyone knows what is happening.",
     tone: "neutral",
   },
   {
@@ -44,8 +45,16 @@ export const beats: Beat[] = [
     tone: "data",
   },
   {
-    id: "detect",
+    id: "coverage",
     code: "03",
+    label: "Coverage",
+    title: "Coverage where nobody is watching.",
+    line: "Nodes cover ridgelines and canyons that cameras and crews rarely reach.",
+    tone: "data",
+  },
+  {
+    id: "detect",
+    code: "04",
     label: "Detection",
     title: "A node sees something change.",
     line: "One anomalous reading is noise. A pattern across neighbours is a signal.",
@@ -53,31 +62,31 @@ export const beats: Beat[] = [
   },
   {
     id: "alert",
-    code: "04",
+    code: "05",
     label: "Alert",
-    title: "The signal leaves the ridge.",
+    title: "Alert received.",
     line: "Event and location propagate through the network to the Operations Center.",
     tone: "signal",
   },
   {
     id: "ops",
-    code: "05",
+    code: "06",
     label: "Operations Center",
-    title: "Someone is watching.",
-    line: "24/7/365 monitoring. A person reviews the detection and opens an incident.",
+    title: "24/7/365 Operations Center.",
+    line: "Someone is always watching. A person reviews the detection and opens an incident.",
     tone: "data",
   },
   {
     id: "dispatch",
-    code: "06",
+    code: "07",
     label: "Dispatch",
-    title: "A mission is created.",
+    title: "Mission assigned.",
     line: "An aircraft is assigned to the coordinates and cleared to investigate.",
     tone: "data",
   },
   {
-    id: "flight",
-    code: "07",
+    id: "transit",
+    code: "08",
     label: "Autonomous flight",
     title: "Then we send eyes.",
     line: "The UAV navigates toward the event while the Operations Center tracks it.",
@@ -86,16 +95,24 @@ export const beats: Beat[] = [
     tone: "data",
   },
   {
+    id: "rgb",
+    code: "09",
+    label: "Optical",
+    title: "Eyes on the fire.",
+    line: "Optical reads terrain, access routes and how the smoke column is behaving.",
+    tone: "signal",
+  },
+  {
     id: "thermal",
-    code: "08",
-    label: "Thermal + RGB",
-    title: "Two ways of seeing the same ridge.",
-    line: "Optical reads terrain and access. Thermal is designed to find heat that hides.",
+    code: "10",
+    label: "Thermal",
+    title: "Thermal + visual intelligence.",
+    line: "Thermal is designed to find the heat that smoke, canopy and darkness hide.",
     tone: "signal",
   },
   {
     id: "intel",
-    code: "09",
+    code: "11",
     label: "Intelligence",
     title: "Coordinates lock. Data flows back.",
     line: "Imagery, position and thermal information assemble into one incident record.",
@@ -103,19 +120,27 @@ export const beats: Beat[] = [
   },
   {
     id: "responder",
-    code: "10",
+    code: "12",
     label: "Responder",
-    title: "A clearer picture, sooner.",
-    line: "Useful information reaches the people who are already running toward it.",
+    title: "Information for responders.",
+    line: "A clearer picture reaches the people who are already running toward it.",
     tone: "neutral",
   },
   {
     id: "system",
-    code: "11",
+    code: "13",
     label: "The system",
     title: "A drone alone isn't the system.",
     line: "Sensors, Operations Center, aircraft and software — designed as one pipeline.",
     tone: "data",
+  },
+  {
+    id: "future",
+    code: "14",
+    label: "What's next",
+    title: "Wildfire is only the beginning.",
+    line: "Mission 01 has our full attention. The same foundation could serve other emergencies.",
+    tone: "neutral",
   },
 ];
 

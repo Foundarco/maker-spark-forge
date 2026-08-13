@@ -6,10 +6,6 @@ import { JourneyFallback } from "./JourneyFallback";
 const MissionScene = lazy(() => import("./MissionScene"));
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
-const ramp = (p: number, a: number, b: number) => {
-  const t = clamp01((p - a) / (b - a));
-  return t * t * (3 - 2 * t);
-};
 
 function supports3D() {
   if (typeof window === "undefined") return false;
@@ -23,16 +19,19 @@ function supports3D() {
   }
 }
 
+const N = beats.length;
+
 /**
- * The homepage mission flight. A tall scroll track drives one sticky scene:
- * scroll position is the mission timeline. Falls back to a layered 2D
- * presentation on mobile, reduced-motion, or without WebGL.
+ * The homepage mission flight. One tall scroll track drives one sticky scene:
+ * scroll position is the mission timeline, from a wide California establishing
+ * shot through detection, the Operations Center, the UAV investigation and the
+ * full-system reveal. Falls back to a layered 2D presentation on mobile,
+ * reduced-motion, or without WebGL.
  */
 export function MissionJourney() {
   const track = useRef<HTMLDivElement>(null);
   const progress = useRef({ current: 0 });
   const hud = useRef<HTMLDivElement>(null);
-  const thermal = useRef<HTMLDivElement>(null);
   const [enabled, setEnabled] = useState<boolean | null>(null);
   const [beat, setBeat] = useState(0);
   const [expanded, setExpanded] = useState(false);
@@ -51,14 +50,12 @@ export function MissionJourney() {
       const p = clamp01(-rect.top / Math.max(1, span));
       progress.current.current = p;
 
-      const idx = Math.min(beats.length - 1, Math.floor(p * beats.length * 0.999));
+      const idx = Math.min(N - 1, Math.floor(p * N * 0.999));
       setBeat((b) => (b === idx ? b : idx));
-
-      if (thermal.current) {
-        const t = ramp(p, 0.66, 0.76) * (1 - ramp(p, 0.84, 0.9));
-        thermal.current.style.opacity = String(t);
+      if (hud.current) {
+        const o = p > 0.03 ? 1 : 0;
+        if (hud.current.style.opacity !== String(o)) hud.current.style.opacity = String(o);
       }
-      if (hud.current) hud.current.style.opacity = String(ramp(p, 0.02, 0.09));
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(read);
@@ -81,16 +78,29 @@ export function MissionJourney() {
   const toneColor =
     b.tone === "signal" ? "var(--signal)" : b.tone === "data" ? "#38bdf8" : "currentColor";
 
+  const opsActive = beat === 6 || beat === 7;
+  const rgbActive = beat === 9;
+  const thermalActive = beat === 10;
+  const mapActive = beat === 11 || beat === 12;
+  const sensorView = rgbActive || thermalActive;
+
   return (
     <section
       ref={track}
-      className="relative bg-[#131c27]"
-      style={{ height: `${beats.length * 85}vh` }}
+      className="relative bg-[#1a1d22]"
+      style={{ height: `${N * 92}vh` }}
       aria-label="Mission journey: from sensor detection to responder"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* 3D scene */}
-        <div className="absolute inset-0">
+        {/* 3D scene — the visual spine of the page */}
+        <div
+          className="absolute inset-0 transition-[filter] duration-700 ease-out"
+          style={{
+            filter: thermalActive
+              ? "grayscale(1) contrast(1.45) brightness(0.95) sepia(1) hue-rotate(185deg) saturate(3.2)"
+              : "none",
+          }}
+        >
           {enabled ? (
             <Suspense fallback={null}>
               <MissionScene progress={progress.current} />
@@ -98,27 +108,132 @@ export function MissionJourney() {
           ) : null}
         </div>
 
-        {/* thermal sweep */}
+        {/* thermal heat wash */}
         <div
-          ref={thermal}
-          className="journey-thermal pointer-events-none absolute inset-0"
-          style={{ opacity: 0 }}
+          className="journey-thermal pointer-events-none absolute inset-0 transition-opacity duration-700"
+          style={{ opacity: thermalActive ? 0.55 : 0 }}
           aria-hidden
         />
-        <div className="scanlines pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden />
+
+        {/* atmospheric grade + legibility scrim */}
         <div
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "linear-gradient(100deg, rgba(8,11,16,0.82) 0%, rgba(8,11,16,0.5) 32%, rgba(8,11,16,0.04) 56%, transparent 74%), radial-gradient(140% 100% at 62% 45%, transparent 62%, rgba(6,9,13,0.42) 100%)",
+              "linear-gradient(100deg, rgba(9,12,17,0.78) 0%, rgba(9,12,17,0.42) 30%, rgba(9,12,17,0.02) 54%, transparent 72%), radial-gradient(150% 105% at 60% 42%, transparent 58%, rgba(6,9,13,0.5) 100%)",
           }}
           aria-hidden
         />
 
+        {/* aircraft sensor perspective framing */}
+        <div
+          className="pointer-events-none absolute inset-0 transition-opacity duration-500"
+          style={{ opacity: sensorView ? 1 : 0 }}
+          aria-hidden
+        >
+          <div className="scanlines absolute inset-0 opacity-40" />
+          <div className="absolute inset-x-10 inset-y-8 border border-white/25">
+            <span className="absolute -left-px -top-px h-5 w-5 border-l-2 border-t-2 border-[var(--signal)]" />
+            <span className="absolute -right-px -top-px h-5 w-5 border-r-2 border-t-2 border-[var(--signal)]" />
+            <span className="absolute -bottom-px -left-px h-5 w-5 border-b-2 border-l-2 border-[var(--signal)]" />
+            <span className="absolute -bottom-px -right-px h-5 w-5 border-b-2 border-r-2 border-[var(--signal)]" />
+          </div>
+          <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2">
+            <span className="absolute inset-0 rounded-full border border-[var(--signal)]/70" />
+            <span className="absolute left-1/2 top-0 h-4 w-px -translate-x-1/2 bg-[var(--signal)]/70" />
+            <span className="absolute bottom-0 left-1/2 h-4 w-px -translate-x-1/2 bg-[var(--signal)]/70" />
+            <span className="absolute left-0 top-1/2 h-px w-4 -translate-y-1/2 bg-[var(--signal)]/70" />
+            <span className="absolute right-0 top-1/2 h-px w-4 -translate-y-1/2 bg-[var(--signal)]/70" />
+          </div>
+          <p className="absolute left-12 top-12 font-mono text-[0.6rem] uppercase tracking-[0.24em] text-white/70">
+            UAV-01 · {thermalActive ? "Thermal (LWIR) · concept" : "Optical · concept"}
+          </p>
+          <p className="absolute right-12 top-12 font-mono text-[0.6rem] uppercase tracking-[0.24em] text-white/70">
+            Sensor feed · simulated
+          </p>
+        </div>
+
+        {/* Operations Center — a live mission surface, not a static card */}
+        <div
+          className="pointer-events-none absolute inset-0 hidden transition-opacity duration-500 lg:block"
+          style={{ opacity: opsActive ? 1 : 0 }}
+          aria-hidden={!opsActive}
+        >
+          <div className="absolute inset-x-0 bottom-0 top-0 bg-[rgba(8,11,16,0.55)]" />
+          <div className="absolute right-8 top-1/2 w-[26rem] -translate-y-1/2 border border-white/15 bg-[rgba(10,14,20,0.82)] backdrop-blur-sm">
+            <div className="flex items-center justify-between border-b border-white/12 px-4 py-2.5 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/70">
+              <span className="flex items-center gap-2">
+                <span className="live-pulse h-1.5 w-1.5 rounded-full bg-[var(--signal)]" />
+                Operations Center · 24/7/365
+              </span>
+              <span>Concept</span>
+            </div>
+            <dl className="grid grid-cols-2 gap-px bg-white/10 font-mono text-[0.6rem] uppercase tracking-[0.16em]">
+              {[
+                ["Incident", "INC-0001 · Open"],
+                ["Source", "Sensor node · corroborated"],
+                ["Terrain", "Ridge · limited access"],
+                ["Conditions", "Dry · wind rising"],
+                ["Asset", beat === 7 ? "UAV-01 · Launching" : "UAV-01 · Standby"],
+                ["Status", beat === 7 ? "Mission assigned" : "Under review"],
+              ].map(([k, v]) => (
+                <div key={k} className="bg-[rgba(10,14,20,0.95)] px-4 py-3">
+                  <dt className="text-white/45">{k}</dt>
+                  <dd className="mt-1.5 text-white/85">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="space-y-2 border-t border-white/12 px-4 py-3 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-white/60">
+              {[
+                "Node reports anomaly",
+                "Neighbours corroborate",
+                "Operator reviews detection",
+                "Incident opened",
+                "Aircraft assigned",
+              ].map((step, i) => {
+                const done = beat === 7 ? i <= 4 : i <= 3;
+                return (
+                  <p key={step} className="flex items-center gap-2.5">
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ background: done ? "var(--signal)" : "rgba(255,255,255,0.2)" }}
+                    />
+                    <span style={{ color: done ? "rgba(255,255,255,0.85)" : undefined }}>{step}</span>
+                  </p>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Intelligence / mapping readout */}
+        <div
+          className="pointer-events-none absolute right-8 top-1/2 hidden w-[22rem] -translate-y-1/2 border border-white/15 bg-[rgba(10,14,20,0.78)] backdrop-blur-sm transition-opacity duration-500 lg:block"
+          style={{ opacity: mapActive ? 1 : 0 }}
+          aria-hidden
+        >
+          <p className="border-b border-white/12 px-4 py-2.5 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/70">
+            Incident record · concept
+          </p>
+          <dl className="grid gap-px bg-white/10 font-mono text-[0.6rem] uppercase tracking-[0.16em]">
+            {[
+              ["Position", "Locked · coordinates returned"],
+              ["Optical", "Terrain + access captured"],
+              ["Thermal", "Heat signature mapped"],
+              ["Handoff", "Shared with responding agency"],
+            ].map(([k, v]) => (
+              <div key={k} className="bg-[rgba(10,14,20,0.95)] px-4 py-3">
+                <dt className="text-white/45">{k}</dt>
+                <dd className="mt-1.5 text-white/85">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
         {/* HUD frame */}
         <div
           ref={hud}
-          className="pointer-events-none absolute inset-0 hidden font-mono text-[0.6rem] uppercase tracking-[0.22em] text-white/55 lg:block"
+          className="pointer-events-none absolute inset-0 hidden font-mono text-[0.6rem] uppercase tracking-[0.22em] text-white/55 transition-opacity duration-500 lg:block"
           style={{ opacity: 0 }}
           aria-hidden
         >
@@ -127,11 +242,11 @@ export function MissionJourney() {
             Mission 01 · Wildfire · Concept simulation
           </div>
           <div className="absolute right-6 top-24 space-y-1.5 text-right">
-            <p>UAV-01 · {beat >= 6 ? "Airborne" : "Standby"}</p>
-            <p>Network · {beat >= 2 ? "12 nodes reporting" : "Initialising"}</p>
+            <p>UAV-01 · {beat >= 7 ? "Airborne · on mission" : "Airborne · patrol"}</p>
+            <p>Network · {beat >= 2 ? "Nodes reporting" : "Initialising"}</p>
             <p>Ops center · 24/7/365</p>
           </div>
-          <div className="absolute bottom-8 left-6 right-6 flex items-center gap-2">
+          <div className="absolute bottom-8 left-6 right-6 flex items-center gap-1.5">
             {beats.map((x, i) => (
               <span
                 key={x.id}
@@ -198,13 +313,19 @@ export function MissionJourney() {
                 </div>
               ) : null}
 
-              {beat === beats.length - 1 ? (
-                <div className="pointer-events-auto mt-9">
+              {beat === N - 1 ? (
+                <div className="pointer-events-auto mt-9 flex flex-wrap gap-3">
                   <Link
                     to="/system"
                     className="border border-white/25 px-6 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-white/80 transition-colors hover:border-white/60 hover:text-white"
                   >
                     Walk the full architecture
+                  </Link>
+                  <Link
+                    to="/donate"
+                    className="border border-[color:var(--signal)] bg-[var(--signal)] px-6 py-3 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-[#10131a] transition-opacity hover:opacity-90"
+                  >
+                    Support the mission
                   </Link>
                 </div>
               ) : null}
