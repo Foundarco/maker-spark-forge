@@ -63,7 +63,7 @@ export function MissionJourney() {
         const au = Math.abs(u);
 
         if (plate) {
-          const a = clamp01(1 - au / 1.02);
+          const a = clamp01((1.0 - au) / 0.34);
           const prev = state.op[i];
           if (a <= 0.002) {
             if (prev !== 0) {
@@ -83,7 +83,7 @@ export function MissionJourney() {
         }
 
         if (text) {
-          const a = clamp01(1 - au / 0.58);
+          const a = clamp01((0.86 - au) / 0.3);
           const e = a * a * (3 - 2 * a);
           text.style.opacity = e.toFixed(3);
           text.style.transform = `translate3d(0, ${(u * -44).toFixed(1)}px, 0)`;
