@@ -600,3 +600,8 @@
 @media (prefers-reduced-motion: reduce) {
   .journey-node, .journey-alert-ring, .journey-network svg, .journey-scroll-cue { animation: none; }
 }
+
+@keyframes cue {
+  0% { transform: translateY(-100%); }
+  60%, 100% { transform: translateY(250%); }
+}
