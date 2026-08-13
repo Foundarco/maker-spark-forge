@@ -53,7 +53,7 @@ function HomePage() {
     <>
       <FilmHero />
       <Statement />
-      <SplitPanels />
+      <ScrollStory />
       <QuoteBanner />
       <HowItWorks />
       <FlyBanner />
