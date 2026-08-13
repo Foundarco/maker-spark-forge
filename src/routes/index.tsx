@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { FilmHero } from "@/components/site/home/FilmHero";
 import { Statement } from "@/components/site/home/Statement";
-import { SplitPanels } from "@/components/site/home/SplitPanels";
+import { ScrollStory } from "@/components/site/home/ScrollStory";
 import { QuoteBanner } from "@/components/site/home/QuoteBanner";
 import { HowItWorks } from "@/components/site/home/HowItWorks";
 import { FlyBanner } from "@/components/site/home/FlyBanner";
@@ -53,7 +53,7 @@ function HomePage() {
     <>
       <FilmHero />
       <Statement />
-      <SplitPanels />
+      <ScrollStory />
       <QuoteBanner />
       <HowItWorks />
       <FlyBanner />
