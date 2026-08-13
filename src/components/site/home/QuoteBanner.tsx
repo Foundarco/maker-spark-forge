@@ -8,7 +8,8 @@ export function QuoteBanner() {
       <img
         src={responders}
         alt="Wildland firefighters preparing at the edge of an incident"
-        className="h-[86vh] w-full object-cover object-left"
+        className="h-[86vh] w-full scale-110 object-cover object-left"
+        data-parallax="70"
         loading="lazy"
         width={1600}
         height={1000}
@@ -17,7 +18,7 @@ export function QuoteBanner() {
       <div className="absolute inset-0 flex items-center">
         <div className="mx-auto grid w-full max-w-7xl px-6 sm:px-10 lg:grid-cols-2">
           <div />
-          <Reveal>
+          <Reveal variant="blur">
             <blockquote className="text-[clamp(1.5rem,2.6vw,2.4rem)] font-medium leading-snug text-ink">
               “The hardest part is the beginning. If somebody can tell us exactly what is burning and
               where it is going while it is still small, that changes the whole day.”
