@@ -457,31 +457,105 @@
   );
 }
 
-/* ── Mission journey (scroll-driven 3D scene) ───────────────────────── */
-.journey-thermal {
+/* ── Mission journey: one continuous hybrid film stage ──────────────── */
+.journey-stage {
+  --thermal: 0;
+  --alert: 0;
+  --intel: 0;
+  --network: 0;
+  isolation: isolate;
+  contain: paint;
+}
+
+.journey-environment {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-origin: center;
+}
+
+.journey-environment > img,
+.journey-environment > video {
+  filter: saturate(1.12) contrast(1.04);
+}
+
+.journey-grade {
+  z-index: 6;
   background:
-    radial-gradient(60% 45% at 62% 52%, rgba(255, 214, 120, 0.55), rgba(255, 96, 0, 0.35) 38%, transparent 72%),
-    linear-gradient(180deg, rgba(12, 24, 58, 0.5), rgba(120, 26, 10, 0.45));
+    linear-gradient(90deg, color-mix(in oklab, var(--night) 82%, transparent) 0%, color-mix(in oklab, var(--night) 38%, transparent) 34%, transparent 67%),
+    linear-gradient(180deg, color-mix(in oklab, var(--night) 16%, transparent), transparent 45%, color-mix(in oklab, var(--night) 58%, transparent));
+}
+
+.journey-thermal-pass {
+  z-index: 7;
+  opacity: var(--thermal);
+  background:
+    radial-gradient(38% 30% at 59% 57%, color-mix(in oklab, var(--signal) 92%, transparent), transparent 16%),
+    radial-gradient(60% 48% at 58% 54%, color-mix(in oklab, var(--signal) 66%, transparent), color-mix(in oklab, var(--aid) 32%, transparent) 44%, transparent 75%),
+    linear-gradient(180deg, color-mix(in oklab, var(--night) 28%, transparent), color-mix(in oklab, var(--signal) 24%, transparent));
+  mix-blend-mode: color;
+}
+
+.journey-grid {
+  z-index: 8;
+  opacity: calc(var(--intel) * 0.42);
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--aid) 25%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--aid) 25%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+
+.journey-network {
+  opacity: var(--network);
+  color: var(--aid);
   mix-blend-mode: screen;
-  transition: opacity 220ms linear;
 }
 
-.journey-beat {
-  animation: journey-beat-in 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes journey-beat-in {
-  from { opacity: 0; transform: translateY(18px); filter: blur(4px); }
-  to { opacity: 1; transform: none; filter: blur(0); }
+.journey-network svg {
+  stroke: color-mix(in oklab, var(--aid) 72%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 7 9;
+  animation: journey-route 8s linear infinite;
 }
 
-.journey-cue {
+.journey-node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  box-shadow: 0 0 18px currentColor;
+  animation: journey-node 1.8s ease-in-out infinite;
+}
+
+.journey-alert-ring {
+  opacity: var(--alert);
+  border: 1px solid var(--signal);
+  box-shadow: 0 0 0 14px color-mix(in oklab, var(--signal) 8%, transparent), 0 0 42px color-mix(in oklab, var(--signal) 55%, transparent);
+  animation: journey-alert 1.25s ease-out infinite;
+}
+
+.journey-reticle {
+  color: color-mix(in oklab, var(--aid) 74%, transparent);
+  opacity: var(--intel);
+}
+
+.journey-copy {
+  text-shadow: 0 2px 18px color-mix(in oklab, var(--night) 82%, transparent);
+}
+
+.journey-scroll-cue {
   animation: journey-cue-k 2.2s ease-in-out infinite;
 }
+
+@keyframes journey-route { to { stroke-dashoffset: -128; } }
+@keyframes journey-node { 50% { transform: scale(1.7); opacity: 0.55; } }
+@keyframes journey-alert { to { transform: translate(-50%, -50%) scale(1.28); opacity: 0; } }
 @keyframes journey-cue-k {
   0%, 100% { opacity: 0.4; transform: translateY(0); }
   50% { opacity: 1; transform: translateY(5px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .journey-beat, .journey-cue { animation: none; }
+  .journey-node, .journey-alert-ring, .journey-network svg, .journey-scroll-cue { animation: none; }
 }

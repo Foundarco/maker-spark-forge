@@ -38,6 +38,14 @@ export type Beat = {
   focus?: string;
 };
 
+export type JourneyChapter = Beat & {
+  /** Normalized master-timeline position. Chapters deliberately overlap. */
+  at: number;
+  /** Optional telemetry shown only while this chapter is dominant. */
+  telemetry?: readonly string[];
+  align?: "left" | "right";
+};
+
 const g = {
   dawn: "linear-gradient(180deg, rgba(8,18,34,0.34) 0%, rgba(8,18,34,0.05) 42%, rgba(6,12,22,0.72) 100%)",
   sky: "linear-gradient(180deg, rgba(6,26,52,0.30) 0%, rgba(6,20,40,0.04) 45%, rgba(5,12,24,0.74) 100%)",
@@ -52,7 +60,7 @@ const g = {
   dusk: "linear-gradient(180deg, rgba(8,14,34,0.34) 0%, rgba(40,20,10,0.10) 46%, rgba(6,8,18,0.78) 100%)",
 };
 
-export const beats: Beat[] = [
+export const beats: JourneyChapter[] = [
   {
     id: "california",
     code: "00",
@@ -63,6 +71,8 @@ export const beats: Beat[] = [
     img: ridge,
     grade: g.dawn,
     focus: "50% 55%",
+    at: 0,
+    telemetry: ["CALIFORNIA · 38.58° N", "SYSTEM STATUS · DEVELOPMENT"],
   },
   {
     id: "flight",
@@ -74,6 +84,9 @@ export const beats: Beat[] = [
     img: uav,
     grade: g.sky,
     focus: "45% 50%",
+    at: 0.085,
+    align: "right",
+    telemetry: ["UAV-01 · AIRBORNE", "CRUISE · 42 KT"],
   },
   {
     id: "network",
@@ -87,6 +100,8 @@ export const beats: Beat[] = [
     img: node,
     grade: g.cool,
     focus: "62% 50%",
+    at: 0.17,
+    telemetry: ["MESH · 72 NODES", "LINK · NOMINAL"],
   },
   {
     id: "coverage",
@@ -98,6 +113,9 @@ export const beats: Beat[] = [
     img: canyon,
     grade: g.cool,
     focus: "50% 45%",
+    at: 0.255,
+    align: "right",
+    telemetry: ["COVERAGE · REMOTE RIDGE", "WIND · WSW 18 KT"],
   },
   {
     id: "detect",
@@ -109,6 +127,8 @@ export const beats: Beat[] = [
     img: ignition,
     grade: g.amber,
     focus: "45% 50%",
+    at: 0.335,
+    telemetry: ["Δ TEMP · +8.4 °C", "CONFIDENCE · RISING"],
   },
   {
     id: "ops",
@@ -120,6 +140,9 @@ export const beats: Beat[] = [
     img: ops,
     grade: g.cyan,
     focus: "50% 50%",
+    at: 0.42,
+    align: "right",
+    telemetry: ["OPS · 24 / 7 / 365", "INCIDENT · MC-001"],
   },
   {
     id: "dispatch",
@@ -133,6 +156,8 @@ export const beats: Beat[] = [
     img: transit,
     grade: g.sky,
     focus: "55% 55%",
+    at: 0.51,
+    telemetry: ["ROUTE · LOCKED", "MISSION · ASSIGNED"],
   },
   {
     id: "rgb",
@@ -144,6 +169,9 @@ export const beats: Beat[] = [
     img: fire,
     grade: g.ember,
     focus: "52% 52%",
+    at: 0.64,
+    align: "right",
+    telemetry: ["PAYLOAD · RGB", "TARGET · ACQUIRED"],
   },
   {
     id: "thermal",
@@ -157,6 +185,8 @@ export const beats: Beat[] = [
     filter:
       "grayscale(1) contrast(1.5) brightness(1.05) sepia(1) hue-rotate(-35deg) saturate(4.2)",
     focus: "52% 52%",
+    at: 0.735,
+    telemetry: ["PAYLOAD · LWIR", "HOTSPOT · 612 °C"],
   },
   {
     id: "intel",
@@ -168,6 +198,9 @@ export const beats: Beat[] = [
     img: foothills,
     grade: g.cyan,
     focus: "50% 55%",
+    at: 0.825,
+    align: "right",
+    telemetry: ["PERIMETER · MAPPED", "PACKAGE · UPLINKING"],
   },
   {
     id: "responder",
@@ -179,6 +212,8 @@ export const beats: Beat[] = [
     img: responders,
     grade: g.dusk,
     focus: "50% 45%",
+    at: 0.91,
+    telemetry: ["HANDOFF · COMPLETE", "RESPONDER ETA · 06 MIN"],
   },
   {
     id: "system",
@@ -190,9 +225,18 @@ export const beats: Beat[] = [
     img: system,
     grade: g.dawn,
     focus: "50% 50%",
+    at: 0.975,
+    align: "right",
+    telemetry: ["MISSION 01", "ONE CONNECTED SYSTEM"],
   },
 ];
 
 /** Slice of scroll progress owned by beat i. */
-export const beatAt = (p: number) =>
-  Math.min(beats.length - 1, Math.max(0, Math.floor(p * beats.length)));
+export const beatAt = (p: number) => {
+  let index = 0;
+  for (let i = 1; i < beats.length; i += 1) {
+    const chapter = beats[i];
+    if (chapter && p >= chapter.at) index = i;
+  }
+  return index;
+};
