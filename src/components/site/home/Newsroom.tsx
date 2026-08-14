@@ -8,7 +8,7 @@ import foothills from "@/assets/j-foothills.jpg";
 
 const posts = [
   { img: node, tag: "Engineering", title: "Designing sensor nodes for terrain nobody visits", to: "/technology" as const },
-  { img: uav, tag: "Airframe", title: "Why Mission 01 flies a VTOL, not a quadcopter", to: "/technology" as const },
+  { img: uav, tag: "Airframe", title: "Why we fly a VTOL, not a quadcopter", to: "/technology" as const },
   { img: system, tag: "System", title: "The nine layers between an ignition and an answer", to: "/system" as const },
   { img: foothills, tag: "Programme", title: "Building in public: the honest development status", to: "/development" as const },
 ] as const;

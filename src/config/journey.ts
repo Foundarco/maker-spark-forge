@@ -64,9 +64,9 @@ export const beats: JourneyChapter[] = [
   {
     id: "california",
     code: "00",
-    label: "Mission 01 · Wildfire",
+    label: "Wildfire response",
     title: "See the fire sooner.",
-    line: "An autonomous wildfire detection and aerial response system, in development.",
+    line: "An autonomous wildfire detection and aerial response system.",
     tone: "signal",
     img: ridge,
     grade: g.dawn,
@@ -95,7 +95,7 @@ export const beats: JourneyChapter[] = [
     title: "Detection starts on the ground.",
     line: "Distributed sensor nodes watch local conditions and corroborate each other.",
     detail:
-      "Temperature, humidity, particulate indicators and atmospheric conditions over low-power wireless links. Sensing set in development.",
+      "Temperature, humidity, particulate indicators and atmospheric conditions over low-power wireless links.",
     tone: "data",
     img: node,
     grade: g.cool,
@@ -227,7 +227,7 @@ export const beats: JourneyChapter[] = [
     focus: "50% 50%",
     at: 0.975,
     align: "right",
-    telemetry: ["MISSION 01", "ONE CONNECTED SYSTEM"],
+    telemetry: ["WILDFIRE RESPONSE", "ONE CONNECTED SYSTEM"],
   },
 ];
 

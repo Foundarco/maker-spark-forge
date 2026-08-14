@@ -5,12 +5,12 @@ import { brand } from "@/config/brand";
 /** Format: a plain page again. The film is over; this is the ask. */
 export function ActFuture() {
   return (
-    <section aria-label="Beyond Mission 01" className="relative bg-[var(--night)] px-5 py-24 sm:px-8 sm:py-32">
+    <section aria-label="Beyond wildfire" className="relative bg-[var(--night)] px-5 py-24 sm:px-8 sm:py-32">
       <div className="mx-auto max-w-6xl">
         <p className="act-kicker text-ink/60">
           <span>13</span>
           <span className="act-rule" />
-          Beyond Mission 01
+          Beyond wildfire
         </p>
         <h2 className="display-cond mt-4 max-w-3xl text-[clamp(2rem,5vw,3.8rem)] leading-[0.95] text-ink">
           Wildfire is where we start.
@@ -29,7 +29,7 @@ export function ActFuture() {
 
         <div className="mt-16 border-t border-ink/12 pt-14">
           <h2 className="display-cond max-w-3xl text-[clamp(2.2rem,6vw,4.6rem)] leading-[0.92] text-ink">
-            Build Mission 01 with us.
+            Build it with us.
           </h2>
           <p className="mt-4 max-w-xl text-base text-ink/70">{brand.shortMission}</p>
           <div className="mt-8 flex flex-wrap gap-3">

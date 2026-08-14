@@ -6,9 +6,9 @@ export const brand = {
   name: "Clovr Labs",
   shortName: "Clovr",
   legalName: "Clovr Labs",
-  mission01: "Mission 01 — Autonomous wildfire detection + UAV investigation",
+  mission01: "Autonomous wildfire detection + UAV response",
   tagline: "See the fire sooner.",
-  status: "Currently in development",
+  status: "Early-stage",
   mission:
     "We're developing an autonomous wildfire detection and aerial response system designed to identify potential fires, investigate them quickly, and give responders better information.",
   shortMission:
@@ -30,7 +30,7 @@ export const brand = {
   },
   /** Honest, non-numeric statements about where the organization actually is. */
   statusPoints: [
-    { label: "Mission 01", value: "Wildfire detection + UAV investigation" },
+    { label: "Focus", value: "Wildfire detection + UAV response" },
     { label: "Stage", value: "Prototype in progress" },
     { label: "Operations Center", value: "24/7/365" },
     { label: "Structure", value: "Mission-driven nonprofit" },

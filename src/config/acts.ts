@@ -1,5 +1,5 @@
 /**
- * Mission 01 — the film's chapters.
+ * The film's chapters.
  *
  * This is the single source of story copy: the cinematic acts and the
  * reduced-motion fallback both read it, so they can never drift apart.
@@ -23,10 +23,10 @@ export const acts: ActCopy[] = [
   {
     id: "opening",
     code: "01",
-    kicker: "Mission 01 · Wildfire",
+    kicker: "Wildfire response",
     title: "See the fire sooner.",
     line: "Most wildfires start where nobody is looking. We are building a system that watches that ground.",
-    note: "In development",
+    note: "",
   },
   {
     id: "landscape",
@@ -41,7 +41,7 @@ export const acts: ActCopy[] = [
     kicker: "Sense",
     title: "Sensors watch the ground.",
     line: "Small nodes across the terrain track local conditions and check each other's readings.",
-    detail: "Sensor network · in development",
+    detail: "Sensor network",
   },
   {
     id: "ops",
@@ -88,7 +88,7 @@ export const acts: ActCopy[] = [
     kicker: "Suppression attempt",
     title: "Try to slow it down.",
     line: "With the fire confirmed and the mission authorized, the aircraft is intended to release a water payload on a controlled pass.",
-    note: "Planned capability · in development. Release is designed to require authorization and to respect mission rules, geofencing and payload limits.",
+    note: "Release is designed to require authorization and to respect mission rules, geofencing and payload limits.",
   },
   {
     id: "reassess",
@@ -107,7 +107,7 @@ export const acts: ActCopy[] = [
   {
     id: "system",
     code: "12",
-    kicker: "Mission 01 · Wildfire",
+    kicker: "Wildfire response",
     title: "One system.",
     line: "Sensors, Operations Center, aircraft, payload and software — built to work as one.",
   },

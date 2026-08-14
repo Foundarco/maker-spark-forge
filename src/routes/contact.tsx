@@ -7,7 +7,7 @@ import { SITE_URL } from "@/lib/seo";
 
 const title = `Contact | ${brand.name}`;
 const desc =
-  "Contact Clovr Labs — general enquiries, press, research collaboration, partnerships, and joining the team on Mission 01: wildfire detection and UAV investigation.";
+  "Contact Clovr Labs — general enquiries, press, research collaboration, partnerships, and joining the team on wildfire detection and UAV response.";
 
 const desks = [
   { k: "General", email: brand.contact.general, note: "Anything that doesn't fit elsewhere." },
@@ -41,7 +41,7 @@ function ContactPage() {
           <PageHeader
             eyebrow="Contact"
             title="Reach the right desk."
-            lede="We're a small team building Mission 01. Email is the fastest way to reach us."
+            lede="We're a small team. Email is the fastest way to reach us."
           />
         </div>
       </div>

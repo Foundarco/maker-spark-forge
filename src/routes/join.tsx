@@ -6,7 +6,7 @@ import { involvement, media } from "@/config/system";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
 
-const title = `Join the Team — Build Mission 01 | ${brand.name}`;
+const title = `Join the Team | ${brand.name}`;
 const desc =
   "Engineers, robotics and software developers, researchers, fire professionals, mentors, sponsors, and manufacturing partners: help build an autonomous wildfire detection and UAV investigation system.";
 

@@ -63,7 +63,7 @@ function MissionPage() {
               can use.
             </p>
             <p className="text-ink">
-              We are early-stage and in development. We are building the system; we have not deployed it.
+              We are early-stage. We are building the system; we have not deployed it.
             </p>
           </Reveal>
         </div>
@@ -99,7 +99,7 @@ function MissionPage() {
           <Reveal delay={120}>
             <SectionLabel n="04" tone="light">Wildfire is only the beginning</SectionLabel>
             <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-              Mission 01 has our full attention. In time, the same foundation could support other emergencies.
+              Wildfire has our full attention. In time, the same foundation could support other emergencies.
             </p>
             <ul className="mt-6 grid gap-px border border-border bg-border sm:grid-cols-2">
               {expansion.map((e) => (
