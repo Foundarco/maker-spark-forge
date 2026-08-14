@@ -872,3 +872,525 @@
 @media (prefers-reduced-motion: reduce) {
   .film-node, .film-water span, .film-scan, .film-cue { animation: none; }
 }
+
+/* ══ Mission film — act system ══════════════════════════════════════ */
+
+.film-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: 80;
+  pointer-events: none;
+  transform-origin: left center;
+  transform: scaleX(var(--page-p, 0));
+  background: var(--signal);
+}
+
+.act { --ap: 0; }
+
+.act-media {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* slow push-in across the act's life */
+.act-push { transform: scale(calc(1.12 - var(--ap) * 0.1)); }
+.act-slide-left { transform: translate3d(calc(var(--ap) * -4%), 0, 0) scale(1.08); }
+
+/* ── grades: each act gets its own light ── */
+.act-grade-warm,
+.act-grade-cool,
+.act-grade-ember,
+.act-grade-golden {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.act-grade-warm {
+  background:
+    linear-gradient(90deg, rgb(6 12 20 / 0.82), rgb(6 12 20 / 0.1) 58%, transparent 78%),
+    linear-gradient(0deg, rgb(6 12 20 / 0.6), transparent 46%);
+}
+.act-grade-cool {
+  background:
+    linear-gradient(90deg, rgb(4 10 20 / 0.88), rgb(4 10 20 / 0.2) 60%, transparent 82%),
+    linear-gradient(0deg, rgb(4 10 20 / 0.55), transparent 42%);
+}
+.act-grade-ember {
+  background:
+    linear-gradient(90deg, rgb(14 7 4 / 0.84), rgb(14 7 4 / 0.16) 58%, transparent 80%),
+    radial-gradient(70% 55% at 62% 58%, rgb(255 138 40 / 0.16), transparent 62%),
+    linear-gradient(0deg, rgb(14 7 4 / 0.6), transparent 44%);
+}
+.act-grade-golden {
+  background:
+    linear-gradient(90deg, rgb(18 11 5 / 0.78), rgb(18 11 5 / 0.08) 55%, transparent 76%),
+    linear-gradient(0deg, rgb(18 11 5 / 0.5), transparent 40%);
+}
+
+.act-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--aid) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--aid) 9%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(80% 70% at 50% 45%, #000, transparent 78%);
+}
+
+/* ── copy blocks ── */
+.act-copy {
+  position: absolute;
+  z-index: 30;
+  max-width: 34rem;
+  padding-inline: 1.25rem;
+  opacity: calc((var(--ap) - 0.06) * 6);
+  transform: translate3d(0, calc((0.45 - var(--ap)) * 40px), 0);
+}
+@media (min-width: 640px) { .act-copy { padding-inline: 2rem; } }
+.act-copy-left { left: max(0px, calc(50vw - 40rem)); top: 50%; margin-top: -6rem; }
+.act-copy-right { right: max(0px, calc(50vw - 40rem)); top: 50%; margin-top: -6rem; }
+.act-copy-center { left: 50%; top: 50%; transform: translate3d(-50%, calc((0.45 - var(--ap)) * 40px), 0); text-align: center; }
+.act-copy-low { top: auto; bottom: 12svh; margin-top: 0; }
+
+.act-kicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+}
+.act-rule { display: block; height: 1px; width: 2.25rem; background: currentColor; }
+.act-title {
+  font-family: var(--font-display);
+  font-stretch: condensed;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 1.1rem;
+  font-size: clamp(2.2rem, 4.6vw, 4.2rem);
+  line-height: 0.95;
+  color: var(--ink);
+  text-shadow: 0 2px 26px rgb(4 8 14 / 0.6);
+}
+.act-line {
+  margin-top: 1rem;
+  max-width: 30rem;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  color: color-mix(in oklab, var(--ink) 82%, transparent);
+}
+.act-detail,
+.act-note {
+  margin-top: 0.9rem;
+  max-width: 28rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  line-height: 1.9;
+  color: color-mix(in oklab, var(--ink) 55%, transparent);
+}
+.act-note { color: color-mix(in oklab, var(--signal) 85%, transparent); }
+
+.act-fade-up {
+  opacity: calc((var(--ap) - 0.2) * 4);
+  transform: translate3d(0, calc((0.5 - var(--ap)) * 44px), 0);
+}
+
+/* ── Act I: opening reel ── */
+.reel-shot {
+  position: absolute;
+  inset: 0;
+  transition: opacity 700ms ease;
+}
+.reel-media {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  animation: reel-drift 9s ease-out both;
+}
+@keyframes reel-drift {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.1); }
+}
+.reel-grade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgb(3 6 11 / 0.92) 0%, rgb(3 6 11 / 0.25) 42%, rgb(3 6 11 / 0.45) 100%);
+}
+.reel-line,
+.reel-title,
+.reel-foot {
+  opacity: 0;
+  animation: reel-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.reel-line {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: color-mix(in oklab, var(--ink) 72%, transparent);
+  margin-bottom: 0.6rem;
+}
+.reel-title { animation-delay: 4.2s; margin-top: 0.5rem; }
+.reel-foot {
+  animation-delay: 5.4s;
+  margin-top: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+@keyframes reel-in {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.reel-cue {
+  position: relative;
+  display: block;
+  height: 2.4rem;
+  width: 1px;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.18);
+}
+.reel-cue::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  height: 40%;
+  width: 100%;
+  background: var(--signal);
+  animation: cue 2.4s ease-in-out infinite;
+}
+
+/* ── Act III: sensor map ── */
+.act-map-plate {
+  transform: scale(calc(1.18 - var(--ap) * 0.16)) translate3d(calc(var(--ap) * -2%), 0, 0);
+  opacity: 0.9;
+}
+.act-mesh {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 12;
+}
+.act-mesh line {
+  stroke: color-mix(in oklab, var(--aid) 45%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+  opacity: calc((var(--ap) - 0.28) * 3);
+}
+.act-node {
+  position: absolute;
+  z-index: 14;
+  height: 9px;
+  width: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  border-radius: 999px;
+  background: var(--aid);
+  box-shadow: 0 0 0 5px color-mix(in oklab, var(--aid) 14%, transparent);
+  opacity: calc((var(--ap) - var(--delay, 0)) * 8);
+  transform: scale(calc(0.6 + min(1, max(0, (var(--ap) - var(--delay, 0)) * 6)) * 0.4));
+}
+.act-node.is-alert {
+  background: var(--signal);
+  box-shadow:
+    0 0 0 6px color-mix(in oklab, var(--signal) 16%, transparent),
+    0 0 34px color-mix(in oklab, var(--signal) 60%, transparent);
+  animation: act-ping 2.2s ease-out infinite;
+}
+@keyframes act-ping {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--signal) 45%, transparent); }
+  100% { box-shadow: 0 0 0 26px transparent; }
+}
+
+/* ── Act IV: operations panel ── */
+.act-panel {
+  position: absolute;
+  z-index: 26;
+  right: max(1.25rem, calc(50vw - 40rem));
+  top: 50%;
+  width: min(21rem, 40vw);
+  transform: translate3d(calc((1 - min(1, var(--ap) * 3)) * 40px), -50%, 0);
+  opacity: calc(var(--ap) * 3);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background: rgb(6 12 20 / 0.66);
+  backdrop-filter: blur(8px);
+  padding: 1.1rem 1.15rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in oklab, var(--ink) 70%, transparent);
+}
+.act-panel-head { color: var(--aid); }
+.act-panel-rows { margin-top: 0.9rem; display: grid; gap: 0.55rem; }
+.act-panel-rows li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+  padding-bottom: 0.45rem;
+  opacity: calc((var(--ap) - var(--delay, 0)) * 8);
+}
+.act-panel-state { color: var(--signal); }
+.act-panel-map { margin-top: 1rem; height: 6.5rem; }
+.act-panel-map svg { height: 100%; width: 100%; }
+.act-panel-route {
+  stroke: var(--aid);
+  stroke-width: 1.5;
+  stroke-dasharray: 200;
+  stroke-dashoffset: calc(200 - var(--ap) * 220);
+}
+.act-panel-map circle { fill: var(--signal); opacity: calc((var(--ap) - 0.6) * 4); }
+
+/* ── Act VII: payload point of view ── */
+.act-pov-media { transform: scale(calc(1.16 - var(--ap) * 0.14)); }
+.act-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 24;
+  background: #000;
+  height: calc(min(1, var(--ap) * 3) * 11svh);
+}
+.act-bar-top { top: 0; }
+.act-bar-bottom { bottom: 0; }
+.act-lens {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 50%, transparent 46%, rgb(0 0 0 / 0.66));
+}
+.act-pov-hud {
+  position: absolute;
+  z-index: 26;
+  top: calc(min(1, var(--ap) * 3) * 11svh + 1.1rem);
+  left: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: color-mix(in oklab, var(--ink) 60%, transparent);
+  opacity: calc((var(--ap) - 0.15) * 4);
+}
+
+/* ── Act VIII: RGB → thermal, a hard travelling edge ── */
+.act-thermal {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 calc((1 - min(1, max(0, (var(--ap) - 0.24) * 1.7))) * 100%) 0 0);
+  filter: grayscale(1) contrast(1.6) brightness(1.05) sepia(1) hue-rotate(-30deg) saturate(4.6);
+}
+.act-wipe-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 18;
+  width: 2px;
+  left: calc(min(1, max(0, (var(--ap) - 0.24) * 1.7)) * 100%);
+  background: color-mix(in oklab, var(--signal) 80%, transparent);
+  box-shadow: 0 0 28px color-mix(in oklab, var(--signal) 60%, transparent);
+  opacity: calc(min(1, max(0, (var(--ap) - 0.2) * 5)) * (1 - max(0, (var(--ap) - 0.82) * 6)));
+}
+.act-confirm-stamp {
+  position: absolute;
+  z-index: 30;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(calc(0.96 + min(1, max(0, (var(--ap) - 0.78) * 5)) * 0.04));
+  border: 1px solid var(--signal);
+  padding: 0.7rem 1.4rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  color: var(--signal);
+  background: rgb(8 5 3 / 0.5);
+  opacity: calc((var(--ap) - 0.78) * 6);
+}
+
+/* ── Act IX: suppression ── */
+.act-drop {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+  opacity: calc(min(1, max(0, (var(--ap) - 0.68) * 8)) * (1 - max(0, (var(--ap) - 0.9) * 8)));
+}
+.act-drop span {
+  position: absolute;
+  top: 26%;
+  width: 10px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgb(226 246 255 / 0.9), rgb(150 205 235 / 0.15));
+  filter: blur(1.5px);
+  height: calc(min(1, max(0, (var(--ap) - 0.7) * 6)) * 40svh);
+  transform: translate3d(calc(min(1, max(0, (var(--ap) - 0.7) * 6)) * 3vw), 0, 0)
+    scaleX(calc(1 + min(1, max(0, (var(--ap) - 0.7) * 6)) * 2.4));
+}
+.act-drop span:nth-child(1) { left: 47%; }
+.act-drop span:nth-child(2) { left: 51%; opacity: 0.75; }
+.act-drop span:nth-child(3) { left: 55%; opacity: 0.5; }
+.act-impact {
+  position: absolute;
+  z-index: 21;
+  left: 46%;
+  top: 62%;
+  height: 22svh;
+  width: 26vw;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgb(240 250 255 / 0.55), transparent 66%);
+  filter: blur(18px);
+  opacity: calc(min(1, max(0, (var(--ap) - 0.8) * 8)) * (1 - max(0, (var(--ap) - 0.95) * 12)));
+  transform: scale(calc(0.5 + min(1, max(0, (var(--ap) - 0.8) * 6))));
+}
+.act-stages {
+  margin-top: 1.4rem;
+  display: grid;
+  gap: 0.5rem;
+  max-width: 22rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: color-mix(in oklab, var(--ink) 62%, transparent);
+}
+.act-stages li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+  padding-bottom: 0.35rem;
+  opacity: calc((var(--ap) - var(--delay, 0)) * 8);
+}
+.act-status {
+  position: absolute;
+  z-index: 30;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  border: 1px solid color-mix(in oklab, var(--signal) 45%, transparent);
+  padding: 0.4rem 0.75rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--signal);
+  background: rgb(10 6 4 / 0.55);
+}
+
+/* ── Act X: reassessment sweep ── */
+.act-sweep {
+  position: absolute;
+  inset: 0;
+  z-index: 18;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    color-mix(in oklab, var(--aid) 22%, transparent) 48%,
+    transparent 52%
+  );
+  transform: translate3d(0, calc((var(--ap) - 0.5) * 130%), 0);
+  opacity: calc(min(1, var(--ap) * 4) * (1 - max(0, (var(--ap) - 0.85) * 6)));
+}
+
+/* ── Act XI: handoff ── */
+.act-handoff-list {
+  margin-top: 1.4rem;
+  display: grid;
+  gap: 0.6rem;
+  font-size: 1rem;
+  color: color-mix(in oklab, var(--ink) 78%, transparent);
+}
+.act-handoff-list li {
+  border-left: 2px solid var(--signal);
+  padding-left: 0.85rem;
+  opacity: calc((var(--ap) - var(--delay, 0)) * 8);
+  transform: translate3d(calc((1 - min(1, max(0, (var(--ap) - var(--delay, 0)) * 6))) * 18px), 0, 0);
+}
+
+/* ── Act XII: the pull-back ── */
+.act-pullback-photo {
+  transform: scale(calc(1.25 - var(--ap) * 0.55));
+  opacity: calc(1 - max(0, (var(--ap) - 0.1) * 2.6));
+}
+.act-pullback-map {
+  opacity: calc(max(0, (var(--ap) - 0.22) * 2.4));
+  transform: scale(calc(1.35 - var(--ap) * 0.35));
+}
+.act-graph {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 16;
+}
+.act-graph line {
+  stroke: color-mix(in oklab, var(--aid) 70%, transparent);
+  stroke-width: 1.25;
+  stroke-dasharray: 100;
+  stroke-dashoffset: calc(100 - max(0, (var(--ap) - var(--delay, 0)) * 320));
+}
+.act-graph-node {
+  position: absolute;
+  z-index: 18;
+  transform: translate(-50%, -50%);
+  border: 1px solid color-mix(in oklab, var(--aid) 55%, transparent);
+  background: rgb(5 10 18 / 0.75);
+  padding: 0.35rem 0.7rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: color-mix(in oklab, var(--ink) 76%, transparent);
+  opacity: calc((var(--ap) - var(--delay, 0)) * 8);
+  white-space: nowrap;
+}
+.act-reveal-copy {
+  position: absolute;
+  z-index: 30;
+  inset: auto 0 8svh 0;
+  text-align: center;
+  padding-inline: 1.25rem;
+  opacity: calc((var(--ap) - 0.6) * 4);
+}
+.act-reveal-copy .act-kicker { justify-content: center; }
+.act-chain {
+  margin: 1.4rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  max-width: 54rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: color-mix(in oklab, var(--ink) 62%, transparent);
+}
+.act-chain span { border: 1px solid rgb(255 255 255 / 0.16); padding: 0.35rem 0.7rem; }
+.act-final {
+  margin-top: 1.3rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.4vw, 1.9rem);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reel-media, .reel-cue::after, .act-node.is-alert { animation: none; }
+  .reel-line, .reel-title, .reel-foot { opacity: 1; animation: none; }
+}
