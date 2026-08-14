@@ -16,8 +16,13 @@ const posts = [
 /** Newsroom grid closing the narrative. */
 export function Newsroom() {
   return (
-    <section className="bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
-      <div className="mx-auto max-w-7xl px-6 sm:px-10">
+    <section className="relative bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
+      {/* soft transition out of the cinematic dark section above */}
+      <div
+        className="pointer-events-none absolute inset-x-0 -top-32 h-32 bg-[linear-gradient(180deg,rgba(6,12,22,1),rgba(6,12,22,0))]"
+        aria-hidden
+      />
+      <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
         <Reveal variant="mask">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <h2 className="display-cond text-[clamp(2.4rem,6vw,5rem)] text-[oklch(0.12_0.02_260)]">

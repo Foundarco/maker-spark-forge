@@ -9,12 +9,14 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { MotionConfig } from "framer-motion";
 
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Header } from "../components/site/Header";
 import { Footer } from "../components/site/Footer";
+import { SmoothScroll } from "../components/site/SmoothScroll";
 import { brand } from "../config/brand";
 import { SITE_URL } from "../lib/seo";
 
@@ -191,14 +193,16 @@ function RootComponent() {
       {isHQ || isChromeless ? (
         <Outlet />
       ) : (
-        <div className="site-theme flex min-h-dvh flex-col bg-background text-foreground">
-
-          <Header />
-          <main className="flex-1">
-            <Outlet />
-          </main>
-          <Footer />
-        </div>
+        <MotionConfig reducedMotion="user">
+          <div className="site-theme flex min-h-dvh flex-col bg-background text-foreground">
+            <SmoothScroll />
+            <Header />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+        </MotionConfig>
       )}
     </QueryClientProvider>
   );

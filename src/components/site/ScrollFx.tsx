@@ -26,6 +26,9 @@ export function ScrollFx() {
     const mo = new MutationObserver(() => collect());
     mo.observe(document.body, { childList: true, subtree: true });
 
+    // Heavy parallax is desktop-only; small/touch screens get plain reveals.
+    const rich = window.matchMedia("(min-width: 768px) and (pointer: fine)");
+
     const loop = () => {
       raf = requestAnimationFrame(loop);
       const vh = window.innerHeight;
@@ -33,6 +36,7 @@ export function ScrollFx() {
       const max = doc.scrollHeight - vh;
       bar.style.transform = `scaleX(${max > 0 ? Math.min(1, window.scrollY / max) : 0})`;
 
+      if (!rich.matches) return;
       for (const el of nodes) {
         const r = el.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) continue;

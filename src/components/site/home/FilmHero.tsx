@@ -1,5 +1,15 @@
 import { Link } from "@tanstack/react-router";
+import { motion, type Variants } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+
+const line: Variants = {
+  hidden: { y: "110%" },
+  shown: { y: "0%", transition: { duration: 0.95, ease: [0.22, 1, 0.36, 1] } },
+};
+const rise: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  shown: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+};
 import { ArrowUpRight } from "lucide-react";
 import ridgeDawn from "@/assets/hero-ridgeline-dawn.mp4.asset.json";
 import fireAerial from "@/assets/hero-fire-aerial.mp4.asset.json";
@@ -149,22 +159,30 @@ export function FilmHero() {
         <div className="film-grain pointer-events-none absolute inset-0" aria-hidden />
       </div>
 
-      <div
+      <motion.div
         ref={copy}
+        initial="hidden"
+        animate="shown"
+        variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.14, delayChildren: 0.15 } } }}
         className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-between px-6 pb-16 pt-36 will-change-transform sm:px-10"
       >
-        <h1 className="display-cond max-w-4xl animate-fade-in text-[clamp(4rem,13vw,11rem)] leading-[0.86] text-ink drop-shadow-[0_6px_40px_rgb(0_0_0/0.6)]">
-          See it sooner
+        <h1 className="display-cond max-w-4xl text-[clamp(4rem,13vw,11rem)] leading-[0.86] text-ink drop-shadow-[0_6px_40px_rgb(0_0_0/0.6)]">
+          <span className="block overflow-hidden">
+            <motion.span className="block" variants={line}>See it</motion.span>
+          </span>
+          <span className="block overflow-hidden">
+            <motion.span className="block" variants={line}>sooner</motion.span>
+          </span>
         </h1>
 
         <div className="max-w-xl">
-          <p className="text-xl leading-snug text-ink/90 sm:text-2xl">
+          <motion.p variants={rise} className="text-xl leading-snug text-ink/90 sm:text-2xl">
             Autonomous wildfire detection. Investigated from the air in minutes, not hours.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-3">
+          </motion.p>
+          <motion.div variants={rise} className="mt-7 flex flex-wrap items-center gap-3">
             <Link
               to="/mission"
-              className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-[var(--night)] transition-transform hover:scale-[1.03]"
+              className="inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-[var(--night)] transition-transform duration-200 ease-out hover:scale-[1.03]"
             >
               Our mission
               <ArrowUpRight className="h-4 w-4" aria-hidden />
@@ -173,16 +191,22 @@ export function FilmHero() {
               <span className="live-pulse h-1.5 w-1.5 rounded-full bg-[var(--signal)]" aria-hidden />
               {brand.status}
             </span>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Scroll cue */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.1, duration: 0.8 }}
+        className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex flex-col items-center gap-2"
+      >
+        <span className="font-mono text-[0.56rem] uppercase tracking-[0.3em] text-ink/55">Scroll</span>
         <span className="h-10 w-px overflow-hidden bg-white/20">
           <span className="block h-4 w-px animate-[cue_2.2s_ease-in-out_infinite] bg-[var(--signal)]" />
         </span>
-      </div>
+      </motion.div>
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { CountUp } from "@/components/site/CountUp";
 import sensor from "@/assets/wf-sensor.jpg";
 import transit from "@/assets/j-transit.jpg";
 import ops from "@/assets/j-ops.jpg";
@@ -49,6 +50,7 @@ export function ScrollStory() {
   const track = useRef<HTMLDivElement>(null);
   const panels = useRef<(HTMLDivElement | null)[]>([]);
   const plates = useRef<(HTMLDivElement | null)[]>([]);
+  const marks = useRef<(HTMLSpanElement | null)[]>([]);
   const bar = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -83,6 +85,11 @@ export function ScrollStory() {
           plate.style.opacity = opacity.toFixed(3);
           plate.style.visibility = opacity < 0.01 ? "hidden" : "visible";
           plate.style.transform = `translate3d(${((1 - inAmt) * 8 - outAmt * 8).toFixed(2)}%, 0, 0) scale(${(1.06 - inAmt * 0.05 + outAmt * 0.04).toFixed(4)})`;
+        }
+        const mark = marks.current[i];
+        if (mark) {
+          mark.style.opacity = (0.28 + opacity * 0.72).toFixed(3);
+          mark.style.transform = `scaleX(${(0.35 + opacity * 0.65).toFixed(3)})`;
         }
       });
     };
@@ -119,7 +126,13 @@ export function ScrollStory() {
                   {c.body}
                 </p>
                 <p className="mt-6 flex items-baseline gap-3">
-                  <span className="display-cond text-3xl text-[oklch(0.12_0.02_260)]">{c.stat[0]}</span>
+                  <span className="display-cond text-3xl text-[oklch(0.12_0.02_260)]">
+                    {/[0-9]/.test(c.stat[0]) && !c.stat[0].includes("/") ? (
+                      <CountUp value={c.stat[0]} />
+                    ) : (
+                      c.stat[0]
+                    )}
+                  </span>
                   <span className="text-xs uppercase tracking-[0.18em] text-[oklch(0.5_0.02_260)]">{c.stat[1]}</span>
                 </p>
               </div>
@@ -142,8 +155,21 @@ export function ScrollStory() {
           </div>
         </div>
 
-        {/* Progress rail */}
+        {/* Chapter markers */}
         <div className="pointer-events-none absolute inset-x-6 bottom-8 sm:inset-x-10">
+          <div className="mb-3 flex items-end gap-4">
+            {chapters.map((c, i) => (
+              <div key={c.kicker} className="flex flex-1 flex-col gap-1.5">
+                <span className="font-mono text-[0.58rem] uppercase tracking-[0.26em] text-[oklch(0.45_0.02_260)]">
+                  {c.kicker.split(" — ")[0]}
+                </span>
+                <span
+                  ref={(el) => { marks.current[i] = el; }}
+                  className="block h-[2px] w-full origin-left bg-[var(--signal)] opacity-30 will-change-transform"
+                />
+              </div>
+            ))}
+          </div>
           <span className="block h-px w-full bg-black/12">
             <span ref={bar} className="block h-px w-full origin-left scale-x-0 bg-[var(--signal)]" />
           </span>

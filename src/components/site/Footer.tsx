@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { Github, Instagram, Linkedin, Youtube } from "lucide-react";
 import { BrandLogo } from "./BrandLogo";
 import { brand } from "@/config/brand";
@@ -51,7 +52,13 @@ export function Footer() {
         aria-hidden
       />
 
-      <div className="mx-auto flex min-h-[86svh] w-full max-w-7xl flex-col justify-between px-6 pb-10 pt-24 sm:px-10">
+      <motion.div
+        initial={{ opacity: 0, y: 26 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto flex min-h-[86svh] w-full max-w-7xl flex-col justify-between px-6 pb-10 pt-24 sm:px-10"
+      >
         <div className="max-w-3xl">
           <h2 className="display-cond text-[clamp(2.6rem,8vw,7rem)] leading-[0.86] text-ink">
             See it sooner.
@@ -111,7 +118,7 @@ export function Footer() {
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }
