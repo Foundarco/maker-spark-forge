@@ -14,6 +14,7 @@ import { ActHandoff } from "./acts/ActHandoff";
 import { ActSystem } from "./acts/ActSystem";
 import { ActFuture } from "./acts/ActFuture";
 import { FilmFallback } from "./FilmFallback";
+import { SmoothWheel } from "./SmoothWheel";
 
 const UavStage = lazy(() => import("./UavStage"));
 
@@ -30,7 +31,9 @@ function pickMode(): Mode {
 
 /** The public film: twelve acts, one scroll engine, one WebGL context. */
 export function MissionStory() {
-  const [mode, setMode] = useState<Mode>("pending");
+  // the film is the default presentation — we only step down after we have
+  // measured the device, so the first paint is never the plain fallback
+  const [mode, setMode] = useState<Mode>("film");
 
   useEffect(() => {
     const update = () => setMode(pickMode());
@@ -43,7 +46,7 @@ export function MissionStory() {
     return () => mqs.forEach((m) => m.removeEventListener("change", update));
   }, []);
 
-  if (mode === "pending" || mode === "reduced") {
+  if (mode === "reduced") {
     return (
       <>
         <FilmFallback />
@@ -55,11 +58,13 @@ export function MissionStory() {
   return (
     <>
       <span className="film-progress" aria-hidden />
+      <SmoothWheel />
       <ClientOnly fallback={null}>
         <Suspense fallback={null}>
           <UavStage />
         </Suspense>
       </ClientOnly>
+
 
       <ActOpening />
       <ActLandscape />
