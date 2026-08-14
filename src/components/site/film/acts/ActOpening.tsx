@@ -1,43 +1,45 @@
 import { useEffect, useRef, useState } from "react";
 import ridgeline from "@/assets/hero-ridgeline-dawn.mp4.asset.json";
+import houseBurning from "@/assets/reel-house-burning.mp4.asset.json";
+import evacuees from "@/assets/reel-evacuees.mp4.asset.json";
+import aftermathClip from "@/assets/reel-aftermath.mp4.asset.json";
 import fire from "@/assets/act-fire.jpg";
 import aftermath from "@/assets/act-aftermath.jpg";
-import install from "@/assets/act-install.jpg";
-import uavStill from "@/assets/j-uav.jpg";
 import california from "@/assets/f-california.jpg";
 
-const SHOT_MS = 3400;
+const SHOT_MS = 4600;
 
-type Shot = { kind: "video"; src: string; poster: string; alt: string } | { kind: "image"; src: string; alt: string };
+type Shot = { src: string; poster: string; alt: string };
 
-/** The opening reel. Cut, don't dissolve — this is a film title sequence. */
+/** The opening reel — cut scenes of what a wildfire actually does. */
 const reel: Shot[] = [
-  { kind: "image", src: fire, alt: "A wildfire burning along a forested ridge at dusk" },
-  { kind: "image", src: aftermath, alt: "A person standing in the ashes of a burned structure" },
-  { kind: "image", src: uavStill, alt: "An uncrewed aircraft in flight above mountain country" },
-  { kind: "video", src: ridgeline.url, poster: california, alt: "Flight over California ridgelines at dawn" },
-  { kind: "image", src: install, alt: "A field engineer installing an environmental sensor on a tree" },
+  { src: houseBurning.url, poster: fire, alt: "A home engulfed in wildfire flames at night" },
+  { src: evacuees.url, poster: aftermath, alt: "A family on a rural road watching a distant smoke column" },
+  { src: aftermathClip.url, poster: aftermath, alt: "A burned neighbourhood at dawn, smoking rubble and ash" },
+  { src: ridgeline.url, poster: california, alt: "Flight over California ridgelines at dawn" },
 ];
 
 export function ActOpening() {
   const [shot, setShot] = useState(0);
-  const video = useRef<HTMLVideoElement>(null);
+  const videos = useRef<(HTMLVideoElement | null)[]>([]);
 
   useEffect(() => {
     const id = window.setInterval(() => setShot((s) => (s + 1) % reel.length), SHOT_MS);
     return () => window.clearInterval(id);
   }, []);
 
-  // exactly one video, and it only decodes while its own shot is on screen
+  // exactly one video decodes at a time; the next one is warmed just before its cut
   useEffect(() => {
-    const el = video.current;
-    if (!el) return;
-    const active = reel[shot]?.kind === "video";
-    if (active) void el.play().catch(() => {});
-    else {
-      el.pause();
-      el.currentTime = 0;
-    }
+    videos.current.forEach((el, i) => {
+      if (!el) return;
+      if (i === shot) {
+        el.currentTime = 0;
+        void el.play().catch(() => {});
+      } else {
+        el.pause();
+        if (i === (shot + 1) % reel.length && el.preload !== "auto") el.preload = "auto";
+      }
+    });
   }, [shot]);
 
   return (
@@ -51,30 +53,20 @@ export function ActOpening() {
           className="reel-shot"
           style={{ opacity: i === shot ? 1 : 0, visibility: i === shot ? "visible" : "hidden" }}
         >
-          {s.kind === "video" ? (
-            <video
-              ref={video}
-              className="reel-media"
-              muted
-              loop
-              playsInline
-              preload="none"
-              poster={s.poster}
-              aria-label={s.alt}
-            >
-              <source src={s.src} type="video/mp4" />
-            </video>
-          ) : (
-            <img
-              src={s.src}
-              alt={i === 0 ? s.alt : ""}
-              aria-hidden={i !== 0}
-              className="reel-media"
-              width={1920}
-              height={1080}
-              {...(i === 0 ? { fetchPriority: "high" as const } : { loading: "lazy" as const })}
-            />
-          )}
+          <video
+            ref={(el) => {
+              videos.current[i] = el;
+            }}
+            className="reel-media"
+            muted
+            loop
+            playsInline
+            preload={i === 0 ? "auto" : "none"}
+            poster={s.poster}
+            aria-label={s.alt}
+          >
+            <source src={s.src} type="video/mp4" />
+          </video>
         </div>
       ))}
 
@@ -83,10 +75,10 @@ export function ActOpening() {
 
       <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-20 sm:px-8 sm:pb-24">
         <p className="reel-line" style={{ animationDelay: "0.4s" }}>
-          Something starts.
+          This is what it costs.
         </p>
         <p className="reel-line" style={{ animationDelay: "2.4s" }}>
-          Somewhere nobody is watching.
+          It starts somewhere nobody is watching.
         </p>
         <h1 className="reel-title display-cond text-[clamp(3.2rem,10vw,8rem)] leading-[0.88] text-ink">
           See the fire sooner.
