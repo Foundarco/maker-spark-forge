@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { FilmHero } from "@/components/site/home/FilmHero";
+import { MissionFilm } from "@/components/site/film/MissionFilm";
 import { Statement } from "@/components/site/home/Statement";
 import { ScrollStory } from "@/components/site/home/ScrollStory";
 import { QuoteBanner } from "@/components/site/home/QuoteBanner";
