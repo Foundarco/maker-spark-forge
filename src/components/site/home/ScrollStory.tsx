@@ -71,20 +71,25 @@ export function ScrollStory() {
 
       chapters.forEach((_, i) => {
         const local = p - i; // 0 → 1 while this chapter owns the stage
-        const inAmt = clamp(local / 0.45);
-        const outAmt = clamp((local - 0.85) / 0.35);
-        const opacity = inAmt * (1 - outAmt);
+        // Plates cross-dissolve slowly; copy swaps quickly so two chapters
+        // never read on top of each other.
+        const plateIn = clamp(local / 0.45);
+        const plateOut = clamp((local - 0.85) / 0.35);
+        const plateOpacity = plateIn * (1 - plateOut);
+        const textIn = clamp((local - 0.06) / 0.24);
+        const textOut = clamp((local - 0.82) / 0.16);
+        const opacity = textIn * (1 - textOut);
         const panel = panels.current[i];
         const plate = plates.current[i];
         if (panel) {
           panel.style.opacity = opacity.toFixed(3);
           panel.style.visibility = opacity < 0.01 ? "hidden" : "visible";
-          panel.style.transform = `translate3d(0, ${((1 - inAmt) * 70 - outAmt * 60).toFixed(1)}px, 0)`;
+          panel.style.transform = `translate3d(0, ${((1 - textIn) * 70 - textOut * 60).toFixed(1)}px, 0)`;
         }
         if (plate) {
-          plate.style.opacity = opacity.toFixed(3);
-          plate.style.visibility = opacity < 0.01 ? "hidden" : "visible";
-          plate.style.transform = `translate3d(${((1 - inAmt) * 8 - outAmt * 8).toFixed(2)}%, 0, 0) scale(${(1.06 - inAmt * 0.05 + outAmt * 0.04).toFixed(4)})`;
+          plate.style.opacity = plateOpacity.toFixed(3);
+          plate.style.visibility = plateOpacity < 0.01 ? "hidden" : "visible";
+          plate.style.transform = `translate3d(${((1 - plateIn) * 8 - plateOut * 8).toFixed(2)}%, 0, 0) scale(${(1.06 - plateIn * 0.05 + plateOut * 0.04).toFixed(4)})`;
         }
         const mark = marks.current[i];
         if (mark) {
