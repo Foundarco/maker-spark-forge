@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { FilmHero } from "@/components/site/home/FilmHero";
 import { Statement } from "@/components/site/home/Statement";
 import { ScrollStory } from "@/components/site/home/ScrollStory";
@@ -70,15 +71,33 @@ function HomePage() {
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
             {brand.shortMission}
           </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <CTAButton to="/donate" variant="primary">Support the mission</CTAButton>
-            <CTAButton to="/join" variant="ghost" className="border border-border text-ink hover:bg-surface">
-              Build with us
-            </CTAButton>
-            <CTAButton to="/partners" variant="ghost" className="border border-border text-ink hover:bg-surface">
-              Partner with us
-            </CTAButton>
-          </div>
+          <motion.div
+            className="mt-9 flex flex-wrap justify-center gap-3"
+            initial="hidden"
+            whileInView="shown"
+            viewport={{ once: true, amount: 0.5 }}
+            variants={{ hidden: {}, shown: { transition: { staggerChildren: 0.12 } } }}
+          >
+            {[
+              <CTAButton key="donate" to="/donate" variant="primary">Support the mission</CTAButton>,
+              <CTAButton key="join" to="/join" variant="ghost" className="border border-border text-ink hover:bg-surface">
+                Build with us
+              </CTAButton>,
+              <CTAButton key="partners" to="/partners" variant="ghost" className="border border-border text-ink hover:bg-surface">
+                Partner with us
+              </CTAButton>,
+            ].map((btn, i) => (
+              <motion.div
+                key={i}
+                variants={{
+                  hidden: { opacity: 0, y: 22 },
+                  shown: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+                }}
+              >
+                {btn}
+              </motion.div>
+            ))}
+          </motion.div>
         </Reveal>
       </Section>
     </>
