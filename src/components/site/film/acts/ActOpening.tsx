@@ -95,7 +95,7 @@ export function ActOpening() {
               January. Winds at sixty.
             </p>
             <p
-              className="reel-line !text-center text-[clamp(1rem,2.4vw,1.5rem)] opacity-0 [animation:reel-in_2.4s_ease_forwards]"
+              className="max-w-2xl text-[clamp(1.1rem,2.6vw,1.7rem)] font-light leading-snug text-ink/80 opacity-0 [animation:reel-in_2.4s_ease_forwards]"
               style={{ animationDelay: "3.2s" }}
             >
               A whole neighbourhood, gone before anyone could reach it.
