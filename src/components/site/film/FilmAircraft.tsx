@@ -157,6 +157,6 @@ export default function FilmAircraft({
     h("ambientLight", { intensity: 0.75 }),
     h("directionalLight", { position: [5, 6, 4], intensity: 2.4, color: "#ffe6c2" }),
     h("directionalLight", { position: [-6, -1, -5], intensity: 0.7, color: "#7dd3fc" }),
-    h(Suspense, { fallback: null }, h(Airframe, { progress })),
+    h(Suspense, { fallback: null }, h("group", { position: [0.75, -0.5, 0] }, h(Airframe, { progress }))),
   );
 }
