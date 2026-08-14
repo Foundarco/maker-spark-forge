@@ -54,7 +54,7 @@ function HomePage() {
   return (
     <>
       <ScrollFx />
-      <FilmHero />
+      <MissionFilm />
       <Statement />
       <ScrollStory />
       <QuoteBanner />
