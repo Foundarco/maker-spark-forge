@@ -57,6 +57,7 @@ export function MissionFilm() {
     const small = window.matchMedia("(max-width: 760px)");
     const update = () => setMode(reduce.matches || small.matches ? "reduced" : "film");
     update();
+    console.log("FILM mode init", reduce.matches, small.matches);
     reduce.addEventListener("change", update);
     small.addEventListener("change", update);
     return () => {
