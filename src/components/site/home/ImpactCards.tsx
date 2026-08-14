@@ -5,7 +5,7 @@ import opsRoom from "@/assets/wf-ops.jpg";
 
 const cards = [
   { img: ridge, alt: "Ridgeline at dawn", stat: "24/7/365", label: "Operations Center coverage by design" },
-  { img: bench, alt: "Prototype hardware on the bench", stat: "Mission 01", label: "Wildfire detection and UAV investigation" },
+  { img: bench, alt: "Prototype hardware on the bench", stat: "Wildfire", label: "Detection and UAV response" },
   { img: opsRoom, alt: "Operations console", stat: "0", label: "Deployments yet — we are building in public" },
 ] as const;
 

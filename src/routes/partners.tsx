@@ -63,7 +63,7 @@ function PartnersPage() {
         <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
           <PageHeader
             eyebrow="Partners"
-            title="Partner with us on Mission 01."
+            title="Partner with us."
             lede="We do not list partners we do not have. These are the four tracks where collaboration would move the wildfire system forward right now."
           />
         </div>
@@ -103,7 +103,7 @@ function PartnersPage() {
               <SectionLabel n="05" tone="light">What you should know first</SectionLabel>
               <ul className="mt-8 space-y-3 text-base text-muted-foreground">
                 {[
-                  "The system is in development; nothing is deployed operationally.",
+                  "Nothing is deployed operationally yet.",
                   "We publish an honest development timeline and update it as stages move.",
                   "We do not publish performance figures we have not measured.",
                   "Our Operations Center runs 24/7/365 and is the coordination point for everything.",

@@ -6,7 +6,7 @@ import { phases, expansion } from "@/config/system";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
 
-const title = `Development Status — Building Mission 01 | ${brand.name}`;
+const title = `Development Status | ${brand.name}`;
 const desc =
   "An honest development timeline: research, system design, prototype, field testing, pilot, and eventual deployment. Nothing is operationally deployed yet.";
 
@@ -33,7 +33,7 @@ function DevelopmentPage() {
         <div className="mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-24">
           <PageHeader
             eyebrow="Development status"
-            title="Building Mission 01, in public."
+            title="Building it in public."
             lede="We are an early-stage organization. Nothing described on this site is operationally deployed. Here is exactly where the programme stands and what has to happen next."
           />
         </div>

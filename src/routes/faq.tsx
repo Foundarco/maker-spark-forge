@@ -15,7 +15,7 @@ const faqs = [
   },
   {
     q: "Is the system deployed?",
-    a: "No. We are early-stage and in development. Prototype work is in progress, field testing is ahead of us, and no sensor network or aircraft is in operational service. Our development status page describes exactly where each stage stands.",
+    a: "No. We are early-stage. Prototype work is in progress, field testing is ahead of us, and no sensor network or aircraft is in operational service. Our status page describes exactly where each stage stands.",
   },
   {
     q: "Are you a disaster-relief or humanitarian aid organization?",

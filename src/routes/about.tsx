@@ -52,7 +52,7 @@ function AboutPage() {
               Alongside the engineering, we run a {brand.opsCenter} — the part of the organization that already
               operates continuously, and the seat from which every future mission will be coordinated.
             </p>
-            <p className="text-ink">{brand.status}. Prototype in progress. Building Mission 01.</p>
+            <p className="text-ink">Prototype in progress. Building the wildfire response system.</p>
           </Reveal>
           <Reveal delay={120}>
             <img

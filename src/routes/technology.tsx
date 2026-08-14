@@ -37,7 +37,7 @@ function TechnologyPage() {
           <PageHeader
             eyebrow="Technology"
             title="Sensors on the ground. Eyes in the air. Software in between."
-            lede="Four technology tracks, developed together. Everything described here is in development or prototype unless stated otherwise."
+            lede="Four technology tracks, developed together."
           />
         </div>
       </div>

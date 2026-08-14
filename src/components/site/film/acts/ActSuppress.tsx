@@ -69,7 +69,7 @@ export function ActSuppress() {
       </div>
 
       <span className="act-status" aria-hidden>
-        Planned capability · in development
+        Designed capability
       </span>
       {/* keeps the ramp helper honest for future tuning */}
       <span hidden>{ramp(0, 0, 1)}</span>

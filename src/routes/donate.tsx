@@ -49,7 +49,7 @@ function DonatePage() {
           <PageHeader
             eyebrow="Support the mission"
             title="Fund the prototype, not the press release."
-            lede="We are building Mission 01 — autonomous wildfire detection and UAV investigation. Support at this stage buys parts, test days, and engineering time."
+            lede="We are building autonomous wildfire detection and UAV response. Support at this stage buys parts, test days, and engineering time."
           />
         </div>
       </section>

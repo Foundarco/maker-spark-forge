@@ -169,15 +169,15 @@ export const opsResponsibilities = [
   "Maintaining situational awareness across the network",
 ];
 
-export type UavCapability = { title: string; body: string; state: "In development" | "Planned" | "Prototype" };
+export type UavCapability = { title: string; body: string; state: "Active" | "Planned" | "Prototype" };
 
 export const uavCapabilities: UavCapability[] = [
-  { title: "Rapid deployment", body: "Designed to launch on an assigned mission shortly after an alert is reviewed.", state: "In development" },
-  { title: "Autonomous or assisted navigation", body: "Waypoint navigation toward the event with operator oversight and takeover.", state: "In development" },
+  { title: "Rapid deployment", body: "Designed to launch on an assigned mission shortly after an alert is reviewed.", state: "Prototype" },
+  { title: "Autonomous or assisted navigation", body: "Waypoint navigation toward the event with operator oversight and takeover.", state: "Prototype" },
   { title: "Thermal imaging", body: "Heat signatures through smoke, haze, and darkness where optical imagery falls short.", state: "Prototype" },
   { title: "RGB / optical imaging", body: "Human-readable imagery of the event and the terrain around it.", state: "Prototype" },
-  { title: "Location awareness", body: "Georeferenced position tied to every frame and telemetry sample.", state: "In development" },
-  { title: "Real-time communications", body: "Live link to the Operations Center for telemetry and imagery.", state: "In development" },
+  { title: "Location awareness", body: "Georeferenced position tied to every frame and telemetry sample.", state: "Prototype" },
+  { title: "Real-time communications", body: "Live link to the Operations Center for telemetry and imagery.", state: "Prototype" },
   { title: "Persistent observation", body: "Remaining on station to keep eyes on a developing situation.", state: "Planned" },
 ];
 
