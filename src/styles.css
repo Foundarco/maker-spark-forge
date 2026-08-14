@@ -646,3 +646,229 @@
 @media (prefers-reduced-motion: reduce) {
   .film-grain { animation: none; }
 }
+
+/* ── Mission film: one continuous cinematic stage ───────────────────── */
+.film-stage {
+  --p: 0;
+  --t: 0;
+  --net: 0;
+  --alert: 0;
+  --map: 0;
+  --reticle: 0;
+  --thermal: 0;
+  --confirm: 0;
+  --water: 0;
+  --scan: 0;
+  --reveal: 0;
+  --vel: 0;
+  contain: strict;
+}
+
+.film-plate {
+  position: absolute;
+  inset: -6%;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.film-media {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* RGB → thermal is the same frame, re-mapped, never a swapped picture */
+.film-thermal {
+  position: absolute;
+  inset: 0;
+  opacity: var(--thermal);
+  filter: grayscale(1) contrast(1.55) brightness(1.06) sepia(1) hue-rotate(-32deg)
+    saturate(4.4);
+  mix-blend-mode: screen;
+}
+
+.film-grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, color-mix(in oklab, var(--night) 84%, transparent), transparent 66%),
+    linear-gradient(180deg, color-mix(in oklab, var(--night) 40%, transparent), transparent 34%,
+      color-mix(in oklab, var(--night) 78%, transparent)),
+    radial-gradient(120% 90% at 50% 50%, transparent 42%, color-mix(in oklab, var(--night) 62%, transparent));
+}
+
+/* sensor mesh */
+.film-net {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: var(--net);
+}
+.film-net path {
+  stroke: color-mix(in oklab, var(--aid) 60%, transparent);
+  stroke-width: 1;
+  stroke-dasharray: 3 7;
+}
+.film-node {
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 999px;
+  background: var(--aid);
+  box-shadow: 0 0 0 6px color-mix(in oklab, var(--aid) 14%, transparent);
+  animation: film-ping 2.6s ease-out infinite;
+}
+@keyframes film-ping {
+  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--aid) 40%, transparent); }
+  100% { box-shadow: 0 0 0 26px transparent; }
+}
+
+/* detection bloom */
+.film-alert {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: var(--alert);
+  background: radial-gradient(26% 26% at 42% 56%,
+    color-mix(in oklab, var(--signal) 55%, transparent), transparent 70%);
+}
+
+/* operations map surface */
+.film-map {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: var(--map);
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--aid) 16%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--aid) 16%, transparent) 1px, transparent 1px);
+  background-size: 74px 74px, 74px 74px;
+}
+.film-route {
+  stroke: var(--signal);
+  stroke-width: 2;
+  stroke-dasharray: 340;
+  stroke-dashoffset: calc(340 - 340 * var(--map));
+  filter: drop-shadow(0 0 10px color-mix(in oklab, var(--signal) 60%, transparent));
+}
+
+/* payload reticle */
+.film-reticle {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  opacity: var(--reticle);
+}
+.film-reticle-box {
+  position: absolute;
+  left: 52%;
+  top: 52%;
+  height: clamp(120px, 20vw, 230px);
+  width: clamp(120px, 20vw, 230px);
+  translate: -50% -50%;
+  border: 1px solid color-mix(in oklab, var(--signal) 80%, transparent);
+  outline: 1px solid color-mix(in oklab, var(--signal) 18%, transparent);
+  outline-offset: 12px;
+  scale: calc(1 + 0.05 * var(--vel));
+}
+.film-reticle-h,
+.film-reticle-v {
+  position: absolute;
+  background: color-mix(in oklab, var(--signal) 34%, transparent);
+}
+.film-reticle-h { left: 0; right: 0; top: 52%; height: 1px; }
+.film-reticle-v { top: 0; bottom: 0; left: 52%; width: 1px; }
+
+.film-confirm {
+  position: absolute;
+  left: 52%;
+  top: calc(52% + clamp(70px, 11vw, 130px));
+  z-index: 25;
+  translate: -50% 0;
+  opacity: var(--confirm);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: var(--signal);
+  border: 1px solid color-mix(in oklab, var(--signal) 55%, transparent);
+  padding: 0.4rem 0.8rem;
+  background: color-mix(in oklab, var(--night) 55%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+/* suppression release */
+.film-water {
+  position: absolute;
+  inset: 0;
+  z-index: 22;
+  pointer-events: none;
+  opacity: var(--water);
+}
+.film-water span {
+  position: absolute;
+  top: 34%;
+  width: clamp(60px, 8vw, 120px);
+  height: 46%;
+  border-radius: 50% 50% 42% 42%;
+  background: linear-gradient(180deg,
+    color-mix(in oklab, var(--aid) 62%, transparent),
+    color-mix(in oklab, var(--aid) 6%, transparent));
+  filter: blur(6px);
+  animation: film-drop 1.5s ease-in infinite;
+}
+.film-water span:nth-child(1) { left: 44%; animation-delay: 0s; }
+.film-water span:nth-child(2) { left: 51%; animation-delay: -0.5s; opacity: 0.75; }
+.film-water span:nth-child(3) { left: 58%; animation-delay: -1s; opacity: 0.55; }
+@keyframes film-drop {
+  0% { transform: translate3d(0, -22%, 0) scaleY(0.5); opacity: 0; }
+  35% { opacity: 1; }
+  100% { transform: translate3d(6%, 34%, 0) scaleY(1.25); opacity: 0; }
+}
+
+/* reassessment sweep */
+.film-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  pointer-events: none;
+  opacity: var(--scan);
+  background: linear-gradient(180deg, transparent 42%,
+    color-mix(in oklab, var(--aid) 26%, transparent) 50%, transparent 58%);
+  animation: film-sweep 3.4s linear infinite;
+}
+@keyframes film-sweep {
+  from { background-position: 0 -60%; }
+  to { background-position: 0 160%; }
+}
+
+.film-copy { will-change: transform, opacity; }
+
+.film-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 2.1rem;
+  z-index: 30;
+  translate: -50% 0;
+  opacity: calc(1 - var(--p) * 26);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--ink, white) 62%, transparent);
+  animation: film-bob 2.6s ease-in-out infinite;
+}
+@keyframes film-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-node, .film-water span, .film-scan, .film-cue { animation: none; }
+}
