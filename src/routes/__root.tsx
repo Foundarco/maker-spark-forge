@@ -195,7 +195,7 @@ function RootComponent() {
       ) : (
         <MotionConfig reducedMotion="user">
           <div className="site-theme flex min-h-dvh flex-col bg-background text-foreground">
-            <SmoothScroll />
+            <Header />
             <Header />
             <main className="flex-1">
               <Outlet />
