@@ -14,6 +14,7 @@ import { ActHandoff } from "./acts/ActHandoff";
 import { ActSystem } from "./acts/ActSystem";
 import { ActFuture } from "./acts/ActFuture";
 import { FilmFallback } from "./FilmFallback";
+import { SmoothWheel } from "./SmoothWheel";
 
 const UavStage = lazy(() => import("./UavStage"));
 
