@@ -12,49 +12,54 @@ const rows = [
   { label: "Operator review", state: "In progress" },
 ];
 
-/** Format: a real room, with a restrained operational layer docked beside it. */
+/** Page form: the room, the queue, and who is accountable for the call. */
 export function ActOps() {
   return (
-    <Act id="act-ops" label={copy.title} vh={230} stageClassName="bg-[#05080e]">
-      <img
-        src={operator}
-        alt="An operator reviewing incident maps at a monitoring console"
-        className="act-media act-slide-left"
-        width={1920}
-        height={1080}
-        loading="lazy"
-      />
-      <div className="act-grade-cool" aria-hidden />
+    <Act id="act-ops" label={copy.title} pinned={false} stageClassName="pg-sec">
+      <div className="pg-in">
+        <div className="pg-grid">
+          <div className="pg-rise">
+            <p className="act-kicker text-[var(--aid)]">
+              <span>{copy.code}</span>
+              <span className="act-rule" />
+              {copy.kicker}
+            </p>
+            <h2 className="pg-title">{copy.title}</h2>
+            <p className="pg-line">{copy.line}</p>
+            <p className="pg-sub">{copy.detail}</p>
+            <div className="mt-7">
+              <OversightLockup compact />
+            </div>
+          </div>
 
-      <aside className="act-panel" aria-hidden>
-        <p className="act-panel-head">Incident · under review</p>
-        <ul className="act-panel-rows">
-          {rows.map((r, i) => (
-            <li key={r.label} style={{ ["--delay" as string]: (0.24 + i * 0.09).toFixed(2) }}>
-              <span>{r.label}</span>
-              <span className="act-panel-state">{r.state}</span>
-            </li>
-          ))}
-        </ul>
-        <div className="act-panel-map">
-          <svg viewBox="0 0 200 120" preserveAspectRatio="none" aria-hidden>
-            <path className="act-panel-route" d="M18 96 C 70 88, 104 52, 158 34" fill="none" vectorEffect="non-scaling-stroke" />
-            <circle cx="158" cy="34" r="4" />
-          </svg>
-        </div>
-      </aside>
+          <div className="grid gap-4">
+            <figure className="pg-figure pg-rise" style={{ aspectRatio: "16 / 10" }}>
+              <img
+                src={operator}
+                alt="An operator reviewing incident maps at a monitoring console"
+                width={1600}
+                height={1000}
+                loading="lazy"
+              />
+              <figcaption>Operations Center · incident review</figcaption>
+            </figure>
 
-      <div className="act-copy act-copy-left">
-        <p className="act-kicker text-[var(--aid)]">
-          <span>{copy.code}</span>
-          <span className="act-rule" />
-          {copy.kicker}
-        </p>
-        <h2 className="act-title">{copy.title}</h2>
-        <p className="act-line">{copy.line}</p>
-        <p className="act-detail">{copy.detail}</p>
-        <div className="mt-6">
-          <OversightLockup compact />
+            <div className="pg-card pg-rise">
+              <h3>Incident · under review</h3>
+              <ul className="mt-3 grid gap-2 pg-stagger">
+                {rows.map((r, i) => (
+                  <li
+                    key={r.label}
+                    style={{ ["--i" as string]: i }}
+                    className="flex items-center justify-between border-b border-white/8 pb-2 font-mono text-[0.58rem] uppercase tracking-[0.16em] text-ink/60"
+                  >
+                    <span>{r.label}</span>
+                    <span className="text-[var(--signal)]">{r.state}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </Act>

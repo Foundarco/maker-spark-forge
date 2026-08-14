@@ -4,37 +4,47 @@ import responders from "@/assets/act-responders.jpg";
 
 const copy = acts[10]!;
 
-const delivered = ["Where it is", "What it looks like", "What changed since the alert"];
+const delivered = [
+  ["Location", "Coordinates, access roads and the nearest approach."],
+  ["Imagery", "What the camera and the thermal sensor actually saw."],
+  ["Change", "What moved between the first alert and the last pass."],
+];
 
-/** Format: the human moment. Warm, wide, almost no technical furniture. */
+/** Page form: the human moment, written like a page in a report. */
 export function ActHandoff() {
   return (
-    <Act id="act-handoff" label={copy.title} vh={210} stageClassName="bg-[#100b07]">
-      <img
-        src={responders}
-        alt="Two wildland firefighters walking a fire road at golden hour"
-        className="act-media act-push"
-        width={1920}
-        height={1080}
-        loading="lazy"
-      />
-      <div className="act-grade-golden" aria-hidden />
+    <Act id="act-handoff" label={copy.title} pinned={false} stageClassName="pg-sec">
+      <div className="pg-in">
+        <div className="pg-grid pg-grid-wide">
+          <div className="pg-rise">
+            <p className="act-kicker text-[var(--signal)]">
+              <span>{copy.code}</span>
+              <span className="act-rule" />
+              {copy.kicker}
+            </p>
+            <h2 className="pg-title">{copy.title}</h2>
+            <p className="pg-line">{copy.line}</p>
+            <ul className="pg-list pg-stagger">
+              {delivered.map(([h, p], i) => (
+                <li key={h} style={{ ["--i" as string]: i }}>
+                  <span>{h}</span>
+                  <span>{p}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      <div className="act-copy act-copy-left act-copy-low">
-        <p className="act-kicker text-[var(--signal)]">
-          <span>{copy.code}</span>
-          <span className="act-rule" />
-          {copy.kicker}
-        </p>
-        <h2 className="act-title">{copy.title}</h2>
-        <p className="act-line">{copy.line}</p>
-        <ul className="act-handoff-list">
-          {delivered.map((d, i) => (
-            <li key={d} style={{ ["--delay" as string]: (0.3 + i * 0.08).toFixed(2) }}>
-              {d}
-            </li>
-          ))}
-        </ul>
+          <figure className="pg-figure pg-rise" style={{ aspectRatio: "4 / 3" }}>
+            <img
+              src={responders}
+              alt="Two wildland firefighters walking a fire road at golden hour"
+              width={1600}
+              height={1200}
+              loading="lazy"
+            />
+            <figcaption>Handoff · the people already moving</figcaption>
+          </figure>
+        </div>
       </div>
     </Act>
   );
