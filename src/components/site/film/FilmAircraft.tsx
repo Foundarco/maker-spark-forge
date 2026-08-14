@@ -22,21 +22,21 @@ const win = (v: number, a: number, b: number, c: number, d: number) => range(v, 
  */
 const route = new CatmullRomCurve3(
   [
-    new Vector3(-6.4, 1.9, -6.5), // 01 distant entry
-    new Vector3(-3.2, 1.1, -2.2), // 02 camera catches it
-    new Vector3(-0.6, 0.55, 0.4), // 03 escort / passes near
-    new Vector3(2.4, 1.15, -1.6), // 04 climbs away over sensor terrain
-    new Vector3(0.9, 1.6, -4.2), // 05 anomaly, high and small
-    new Vector3(0.15, 1.15, -6.6), // 06 ops map: mission object
-    new Vector3(-2.6, 0.9, -4.0), // 07 dispatch turn
-    new Vector3(-1.1, 0.35, -0.6), // 08 accelerates back in
-    new Vector3(1.9, 0.05, 0.8), // 09 rgb pass
-    new Vector3(0.6, -0.25, -0.4), // 10 thermal orbit
-    new Vector3(-1.6, -0.15, -1.2), // 11 confirmation
-    new Vector3(0.2, -0.55, 0.6), // 12 suppression run
-    new Vector3(2.2, 0.25, -1.4), // 13 reassessment climb
-    new Vector3(0.4, 0.9, -3.6), // 14 handoff
-    new Vector3(-0.2, 1.3, -8.5), // 15 pull back
+    new Vector3(-4.61, 1.23, -6.5), // 01 distant entry
+    new Vector3(-2.30, 0.73, -2.2), // 02 camera catches it
+    new Vector3(-0.43, 0.39, 0.4), // 03 escort / passes near
+    new Vector3(1.73, 0.76, -1.6), // 04 climbs away over sensor terrain
+    new Vector3(0.65, 1.04, -4.2), // 05 anomaly, high and small
+    new Vector3(0.11, 0.76, -6.6), // 06 ops map: mission object
+    new Vector3(-1.87, 0.61, -4.0), // 07 dispatch turn
+    new Vector3(-0.79, 0.27, -0.6), // 08 accelerates back in
+    new Vector3(1.37, 0.08, 0.8), // 09 rgb pass
+    new Vector3(0.43, -0.10, -0.4), // 10 thermal orbit
+    new Vector3(-1.15, -0.04, -1.2), // 11 confirmation
+    new Vector3(0.14, -0.29, 0.6), // 12 suppression run
+    new Vector3(1.58, 0.21, -1.4), // 13 reassessment climb
+    new Vector3(0.29, 0.61, -3.6), // 14 handoff
+    new Vector3(-0.14, 0.86, -8.5), // 15 pull back
   ],
   false,
   "catmullrom",
@@ -110,7 +110,7 @@ function Airframe({ progress }: { progress: RefObject<number> }) {
 
   return h(
     "group",
-    { ref: group, position: [-6.4, 1.9, -6.5] },
+    { ref: group, position: [-4.6, 1.23, -6.5] },
     h(
       "group",
       { ref: tilt },
