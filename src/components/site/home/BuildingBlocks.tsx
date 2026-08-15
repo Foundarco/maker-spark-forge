@@ -4,7 +4,19 @@ import { ArrowUpRight } from "lucide-react";
 import bench from "@/assets/wf-bench.jpg";
 import uav from "@/assets/j-uav.jpg";
 
-const tiles = [
+type Tile = {
+  span: string;
+  tone: "signal" | "sheet" | "surface" | "photo";
+  label: string;
+  title: string;
+  body?: string;
+  img?: string;
+  alt?: string;
+  to?: "/development" | "/join";
+  cta?: string;
+};
+
+const tiles: Tile[] = [
   {
     span: "sm:col-span-2 sm:row-span-2",
     tone: "signal",
@@ -27,7 +39,7 @@ const tiles = [
     to: "/join" as const,
     cta: "Join the team",
   },
-] as const;
+];
 
 /** A bento board of what actually exists today — no inflated numbers. */
 export function BuildingBlocks() {
