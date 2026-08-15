@@ -4,7 +4,7 @@ import { ArrowRight, Hand, Sparkles } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Uav3D } from "./Uav3D";
 
-const line = "See the fire while it is still small.";
+const line = "Get there before it is big.";
 
 /** A cursor-reactive tile: it tips a few degrees toward the pointer. */
 function TiltCard({
@@ -91,7 +91,7 @@ export function HeroBento() {
               className="pill"
             >
               <Sparkles className="h-3.5 w-3.5" aria-hidden />
-              A nonprofit building wildfire tech in the open
+              A nonprofit building disaster-response tech in the open
             </motion.span>
 
             <h1 className="mt-7 text-[clamp(2.6rem,6.2vw,5.2rem)] font-extrabold leading-[0.95] tracking-tight text-ink">
@@ -103,7 +103,7 @@ export function HeroBento() {
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
                   transition={{ delay: 0.12 + i * 0.06, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {w === "small." ? <em className="not-italic text-[var(--signal)]">{w}</em> : w}
+                  {w === "big." ? <em className="not-italic text-[var(--signal)]">{w}</em> : w}
                   &nbsp;
                 </motion.span>
               ))}
@@ -115,8 +115,9 @@ export function HeroBento() {
               transition={{ delay: 0.6, duration: 0.7 }}
               className="mt-6 max-w-xl text-lg leading-relaxed text-ink/70"
             >
-              Most wildfires start where nobody is watching. We are building sensors that notice, people who
-              check, and an aircraft that goes to look — so responders get a real picture, early.
+              Most disasters begin where nobody is watching. We are building sensors that notice, people who
+              check, and an aircraft that goes to look — so responders get a real picture, early. Wildfire is
+              where we start; wind, water and quake are the same problem.
             </motion.p>
 
             <motion.div
@@ -164,7 +165,7 @@ export function HeroBento() {
           { k: "Where it starts", v: "Remote ground, no camera, no lookout" },
           { k: "What we build", v: "Sensors, ops software and a VTOL aircraft" },
           { k: "Who decides", v: "People — every mission is authorized" },
-        ].map((f, i) => (
+        ].map((f: { k: string; v: string }, i: number) => (
           <motion.div
             key={f.k}
             initial={{ opacity: 0, y: 22 }}
