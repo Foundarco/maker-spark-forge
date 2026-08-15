@@ -1584,7 +1584,7 @@
 .site-theme .pg-map > img { opacity: calc(0.42 + var(--light) * 0.34); }
 
 /* ── Act: rain ─────────────────────────────────────────── */
-.rain-stage { position: relative; isolate: isolate; background: #04070c; }
+.rain-stage { isolation: isolate; background: #04070c; }
 .rain-media {
   position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover;
   filter: saturate(0.55) contrast(1.06) brightness(calc(0.5 + var(--ap) * 0.22));
@@ -1643,7 +1643,7 @@
 }
 
 /* ── Act: cloud break ──────────────────────────────────── */
-.cloud-stage { position: relative; overflow: hidden; }
+.cloud-stage { isolation: isolate; }
 .cloud-sky {
   position: absolute; inset: 0;
   background: linear-gradient(180deg,
