@@ -1693,8 +1693,9 @@
   .rain-drop, .rain-ping::after { animation: none; }
 }
 
-/* rain drop timing — the frame callback slows these to a stop */
-.site-theme .rain-drop {
+/* rain drop timing — the act's frame callback slows these to a stop */
+.rain-drop {
   animation-duration: calc(var(--dur, 1) * var(--slow, 1) * 1s);
   animation-delay: calc(var(--delay, 0) * -1s);
+  opacity: calc(var(--o, 1) * (1 - var(--ap) * 0.75));
 }
