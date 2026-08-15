@@ -69,7 +69,7 @@ function Layer({
   const start = i * seg;
   const opacity = useTransform(
     p,
-    [start - seg * 0.42, start + seg * 0.12, start + seg * 0.82, start + seg * 1.25],
+    [start - seg * 0.3, start + seg * 0.06, start + seg * 0.9, start + seg * 1.12],
     [0, 1, 1, 0],
   );
   const scale = useTransform(p, [start - seg, start + seg], [1.18, 1.02]);
@@ -89,7 +89,7 @@ function Layer({
           muted
           loop
           playsInline
-          preload={i === 0 ? "auto" : "none"}
+          preload="auto"
           aria-label={c.alt}
           ref={(el) => {
             if (!el) return;
@@ -152,9 +152,9 @@ export function PinnedStory() {
 
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--night)_88%,transparent)_0%,color-mix(in_oklab,var(--night)_30%,transparent)_36%,color-mix(in_oklab,var(--night)_92%,transparent)_100%)]"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--night)_78%,transparent)_0%,color-mix(in_oklab,var(--night)_12%,transparent)_34%,color-mix(in_oklab,var(--night)_86%,transparent)_100%)]"
         />
-        <div aria-hidden className="grid-fine pointer-events-none absolute inset-0 opacity-40" />
+        <div aria-hidden className="grid-fine pointer-events-none absolute inset-0 opacity-25" />
 
         {/* chapter rail */}
         <div className="pointer-events-none absolute left-5 top-1/2 hidden -translate-y-1/2 flex-col gap-3 sm:left-8 lg:flex">
