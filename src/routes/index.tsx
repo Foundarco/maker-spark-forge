@@ -49,8 +49,8 @@ function HomePage() {
   return (
     <>
       <DisasterReel />
+      <PinnedStory />
       <DisasterStats />
-      <Escalation />
       <StoryScroll />
       <HeroBento />
       <MissionFlow />
@@ -60,3 +60,4 @@ function HomePage() {
     </>
   );
 }
+
