@@ -185,6 +185,17 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           )}
         </div>
 
+        {/* Theme toggle */}
+        <button
+          onClick={() => setTheme(resolveTheme(theme) === "dark" ? "light" : "dark")}
+          className={iconBtn}
+          aria-label="Toggle light or dark mode"
+        >
+          {resolveTheme(theme) === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+
+
+
         {/* Notifications */}
         <div className="relative" data-topbar-menu>
           <button
