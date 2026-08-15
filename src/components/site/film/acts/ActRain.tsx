@@ -1,7 +1,6 @@
 import { useMemo, useRef } from "react";
 import { Act } from "../Act";
 import { act } from "@/config/acts";
-import { clamp, ramp } from "../useFilmScroll";
 import rainClip from "@/assets/reel-rain-ruins.mp4.asset.json";
 
 const copy = act("rain");
@@ -125,5 +124,3 @@ export function ActRain() {
     </Act>
   );
 }
-
-export { clamp, ramp };
