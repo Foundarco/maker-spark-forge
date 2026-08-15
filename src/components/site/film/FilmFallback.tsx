@@ -14,9 +14,12 @@ import responders from "@/assets/act-responders.jpg";
 /** Reduced-motion, small-screen and low-power presentation. Same twelve acts. */
 const stills: Record<string, string> = {
   opening: fire,
+  rain: steam,
   landscape: ridge,
   sense: topo,
   ops: operator,
+  clouds: ridge,
+  reveal: canyon,
   oversight: topo,
   navigate: canyon,
   investigate: pov,
