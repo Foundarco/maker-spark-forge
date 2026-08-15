@@ -11,8 +11,9 @@ import { Newsroom } from "@/components/site/home/Newsroom";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
 
-const title = `${brand.name} — See the fire sooner`;
-const desc = brand.mission;
+const title = `${brand.name} — Disaster response, sooner`;
+const desc =
+  "A nonprofit building sensing, operations software and autonomous aircraft so responders see wildfires, floods and storms sooner.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
