@@ -27,7 +27,7 @@ export function BrandLogo({
           {brand.name}
         </span>
         <span className={`mt-1.5 block text-[0.56rem] font-medium uppercase tracking-[0.22em] ${subColor}`}>
-          Wildfire detection + UAV response
+          Disaster detection + UAV response
         </span>
       </span>
     </span>
