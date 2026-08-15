@@ -35,6 +35,7 @@ export function ActNavigate() {
       label={copy.title}
       vh={240}
       frame={(p) => {
+        uav.reveal = 0;
         uav.t = 0.44 + p * 0.16;
         uav.weight = win(p, 0.05, 0.22, 0.7, 0.95);
         uav.bank = Math.sin(p * Math.PI) * 0.12;

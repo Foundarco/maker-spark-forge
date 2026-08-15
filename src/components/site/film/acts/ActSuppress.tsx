@@ -22,6 +22,7 @@ export function ActSuppress() {
       label={copy.title}
       vh={300}
       frame={(p, { t }) => {
+        uav.reveal = 0;
         uav.t = 0.6 + p * 0.3;
         uav.weight = win(p, 0.02, 0.14, 0.86, 0.98);
         uav.bank = Math.sin(p * Math.PI * 1.4) * 0.22 + Math.sin(t * 0.7) * 0.02;
