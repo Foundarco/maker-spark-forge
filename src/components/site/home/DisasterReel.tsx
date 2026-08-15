@@ -108,30 +108,35 @@ export function DisasterReel() {
         <motion.h1
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-5 max-w-4xl text-[clamp(2.6rem,7.2vw,5.8rem)] font-bold leading-[0.95] tracking-tight text-ink"
+          transition={{ delay: 0.9, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-3 text-[clamp(3.4rem,13vw,11rem)] font-extrabold uppercase leading-[0.82] tracking-[-0.04em] text-ink"
         >
-          The disasters are getting bigger. The response has to get faster.
+          See it first
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.8, duration: 1.2 }}
-          className="mt-6 max-w-xl text-lg leading-relaxed text-ink/70"
+          transition={{ delay: 1.5, duration: 1.2 }}
+          className="mt-7 max-w-xl text-lg leading-relaxed text-ink/75"
         >
-          Wildfire, tornado, flood, hurricane — they all begin in the same place: somewhere nobody is watching. We
-          are a nonprofit building the sensing, software and aircraft that get there first.
+          Wildfire, tornado, flood, hurricane — they all begin somewhere nobody is watching. We are a nonprofit
+          building the sensing, software and aircraft that get there first.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2.6, duration: 1 }}
-          className="mt-10 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink/55"
+          transition={{ delay: 2.1, duration: 1 }}
+          className="mt-9 flex flex-wrap items-center gap-4"
         >
-          <span className="inline-block h-9 w-[1px] animate-pulse bg-[var(--signal)]" aria-hidden />
-          Scroll to begin
+          <a href="/mission" className="btn-leaf text-sm">
+            See the mission ↗
+          </a>
+          <span className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink/55">
+            <span className="inline-block h-8 w-[1px] animate-pulse bg-[var(--signal)]" aria-hidden />
+            Scroll to begin
+          </span>
         </motion.div>
       </div>
 
