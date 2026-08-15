@@ -11,9 +11,9 @@ import uavAsset from "@/assets/athera-vtol.glb.asset.json";
 useGLTF.preload?.(uavAsset.url, true);
 
 const shell = new MeshStandardMaterial({
-  color: "#f7f6f1",
-  metalness: 0.22,
-  roughness: 0.42,
+  color: "#e6e7e2",
+  metalness: 0.45,
+  roughness: 0.35,
 });
 
 function Airframe({ spin }: { spin: number }) {
@@ -23,7 +23,7 @@ function Airframe({ spin }: { spin: number }) {
   const fit = useMemo(() => {
     const box = new Box3().setFromObject(scene);
     const size = box.getSize(new Vector3());
-    return 2 / Math.max(size.x, size.y, size.z, 0.001);
+    return 3.1 / Math.max(size.x, size.y, size.z, 0.001);
   }, [scene]);
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export function Uav3D({
       ? h(
           Canvas,
           {
-            camera: { position: [0, 0.8, 6], fov: 32 },
+            camera: { position: [0, 0.7, 5.2], fov: 30 },
             dpr: [1, 1.7],
             gl: { antialias: true, alpha: true, powerPreference: "high-performance" },
           },
@@ -95,8 +95,8 @@ export function Uav3D({
             { fallback: null },
             h(Float, { speed: 1.1, rotationIntensity: 0.15, floatIntensity: 0.6 }, h(Airframe, { spin })),
             h(ContactShadows, {
-              position: [0, -1.35, 0],
-              opacity: 0.28,
+              position: [0, -1.5, 0],
+              opacity: 0.34,
               scale: 9,
               blur: 3,
               far: 4,
