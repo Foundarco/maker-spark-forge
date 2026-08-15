@@ -47,9 +47,12 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <>
+      <DisasterReel />
+      <DisasterStats />
+      <Escalation />
+      <StoryScroll />
       <HeroBento />
       <MissionFlow />
-      <StoryScroll />
       <BuildingBlocks />
       <JoinBanner />
       <Newsroom />
