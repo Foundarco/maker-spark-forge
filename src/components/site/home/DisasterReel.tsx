@@ -1,0 +1,139 @@
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import fireClip from "@/assets/hero-fire-aerial.mp4.asset.json";
+import tornadoClip from "@/assets/reel-tornado.mp4.asset.json";
+import floodClip from "@/assets/reel-flood.mp4.asset.json";
+import stormClip from "@/assets/reel-storm.mp4.asset.json";
+import hoodClip from "@/assets/reel-neighborhood-1.mp4.asset.json";
+import poster from "@/assets/act-aftermath.jpg";
+
+const SHOT_MS = 4200;
+
+const reel = [
+  { src: fireClip.url, label: "Wildfire", alt: "Aerial view of a wildfire burning through forest" },
+  { src: tornadoClip.url, label: "Tornado", alt: "A tornado crossing open farmland under a dark sky" },
+  { src: floodClip.url, label: "Flood", alt: "A flooded neighbourhood with water up to the rooftops" },
+  { src: stormClip.url, label: "Hurricane", alt: "Storm damage on a coastal street in heavy rain" },
+  { src: hoodClip.url, label: "Aftermath", alt: "A burned neighbourhood reduced to smouldering foundations" },
+];
+
+/** The opening cut-scenes: the disasters, one after another, then the promise. */
+export function DisasterReel() {
+  const [shot, setShot] = useState(0);
+  const [dark, setDark] = useState(false);
+  const videos = useRef<(HTMLVideoElement | null)[]>([]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => setShot((s) => (s + 1) % reel.length), SHOT_MS);
+    const cut = window.setTimeout(() => setDark(true), reel.length * SHOT_MS);
+    return () => {
+      window.clearInterval(id);
+      window.clearTimeout(cut);
+    };
+  }, []);
+
+  useEffect(() => {
+    videos.current.forEach((el, i) => {
+      if (!el) return;
+      if (i === shot && !dark) {
+        el.currentTime = 0;
+        void el.play().catch(() => {});
+      } else {
+        el.pause();
+        if (i === (shot + 1) % reel.length && el.preload !== "auto") el.preload = "auto";
+      }
+    });
+  }, [shot, dark]);
+
+  return (
+    <section
+      aria-label="Natural disasters are getting worse"
+      className="relative isolate flex h-svh items-end overflow-hidden bg-[var(--night)]"
+    >
+      {reel.map((s, i) => (
+        <div
+          key={s.label}
+          className="absolute inset-0 transition-opacity duration-[1400ms]"
+          style={{ opacity: !dark && i === shot ? 1 : 0 }}
+          aria-hidden={dark || i !== shot}
+        >
+          <video
+            ref={(el) => {
+              videos.current[i] = el;
+            }}
+            className="h-full w-full scale-105 object-cover"
+            muted
+            loop
+            playsInline
+            preload={i === 0 ? "auto" : "none"}
+            poster={i === 0 ? poster : undefined}
+            aria-label={s.alt}
+          >
+            <source src={s.src} type="video/mp4" />
+          </video>
+        </div>
+      ))}
+
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/55 transition-opacity duration-[1600ms]"
+        style={{ opacity: dark ? 1 : 0.9 }}
+        aria-hidden
+      />
+
+      {/* the shot label ticker */}
+      {!dark && (
+        <div className="absolute left-5 top-24 z-10 flex flex-col gap-2 sm:left-8">
+          {reel.map((s, i) => (
+            <span
+              key={s.label}
+              className="font-mono text-[0.62rem] uppercase tracking-[0.28em] transition-colors duration-500"
+              style={{ color: i === shot ? "white" : "rgba(255,255,255,0.32)" }}
+            >
+              {String(i + 1).padStart(2, "0")} · {s.label}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 sm:px-8 sm:pb-24">
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 1.2 }}
+          className="font-mono text-[0.66rem] uppercase tracking-[0.34em] text-white/70"
+        >
+          Fire · Wind · Water · Earth
+        </motion.p>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-5 max-w-4xl text-[clamp(2.6rem,7.4vw,6rem)] font-extrabold leading-[0.94] tracking-tight text-white"
+        >
+          Every year the disasters get bigger.
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8, duration: 1.2 }}
+          className="mt-6 max-w-xl text-lg leading-relaxed text-white/75"
+        >
+          Wildfire, tornado, flood, hurricane — they all start in the same place: somewhere nobody is watching. We
+          are a nonprofit building the eyes and the aircraft that get there first.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.6, duration: 1 }}
+          className="mt-10 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/55"
+        >
+          <span className="inline-block h-9 w-[1px] animate-pulse bg-white/50" aria-hidden />
+          Scroll
+        </motion.div>
+      </div>
+    </section>
+  );
+}

@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { DisasterReel } from "@/components/site/home/DisasterReel";
+import { DisasterStats } from "@/components/site/home/DisasterStats";
+import { Escalation } from "@/components/site/home/Escalation";
 import { HeroBento } from "@/components/site/home/HeroBento";
 import { MissionFlow } from "@/components/site/home/MissionFlow";
 import { StoryScroll } from "@/components/site/home/StoryScroll";
@@ -8,8 +11,9 @@ import { Newsroom } from "@/components/site/home/Newsroom";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
 
-const title = `${brand.name} — See the fire sooner`;
-const desc = brand.mission;
+const title = `${brand.name} — Disaster response, sooner`;
+const desc =
+  "A nonprofit building sensing, operations software and autonomous aircraft so responders see wildfires, floods and storms sooner.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,9 +48,12 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <>
+      <DisasterReel />
+      <DisasterStats />
+      <Escalation />
+      <StoryScroll />
       <HeroBento />
       <MissionFlow />
-      <StoryScroll />
       <BuildingBlocks />
       <JoinBanner />
       <Newsroom />
