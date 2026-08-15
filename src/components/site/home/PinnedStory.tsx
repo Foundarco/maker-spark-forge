@@ -5,10 +5,16 @@ import tornadoClip from "@/assets/reel-tornado.mp4.asset.json";
 import floodClip from "@/assets/reel-flood.mp4.asset.json";
 import stormClip from "@/assets/reel-storm.mp4.asset.json";
 import hoodClip from "@/assets/reel-neighborhood-1.mp4.asset.json";
+import posterFire from "@/assets/act-fire.jpg";
+import posterWind from "@/assets/j-canyon.jpg";
+import posterWater from "@/assets/f-california.jpg";
+import posterStorm from "@/assets/act-steam.jpg";
+import posterAfter from "@/assets/act-aftermath.jpg";
 
 const chapters = [
   {
     src: fireClip.url,
+    poster: posterFire,
     tag: "Chapter 01 — Fire",
     stat: "7.6M acres",
     statNote: "burned in a single U.S. season",
@@ -18,6 +24,7 @@ const chapters = [
   },
   {
     src: tornadoClip.url,
+    poster: posterWind,
     tag: "Chapter 02 — Wind",
     stat: "13 minutes",
     statNote: "median tornado warning lead time",
@@ -27,6 +34,7 @@ const chapters = [
   },
   {
     src: floodClip.url,
+    poster: posterWater,
     tag: "Chapter 03 — Water",
     stat: "Hours",
     statNote: "for a flash flood to redraw a town",
@@ -36,6 +44,7 @@ const chapters = [
   },
   {
     src: stormClip.url,
+    poster: posterStorm,
     tag: "Chapter 04 — Storm",
     stat: "$1B+",
     statNote: "disasters, now several dozen a year",
@@ -45,6 +54,7 @@ const chapters = [
   },
   {
     src: hoodClip.url,
+    poster: posterAfter,
     tag: "Chapter 05 — After",
     stat: "The gap",
     statNote: "between ignition and information",
@@ -90,6 +100,7 @@ function Layer({
           loop
           playsInline
           preload="auto"
+          poster={c.poster}
           aria-label={c.alt}
           ref={(el) => {
             if (!el) return;
