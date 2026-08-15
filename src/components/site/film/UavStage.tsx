@@ -80,6 +80,9 @@ function Airframe() {
 
     const heading = Math.atan2(dir.x, dir.z);
     g.rotation.y = MathUtils.damp(g.rotation.y, heading, 4, dt);
+    // the reveal lifts it out of the cloud deck and turns it in the light
+    const climb = uav.reveal > 0 ? Math.min(1, uav.reveal / 0.34) : 1;
+
     if (tilt.current) {
       const bank = Math.max(-0.6, Math.min(0.6, -dir.x * 1.05 + uav.bank));
       tilt.current.rotation.z = MathUtils.damp(tilt.current.rotation.z, bank, 3.2, dt);
@@ -89,13 +92,19 @@ function Airframe() {
         3.2,
         dt,
       );
-    }
-
-    // the reveal lifts it out of the cloud deck and fills it with daylight
-    if (uav.reveal > 0) {
-      const climb = Math.min(1, uav.reveal / 0.34);
-      g.position.y += (1 - climb) * -2.6;
-      g.rotation.y += uav.reveal * 0.9;
+      // offsets live on the inner group so they never accumulate
+      tilt.current.position.y = MathUtils.damp(
+        tilt.current.position.y,
+        (1 - climb) * -2.8,
+        3.2,
+        dt,
+      );
+      tilt.current.rotation.y = MathUtils.damp(
+        tilt.current.rotation.y,
+        uav.reveal * 1.4,
+        2.4,
+        dt,
+      );
     }
 
     const fill = Math.min(1, Math.max(uav.light, uav.reveal * 1.4));
