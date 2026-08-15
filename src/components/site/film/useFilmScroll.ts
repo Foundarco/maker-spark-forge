@@ -1,4 +1,9 @@
 import { useEffect, type RefObject } from "react";
+import { uav } from "./uav";
+
+/** page progress where the dawn begins and where it is complete */
+const LIGHT_FROM = 0.14;
+const LIGHT_TO = 0.56;
 
 /**
  * The single motion authority for the public film.
