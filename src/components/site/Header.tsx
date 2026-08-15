@@ -74,19 +74,19 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
             <Link
               to="/partners"
-              className={`rounded-full border border-white/25 font-medium text-ink transition-colors hover:bg-white/10 ${
-                condensed ? "px-4 py-1.5 text-[0.8rem]" : "px-5 py-2.5 text-sm"
+              className={`inline-flex items-center whitespace-nowrap rounded-full border border-white/25 font-medium leading-none text-ink transition-colors hover:bg-white/10 ${
+                condensed ? "px-3.5 py-2 text-[0.78rem]" : "px-5 py-2.5 text-sm"
               }`}
             >
               Partner with us
             </Link>
             <Link
               to="/donate"
-              className={`inline-flex items-center gap-1.5 rounded-full bg-[var(--signal)] font-semibold text-[var(--night)] transition-transform hover:scale-[1.03] ${
-                condensed ? "px-4 py-1.5 text-[0.8rem]" : "px-5 py-2.5 text-sm"
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--signal)] font-semibold leading-none text-[var(--night)] transition-colors hover:brightness-110 ${
+                condensed ? "px-3.5 py-2 text-[0.78rem]" : "px-5 py-2.5 text-sm"
               }`}
             >
               Support us
