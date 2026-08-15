@@ -66,7 +66,7 @@ export function DisasterReel() {
             loop
             playsInline
             preload={i === 0 ? "auto" : "none"}
-            poster={poster}
+            poster={i === 0 ? poster : undefined}
             aria-label={s.alt}
           >
             <source src={s.src} type="video/mp4" />

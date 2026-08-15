@@ -48,7 +48,7 @@ function Beat({ b, i }: { b: (typeof beats)[number]; i: number }) {
           loop
           playsInline
           preload="none"
-          poster={poster}
+          poster={i === 0 ? poster : undefined}
           aria-label={b.alt}
           onMouseEnter={(e) => void e.currentTarget.play().catch(() => {})}
           ref={(el) => {
