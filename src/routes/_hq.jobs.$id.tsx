@@ -333,6 +333,6 @@ function Row2({ left, right, sub, icon: Icon }: { left: string; right?: string; 
 }
 
 export const Route = createFileRoute("/_hq/jobs/$id")({
-  head: () => ({ meta: [{ title: "Job record — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Job record — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: JobDetail,
 });

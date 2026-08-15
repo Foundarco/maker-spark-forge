@@ -19,8 +19,8 @@ const STAGE_PALETTE = {
 
 const config: ResourceConfig<any> = {
   table: "sales_deals",
-  title: "Sales Pipeline",
-  eyebrow: "Sales · Pipeline",
+  title: "Funding Pipeline",
+  eyebrow: "Funding · Pipeline",
   icon: Filter,
   itemName: "deal",
   searchable: ["title", "company", "contact_name", "contact_email"],

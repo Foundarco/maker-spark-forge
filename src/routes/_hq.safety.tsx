@@ -6,8 +6,8 @@ const SEV = { minor: "border-emerald-200 bg-emerald-50 text-emerald-700", modera
 
 const cfg: ResourceConfig<any> = {
   table: "con_safety_incidents",
-  title: "Safety & Incidents",
-  eyebrow: "Field Ops",
+  title: "Safety & Reports",
+  eyebrow: "Mission Ops",
   icon: ShieldAlert,
   itemName: "incident",
   noCreatedBy: true,
@@ -45,6 +45,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/safety")({
-  head: () => ({ meta: [{ title: "Safety & Incidents — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Safety & Incidents — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

@@ -10,8 +10,8 @@ export const Route = createFileRoute("/_hq/inventory")({
 
 const config: ResourceConfig<any> = {
   table: "mfg_inventory",
-  title: "Inventory",
-  eyebrow: "Manufacturing · Inventory",
+  title: "Parts Inventory",
+  eyebrow: "Fleet & Supply · Inventory",
   icon: Boxes,
   itemName: "item",
   searchable: ["sku", "name", "category", "location"],

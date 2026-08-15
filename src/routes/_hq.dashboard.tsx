@@ -11,8 +11,8 @@ import { UserMention } from "@/components/hq/UserMention";
 export const Route = createFileRoute("/_hq/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — McGuire HQ" },
-      { name: "description", content: "Company-wide view of jobs, crews, safety, materials and finance for McGuire Construction." },
+      { title: "Dashboard — Clovr Labs HQ" },
+      { name: "description", content: "Organization-wide view of incidents, response teams, safety, fleet and funding for Clovr Labs." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -23,14 +23,14 @@ type Focus = "exec" | "precon" | "pm" | "field" | "materials" | "safety" | "fina
 
 const FOCUS_LABEL: Record<Focus, string> = {
   exec: "Executive",
-  precon: "Preconstruction",
-  pm: "Project Management",
-  field: "Field Ops",
-  materials: "Materials",
+  precon: "Engineering",
+  pm: "Mission Management",
+  field: "Mission Ops",
+  materials: "Fleet & Supply",
   safety: "Safety & Quality",
-  finance: "Finance",
+  finance: "Funding",
   people: "People",
-  client: "Client Relations",
+  client: "Research & Partners",
 };
 
 function focusFromText(text: string, add: (f: Focus) => void) {
@@ -214,7 +214,7 @@ function DashboardPage() {
         <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Core · Dashboard</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{greeting}, {firstName}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {focus.length ? `${focus.map((f) => FOCUS_LABEL[f]).join(" · ")} — today at McGuire.` : "Here's what's happening today."}
+          {focus.length ? `${focus.map((f) => FOCUS_LABEL[f]).join(" · ")} — today at Clovr Labs.` : "Here's what's happening today."}
         </p>
       </div>
 

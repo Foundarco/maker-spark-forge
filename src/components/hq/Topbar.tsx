@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Bell, Menu, Phone, PhoneOff, Mic, MicOff, Grip, LayoutDashboard, Mail, Calendar as CalendarIcon, FolderOpen, MessagesSquare, Users, Bot } from "lucide-react";
+import { Bell, Menu, Phone, PhoneOff, Mic, MicOff, Grip, LayoutDashboard, Mail, Calendar as CalendarIcon, FolderOpen, MessagesSquare, Users, Bot, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { RecordTabs } from "./RecordTabs";
 import { usePhone, formatDuration } from "@/lib/hq/phone";
+import { useHQTheme, resolveTheme } from "@/lib/hq/theme";
 
 type Notification = {
   id: string;
@@ -29,6 +30,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [open, setOpen] = useState<null | "notif" | "apps" | "phone">(null);
   const [notifs, setNotifs] = useState<Notification[]>([]);
   const [, tick] = useState(0);
+  const { theme, setTheme } = useHQTheme();
   const { active, endCall, toggleMute, incoming, acceptIncoming, declineIncoming } = usePhone();
 
   useEffect(() => {
@@ -184,6 +186,17 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
             </div>
           )}
         </div>
+
+        {/* Theme toggle */}
+        <button
+          onClick={() => setTheme(resolveTheme(theme) === "dark" ? "light" : "dark")}
+          className={iconBtn}
+          aria-label="Toggle light or dark mode"
+        >
+          {resolveTheme(theme) === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+
+
 
         {/* Notifications */}
         <div className="relative" data-topbar-menu>

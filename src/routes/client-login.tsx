@@ -7,10 +7,10 @@ export const Route = createFileRoute("/client-login")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Client Portal Sign In — McGuire Construction" },
-      { name: "description", content: "Sign in to the McGuire Construction client portal to track your project, documents and invoices." },
+      { title: "Client Portal Sign In — Clovr Labs" },
+      { name: "description", content: "Sign in to the Clovr Labs client portal to track your project, documents and invoices." },
       { name: "robots", content: "noindex" },
-      { property: "og:title", content: "Client Portal Sign In — McGuire Construction" },
+      { property: "og:title", content: "Client Portal Sign In — Clovr Labs" },
       { property: "og:description", content: "Track your project, documents and invoices." },
     ],
   }),
@@ -73,7 +73,7 @@ function ClientLogin() {
           </div>
           <div>
             <p className="text-lg font-semibold">Client Portal</p>
-            <p className="text-xs text-muted-foreground">McGuire Construction</p>
+            <p className="text-xs text-muted-foreground">Clovr Labs</p>
           </div>
         </div>
 

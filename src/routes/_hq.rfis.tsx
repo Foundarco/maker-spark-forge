@@ -6,8 +6,8 @@ const STATUS = { open: "border-amber-200 bg-amber-50 text-amber-700", answered: 
 
 const cfg: ResourceConfig<any> = {
   table: "con_submittals",
-  title: "RFIs & Submittals",
-  eyebrow: "Preconstruction",
+  title: "Engineering Requests",
+  eyebrow: "Engineering",
   icon: MessageSquareWarning,
   itemName: "RFI",
   noCreatedBy: true,
@@ -44,6 +44,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/rfis")({
-  head: () => ({ meta: [{ title: "RFIs & Submittals — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Engineering Requests — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

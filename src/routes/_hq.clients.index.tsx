@@ -6,8 +6,8 @@ const STATUS = { active: "border-emerald-200 bg-emerald-50 text-emerald-700", pr
 
 const cfg: ResourceConfig<any> = {
   table: "con_clients",
-  title: "Client Directory",
-  eyebrow: "Clients",
+  title: "Partner Directory",
+  eyebrow: "Partners",
   icon: Users2,
   itemName: "client",
   orderBy: { column: "name", ascending: true },
@@ -54,6 +54,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/clients/")({
-  head: () => ({ meta: [{ title: "Client Directory — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Partner Directory — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

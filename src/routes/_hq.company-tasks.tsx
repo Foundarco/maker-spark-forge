@@ -7,7 +7,7 @@ const STATUS = { todo: "border-border bg-muted/40 text-muted-foreground", in_pro
 
 const cfg: ResourceConfig<any> = {
   table: "con_tasks",
-  title: "Company Tasks",
+  title: "Org Tasks",
   eyebrow: "Operations",
   icon: CheckSquare,
   itemName: "task",
@@ -30,7 +30,7 @@ const cfg: ResourceConfig<any> = {
   ],
   fields: [
     { key: "title", label: "Task", type: "text", required: true, full: true },
-    { key: "department", label: "Department", type: "select", options: ["Preconstruction", "Field Ops", "Materials", "Finance", "People", "Clients", "Operations"].map((v) => ({ value: v, label: v })) },
+    { key: "department", label: "Department", type: "select", options: ["Engineering", "Mission Ops", "Fleet & Supply", "Funding", "People", "Research & Partners", "Operations"].map((v) => ({ value: v, label: v })) },
     { key: "job_id", label: "Related job", type: "job" },
     { key: "owner_id", label: "Owner", type: "user" },
     { key: "assignee_id", label: "Assignee", type: "user" },
@@ -44,6 +44,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/company-tasks")({
-  head: () => ({ meta: [{ title: "Company Tasks — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Org Tasks — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

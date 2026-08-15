@@ -6,8 +6,8 @@ const STATUS = { approved: "border-emerald-200 bg-emerald-50 text-emerald-700", 
 
 const cfg: ResourceConfig<any> = {
   table: "con_subcontractors",
-  title: "Subcontractors",
-  eyebrow: "Materials",
+  title: "Fabrication Partners",
+  eyebrow: "Fleet & Supply",
   icon: Handshake,
   itemName: "subcontractor",
   noCreatedBy: true,
@@ -46,6 +46,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/subcontractors")({
-  head: () => ({ meta: [{ title: "Subcontractors — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Fabrication Partners — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

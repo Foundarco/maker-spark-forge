@@ -114,6 +114,6 @@ function Kpi({ label, value, icon: Icon, hint }: { label: string; value: string;
 }
 
 export const Route = createFileRoute("/_hq/job-costing")({
-  head: () => ({ meta: [{ title: "Job Costing — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Job Costing — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: JobCosting,
 });

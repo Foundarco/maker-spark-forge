@@ -7,8 +7,8 @@ const STATUS = { open: "border-amber-200 bg-amber-50 text-amber-700", in_progres
 
 const cfg: ResourceConfig<any> = {
   table: "con_punch_items",
-  title: "Punch List",
-  eyebrow: "Field Ops",
+  title: "Follow-ups",
+  eyebrow: "Mission Ops",
   icon: ListChecks,
   itemName: "punch item",
   noCreatedBy: true,
@@ -45,6 +45,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/punch-list")({
-  head: () => ({ meta: [{ title: "Punch List — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Follow-ups — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

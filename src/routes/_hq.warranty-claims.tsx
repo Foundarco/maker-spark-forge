@@ -19,7 +19,7 @@ const STATUS_PALETTE = {
 const config: ResourceConfig<any> = {
   table: "cs_warranty_claims",
   title: "Warranty Claims",
-  eyebrow: "Customer Service · Warranty",
+  eyebrow: "Research & Partners · Warranty",
   icon: ShieldCheck,
   itemName: "claim",
   searchable: ["claim_number", "customer_name", "product_name", "serial_number"],

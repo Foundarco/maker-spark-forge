@@ -7,7 +7,7 @@ const STAGES = ["applied", "screening", "interview", "offer", "hired", "rejected
 export const applicantsCfg: ResourceConfig<any> = {
   table: "hr_applicants",
   title: "Applicants",
-  eyebrow: "HR",
+  eyebrow: "People",
   icon: UserSearch,
   itemName: "applicant",
   orderBy: { column: "created_at", ascending: false },

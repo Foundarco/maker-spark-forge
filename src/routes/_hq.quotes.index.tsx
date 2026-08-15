@@ -200,6 +200,6 @@ function QuotesDashboard() {
 }
 
 export const Route = createFileRoute("/_hq/quotes/")({
-  head: () => ({ meta: [{ title: "Quotes — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Quotes — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: QuotesDashboard,
 });

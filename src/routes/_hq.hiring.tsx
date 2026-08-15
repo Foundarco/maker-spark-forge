@@ -7,7 +7,7 @@ import { applicantsCfg } from "./_hq.applicants";
 const onboardingCfg: ResourceConfig<any> = {
   table: "hr_onboarding",
   title: "Onboarding Tasks",
-  eyebrow: "HR",
+  eyebrow: "People",
   icon: ClipboardCheck,
   itemName: "task",
   orderBy: { column: "due_date", ascending: true },

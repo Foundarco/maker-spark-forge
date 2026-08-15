@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 const reviewsCfg: ResourceConfig<any> = {
   table: "hr_reviews",
   title: "Performance Reviews",
-  eyebrow: "HR",
+  eyebrow: "People",
   icon: Star,
   itemName: "review",
   orderBy: { column: "review_date", ascending: false },
@@ -49,7 +49,7 @@ function EmployeeName({ id }: { id: string | null }) {
 const benefitsCfg: ResourceConfig<any> = {
   table: "hr_benefits",
   title: "Benefits",
-  eyebrow: "HR",
+  eyebrow: "People",
   icon: HeartHandshake,
   itemName: "benefit",
   orderBy: { column: "name", ascending: true },

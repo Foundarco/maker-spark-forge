@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_hq/accounting")({
 const config: ResourceConfig<any> = {
   table: "fin_transactions",
   title: "Accounting",
-  eyebrow: "Finance · Journal",
+  eyebrow: "Funding · Journal",
   icon: Landmark,
   itemName: "entry",
   searchable: ["memo", "reference"],

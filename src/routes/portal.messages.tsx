@@ -71,7 +71,7 @@ function PortalMessages() {
               <div className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm ${m.from_client ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                 <p className="whitespace-pre-wrap">{m.body}</p>
                 <p className={`mt-1 text-[10px] ${m.from_client ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                  {m.from_client ? "You" : "McGuire team"} · {new Date(m.created_at).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
+                  {m.from_client ? "You" : "Clovr Labs team"} · {new Date(m.created_at).toLocaleString(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
                 </p>
               </div>
             </div>

@@ -6,8 +6,8 @@ const STATUS = { available: "border-emerald-200 bg-emerald-50 text-emerald-700",
 
 const cfg: ResourceConfig<any> = {
   table: "con_equipment",
-  title: "Equipment & Fleet",
-  eyebrow: "Field Ops",
+  title: "Aircraft & Assets",
+  eyebrow: "Mission Ops",
   icon: Truck,
   itemName: "asset",
   noCreatedBy: true,
@@ -48,6 +48,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/equipment")({
-  head: () => ({ meta: [{ title: "Equipment & Fleet — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Aircraft & Assets — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

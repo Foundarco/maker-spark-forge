@@ -5,7 +5,7 @@ import { ResourcePage, StatusBadge, DateCell, UserCell, type ResourceConfig } fr
 const cfg: ResourceConfig<any> = {
   table: "hr_time_off",
   title: "Time Off",
-  eyebrow: "HR",
+  eyebrow: "People",
   icon: CalendarOff,
   itemName: "request",
   orderBy: { column: "start_date", ascending: false },

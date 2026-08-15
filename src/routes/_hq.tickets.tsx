@@ -4,7 +4,7 @@ import { ResourcePage, StatusBadge, UserCell, DateCell } from "@/components/hq/R
 import type { ResourceConfig } from "@/components/hq/ResourcePage";
 
 export const Route = createFileRoute("/_hq/tickets")({
-  head: () => ({ meta: [{ title: "Support Tickets — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Research Requests — Clovr HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={config} />,
 });
 
@@ -23,8 +23,8 @@ const PRIORITY_PALETTE = {
 
 const config: ResourceConfig<any> = {
   table: "cs_tickets",
-  title: "Support Tickets",
-  eyebrow: "Customer Service · Tickets",
+  title: "Research Requests",
+  eyebrow: "Research & Partners · Tickets",
   icon: Ticket,
   itemName: "ticket",
   searchable: ["ticket_number", "subject", "customer_name", "customer_email"],

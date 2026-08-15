@@ -169,6 +169,6 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 }
 
 export const Route = createFileRoute("/_hq/analytics")({
-  head: () => ({ meta: [{ title: "Dashboards — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Dashboards — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: Dashboards,
 });

@@ -309,6 +309,6 @@ function Field({ label, full, children }: { label: string; full?: boolean; child
 }
 
 export const Route = createFileRoute("/_hq/jobs/")({
-  head: () => ({ meta: [{ title: "Jobs — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Jobs — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: JobsDashboard,
 });

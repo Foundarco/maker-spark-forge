@@ -218,7 +218,7 @@ function QuoteDetail() {
                 </div>
               </Panel>
               <p className="text-xs text-muted-foreground">
-                Set the status to <strong>Won</strong> and the quote converts itself into a construction job with a kickoff task.
+                Set the status to <strong>Won</strong> and the quote converts itself into an active program with a kickoff task.
               </p>
             </>
           )}
@@ -351,6 +351,6 @@ function Panel({ title, action, children }: { title: string; action?: React.Reac
 }
 
 export const Route = createFileRoute("/_hq/quotes/$id")({
-  head: () => ({ meta: [{ title: "Quote — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Quote — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: QuoteDetail,
 });
