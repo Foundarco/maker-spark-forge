@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { acts } from "@/config/acts";
 import fire from "@/assets/act-fire.jpg";
@@ -13,9 +14,12 @@ import responders from "@/assets/act-responders.jpg";
 /** Reduced-motion, small-screen and low-power presentation. Same twelve acts. */
 const stills: Record<string, string> = {
   opening: fire,
+  rain: steam,
   landscape: ridge,
   sense: topo,
   ops: operator,
+  clouds: ridge,
+  reveal: canyon,
   oversight: topo,
   navigate: canyon,
   investigate: pov,
@@ -27,13 +31,32 @@ const stills: Record<string, string> = {
 };
 
 export function FilmFallback() {
+  // the same dark → dawn arc, driven by plain page scroll
+  useEffect(() => {
+    const doc = document.documentElement;
+    const update = () => {
+      const max = doc.scrollHeight - window.innerHeight;
+      const page = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      const raw = Math.min(1, Math.max(0, (page - 0.12) / 0.44));
+      doc.style.setProperty("--light", (raw * raw * (3 - 2 * raw)).toFixed(4));
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+      doc.style.setProperty("--light", "0");
+    };
+  }, []);
+
   return (
     <div className="bg-[var(--night)]">
       {acts.map((act, i) => (
         <section
           key={act.id}
           aria-label={act.title}
-          className={`relative isolate overflow-hidden border-b border-white/10 ${i === 0 ? "min-h-[88svh]" : "min-h-[60svh]"}`}
+          className={`relative isolate overflow-hidden border-b border-[var(--hair)] ${i === 0 ? "min-h-[88svh]" : "min-h-[60svh]"}`}
         >
           <img
             src={stills[act.id]}
@@ -48,7 +71,7 @@ export function FilmFallback() {
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(100deg, rgba(6,10,18,0.86) 0%, rgba(6,10,18,0.4) 40%, transparent 74%)",
+                "linear-gradient(100deg, color-mix(in oklab, var(--night) 90%, transparent) 0%, color-mix(in oklab, var(--night) 55%, transparent) 40%, transparent 74%)",
             }}
             aria-hidden
           />

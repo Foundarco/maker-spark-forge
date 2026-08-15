@@ -1,8 +1,8 @@
 import { Act } from "../Act";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import steam from "@/assets/act-steam.jpg";
 
-const copy = acts[9]!;
+const copy = act("reassess");
 
 /** Page form: the quiet check afterwards. */
 export function ActReassess() {

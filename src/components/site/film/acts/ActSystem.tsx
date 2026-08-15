@@ -1,9 +1,9 @@
 import { Act } from "../Act";
-import { acts, chain } from "@/config/acts";
+import { act, chain } from "@/config/acts";
 import topo from "@/assets/act-topo.jpg";
 import responders from "@/assets/act-responders.jpg";
 
-const copy = acts[11]!;
+const copy = act("system");
 
 const nodes = [
   { id: "responder", label: "Responder", x: 16, y: 78 },

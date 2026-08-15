@@ -2,11 +2,11 @@ import { useEffect, useRef } from "react";
 import { Act } from "../Act";
 import { uav } from "../uav";
 import { win } from "../useFilmScroll";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import incident from "@/assets/journey-incident-flight.mp4.asset.json";
 import canyon from "@/assets/j-canyon.jpg";
 
-const copy = acts[5]!;
+const copy = act("navigate");
 
 /** Format: motion video plate + the aircraft flying its assigned route. */
 export function ActNavigate() {
@@ -35,6 +35,7 @@ export function ActNavigate() {
       label={copy.title}
       vh={240}
       frame={(p) => {
+        uav.reveal = 0;
         uav.t = 0.44 + p * 0.16;
         uav.weight = win(p, 0.05, 0.22, 0.7, 0.95);
         uav.bank = Math.sin(p * Math.PI) * 0.12;

@@ -1,8 +1,8 @@
 import { Act } from "../Act";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import topo from "@/assets/act-topo.jpg";
 
-const copy = acts[2]!;
+const copy = act("sense");
 
 const nodes = [
   { x: 18, y: 62 },

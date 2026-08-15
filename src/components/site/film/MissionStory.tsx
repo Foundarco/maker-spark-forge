@@ -1,9 +1,12 @@
 import { ClientOnly } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { ActOpening } from "./acts/ActOpening";
+import { ActRain } from "./acts/ActRain";
 import { ActLandscape } from "./acts/ActLandscape";
 import { ActSense } from "./acts/ActSense";
 import { ActOps } from "./acts/ActOps";
+import { ActClouds } from "./acts/ActClouds";
+import { ActReveal } from "./acts/ActReveal";
 import { ActOversight } from "./acts/ActOversight";
 import { ActNavigate } from "./acts/ActNavigate";
 import { ActInvestigate } from "./acts/ActInvestigate";
@@ -67,9 +70,12 @@ export function MissionStory() {
 
 
       <ActOpening />
+      <ActRain />
       <ActLandscape />
       <ActSense />
       <ActOps />
+      <ActClouds />
+      <ActReveal />
       <ActOversight />
       <ActNavigate />
       <ActInvestigate />

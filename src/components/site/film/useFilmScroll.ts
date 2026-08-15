@@ -1,4 +1,9 @@
 import { useEffect, type RefObject } from "react";
+import { uav } from "./uav";
+
+/** page progress where the dawn begins and where it is complete */
+const LIGHT_FROM = 0.14;
+const LIGHT_TO = 0.56;
 
 /**
  * The single motion authority for the public film.
@@ -55,6 +60,15 @@ function loop(now: number) {
   // ── pass 2: writes ───────────────────────────────────────────────
   doc.style.setProperty("--page-p", page.toFixed(4));
 
+  // dark → dawn: one light value the whole site reads
+  const lightRaw = clamp((page - LIGHT_FROM) / (LIGHT_TO - LIGHT_FROM));
+  const scrolled = lightRaw * lightRaw * (3 - 2 * lightRaw);
+  // an act in the cloud break can pull the dawn forward on its own
+  const light = Math.max(scrolled, uav.lightBoost);
+  uav.lightBoost *= Math.exp(-2.5 * dt);
+  doc.style.setProperty("--light", light.toFixed(4));
+  uav.light = light;
+
   for (const e of entries) {
     if (!e.visible) continue;
     const span = e.height - vh;
@@ -108,6 +122,10 @@ function stopIfIdle() {
   raf = 0;
   observer?.disconnect();
   observer = null;
+  // leave the rest of the app in its normal night palette
+  document.documentElement.style.setProperty("--light", "0");
+  uav.light = 0;
+  uav.reveal = 0;
 }
 
 /** Register an Act section with the shared loop. */

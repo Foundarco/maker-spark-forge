@@ -1,10 +1,10 @@
 import { Act } from "../Act";
 import { uav } from "../uav";
 import { ramp, win } from "../useFilmScroll";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import suppression from "@/assets/f-suppression.jpg";
 
-const copy = acts[8]!;
+const copy = act("suppress");
 
 const stages = [
   { at: 0.08, label: "Heading change", state: "Aircraft repositioning" },
@@ -22,6 +22,7 @@ export function ActSuppress() {
       label={copy.title}
       vh={300}
       frame={(p, { t }) => {
+        uav.reveal = 0;
         uav.t = 0.6 + p * 0.3;
         uav.weight = win(p, 0.02, 0.14, 0.86, 0.98);
         uav.bank = Math.sin(p * Math.PI * 1.4) * 0.22 + Math.sin(t * 0.7) * 0.02;

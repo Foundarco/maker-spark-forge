@@ -1,7 +1,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { createElement as h, Suspense, useEffect, useMemo, useRef } from "react";
-import { Box3, CatmullRomCurve3, Group, MathUtils, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import { Box3, CatmullRomCurve3, Color, DirectionalLight, Group, MathUtils, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import uavAsset from "@/assets/athera-vtol.glb.asset.json";
 import { uav } from "./uav";
 
@@ -11,6 +11,11 @@ import { uav } from "./uav";
 useGLTF.preload?.(uavAsset.url, true);
 
 const shell = new MeshStandardMaterial({ color: "#e9eef3", metalness: 0.42, roughness: 0.34 });
+
+/** silhouette against the bright sky → daylight filling the airframe */
+const SILHOUETTE = new Color("#0d131c");
+const DAYLIGHT = new Color("#eef2f6");
+const litColor = new Color();
 
 /**
  * Master flight curve.
@@ -75,6 +80,9 @@ function Airframe() {
 
     const heading = Math.atan2(dir.x, dir.z);
     g.rotation.y = MathUtils.damp(g.rotation.y, heading, 4, dt);
+    // the reveal lifts it out of the cloud deck and turns it in the light
+    const climb = uav.reveal > 0 ? Math.min(1, uav.reveal / 0.34) : 1;
+
     if (tilt.current) {
       const bank = Math.max(-0.6, Math.min(0.6, -dir.x * 1.05 + uav.bank));
       tilt.current.rotation.z = MathUtils.damp(tilt.current.rotation.z, bank, 3.2, dt);
@@ -84,7 +92,25 @@ function Airframe() {
         3.2,
         dt,
       );
+      // offsets live on the inner group so they never accumulate
+      tilt.current.position.y = MathUtils.damp(
+        tilt.current.position.y,
+        (1 - climb) * -2.8,
+        3.2,
+        dt,
+      );
+      tilt.current.rotation.y = MathUtils.damp(
+        tilt.current.rotation.y,
+        uav.reveal * 1.4,
+        2.4,
+        dt,
+      );
     }
+
+    const fill = Math.min(1, Math.max(uav.light, uav.reveal * 1.4));
+    litColor.copy(SILHOUETTE).lerp(DAYLIGHT, fill);
+    shell.color.lerp(litColor, 1 - Math.exp(-4 * dt));
+    shell.roughness = 0.42 - fill * 0.1;
 
     const scale = 0.55 + uav.weight * 0.65;
     g.scale.setScalar(MathUtils.damp(g.scale.x || 0.2, scale, 3.5, dt));
@@ -98,6 +124,36 @@ function Airframe() {
       { ref: tilt },
       h("primitive", { object: scene, rotation: [-Math.PI / 2, 0, Math.PI / 2], scale: fit }),
     ),
+  );
+}
+
+/** Light rig that warms and brightens with the page's dawn value. */
+function DawnRig() {
+  const key = useRef<DirectionalLight>(null);
+  const fill = useRef<DirectionalLight>(null);
+  const warm = useMemo(() => new Color("#ffd6a1"), []);
+  const cold = useMemo(() => new Color("#ffe6c2"), []);
+  const tint = useMemo(() => new Color(), []);
+
+  useFrame((_, delta) => {
+    const dt = Math.min(0.05, delta);
+    const l = uav.light;
+    if (key.current) {
+      key.current.intensity = MathUtils.damp(key.current.intensity, 2.1 + l * 1.6, 3, dt);
+      tint.copy(cold).lerp(warm, l);
+      key.current.color.lerp(tint, 1 - Math.exp(-4 * dt));
+    }
+    if (fill.current) {
+      fill.current.intensity = MathUtils.damp(fill.current.intensity, 0.7 + l * 0.9, 3, dt);
+    }
+  });
+
+  return h(
+    "group",
+    null,
+    h("ambientLight", { intensity: 0.7 + uav.light * 0.8 }),
+    h("directionalLight", { ref: key, position: [5, 6, 4], intensity: 2.1, color: "#ffe6c2" }),
+    h("directionalLight", { ref: fill, position: [-6, -1, -5], intensity: 0.7, color: "#bfe4ff" }),
   );
 }
 
@@ -133,9 +189,7 @@ export default function UavStage() {
           tick();
         },
       },
-      h("ambientLight", { intensity: 0.8 }),
-      h("directionalLight", { position: [5, 6, 4], intensity: 2.3, color: "#ffe6c2" }),
-      h("directionalLight", { position: [-6, -1, -5], intensity: 0.75, color: "#7dd3fc" }),
+      h(DawnRig, null),
       h(Suspense, { fallback: null }, h(Airframe, null)),
     ),
   );

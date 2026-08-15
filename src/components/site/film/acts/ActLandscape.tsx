@@ -1,9 +1,9 @@
 import { Act } from "../Act";
 import { uav } from "../uav";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import ridge from "@/assets/j-ridge.jpg";
 
-const copy = acts[1]!;
+const copy = act("landscape");
 
 const facts = [
   { h: "Remote ground", p: "Most ignitions start where there is no camera, no lookout and no crew within reach." },
