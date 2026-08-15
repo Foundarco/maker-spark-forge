@@ -62,7 +62,10 @@ function loop(now: number) {
 
   // dark → dawn: one light value the whole site reads
   const lightRaw = clamp((page - LIGHT_FROM) / (LIGHT_TO - LIGHT_FROM));
-  const light = lightRaw * lightRaw * (3 - 2 * lightRaw);
+  const scrolled = lightRaw * lightRaw * (3 - 2 * lightRaw);
+  // an act in the cloud break can pull the dawn forward on its own
+  const light = Math.max(scrolled, uav.lightBoost);
+  uav.lightBoost *= Math.exp(-2.5 * dt);
   doc.style.setProperty("--light", light.toFixed(4));
   uav.light = light;
 

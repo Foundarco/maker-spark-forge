@@ -1,6 +1,8 @@
 import { useMemo, useRef } from "react";
 import { Act } from "../Act";
 import { act } from "@/config/acts";
+import { uav } from "../uav";
+import { ease } from "../useFilmScroll";
 
 const copy = act("clouds");
 
@@ -23,6 +25,8 @@ export function ActClouds() {
 
   const frame = useMemo(
     () => (p: number) => {
+      // the climb through the deck is what brings the daylight
+      uav.lightBoost = ease(p * 1.15);
       const el = wrap.current;
       if (!el) return;
       const layers = el.querySelectorAll<HTMLElement>(".cloud-band");

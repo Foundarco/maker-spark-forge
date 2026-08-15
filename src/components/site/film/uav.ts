@@ -13,6 +13,12 @@ export const uav = {
   release: 0,
   /** 0 → 1 dark-to-dawn light level, mirrors the page's --light */
   light: 0,
+  /**
+   * Acts can push the dawn forward faster than page scroll alone.
+   * Written every frame by the act that owns the moment; the engine
+   * decays it back to 0 once nothing is asking.
+   */
+  lightBoost: 0,
   /** 0 → 1 the cloud-break reveal: lifts the aircraft out of the deck */
   reveal: 0,
 };

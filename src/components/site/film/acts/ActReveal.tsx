@@ -26,6 +26,7 @@ export function ActReveal() {
       // present from the moment it breaks the deck, gone once we move on
       uav.weight = ease(ramp(p, 0.04, 0.3)) * (1 - ease(ramp(p, 0.88, 1)));
       uav.reveal = clamp(p);
+      uav.lightBoost = 1;
       // hold it near the start of the transit so it reads as a hero shot
       uav.t = 0.06 + p * 0.1;
       uav.bank = Math.sin(p * Math.PI) * 0.12;
