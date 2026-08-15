@@ -97,7 +97,7 @@ export function MissionFlow() {
                 whileHover={{ y: -6 }}
                 aria-pressed={on}
                 className={`bento relative overflow-hidden p-5 text-left transition-colors ${
-                  on ? "bg-[var(--signal)] text-[var(--sheet)]" : "bg-[var(--sheet)] text-ink hover:bg-[var(--surface)]"
+                  on ? "bg-[var(--signal)] text-[var(--on-signal)]" : "bg-[var(--sheet)] text-ink hover:bg-[var(--surface)]"
                 }`}
               >
                 <StepIcon className="h-6 w-6" aria-hidden />
@@ -124,7 +124,7 @@ export function MissionFlow() {
               transition={{ duration: 0.4 }}
               className="flex flex-col gap-6 sm:flex-row sm:items-center"
             >
-              <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-[var(--signal)] text-[var(--sheet)]">
+              <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-[var(--signal)] text-[var(--on-signal)]">
                 <Icon className="h-7 w-7" aria-hidden />
               </span>
               <div>

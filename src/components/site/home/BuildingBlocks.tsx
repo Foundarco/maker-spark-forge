@@ -77,15 +77,15 @@ export function BuildingBlocks() {
                   />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_35%,color-mix(in_oklab,var(--night)_78%,transparent))]" />
                   <div className="absolute inset-x-0 bottom-0 p-5">
-                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[var(--sheet)]/70">{t.label}</p>
-                    <p className="mt-1 text-2xl font-extrabold tracking-tight text-[var(--sheet)]">{t.title}</p>
+                    <p className="text-[0.68rem] font-bold uppercase tracking-[0.18em] text-ink/70">{t.label}</p>
+                    <p className="mt-1 text-2xl font-extrabold tracking-tight text-ink">{t.title}</p>
                   </div>
                 </div>
               ) : (
                 <div
                   className={`bento flex h-full flex-col justify-between p-6 ${
                     t.tone === "signal"
-                      ? "bg-[var(--signal)] text-[var(--sheet)]"
+                      ? "bg-[var(--signal)] text-[var(--on-signal)]"
                       : t.tone === "surface"
                         ? "bg-[var(--surface)] text-ink"
                         : "bg-[var(--sheet)] text-ink"

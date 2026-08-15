@@ -1700,46 +1700,49 @@
   opacity: calc(var(--o, 1) * (1 - var(--ap) * 0.75));
 }
 
+
 /* ══════════════════════════════════════════════════════════
-   Public site — "Sage & Cream" light theme
-   A warm, human, daylight palette for a mission-driven
-   nonprofit. Declared last so it wins over the older
-   dark/dawn film tokens above.
+   Public site — "Deep Navy & Ember" dark theme
+   Professional, cinematic, story-first. Declared last so it
+   wins over every earlier public-site palette.
    ══════════════════════════════════════════════════════════ */
 .site-theme {
-  --radius: 1.6rem;
+  --radius: 0.9rem;
 
-  --cream: oklch(0.962 0.012 92);
-  --sage-100: oklch(0.925 0.024 138);
-  --sage-300: oklch(0.805 0.045 138);
-  --sage-600: oklch(0.635 0.055 142);
-  --forest: oklch(0.315 0.035 145);
+  --navy-950: oklch(0.155 0.036 258);
+  --navy-900: oklch(0.196 0.040 258);
+  --navy-800: oklch(0.247 0.042 258);
+  --navy-700: oklch(0.318 0.046 258);
+  --ember: oklch(0.605 0.205 27);
+  --ember-soft: oklch(0.685 0.170 32);
 
-  --background: var(--cream);
-  --sheet: oklch(0.987 0.008 92);
-  --surface: var(--sage-100);
+  --background: var(--navy-950);
+  --sheet: var(--navy-900);
+  --surface: var(--navy-800);
   --card: var(--sheet);
-  --card-foreground: var(--forest);
-  --popover: var(--sheet);
-  --popover-foreground: var(--forest);
-  --foreground: var(--forest);
-  --ink: var(--forest);
-  --muted-foreground: oklch(0.50 0.030 145);
-  --night: oklch(0.245 0.030 148);
-  --signal: var(--sage-600);
-  --aid: var(--sage-300);
-  --primary: var(--sage-600);
-  --primary-foreground: var(--sheet);
-  --hair: color-mix(in oklab, var(--forest) 12%, transparent);
+  --card-foreground: oklch(0.965 0.006 258);
+  --popover: var(--navy-900);
+  --popover-foreground: oklch(0.965 0.006 258);
+  --foreground: oklch(0.965 0.006 258);
+  --ink: oklch(0.972 0.006 258);
+  --muted-foreground: oklch(0.735 0.018 258);
+  --night: oklch(0.115 0.030 258);
+  --signal: var(--ember);
+  --on-signal: oklch(0.985 0.004 258);
+  --aid: oklch(0.72 0.10 240);
+  --primary: var(--ember);
+  --primary-foreground: var(--on-signal);
+  --hair: color-mix(in oklab, white 13%, transparent);
   --border: var(--hair);
-  --hill-far: color-mix(in oklab, var(--sage-300) 45%, transparent);
-  --hill-near: color-mix(in oklab, var(--sage-300) 78%, transparent);
+  --hill-far: color-mix(in oklab, var(--navy-700) 70%, transparent);
+  --hill-near: color-mix(in oklab, var(--navy-800) 90%, transparent);
 
-  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
   color: var(--foreground);
   background-color: var(--background);
+  color-scheme: dark;
 }
 
 .site-theme h1,
@@ -1747,25 +1750,22 @@
 .site-theme h3,
 .site-theme h4,
 .site-theme .display-cond {
-  font-family: "Syne", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
   text-transform: none;
-  letter-spacing: -0.03em;
-  font-weight: 800;
+  letter-spacing: -0.032em;
+  font-weight: 700;
 }
 
-/* the footer stays a deep forest plate so the page has a base */
 .site-theme footer {
-  --ink: oklch(0.972 0.010 92);
-  --foreground: var(--ink);
-  --hair: color-mix(in oklab, white 18%, transparent);
-  --night: oklch(0.245 0.030 148);
+  --sheet: var(--night);
+  --hair: color-mix(in oklab, white 10%, transparent);
 }
 
-/* rounded tile — the whole homepage is built out of these */
+/* panel tile */
 @utility bento {
-  border-radius: 1.75rem;
+  border-radius: 1.15rem;
   border: 1px solid var(--hair);
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--forest) 6%, transparent);
+  box-shadow: 0 24px 60px -40px rgb(0 0 0 / 0.9);
 }
 
 @utility pill {
@@ -1773,19 +1773,21 @@
   align-items: center;
   gap: 0.5rem;
   border-radius: 999px;
-  background: color-mix(in oklab, var(--sage-300) 45%, transparent);
+  border: 1px solid var(--hair);
+  background: color-mix(in oklab, white 6%, transparent);
   padding: 0.4rem 0.9rem;
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--forest);
+  color: var(--ink);
 }
 
 @utility label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: color-mix(in oklab, var(--forest) 55%, transparent);
+  color: color-mix(in oklab, var(--ink) 52%, transparent);
 }
 
 @utility btn-leaf {
@@ -1796,11 +1798,12 @@
   background: var(--signal);
   padding: 0.95rem 1.6rem;
   font-weight: 700;
-  color: var(--sheet);
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s;
+  color: var(--on-signal);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s, background 0.25s;
   &:hover {
-    background: var(--forest);
+    background: var(--ember-soft);
     transform: translateY(-2px);
+    box-shadow: 0 18px 44px -20px color-mix(in oklab, var(--ember) 70%, transparent);
   }
 }
 
@@ -1809,35 +1812,48 @@
   align-items: center;
   gap: 0.5rem;
   border-radius: 999px;
-  border: 1.5px solid color-mix(in oklab, var(--forest) 25%, transparent);
+  border: 1px solid color-mix(in oklab, white 24%, transparent);
   padding: 0.9rem 1.6rem;
   font-weight: 700;
-  color: var(--forest);
+  color: var(--ink);
   transition: background 0.25s, transform 0.25s;
   &:hover {
-    background: color-mix(in oklab, var(--sage-300) 40%, transparent);
+    background: color-mix(in oklab, white 9%, transparent);
     transform: translateY(-2px);
   }
 }
 
-/* soft drifting colour behind the hero */
+/* atmospheric glow behind sections */
 .site-theme .blob {
   position: absolute;
   border-radius: 999px;
-  filter: blur(90px);
-  opacity: 0.65;
+  filter: blur(110px);
+  opacity: 0.5;
+  pointer-events: none;
 }
 .site-theme .blob-a {
-  top: -12%;
-  right: -6%;
+  top: -14%;
+  right: -8%;
   height: 34rem;
   width: 34rem;
-  background: color-mix(in oklab, var(--sage-300) 70%, transparent);
+  background: color-mix(in oklab, var(--ember) 45%, transparent);
 }
 .site-theme .blob-b {
-  top: 24%;
-  left: -12%;
-  height: 28rem;
-  width: 28rem;
-  background: color-mix(in oklab, oklch(0.88 0.06 78) 70%, transparent);
+  top: 26%;
+  left: -14%;
+  height: 30rem;
+  width: 30rem;
+  background: color-mix(in oklab, var(--navy-700) 90%, transparent);
+}
+
+/* faint technical grid for story stages */
+@utility grid-fine {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, white 5%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility hair-t {
+  border-top: 1px solid var(--hair);
 }

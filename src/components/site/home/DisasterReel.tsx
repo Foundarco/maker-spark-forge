@@ -82,12 +82,12 @@ export function DisasterReel() {
 
       {/* the shot label ticker */}
       {!dark && (
-        <div className="absolute left-5 top-24 z-10 flex flex-col gap-2 sm:left-8">
+        <div className="absolute left-5 top-28 z-10 flex flex-col gap-2 sm:left-8">
           {reel.map((s, i) => (
             <span
               key={s.label}
-              className="font-mono text-[0.62rem] uppercase tracking-[0.28em] transition-colors duration-500"
-              style={{ color: i === shot ? "white" : "rgba(255,255,255,0.32)" }}
+              className="label transition-colors duration-500"
+              style={{ color: i === shot ? "var(--ink)" : "color-mix(in oklab, var(--ink) 30%, transparent)" }}
             >
               {String(i + 1).padStart(2, "0")} · {s.label}
             </span>
@@ -100,7 +100,7 @@ export function DisasterReel() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 1.2 }}
-          className="font-mono text-[0.66rem] uppercase tracking-[0.34em] text-white/70"
+          className="label text-[var(--signal)]"
         >
           Fire · Wind · Water · Earth
         </motion.p>
@@ -109,31 +109,32 @@ export function DisasterReel() {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-5 max-w-4xl text-[clamp(2.6rem,7.4vw,6rem)] font-extrabold leading-[0.94] tracking-tight text-white"
+          className="mt-5 max-w-4xl text-[clamp(2.6rem,7.2vw,5.8rem)] font-bold leading-[0.95] tracking-tight text-ink"
         >
-          Every year the disasters get bigger.
+          The disasters are getting bigger. The response has to get faster.
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.8, duration: 1.2 }}
-          className="mt-6 max-w-xl text-lg leading-relaxed text-white/75"
+          className="mt-6 max-w-xl text-lg leading-relaxed text-ink/70"
         >
-          Wildfire, tornado, flood, hurricane — they all start in the same place: somewhere nobody is watching. We
-          are a nonprofit building the eyes and the aircraft that get there first.
+          Wildfire, tornado, flood, hurricane — they all begin in the same place: somewhere nobody is watching. We
+          are a nonprofit building the sensing, software and aircraft that get there first.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2.6, duration: 1 }}
-          className="mt-10 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/55"
+          className="mt-10 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-ink/55"
         >
-          <span className="inline-block h-9 w-[1px] animate-pulse bg-white/50" aria-hidden />
-          Scroll
+          <span className="inline-block h-9 w-[1px] animate-pulse bg-[var(--signal)]" aria-hidden />
+          Scroll to begin
         </motion.div>
       </div>
+
     </section>
   );
 }

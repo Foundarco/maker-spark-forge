@@ -85,7 +85,7 @@ export function Header() {
             </Link>
             <Link
               to="/donate"
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--signal)] font-semibold leading-none text-[var(--sheet)] transition-colors hover:bg-[var(--ink)] ${
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--signal)] font-semibold leading-none text-[var(--on-signal)] transition-colors hover:bg-[var(--ink)] ${
                 condensed ? "px-3.5 py-2 text-[0.78rem]" : "px-5 py-2.5 text-sm"
               }`}
             >
@@ -123,7 +123,7 @@ export function Header() {
               <Link
                 to="/donate"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-[var(--signal)] px-6 text-sm font-semibold text-[var(--sheet)]"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-[var(--signal)] px-6 text-sm font-semibold text-[var(--on-signal)]"
               >
                 Support the mission
               </Link>
