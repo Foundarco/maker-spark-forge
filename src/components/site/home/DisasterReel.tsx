@@ -5,6 +5,11 @@ import tornadoClip from "@/assets/reel-tornado.mp4.asset.json";
 import floodClip from "@/assets/reel-flood.mp4.asset.json";
 import stormClip from "@/assets/reel-storm.mp4.asset.json";
 import hoodClip from "@/assets/reel-neighborhood-1.mp4.asset.json";
+import hood2Clip from "@/assets/reel-neighborhood-2.mp4.asset.json";
+import evacueesClip from "@/assets/reel-evacuees.mp4.asset.json";
+import houseClip from "@/assets/reel-house-burning.mp4.asset.json";
+import aftermathClip from "@/assets/reel-aftermath.mp4.asset.json";
+import rainClip from "@/assets/reel-rain-ruins.mp4.asset.json";
 import poster from "@/assets/act-aftermath.jpg";
 
 const SHOT_MS = 4200;
@@ -14,28 +19,30 @@ const reel = [
   { src: tornadoClip.url, label: "Tornado", alt: "A tornado crossing open farmland under a dark sky" },
   { src: floodClip.url, label: "Flood", alt: "A flooded neighbourhood with water up to the rooftops" },
   { src: stormClip.url, label: "Hurricane", alt: "Storm damage on a coastal street in heavy rain" },
+  { src: houseClip.url, label: "Structure fire", alt: "A house fully involved in flames at night" },
+  { src: evacueesClip.url, label: "Evacuation", alt: "Residents evacuating with their belongings" },
   { src: hoodClip.url, label: "Aftermath", alt: "A burned neighbourhood reduced to smouldering foundations" },
+  { src: hood2Clip.url, label: "Aftermath", alt: "Smouldering foundations where homes once stood" },
+  { src: rainClip.url, label: "After the storm", alt: "Rain falling over destroyed buildings" },
+  { src: aftermathClip.url, label: "Recovery", alt: "Survey of a destroyed neighbourhood after the fire" },
 ];
 
 /** The opening cut-scenes: the disasters, one after another, then the promise. */
 export function DisasterReel() {
   const [shot, setShot] = useState(0);
-  const [dark, setDark] = useState(false);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
 
   useEffect(() => {
     const id = window.setInterval(() => setShot((s) => (s + 1) % reel.length), SHOT_MS);
-    const cut = window.setTimeout(() => setDark(true), reel.length * SHOT_MS);
     return () => {
       window.clearInterval(id);
-      window.clearTimeout(cut);
     };
   }, []);
 
   useEffect(() => {
     videos.current.forEach((el, i) => {
       if (!el) return;
-      if (i === shot && !dark) {
+      if (i === shot) {
         el.currentTime = 0;
         void el.play().catch(() => {});
       } else {
@@ -43,7 +50,7 @@ export function DisasterReel() {
         if (i === (shot + 1) % reel.length && el.preload !== "auto") el.preload = "auto";
       }
     });
-  }, [shot, dark]);
+  }, [shot]);
 
   return (
     <section
@@ -54,8 +61,8 @@ export function DisasterReel() {
         <div
           key={s.label}
           className="absolute inset-0 transition-opacity duration-[1400ms]"
-          style={{ opacity: !dark && i === shot ? 1 : 0 }}
-          aria-hidden={dark || i !== shot}
+          style={{ opacity: i === shot ? 1 : 0 }}
+          aria-hidden={i !== shot}
         >
           <video
             ref={(el) => {
@@ -76,24 +83,9 @@ export function DisasterReel() {
 
       <div
         className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/55 transition-opacity duration-[1600ms]"
-        style={{ opacity: dark ? 1 : 0.9 }}
+        style={{ opacity: 0.9 }}
         aria-hidden
       />
-
-      {/* the shot label ticker */}
-      {!dark && (
-        <div className="absolute left-5 top-28 z-10 flex flex-col gap-2 sm:left-8">
-          {reel.map((s, i) => (
-            <span
-              key={s.label}
-              className="label transition-colors duration-500"
-              style={{ color: i === shot ? "var(--ink)" : "color-mix(in oklab, var(--ink) 30%, transparent)" }}
-            >
-              {String(i + 1).padStart(2, "0")} · {s.label}
-            </span>
-          ))}
-        </div>
-      )}
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-16 sm:px-8 sm:pb-24">
         <motion.p
