@@ -1702,40 +1702,41 @@
 
 
 /* ══════════════════════════════════════════════════════════
-   Public site — "Deep Navy & Ember" dark theme
+   Public site — "Signal Red on Black" dark theme
    Professional, cinematic, story-first. Declared last so it
    wins over every earlier public-site palette.
    ══════════════════════════════════════════════════════════ */
 .site-theme {
   --radius: 0.9rem;
 
-  --navy-950: oklch(0.155 0.036 258);
-  --navy-900: oklch(0.196 0.040 258);
-  --navy-800: oklch(0.247 0.042 258);
-  --navy-700: oklch(0.318 0.046 258);
-  --ember: oklch(0.815 0.155 168);
-  --ember-soft: oklch(0.885 0.135 168);
+  --navy-950: oklch(0.145 0.008 20);
+  --navy-900: oklch(0.190 0.010 20);
+  --navy-800: oklch(0.242 0.012 20);
+  --navy-700: oklch(0.315 0.014 20);
+  --ember: oklch(0.585 0.222 27);
+  --ember-soft: oklch(0.655 0.215 30);
 
   --background: var(--navy-950);
   --sheet: var(--navy-900);
   --surface: var(--navy-800);
   --card: var(--sheet);
-  --card-foreground: oklch(0.965 0.006 258);
+  --card-foreground: oklch(0.965 0.004 20);
   --popover: var(--navy-900);
-  --popover-foreground: oklch(0.965 0.006 258);
-  --foreground: oklch(0.965 0.006 258);
-  --ink: oklch(0.972 0.006 258);
-  --muted-foreground: oklch(0.735 0.018 258);
-  --night: oklch(0.115 0.030 258);
+  --popover-foreground: oklch(0.965 0.004 20);
+  --foreground: oklch(0.965 0.004 20);
+  --ink: oklch(0.972 0.004 20);
+  --muted-foreground: oklch(0.735 0.010 20);
+  --night: oklch(0.105 0.006 20);
   --signal: var(--ember);
-  --on-signal: oklch(0.185 0.035 258);
-  --aid: oklch(0.72 0.10 240);
+  --on-signal: oklch(0.985 0.004 20);
+  --aid: oklch(0.72 0.14 40);
   --primary: var(--ember);
   --primary-foreground: var(--on-signal);
   --hair: color-mix(in oklab, white 13%, transparent);
   --border: var(--hair);
   --hill-far: color-mix(in oklab, var(--navy-700) 70%, transparent);
   --hill-near: color-mix(in oklab, var(--navy-800) 90%, transparent);
+
 
   --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
