@@ -53,7 +53,7 @@ export function Header() {
         <div
           className={`pointer-events-auto flex w-full items-center justify-between transition-all duration-500 ease-out ${
             condensed
-              ? "max-w-3xl gap-4 rounded-full border border-white/12 bg-[color-mix(in_oklab,var(--night)_78%,transparent)] px-2 py-1.5 shadow-[0_18px_50px_-24px_rgb(0_0_0/0.9)] backdrop-blur-xl sm:px-2.5"
+              ? "max-w-3xl gap-4 rounded-full border border-[var(--hair)] bg-[color-mix(in_oklab,var(--sheet)_88%,transparent)] px-2 py-1.5 shadow-[0_18px_50px_-30px_color-mix(in_oklab,var(--ink)_60%,transparent)] backdrop-blur-xl sm:px-2.5"
               : "max-w-7xl gap-6 rounded-full border border-transparent px-2 py-3 sm:px-4"
           }`}
         >
@@ -77,7 +77,7 @@ export function Header() {
           <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
             <Link
               to="/partners"
-              className={`inline-flex items-center whitespace-nowrap rounded-full border border-white/25 font-medium leading-none text-ink transition-colors hover:bg-white/10 ${
+              className={`inline-flex items-center whitespace-nowrap rounded-full border border-[color-mix(in_oklab,var(--ink)_25%,transparent)] font-semibold leading-none text-ink transition-colors hover:bg-[color-mix(in_oklab,var(--surface)_80%,transparent)] ${
                 condensed ? "px-3.5 py-2 text-[0.78rem]" : "px-5 py-2.5 text-sm"
               }`}
             >
@@ -85,7 +85,7 @@ export function Header() {
             </Link>
             <Link
               to="/donate"
-              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--signal)] font-semibold leading-none text-[var(--night)] transition-colors hover:brightness-110 ${
+              className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-[var(--signal)] font-semibold leading-none text-[var(--sheet)] transition-colors hover:bg-[var(--ink)] ${
                 condensed ? "px-3.5 py-2 text-[0.78rem]" : "px-5 py-2.5 text-sm"
               }`}
             >
@@ -99,7 +99,7 @@ export function Header() {
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((v) => !v)}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/25 text-ink lg:hidden"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[color-mix(in_oklab,var(--ink)_25%,transparent)] text-ink lg:hidden"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -107,14 +107,14 @@ export function Header() {
       </header>
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-40 overflow-y-auto bg-[var(--night)] px-6 pb-16 pt-24 lg:hidden">
+        <div className="fixed inset-0 z-40 overflow-y-auto bg-[var(--background)] px-6 pb-16 pt-24 lg:hidden">
           <nav aria-label="Mobile" className="flex flex-col">
             {[...nav, ...secondary].map((n) => (
               <Link
                 key={n.to}
                 to={n.to}
                 onClick={() => setMobileOpen(false)}
-                className="display-cond border-b border-white/10 py-4 text-3xl text-ink"
+                className="display-cond border-b border-[var(--hair)] py-4 text-3xl font-extrabold tracking-tight text-ink"
               >
                 {n.label}
               </Link>
@@ -123,14 +123,14 @@ export function Header() {
               <Link
                 to="/donate"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-[var(--signal)] px-6 text-sm font-semibold text-[var(--night)]"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-[var(--signal)] px-6 text-sm font-semibold text-[var(--sheet)]"
               >
                 Support the mission
               </Link>
               <Link
                 to="/join"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 px-6 text-sm font-semibold text-ink"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-[color-mix(in_oklab,var(--ink)_25%,transparent)] px-6 text-sm font-semibold text-ink"
               >
                 Build with us
               </Link>

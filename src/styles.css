@@ -1699,3 +1699,145 @@
   animation-delay: calc(var(--delay, 0) * -1s);
   opacity: calc(var(--o, 1) * (1 - var(--ap) * 0.75));
 }
+
+/* ══════════════════════════════════════════════════════════
+   Public site — "Sage & Cream" light theme
+   A warm, human, daylight palette for a mission-driven
+   nonprofit. Declared last so it wins over the older
+   dark/dawn film tokens above.
+   ══════════════════════════════════════════════════════════ */
+.site-theme {
+  --radius: 1.6rem;
+
+  --cream: oklch(0.962 0.012 92);
+  --sage-100: oklch(0.925 0.024 138);
+  --sage-300: oklch(0.805 0.045 138);
+  --sage-600: oklch(0.635 0.055 142);
+  --forest: oklch(0.315 0.035 145);
+
+  --background: var(--cream);
+  --sheet: oklch(0.987 0.008 92);
+  --surface: var(--sage-100);
+  --card: var(--sheet);
+  --card-foreground: var(--forest);
+  --popover: var(--sheet);
+  --popover-foreground: var(--forest);
+  --foreground: var(--forest);
+  --ink: var(--forest);
+  --muted-foreground: oklch(0.50 0.030 145);
+  --night: oklch(0.245 0.030 148);
+  --signal: var(--sage-600);
+  --aid: var(--sage-300);
+  --primary: var(--sage-600);
+  --primary-foreground: var(--sheet);
+  --hair: color-mix(in oklab, var(--forest) 12%, transparent);
+  --border: var(--hair);
+  --hill-far: color-mix(in oklab, var(--sage-300) 45%, transparent);
+  --hill-near: color-mix(in oklab, var(--sage-300) 78%, transparent);
+
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+.site-theme h1,
+.site-theme h2,
+.site-theme h3,
+.site-theme h4,
+.site-theme .display-cond {
+  font-family: "Syne", ui-sans-serif, system-ui, sans-serif;
+  text-transform: none;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+
+/* the footer stays a deep forest plate so the page has a base */
+.site-theme footer {
+  --ink: oklch(0.972 0.010 92);
+  --foreground: var(--ink);
+  --hair: color-mix(in oklab, white 18%, transparent);
+  --night: oklch(0.245 0.030 148);
+}
+
+/* rounded tile — the whole homepage is built out of these */
+@utility bento {
+  border-radius: 1.75rem;
+  border: 1px solid var(--hair);
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--forest) 6%, transparent);
+}
+
+@utility pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--sage-300) 45%, transparent);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--forest);
+}
+
+@utility label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--forest) 55%, transparent);
+}
+
+@utility btn-leaf {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background: var(--signal);
+  padding: 0.95rem 1.6rem;
+  font-weight: 700;
+  color: var(--sheet);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.25s;
+  &:hover {
+    background: var(--forest);
+    transform: translateY(-2px);
+  }
+}
+
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in oklab, var(--forest) 25%, transparent);
+  padding: 0.9rem 1.6rem;
+  font-weight: 700;
+  color: var(--forest);
+  transition: background 0.25s, transform 0.25s;
+  &:hover {
+    background: color-mix(in oklab, var(--sage-300) 40%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
+/* soft drifting colour behind the hero */
+.site-theme .blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: 0.65;
+}
+.site-theme .blob-a {
+  top: -12%;
+  right: -6%;
+  height: 34rem;
+  width: 34rem;
+  background: color-mix(in oklab, var(--sage-300) 70%, transparent);
+}
+.site-theme .blob-b {
+  top: 24%;
+  left: -12%;
+  height: 28rem;
+  width: 28rem;
+  background: color-mix(in oklab, oklch(0.88 0.06 78) 70%, transparent);
+}

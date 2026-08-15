@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MissionStory } from "@/components/site/film/MissionStory";
-import { ImpactCards } from "@/components/site/home/ImpactCards";
+import { HeroBento } from "@/components/site/home/HeroBento";
+import { MissionFlow } from "@/components/site/home/MissionFlow";
+import { StoryScroll } from "@/components/site/home/StoryScroll";
+import { BuildingBlocks } from "@/components/site/home/BuildingBlocks";
+import { JoinBanner } from "@/components/site/home/JoinBanner";
 import { Newsroom } from "@/components/site/home/Newsroom";
 import { brand } from "@/config/brand";
 import { SITE_URL } from "@/lib/seo";
@@ -41,8 +44,11 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   return (
     <>
-      <MissionStory />
-      <ImpactCards />
+      <HeroBento />
+      <MissionFlow />
+      <StoryScroll />
+      <BuildingBlocks />
+      <JoinBanner />
       <Newsroom />
     </>
   );

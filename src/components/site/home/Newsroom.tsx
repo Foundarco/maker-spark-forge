@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { Reveal, Words } from "@/components/site/Reveal";
 import node from "@/assets/j-node.jpg";
 import system from "@/assets/j-system.jpg";
 import uav from "@/assets/j-uav.jpg";
@@ -9,56 +9,59 @@ import foothills from "@/assets/j-foothills.jpg";
 const posts = [
   { img: node, tag: "Engineering", title: "Designing sensor nodes for terrain nobody visits", to: "/technology" as const },
   { img: uav, tag: "Airframe", title: "Why we fly a VTOL, not a quadcopter", to: "/technology" as const },
-  { img: system, tag: "System", title: "The nine layers between an ignition and an answer", to: "/system" as const },
+  { img: system, tag: "System", title: "The layers between an ignition and an answer", to: "/system" as const },
   { img: foothills, tag: "Programme", title: "Building in public: the honest development status", to: "/development" as const },
 ] as const;
 
-/** Newsroom grid closing the narrative. */
+/** Newsroom teaser — light cards that lift under the cursor. */
 export function Newsroom() {
   return (
-    <section className="relative bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
-      {/* soft transition out of the cinematic dark section above */}
-      <div
-        className="pointer-events-none absolute inset-x-0 -top-32 h-32 bg-[linear-gradient(180deg,var(--night),color-mix(in_oklab,_var(--night)_0%,_transparent))]"
-        aria-hidden
-      />
-      <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
-        <Reveal variant="mask">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <h2 className="display-cond text-[clamp(2.4rem,6vw,5rem)] text-[oklch(0.12_0.02_260)]">
-              <Words text="What’s happening" step={100} />
-            </h2>
-            <Link
-              to="/development"
-              className="inline-flex items-center gap-2 rounded-full border border-[oklch(0.16_0.02_260/0.25)] px-5 py-2.5 text-sm font-medium text-[oklch(0.2_0.02_260)] transition-colors hover:bg-[oklch(0.16_0.02_260/0.07)]"
-            >
-              All updates
-              <ArrowUpRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </div>
-        </Reveal>
+    <section className="px-4 pb-24 sm:px-6 sm:pb-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-[clamp(2rem,4.4vw,3.2rem)] font-extrabold tracking-tight text-ink"
+          >
+            From the workshop
+          </motion.h2>
+          <Link to="/development" className="btn-ghost">
+            Everything we are building
+          </Link>
+        </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {posts.map((p, i) => (
-            <Reveal key={p.title} delay={i * 110} variant="rise-rotate">
-              <Link to={p.to} className="group block">
-                <div className="overflow-hidden rounded-2xl">
+            <motion.div
+              key={p.title}
+              initial={{ opacity: 0, y: 28 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ delay: i * 0.07, duration: 0.6 }}
+              whileHover={{ y: -8 }}
+            >
+              <Link to={p.to} className="bento group flex h-full flex-col overflow-hidden bg-[var(--sheet)]">
+                <div className="h-44 overflow-hidden">
                   <img
                     src={p.img}
                     alt=""
-                    aria-hidden
                     loading="lazy"
-                    width={800}
-                    height={600}
-                    className="h-56 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="h-full w-full scale-105 object-cover transition-transform duration-[900ms] group-hover:scale-110"
                   />
                 </div>
-                <p className="mt-4 font-mono text-[0.62rem] uppercase tracking-[0.24em] text-[oklch(0.5_0.02_260)]">
-                  {p.tag}
-                </p>
-                <p className="mt-2 text-lg font-semibold leading-snug text-[oklch(0.12_0.02_260)]">{p.title}</p>
+                <div className="flex flex-1 flex-col p-5">
+                  <p className="label">{p.tag}</p>
+                  <p className="mt-3 flex-1 text-lg font-bold leading-snug tracking-tight text-ink">{p.title}</p>
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--signal)]">
+                    Read
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
+                  </span>
+                </div>
               </Link>
-            </Reveal>
+            </motion.div>
           ))}
         </div>
       </div>
