@@ -1,8 +1,8 @@
 import { Act } from "../Act";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import pov from "@/assets/act-pov.jpg";
 
-const copy = acts[6]!;
+const copy = act("investigate");
 
 /** Format: payload point of view. Letterbox closes in, the frame becomes a camera. */
 export function ActInvestigate() {

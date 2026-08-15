@@ -1,9 +1,9 @@
 import { Act } from "../Act";
 import { OversightLockup } from "../OversightLockup";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import operator from "@/assets/act-operator.jpg";
 
-const copy = acts[3]!;
+const copy = act("ops");
 
 const rows = [
   { label: "Anomaly", state: "Observed" },

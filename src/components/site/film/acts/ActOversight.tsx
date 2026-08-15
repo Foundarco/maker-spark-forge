@@ -1,8 +1,8 @@
 import { Act } from "../Act";
 import { OversightLockup } from "../OversightLockup";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 
-const copy = acts[4]!;
+const copy = act("oversight");
 
 /** Format: no photograph. Pure diagram — the one moment the site explains itself. */
 export function ActOversight() {

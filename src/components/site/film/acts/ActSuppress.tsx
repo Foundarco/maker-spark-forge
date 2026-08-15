@@ -1,10 +1,10 @@
 import { Act } from "../Act";
 import { uav } from "../uav";
 import { ramp, win } from "../useFilmScroll";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import suppression from "@/assets/f-suppression.jpg";
 
-const copy = acts[8]!;
+const copy = act("suppress");
 
 const stages = [
   { at: 0.08, label: "Heading change", state: "Aircraft repositioning" },

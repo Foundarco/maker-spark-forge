@@ -1,8 +1,8 @@
 import { Act } from "../Act";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import fire from "@/assets/act-fire.jpg";
 
-const copy = acts[7]!;
+const copy = act("confirm");
 
 /** Format: one frame, two sensors. A hard edge travels across — a switch, not a fade. */
 export function ActConfirm() {

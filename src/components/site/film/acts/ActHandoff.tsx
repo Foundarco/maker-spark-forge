@@ -1,8 +1,8 @@
 import { Act } from "../Act";
-import { acts } from "@/config/acts";
+import { act } from "@/config/acts";
 import responders from "@/assets/act-responders.jpg";
 
-const copy = acts[10]!;
+const copy = act("handoff");
 
 const delivered = [
   ["Location", "Coordinates, access roads and the nearest approach."],
