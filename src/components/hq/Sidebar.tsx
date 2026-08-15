@@ -75,7 +75,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
         <div className="flex items-center gap-2">
           <div className="flex h-11 min-w-0 flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3">
             <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-black text-sidebar-accent-foreground">
-              MC
+              CL
             </div>
             <div className="min-w-0 flex-1">
               <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Labs</p>

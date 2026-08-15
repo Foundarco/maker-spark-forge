@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_hq/dashboard")({
   head: () => ({
     meta: [
       { title: "Dashboard — Clovr Labs HQ" },
-      { name: "description", content: "Company-wide view of jobs, crews, safety, materials and finance for Clovr Labs." },
+      { name: "description", content: "Organization-wide view of incidents, response teams, safety, fleet and funding for Clovr Labs." },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -23,14 +23,14 @@ type Focus = "exec" | "precon" | "pm" | "field" | "materials" | "safety" | "fina
 
 const FOCUS_LABEL: Record<Focus, string> = {
   exec: "Executive",
-  precon: "Preconstruction",
-  pm: "Project Management",
-  field: "Field Ops",
-  materials: "Materials",
+  precon: "Engineering",
+  pm: "Mission Management",
+  field: "Mission Ops",
+  materials: "Fleet & Supply",
   safety: "Safety & Quality",
-  finance: "Finance",
+  finance: "Funding",
   people: "People",
-  client: "Client Relations",
+  client: "Research & Partners",
 };
 
 function focusFromText(text: string, add: (f: Focus) => void) {
