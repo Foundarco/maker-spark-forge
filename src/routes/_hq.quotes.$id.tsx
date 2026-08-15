@@ -351,6 +351,6 @@ function Panel({ title, action, children }: { title: string; action?: React.Reac
 }
 
 export const Route = createFileRoute("/_hq/quotes/$id")({
-  head: () => ({ meta: [{ title: "Quote — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Quote — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: QuoteDetail,
 });

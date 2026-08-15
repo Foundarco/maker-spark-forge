@@ -41,7 +41,7 @@ function PortalOverview() {
     <div className="space-y-6">
       <header>
         <h1 className="text-xl font-semibold">Welcome back</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Everything happening on your projects with McGuire Construction.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Everything happening on your projects with Clovr Labs.</p>
       </header>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -118,6 +118,6 @@ export function Empty({ text }: { text: string }) {
 }
 
 export const Route = createFileRoute("/portal/")({
-  head: () => ({ meta: [{ title: "Client Portal — McGuire Construction" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Client Portal — Clovr Labs" }, { name: "robots", content: "noindex" }] }),
   component: PortalOverview,
 });

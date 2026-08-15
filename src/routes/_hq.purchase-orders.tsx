@@ -13,7 +13,7 @@ const STATUS = { draft: "border-muted-foreground/30 bg-muted/40 text-muted-foreg
 const config: ResourceConfig<any> = {
   table: "mfg_purchase_orders",
   title: "Purchase Orders",
-  eyebrow: "Manufacturing · Purchasing",
+  eyebrow: "Fleet & Supply · Purchasing",
   icon: ShoppingCart,
   itemName: "purchase order",
   searchable: ["po_number", "notes"],

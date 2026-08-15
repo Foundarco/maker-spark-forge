@@ -6,8 +6,8 @@ const RESULT = { pass: "border-emerald-200 bg-emerald-50 text-emerald-700", fail
 
 const cfg: ResourceConfig<any> = {
   table: "con_inspections",
-  title: "Inspections & QC",
-  eyebrow: "Field Ops",
+  title: "Field Trials",
+  eyebrow: "Mission Ops",
   icon: ClipboardCheck,
   itemName: "inspection",
   noCreatedBy: true,
@@ -43,6 +43,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/inspections")({
-  head: () => ({ meta: [{ title: "Inspections & QC — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Field Trials — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

@@ -6,8 +6,8 @@ const STATUS = { applied: "border-amber-200 bg-amber-50 text-amber-700", issued:
 
 const cfg: ResourceConfig<any> = {
   table: "con_permits",
-  title: "Permits & Approvals",
-  eyebrow: "Preconstruction",
+  title: "Compliance & Approvals",
+  eyebrow: "Engineering",
   icon: Stamp,
   itemName: "permit",
   noCreatedBy: true,
@@ -44,6 +44,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/permits")({
-  head: () => ({ meta: [{ title: "Permits & Approvals — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Compliance & Approvals — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

@@ -16,7 +16,7 @@ const AUDIENCE_PALETTE = {
 const config: ResourceConfig<any> = {
   table: "cs_kb_articles",
   title: "Knowledge Base",
-  eyebrow: "Customer Service · KB",
+  eyebrow: "Research & Partners · KB",
   icon: BookOpen,
   itemName: "article",
   baseFilter: { kind: "kb" },

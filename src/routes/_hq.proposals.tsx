@@ -4,8 +4,8 @@ import { ResourcePage, StatusBadge, DateCell, JobCell, type ResourceConfig } fro
 
 const cfg: ResourceConfig<any> = {
   table: "con_documents",
-  title: "Proposals & Contracts",
-  eyebrow: "Preconstruction",
+  title: "Grants & Proposals",
+  eyebrow: "Engineering",
   icon: FileSignature,
   itemName: "document",
   noCreatedBy: true,
@@ -35,6 +35,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/proposals")({
-  head: () => ({ meta: [{ title: "Proposals & Contracts — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Grants & Proposals — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

@@ -400,6 +400,6 @@ function BlockDialog({ block, jobs, crews, equipment, onClose, onSaved }: {
 }
 
 export const Route = createFileRoute("/_hq/scheduling")({
-  head: () => ({ meta: [{ title: "Scheduling — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Scheduling — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: Scheduling,
 });

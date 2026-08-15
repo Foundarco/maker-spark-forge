@@ -43,6 +43,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/certifications")({
-  head: () => ({ meta: [{ title: "Certifications — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Certifications — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

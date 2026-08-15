@@ -78,7 +78,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
               MC
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">McGuire Construction</p>
+              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Labs</p>
               <p className="truncate text-[11px] text-sidebar-muted">
                 {profile?.department ? `${profile.department} workspace` : "Internal workspace"}
               </p>

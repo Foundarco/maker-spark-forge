@@ -123,6 +123,6 @@ function UniversalSearch() {
 
 export const Route = createFileRoute("/_hq/search")({
   validateSearch: (s: Record<string, unknown>) => ({ q: typeof s.q === "string" ? s.q : undefined }),
-  head: () => ({ meta: [{ title: "Universal Search — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Universal Search — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: UniversalSearch,
 });

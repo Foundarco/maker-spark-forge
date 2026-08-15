@@ -18,7 +18,7 @@ const STATUS_PALETTE = {
 const config: ResourceConfig<any> = {
   table: "cs_tickets",
   title: "Live Chat Sessions",
-  eyebrow: "Customer Service · Chat",
+  eyebrow: "Research & Partners · Chat",
   icon: MessageCircle,
   itemName: "chat",
   baseFilter: { channel: "chat" },

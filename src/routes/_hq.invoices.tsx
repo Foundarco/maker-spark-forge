@@ -19,7 +19,7 @@ const STATUS_PALETTE = {
 const config: ResourceConfig<any> = {
   table: "fin_invoices",
   title: "Invoices & Payments",
-  eyebrow: "Finance · Accounts Receivable",
+  eyebrow: "Funding · Accounts Receivable",
   icon: FileSpreadsheet,
   itemName: "invoice",
   searchable: ["invoice_number", "customer_name", "customer_email"],

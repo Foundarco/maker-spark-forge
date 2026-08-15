@@ -16,8 +16,8 @@ const OPEN = ["new", "qualifying", "walkthrough", "bidding", "submitted"];
 
 const cfg: ResourceConfig<any> = {
   table: "con_leads",
-  title: "Leads & Bids",
-  eyebrow: "Preconstruction",
+  title: "Donors & Sponsors",
+  eyebrow: "Engineering",
   icon: Target,
   itemName: "lead",
   orderBy: { column: "bid_due_date", ascending: true },
@@ -67,6 +67,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/leads")({
-  head: () => ({ meta: [{ title: "Leads & Bids — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Donors & Sponsors — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

@@ -5,8 +5,8 @@ import { useState } from "react";
 
 const entriesCfg: ResourceConfig<any> = {
   table: "hr_time_entries",
-  title: "Time Entries",
-  eyebrow: "HR",
+  title: "Field Time",
+  eyebrow: "People",
   icon: Clock,
   itemName: "entry",
   orderBy: { column: "entry_date", ascending: false },
@@ -39,7 +39,7 @@ const entriesCfg: ResourceConfig<any> = {
 const timeOffCfg: ResourceConfig<any> = {
   table: "hr_time_off",
   title: "Time Off",
-  eyebrow: "HR",
+  eyebrow: "People",
   icon: CalendarOff,
   itemName: "request",
   orderBy: { column: "start_date", ascending: false },

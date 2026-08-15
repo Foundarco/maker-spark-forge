@@ -14,7 +14,7 @@ const overdue = (r: any) => r.status !== "received" && r.expected_date && new Da
 const cfg: ResourceConfig<any> = {
   table: "con_deliveries",
   title: "Receiving",
-  eyebrow: "Materials",
+  eyebrow: "Fleet & Supply",
   icon: PackageOpen,
   itemName: "receipt",
   noCreatedBy: true,
@@ -52,6 +52,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/receiving")({
-  head: () => ({ meta: [{ title: "Receiving — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Receiving — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

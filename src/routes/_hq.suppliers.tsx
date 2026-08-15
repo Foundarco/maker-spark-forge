@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_hq/suppliers")({
 const config: ResourceConfig<any> = {
   table: "mfg_suppliers",
   title: "Suppliers & Vendors",
-  eyebrow: "Manufacturing · Suppliers",
+  eyebrow: "Fleet & Supply · Suppliers",
   icon: Store,
   itemName: "supplier",
   searchable: ["name", "contact_name", "email", "category"],

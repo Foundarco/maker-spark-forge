@@ -18,7 +18,7 @@ const STATUS_PALETTE = {
 const config: ResourceConfig<any> = {
   table: "fin_expenses",
   title: "Expenses & Budgets",
-  eyebrow: "Finance · Expenses",
+  eyebrow: "Funding · Expenses",
   icon: Receipt,
   itemName: "expense",
   searchable: ["purpose", "category"],

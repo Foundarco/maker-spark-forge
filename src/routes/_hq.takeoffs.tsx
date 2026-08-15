@@ -4,8 +4,8 @@ import { ResourcePage, type ResourceConfig } from "@/components/hq/ResourcePage"
 
 const cfg: ResourceConfig<any> = {
   table: "con_estimate_lines",
-  title: "Takeoffs & RFQs",
-  eyebrow: "Preconstruction",
+  title: "Test Plans",
+  eyebrow: "Engineering",
   icon: Ruler,
   itemName: "line item",
   noCreatedBy: true,
@@ -34,6 +34,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/takeoffs")({
-  head: () => ({ meta: [{ title: "Takeoffs & RFQs — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Test Plans — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

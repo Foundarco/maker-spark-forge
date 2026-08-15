@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/_hq/client-comms")({
   head: () => ({
     meta: [
-      { title: "Client Communication — McGuire HQ" },
+      { title: "Client Communication — Clovr Labs HQ" },
       { name: "description", content: "Unified client desk: property, documents, invoices, project history and conversation in one view." },
       { name: "robots", content: "noindex" },
     ],

@@ -207,7 +207,7 @@ export function MailboxesAdmin() {
               </label>
               <label className="text-sm">
                 <span className="mb-1 block font-medium">Display name</span>
-                <input className={input} value={form.display_name ?? ""} onChange={(e) => setForm({ ...form, display_name: e.target.value })} placeholder="McGuire Construction" />
+                <input className={input} value={form.display_name ?? ""} onChange={(e) => setForm({ ...form, display_name: e.target.value })} placeholder="Clovr Labs" />
               </label>
               <label className="text-sm">
                 <span className="mb-1 block font-medium">Login username</span>

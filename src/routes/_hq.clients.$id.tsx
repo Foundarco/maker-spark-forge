@@ -184,6 +184,6 @@ function Panel({ title, action, children }: { title: string; action?: React.Reac
 }
 
 export const Route = createFileRoute("/_hq/clients/$id")({
-  head: () => ({ meta: [{ title: "Client record — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Client record — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: ClientDetail,
 });

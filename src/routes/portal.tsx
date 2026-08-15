@@ -55,7 +55,7 @@ function PortalLayout() {
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold leading-tight">{portal.clientName}</p>
-              <p className="text-[11px] text-muted-foreground">McGuire Construction · Client Portal</p>
+              <p className="text-[11px] text-muted-foreground">Clovr Labs · Client Portal</p>
             </div>
           </div>
           <button onClick={signOut} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium hover:bg-muted">

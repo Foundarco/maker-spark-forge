@@ -6,8 +6,8 @@ const STATUS = { active: "border-emerald-200 bg-emerald-50 text-emerald-700", st
 
 const cfg: ResourceConfig<any> = {
   table: "con_crews",
-  title: "Crews & Dispatch",
-  eyebrow: "Field Ops",
+  title: "Response Teams",
+  eyebrow: "Mission Ops",
   icon: Users,
   itemName: "crew",
   noCreatedBy: true,
@@ -38,6 +38,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/crews")({
-  head: () => ({ meta: [{ title: "Crews & Dispatch — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Response Teams — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

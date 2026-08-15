@@ -6,8 +6,8 @@ const STATUS = { scheduled: "border-blue-200 bg-blue-50 text-blue-700", received
 
 const cfg: ResourceConfig<any> = {
   table: "con_deliveries",
-  title: "Deliveries",
-  eyebrow: "Materials",
+  title: "Shipments",
+  eyebrow: "Fleet & Supply",
   icon: PackageCheck,
   itemName: "delivery",
   noCreatedBy: true,
@@ -45,6 +45,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/deliveries")({
-  head: () => ({ meta: [{ title: "Deliveries — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Shipments — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

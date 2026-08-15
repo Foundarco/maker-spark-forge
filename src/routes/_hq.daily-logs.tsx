@@ -6,8 +6,8 @@ const STATUS = { draft: "border-border bg-muted/40 text-muted-foreground", submi
 
 const cfg: ResourceConfig<any> = {
   table: "con_daily_logs",
-  title: "Daily Logs",
-  eyebrow: "Field Ops",
+  title: "Situation Reports",
+  eyebrow: "Mission Ops",
   icon: ClipboardList,
   itemName: "daily log",
   noCreatedBy: true,
@@ -46,6 +46,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/daily-logs")({
-  head: () => ({ meta: [{ title: "Daily Logs — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Situation Reports — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

@@ -7,7 +7,7 @@ const STATUS = { draft: "border-border bg-muted/40 text-muted-foreground", submi
 const cfg: ResourceConfig<any> = {
   table: "con_change_orders",
   title: "Change Orders",
-  eyebrow: "Finance",
+  eyebrow: "Funding",
   icon: GitPullRequestArrow,
   itemName: "change order",
   noCreatedBy: true,
@@ -44,6 +44,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/change-orders")({
-  head: () => ({ meta: [{ title: "Change Orders — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Change Orders — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });

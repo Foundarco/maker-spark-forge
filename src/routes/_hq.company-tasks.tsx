@@ -7,7 +7,7 @@ const STATUS = { todo: "border-border bg-muted/40 text-muted-foreground", in_pro
 
 const cfg: ResourceConfig<any> = {
   table: "con_tasks",
-  title: "Company Tasks",
+  title: "Org Tasks",
   eyebrow: "Operations",
   icon: CheckSquare,
   itemName: "task",
@@ -44,6 +44,6 @@ const cfg: ResourceConfig<any> = {
 };
 
 export const Route = createFileRoute("/_hq/company-tasks")({
-  head: () => ({ meta: [{ title: "Company Tasks — McGuire HQ" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [{ title: "Org Tasks — Clovr Labs HQ" }, { name: "robots", content: "noindex" }] }),
   component: () => <ResourcePage config={cfg} />,
 });
