@@ -8,7 +8,7 @@ const title = `FAQ | ${brand.name}`;
 const desc =
   "Common questions about Clovr Labs: what the wildfire detection and UAV system is, what stage it is at, how the Operations Center works, and how to get involved.";
 
-const faqs = [
+export const faqs = [
   {
     q: "What are you actually building?",
     a: "An integrated wildfire detection and aerial investigation system: distributed environmental sensor nodes, automated detection, a 24/7/365 Operations Center that reviews alerts and coordinates missions, UAVs that fly to investigate, thermal and RGB imaging, and the software that connects all of it and delivers information to responders.",
