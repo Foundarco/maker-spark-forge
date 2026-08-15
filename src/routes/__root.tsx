@@ -146,7 +146,8 @@ function RootShell({ children }: { children: ReactNode }) {
         var path = window.location.pathname;
         var referrer = document.referrer || "";
         var isHqHost = host === "hq.clovrlab.com" || host.indexOf("hq.") === 0 || host.indexOf("hq--") === 0;
-        var cameFromHq = /^https:\/\/hq\.clovrlab\.com(?:\/|$)/i.test(referrer);
+        var lowerRef = referrer.toLowerCase();
+        var cameFromHq = lowerRef.indexOf("https://hq.clovrlab.com") === 0;
         var isRootPath = path === "/" || path === "" || path === "/index.html";
         if ((isHqHost || cameFromHq) && isRootPath) {
           window.location.replace("/hq-login");
