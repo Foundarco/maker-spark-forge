@@ -29,6 +29,14 @@ export const acts: ActCopy[] = [
     note: "",
   },
   {
+    id: "rain",
+    code: "02",
+    kicker: "Then the rain came",
+    title: "Too late to matter.",
+    line: "Rain always arrives eventually. The question is whether anything is left when it does.",
+    detail: "What if the ground could tell us first",
+  },
+  {
     id: "landscape",
     code: "02",
     kicker: "The country",
@@ -50,6 +58,21 @@ export const acts: ActCopy[] = [
     title: "A person picks up the alert.",
     line: "When the readings stop looking normal, the alert lands in our Operations Center — and a human decides what happens next.",
     detail: "Operations Center · 24/7/365",
+  },
+  {
+    id: "clouds",
+    code: "07",
+    kicker: "Above the deck",
+    title: "Get above it.",
+    line: "Above the smoke and the cloud layer, the sky is clear and the ground is readable.",
+  },
+  {
+    id: "reveal",
+    code: "08",
+    kicker: "The aircraft",
+    title: "Built to go and look.",
+    line: "A vertical-takeoff aircraft carrying a camera, a thermal sensor and a water payload — small enough to launch from a truck.",
+    detail: "VTOL · fixed-wing cruise",
   },
   {
     id: "oversight",
@@ -112,6 +135,9 @@ export const acts: ActCopy[] = [
     line: "Sensors, Operations Center, aircraft, payload and software — built to work as one.",
   },
 ];
+
+/** copy lookup by id — order in the array is story order, not an index contract */
+export const act = (id: string): ActCopy => acts.find((a) => a.id === id)!;
 
 export const chain = [
   "Sense",
