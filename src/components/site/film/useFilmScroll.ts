@@ -55,6 +55,12 @@ function loop(now: number) {
   // ── pass 2: writes ───────────────────────────────────────────────
   doc.style.setProperty("--page-p", page.toFixed(4));
 
+  // dark → dawn: one light value the whole site reads
+  const lightRaw = clamp((page - LIGHT_FROM) / (LIGHT_TO - LIGHT_FROM));
+  const light = lightRaw * lightRaw * (3 - 2 * lightRaw);
+  doc.style.setProperty("--light", light.toFixed(4));
+  uav.light = light;
+
   for (const e of entries) {
     if (!e.visible) continue;
     const span = e.height - vh;
