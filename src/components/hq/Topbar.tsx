@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
-import { Bell, Menu, Phone, PhoneOff, Mic, MicOff, Grip, LayoutDashboard, Mail, Calendar as CalendarIcon, FolderOpen, MessagesSquare, Users, Bot } from "lucide-react";
+import { Bell, Menu, Phone, PhoneOff, Mic, MicOff, Grip, LayoutDashboard, Mail, Calendar as CalendarIcon, FolderOpen, MessagesSquare, Users, Bot, Sun, Moon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { RecordTabs } from "./RecordTabs";
 import { usePhone, formatDuration } from "@/lib/hq/phone";
+import { useHQTheme, resolveTheme } from "@/lib/hq/theme";
 
 type Notification = {
   id: string;
@@ -29,6 +30,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [open, setOpen] = useState<null | "notif" | "apps" | "phone">(null);
   const [notifs, setNotifs] = useState<Notification[]>([]);
   const [, tick] = useState(0);
+  const { theme, setTheme } = useHQTheme();
   const { active, endCall, toggleMute, incoming, acceptIncoming, declineIncoming } = usePhone();
 
   useEffect(() => {
