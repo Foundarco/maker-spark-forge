@@ -1713,8 +1713,8 @@
   --navy-900: oklch(0.196 0.040 258);
   --navy-800: oklch(0.247 0.042 258);
   --navy-700: oklch(0.318 0.046 258);
-  --ember: oklch(0.605 0.205 27);
-  --ember-soft: oklch(0.685 0.170 32);
+  --ember: oklch(0.815 0.155 168);
+  --ember-soft: oklch(0.885 0.135 168);
 
   --background: var(--navy-950);
   --sheet: var(--navy-900);
