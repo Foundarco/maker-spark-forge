@@ -59,7 +59,7 @@ export function DisasterReel() {
     >
       {reel.map((s, i) => (
         <div
-          key={s.label}
+          key={s.src}
           className="absolute inset-0 transition-opacity duration-[1400ms]"
           style={{ opacity: i === shot ? 1 : 0 }}
           aria-hidden={i !== shot}
