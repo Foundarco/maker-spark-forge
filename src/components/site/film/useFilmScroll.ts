@@ -119,6 +119,10 @@ function stopIfIdle() {
   raf = 0;
   observer?.disconnect();
   observer = null;
+  // leave the rest of the app in its normal night palette
+  document.documentElement.style.setProperty("--light", "0");
+  uav.light = 0;
+  uav.reveal = 0;
 }
 
 /** Register an Act section with the shared loop. */
