@@ -85,7 +85,7 @@ export function BuildingBlocks() {
                 <div
                   className={`bento flex h-full flex-col justify-between p-6 ${
                     t.tone === "signal"
-                      ? "bg-[var(--signal)] text-[var(--sheet)]"
+                      ? "bg-[var(--signal)] text-[var(--on-signal)]"
                       : t.tone === "surface"
                         ? "bg-[var(--surface)] text-ink"
                         : "bg-[var(--sheet)] text-ink"
