@@ -1,5 +1,5 @@
 import { Act } from "../Act";
-import { acts, chain } from "@/config/acts";
+import { act, chain } from "@/config/acts";
 import topo from "@/assets/act-topo.jpg";
 import responders from "@/assets/act-responders.jpg";
 
