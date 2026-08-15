@@ -1728,7 +1728,7 @@
   --muted-foreground: oklch(0.735 0.018 258);
   --night: oklch(0.115 0.030 258);
   --signal: var(--ember);
-  --on-signal: oklch(0.985 0.004 258);
+  --on-signal: oklch(0.185 0.035 258);
   --aid: oklch(0.72 0.10 240);
   --primary: var(--ember);
   --primary-foreground: var(--on-signal);
