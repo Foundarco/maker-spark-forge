@@ -59,78 +59,82 @@
 
 :root {
   --radius: 0.75rem;
-  /* Looplet-inspired airy light theme */
-  --background: oklch(0.99 0.003 260);
-  --surface: oklch(0.975 0.006 250);
-  --foreground: oklch(0.18 0.02 260);
-  --ink: oklch(0.13 0.02 260);
-  --warm: oklch(0.98 0.004 260);
+  /* Clovr Labs HQ — light mode: warm neutrals + signal red */
+  --background: oklch(0.99 0.003 25);
+  --surface: oklch(0.972 0.006 30);
+  --foreground: oklch(0.18 0.015 25);
+  --ink: oklch(0.13 0.015 25);
+  --warm: oklch(0.98 0.006 40);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 260);
+  --card-foreground: oklch(0.18 0.015 25);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 260);
-  --primary: oklch(0.58 0.19 260);
-  --primary-foreground: oklch(1 0 0);
-  --primary-soft: oklch(0.94 0.05 260);
-  --success: oklch(0.68 0.16 155);
+  --popover-foreground: oklch(0.18 0.015 25);
+  --primary: oklch(0.585 0.222 27);
+  --primary-foreground: oklch(0.99 0.004 25);
+  --primary-soft: oklch(0.945 0.045 27);
+  --success: oklch(0.66 0.15 155);
   --success-foreground: oklch(1 0 0);
   --success-soft: oklch(0.94 0.06 155);
   --accent-warn: oklch(0.72 0.18 55);
-  /* Cloud palette — sky blues + soft whites */
-  --sky-50: #f0f9ff;
-  --sky-100: #e0f2fe;
-  --sky-200: #bae6fd;
-  --sky-300: #7dd3fc;
-  --sky: #38bdf8;
-  --cloud: #f8fafc;
-  --secondary: oklch(0.965 0.005 260);
-  --secondary-foreground: oklch(0.2 0.02 260);
-  --muted: oklch(0.965 0.005 260);
-  --muted-foreground: oklch(0.52 0.02 260);
-  --accent: oklch(0.955 0.02 260);
-  --accent-foreground: oklch(0.2 0.02 260);
-  --destructive: oklch(0.58 0.22 27);
+  /* Signal palette */
+  --sky-50: #fef2f2;
+  --sky-100: #fee2e2;
+  --sky-200: #fecaca;
+  --sky-300: #fca5a5;
+  --sky: #ef4444;
+  --cloud: #faf7f6;
+  --secondary: oklch(0.963 0.006 30);
+  --secondary-foreground: oklch(0.2 0.015 25);
+  --muted: oklch(0.963 0.006 30);
+  --muted-foreground: oklch(0.52 0.014 25);
+  --accent: oklch(0.955 0.02 27);
+  --accent-foreground: oklch(0.24 0.06 27);
+  --destructive: oklch(0.55 0.21 20);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.92 0.008 260);
-  --input: oklch(0.94 0.008 260);
-  --ring: oklch(0.58 0.19 260);
-  /* Sidebar: slate → blue gradient (theme-independent) */
-  --sidebar: oklch(0.20 0.04 260);
-  --sidebar-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 42%, #1e3a5f 78%, #2563eb 145%);
-  --sidebar-foreground: oklch(0.98 0.005 260);
-  --sidebar-muted: oklch(0.72 0.03 260);
+  --border: oklch(0.915 0.006 30);
+  --input: oklch(0.94 0.006 30);
+  --ring: oklch(0.585 0.222 27);
+  /* Sidebar: charcoal → ember gradient (theme-independent) */
+  --sidebar: oklch(0.19 0.012 25);
+  --sidebar-gradient: linear-gradient(180deg, #171314 0%, #241618 44%, #3d1a1c 76%, #b32424 150%);
+  --sidebar-foreground: oklch(0.98 0.004 25);
+  --sidebar-muted: oklch(0.72 0.014 25);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-accent: oklch(0.62 0.19 260);
-  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.585 0.222 27);
+  --sidebar-accent-foreground: oklch(0.99 0.004 25);
   --sidebar-hover: oklch(1 0 0 / 8%);
 }
 
 .dark {
-  --background: oklch(0.14 0.02 260);
-  --surface: oklch(0.18 0.02 260);
-  --foreground: oklch(0.98 0 0);
-  --ink: oklch(0.98 0 0);
-  --warm: oklch(0.2 0.01 260);
-  --card: oklch(0.20 0.02 260);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.20 0.02 260);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.65 0.20 260);
-  --primary-foreground: oklch(0.14 0.02 260);
-  --primary-soft: oklch(0.30 0.10 260);
-  --success: oklch(0.70 0.17 155);
-  --success-foreground: oklch(0.14 0.02 260);
-  --success-soft: oklch(0.30 0.10 155);
-  --secondary: oklch(0.24 0.01 260);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.24 0.01 260);
-  --muted-foreground: oklch(0.72 0.01 260);
-  --accent: oklch(0.28 0.03 260);
-  --accent-foreground: oklch(0.98 0 0);
+  --background: oklch(0.145 0.008 25);
+  --surface: oklch(0.185 0.010 25);
+  --foreground: oklch(0.97 0.004 25);
+  --ink: oklch(0.98 0.004 25);
+  --warm: oklch(0.21 0.012 30);
+  --card: oklch(0.205 0.011 25);
+  --card-foreground: oklch(0.97 0.004 25);
+  --popover: oklch(0.205 0.011 25);
+  --popover-foreground: oklch(0.97 0.004 25);
+  --primary: oklch(0.635 0.215 27);
+  --primary-foreground: oklch(0.99 0.004 25);
+  --primary-soft: oklch(0.30 0.09 27);
+  --success: oklch(0.70 0.16 155);
+  --success-foreground: oklch(0.145 0.008 25);
+  --success-soft: oklch(0.30 0.09 155);
+  --secondary: oklch(0.245 0.010 25);
+  --secondary-foreground: oklch(0.97 0.004 25);
+  --muted: oklch(0.245 0.010 25);
+  --muted-foreground: oklch(0.73 0.010 25);
+  --accent: oklch(0.28 0.035 27);
+  --accent-foreground: oklch(0.95 0.02 27);
+  --destructive: oklch(0.60 0.21 22);
+  --destructive-foreground: oklch(0.99 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 14%);
-  --ring: oklch(0.65 0.20 260);
+  --ring: oklch(0.635 0.215 27);
+  --sidebar-gradient: linear-gradient(180deg, #100d0e 0%, #1b1213 45%, #301416 78%, #8f1d1d 150%);
 }
+
 
 /* ---------------------------------------------------------------
    Public website theme — Clovr Relief
