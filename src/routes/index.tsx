@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { DisasterReel } from "@/components/site/home/DisasterReel";
+import { DisasterStats } from "@/components/site/home/DisasterStats";
+import { Escalation } from "@/components/site/home/Escalation";
 import { HeroBento } from "@/components/site/home/HeroBento";
 import { MissionFlow } from "@/components/site/home/MissionFlow";
 import { StoryScroll } from "@/components/site/home/StoryScroll";

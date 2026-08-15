@@ -8,9 +8,9 @@ const chapters = [
   {
     img: ridge,
     alt: "A ridgeline of dry timber at first light",
-    kicker: "The problem",
+    kicker: "Our mission",
     title: "Nobody is out there.",
-    body: "Half of the ground that burns has no camera, no lookout and no crew within an hour. By the time a fire is reported, it is usually already a fire worth reporting.",
+    body: "Fire, flood, wind — the worst of it happens on ground with no camera, no lookout and no crew within an hour. By the time it is reported, it is usually already worth reporting.",
   },
   {
     img: node,
