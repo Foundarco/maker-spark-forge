@@ -8,7 +8,8 @@ const copy = act("rain");
 /** deterministic pseudo-random so server and client render the same rain */
 const rand = (i: number, salt: number) => {
   const x = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453;
-  return x - Math.floor(x);
+  // rounded so server and client markup match exactly
+  return Math.round((x - Math.floor(x)) * 1000) / 1000;
 };
 
 const drops = Array.from({ length: 64 }, (_, i) => ({
