@@ -48,7 +48,7 @@ export function Footer() {
         height={1000}
       />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(6,12,22,0.55),rgba(6,12,22,0.35)_35%,rgba(6,12,22,0.94))]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,color-mix(in_oklab,_var(--night)_55%,_transparent),color-mix(in_oklab,_var(--night)_35%,_transparent)_35%,color-mix(in_oklab,_var(--night)_94%,_transparent))]"
         aria-hidden
       />
 

@@ -32,7 +32,7 @@ export function ImpactCards() {
                   className="h-full w-full scale-110 object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.16]"
                   data-parallax="42"
                 />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,12,22,0.1),rgba(6,12,22,0.85))]" />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,_var(--night)_10%,_transparent),color-mix(in_oklab,_var(--night)_85%,_transparent))]" />
                 <div className="absolute inset-x-0 bottom-0 p-7">
                   <p className="display-cond text-[clamp(2.4rem,4.4vw,3.6rem)] text-ink">{c.stat}</p>
                   <p className="mt-2 max-w-[16rem] text-sm text-ink/80">{c.label}</p>

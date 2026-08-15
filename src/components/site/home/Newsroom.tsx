@@ -19,7 +19,7 @@ export function Newsroom() {
     <section className="relative bg-[oklch(0.97_0.012_95)] py-24 text-[oklch(0.16_0.02_260)] sm:py-32">
       {/* soft transition out of the cinematic dark section above */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-32 h-32 bg-[linear-gradient(180deg,rgba(6,12,22,1),rgba(6,12,22,0))]"
+        className="pointer-events-none absolute inset-x-0 -top-32 h-32 bg-[linear-gradient(180deg,var(--night),color-mix(in_oklab,_var(--night)_0%,_transparent))]"
         aria-hidden
       />
       <div className="relative mx-auto max-w-7xl px-6 sm:px-10">
