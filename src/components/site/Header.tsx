@@ -51,10 +51,10 @@ export function Header() {
     <>
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4 sm:px-6">
         <div
-          className={`pointer-events-auto flex w-full items-center justify-between gap-6 transition-all duration-500 ease-out ${
+          className={`pointer-events-auto flex w-full items-center justify-between transition-all duration-500 ease-out ${
             condensed
-              ? "max-w-3xl rounded-full border border-white/12 bg-[color-mix(in_oklab,var(--night)_78%,transparent)] px-4 py-2 shadow-[0_18px_50px_-24px_rgb(0_0_0/0.9)] backdrop-blur-xl sm:px-5"
-              : "max-w-7xl rounded-full border border-transparent px-2 py-3 sm:px-4"
+              ? "max-w-3xl gap-4 rounded-full border border-white/12 bg-[color-mix(in_oklab,var(--night)_78%,transparent)] px-2 py-1.5 shadow-[0_18px_50px_-24px_rgb(0_0_0/0.9)] backdrop-blur-xl sm:px-2.5"
+              : "max-w-7xl gap-6 rounded-full border border-transparent px-2 py-3 sm:px-4"
           }`}
         >
           <Link to="/" aria-label="Clovr Labs home" className="shrink-0">
