@@ -1692,3 +1692,9 @@
 @media (prefers-reduced-motion: reduce) {
   .rain-drop, .rain-ping::after { animation: none; }
 }
+
+/* rain drop timing — the frame callback slows these to a stop */
+.site-theme .rain-drop {
+  animation-duration: calc(var(--dur, 1) * var(--slow, 1) * 1s);
+  animation-delay: calc(var(--delay, 0) * -1s);
+}
