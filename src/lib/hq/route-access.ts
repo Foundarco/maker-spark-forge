@@ -6,7 +6,10 @@ type AccessState = {
   isAdmin: boolean;
   allowed: Set<string> | null; // null = unrestricted
   suspended: boolean;
+  /** Org unit slugs the user belongs to, including parent divisions. */
+  units: Set<string>;
 };
+
 
 /**
  * Resolves the current user's page access from the org permission engine:
