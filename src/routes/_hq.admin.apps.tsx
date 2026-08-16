@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { navGroups } from "@/components/hq/nav-config";
-import { fetchApps, saveApp, deleteApp, appUrl, rootDomain, type OrgApp } from "@/lib/hq/apps";
+import { fetchApps, saveApp, deleteApp, appUrl, rootDomain, APP_LAYOUTS, type OrgApp } from "@/lib/hq/apps";
 import { loadSlackSettings, saveSlackSettings, type SlackSettings } from "@/lib/hq/slack";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { Grip, Plus, Trash2, ExternalLink, Save, Slack, Globe } from "lucide-react";
