@@ -15,7 +15,22 @@ export type OrgApp = {
   enabled: boolean;
   is_hub: boolean;
   sort_order: number;
+  accent: string | null;
+  accent_dark: string | null;
+  layout: string;
+  short_code: string | null;
 };
+
+export const APP_LAYOUTS = [
+  { value: "classic", label: "Classic", hint: "Balanced HQ shell" },
+  { value: "executive", label: "Executive", hint: "Graphite, wide, calm" },
+  { value: "board", label: "Board", hint: "Airy, rounded, light rail" },
+  { value: "rail", label: "Rail", hint: "Slim sidebar, dense lists" },
+  { value: "industrial", label: "Industrial", hint: "Square, uppercase labels" },
+  { value: "ops", label: "Ops", hint: "Dark chrome, mono, tight" },
+  { value: "console", label: "Console", hint: "Flat terminal styling" },
+];
+
 
 export const APP_OVERRIDE_KEY = "hq.app.override";
 
@@ -33,9 +48,10 @@ export function resolveAppSlug(): string {
 
   const param = new URLSearchParams(search).get("app");
   if (param) {
-    try { localStorage.setItem(APP_OVERRIDE_KEY, param); } catch {}
+    try { sessionStorage.setItem(APP_OVERRIDE_KEY, param); } catch {}
     return param;
   }
+
 
   const neutral = NEUTRAL_HOSTS.some((re) => re.test(hostname));
   if (!neutral) {
@@ -48,10 +64,11 @@ export function resolveAppSlug(): string {
   }
 
   try {
-    return localStorage.getItem(APP_OVERRIDE_KEY) || "hq";
+    return sessionStorage.getItem(APP_OVERRIDE_KEY) || "hq";
   } catch {
     return "hq";
   }
+
 }
 
 /** Root domain used to build cross-app links (clovrlab.com). */

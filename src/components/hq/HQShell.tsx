@@ -59,12 +59,12 @@ export function HQShell() {
       <ProductTour />
       <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
         <aside
-          className={`hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block ${
-            hidden ? "w-0" : "w-[260px]"
-          }`}
+          className="hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block"
+          style={{ width: hidden ? 0 : "var(--sidebar-w, 260px)" }}
         >
           <Sidebar onCollapse={() => setHiddenPersist(true)} />
         </aside>
+
 
         {mobileOpen && (
           <div className="fixed inset-0 z-30 flex lg:hidden" onClick={() => setMobileOpen(false)}>

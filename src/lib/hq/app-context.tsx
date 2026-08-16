@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { fetchApps, resolveAppSlug, type OrgApp } from "./apps";
+import { applyAppTheme } from "./app-theme";
 import { useRouteAccess } from "./route-access";
+
 
 type AppState = {
   loading: boolean;
@@ -54,6 +56,9 @@ export function CurrentAppProvider({ children }: { children: ReactNode }) {
   const app = apps.find((a) => a.slug === slug || a.subdomain === slug) ?? null;
   const hub = apps.find((a) => a.is_hub) ?? null;
   const ready = !loading && !access.loading;
+
+  useEffect(() => { applyAppTheme(app ?? hub); }, [app?.id, hub?.id, app?.accent, app?.layout]);
+
 
   const opts = { isAdmin: access.isAdmin, units: access.units, unitSlugById };
   const permitted = apps.filter((a) => a.enabled && canEnter(a, opts));
