@@ -163,29 +163,56 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           )}
         </div>
 
-        {/* Apps grid */}
+        {/* Workspace switcher + quick apps */}
         <div className="relative" data-topbar-menu>
           <button
             onClick={() => toggle("apps")}
             className={`${iconBtn} ${open === "apps" ? iconBtnActive : ""}`}
-            aria-label="Apps"
+            aria-label="Workspaces"
           >
             <Grip className="h-4 w-4" />
           </button>
           {open === "apps" && (
-            <div className="absolute right-0 top-12 w-64 rounded-xl border border-border bg-card p-2 shadow-xl">
-              <p className="px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Apps</p>
-              <div className="grid grid-cols-3 gap-1">
-                {APPS.map((a) => (
-                  <Link key={a.to} to={a.to} onClick={() => setOpen(null)} className="flex flex-col items-center gap-1 rounded-lg p-3 text-center hover:bg-muted">
-                    <a.icon className="h-5 w-5 text-primary" />
-                    <span className="text-[11px] font-medium">{a.label}</span>
-                  </Link>
+            <div className="absolute right-0 top-12 w-72 rounded-xl border border-border bg-card p-2 shadow-xl">
+              <p className="px-2 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Workspaces</p>
+              <div className="space-y-0.5">
+                {permitted.length === 0 && (
+                  <p className="px-2 py-3 text-xs text-muted-foreground">No workspaces assigned yet.</p>
+                )}
+                {permitted.map((a) => (
+                  <a
+                    key={a.id}
+                    href={appUrl(a)}
+                    onClick={() => setOpen(null)}
+                    className={`flex items-center gap-3 rounded-lg px-2 py-2 text-left transition hover:bg-muted ${
+                      current?.id === a.id ? "bg-primary/10" : ""
+                    }`}
+                  >
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-bold uppercase text-primary">
+                      {a.subdomain.slice(0, 2)}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[13px] font-medium">{a.label}</span>
+                      <span className="block truncate text-[11px] text-muted-foreground">{a.tagline || a.subdomain}</span>
+                    </span>
+                  </a>
                 ))}
+              </div>
+              <div className="mt-2 border-t border-border pt-2">
+                <p className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Quick apps</p>
+                <div className="grid grid-cols-3 gap-1">
+                  {APPS.map((a) => (
+                    <Link key={a.to} to={a.to} onClick={() => setOpen(null)} className="flex flex-col items-center gap-1 rounded-lg p-3 text-center hover:bg-muted">
+                      <a.icon className="h-5 w-5 text-primary" />
+                      <span className="text-[11px] font-medium">{a.label}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
             </div>
           )}
         </div>
+
 
         {/* Theme toggle */}
         <button
