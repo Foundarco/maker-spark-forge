@@ -6,7 +6,10 @@ type AccessState = {
   isAdmin: boolean;
   allowed: Set<string> | null; // null = unrestricted
   suspended: boolean;
+  /** Org unit slugs the user belongs to, including parent divisions. */
+  units: Set<string>;
 };
+
 
 /**
  * Resolves the current user's page access from the org permission engine:
@@ -15,13 +18,13 @@ type AccessState = {
  * returns nothing.
  */
 export function useRouteAccess(): AccessState {
-  const [state, setState] = useState<AccessState>({ loading: true, isAdmin: false, allowed: null, suspended: false });
+  const [state, setState] = useState<AccessState>({ loading: true, isAdmin: false, allowed: null, suspended: false, units: new Set() });
 
   useEffect(() => {
     let alive = true;
     (async () => {
       const { data: u } = await supabase.auth.getUser();
-      if (!u.user) { if (alive) setState({ loading: false, isAdmin: false, allowed: new Set(), suspended: false }); return; }
+      if (!u.user) { if (alive) setState({ loading: false, isAdmin: false, allowed: new Set(), suspended: false, units: new Set() }); return; }
       const uid = u.user.id;
 
       const [accessRes, legacy, suspRes] = await Promise.all([
@@ -36,7 +39,7 @@ export function useRouteAccess(): AccessState {
           .limit(50),
       ]);
 
-      const access = (accessRes?.data ?? null) as { is_admin: boolean; routes: string[] } | null;
+      const access = (accessRes?.data ?? null) as { is_admin: boolean; routes: string[]; units?: string[] } | null;
       const legacyAdmin = ((legacy.data ?? []) as any[]).some((r) => r?.custom_roles?.permissions?.admin);
       const isAdmin = !!access?.is_admin || legacyAdmin;
 
@@ -45,8 +48,8 @@ export function useRouteAccess(): AccessState {
         const routes = access?.routes ?? [];
         allowed = new Set<string>([
           ...routes,
-          // Communication baseline everyone gets.
-          "/channels", "/dm", "/meetings", "/phone", "/meeting-notes",
+          // Baseline everyone gets (internal chat moved to Slack).
+          "/meetings", "/phone", "/meeting-notes",
         ]);
       }
 
@@ -54,7 +57,7 @@ export function useRouteAccess(): AccessState {
       const suspended = ((suspRes.data ?? []) as any[]).some(
         (s) => !s.ends_at || new Date(s.ends_at).getTime() > now,
       );
-      if (alive) setState({ loading: false, isAdmin, allowed, suspended });
+      if (alive) setState({ loading: false, isAdmin, allowed, suspended, units: new Set(access?.units ?? []) });
     })();
     return () => { alive = false; };
   }, []);

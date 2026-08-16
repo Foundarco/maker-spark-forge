@@ -5675,6 +5675,65 @@ export type Database = {
         }
         Relationships: []
       }
+      org_apps: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          icon: string | null
+          id: string
+          is_hub: boolean
+          label: string
+          landing_route: string
+          nav_groups: string[]
+          org_unit_id: string | null
+          slug: string
+          sort_order: number
+          subdomain: string
+          tagline: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          icon?: string | null
+          id?: string
+          is_hub?: boolean
+          label: string
+          landing_route?: string
+          nav_groups?: string[]
+          org_unit_id?: string | null
+          slug: string
+          sort_order?: number
+          subdomain: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          icon?: string | null
+          id?: string
+          is_hub?: boolean
+          label?: string
+          landing_route?: string
+          nav_groups?: string[]
+          org_unit_id?: string | null
+          slug?: string
+          sort_order?: number
+          subdomain?: string
+          tagline?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_apps_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       org_role_routes: {
         Row: {
           created_at: string

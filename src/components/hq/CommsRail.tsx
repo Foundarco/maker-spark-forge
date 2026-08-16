@@ -1,9 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Hash, MessagesSquare, Video, StickyNote, Phone, Bot, Users2 } from "lucide-react";
+import { Video, StickyNote, Phone, Bot, Users2 } from "lucide-react";
 
 const items = [
-  { to: "/channels", label: "Channels", icon: Hash },
-  { to: "/dm", label: "Messages", icon: MessagesSquare },
   { to: "/phone", label: "Calls", icon: Phone },
   { to: "/meetings", label: "Meetings", icon: Video },
   { to: "/meeting-notes", label: "Notes", icon: StickyNote },
@@ -21,7 +19,7 @@ export function CommsRail() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   if (!COMMUNICATION_PATHS.has(pathname)) return null;
 
-  const Item = ({ to, label, icon: Icon }: { to: string; label: string; icon: typeof Hash }) => {
+  const Item = ({ to, label, icon: Icon }: { to: string; label: string; icon: typeof Phone }) => {
     const active = pathname === to;
     return (
       <Link

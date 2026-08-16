@@ -155,14 +155,8 @@ function DashboardPage() {
         logsToday: (logs.data || []).length,
       });
 
-      const [chMsgs, dmMsgs] = await Promise.all([
-        supabase.from("channel_messages").select("id, channel_id, author_id, body, created_at, mentions").gte("created_at", since).neq("author_id", me).order("created_at", { ascending: false }).limit(20),
-        supabase.from("direct_messages").select("id, sender_id, recipient_id, body, created_at").gte("created_at", since).eq("recipient_id", me).order("created_at", { ascending: false }).limit(10),
-      ]);
-      const feed = [
-        ...(chMsgs.data || []).map((m: any) => ({ ...m, _type: "channel" as const })),
-        ...(dmMsgs.data || []).map((m: any) => ({ ...m, _type: "dm" as const })),
-      ].sort((a, b) => (a.created_at < b.created_at ? 1 : -1)).slice(0, 10);
+      // Internal chat lives in Slack now; the dashboard feed uses notifications only.
+      const feed: any[] = [];
       setMissed(feed);
 
       const uids = new Set<string>();
@@ -253,47 +247,6 @@ function DashboardPage() {
                   </div>
                 </Link>
               ))}
-            </div>
-          </section>
-
-          {/* Missed activity */}
-          <section className="rounded-xl border border-border bg-card">
-            <div className="flex items-center justify-between border-b border-border px-5 py-3">
-              <div className="flex items-center gap-2">
-                <Activity className="h-4 w-4 text-primary" />
-                <h2 className="text-sm font-semibold">Missed activity</h2>
-                <span className="text-xs text-muted-foreground">last 24h</span>
-              </div>
-              <Link to="/channels" className="text-xs text-primary hover:underline">Open communication →</Link>
-            </div>
-            <div className="divide-y divide-border">
-              {missed.length === 0 && <p className="p-8 text-center text-sm text-muted-foreground">All caught up. No new activity in the last 24 hours.</p>}
-              {missed.map((m: any) => {
-                const uid = m.author_id || m.sender_id;
-                const p = profiles[uid];
-                const mentioned = Array.isArray(m.mentions) && m.mentions.includes(me);
-                return (
-                  <Link
-                    key={`${m._type}-${m.id}`}
-                    to={m._type === "channel" ? "/channels" : "/dm"}
-                    search={m._type === "dm" ? { user: m.sender_id } as any : undefined}
-                    className="flex items-start gap-3 px-5 py-3 hover:bg-muted/40"
-                  >
-                    <div className="mt-0.5">
-                      {m._type === "channel" ? <Hash className="h-4 w-4 text-muted-foreground" /> : <MessageSquare className="h-4 w-4 text-muted-foreground" />}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 text-xs">
-                        <UserMention userId={uid} name={p?.full_name || p?.email || "Someone"} size="xs" />
-                        <span className="text-muted-foreground">{m._type === "channel" ? "in a channel" : "sent you a DM"}</span>
-                        {mentioned && <span className="rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">@you</span>}
-                        <span className="ml-auto text-muted-foreground">{new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-                      </div>
-                      <p className="mt-0.5 line-clamp-2 text-sm">{m.body}</p>
-                    </div>
-                  </Link>
-                );
-              })}
             </div>
           </section>
 
