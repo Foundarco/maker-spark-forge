@@ -48,8 +48,8 @@ export function useRouteAccess(): AccessState {
         const routes = access?.routes ?? [];
         allowed = new Set<string>([
           ...routes,
-          // Communication baseline everyone gets.
-          "/channels", "/dm", "/meetings", "/phone", "/meeting-notes",
+          // Baseline everyone gets (internal chat moved to Slack).
+          "/meetings", "/phone", "/meeting-notes",
         ]);
       }
 
