@@ -9,6 +9,7 @@ import { navGroups } from "./nav-config";
 import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
 import { PhoneProvider } from "@/lib/hq/phone";
 import { SoundNotifier } from "./SoundNotifier";
+import { ProductTour } from "./ProductTour";
 
 const HIDE_KEY = "hq.sidebar.hidden";
 
@@ -51,6 +52,7 @@ export function HQShell() {
     <RecordTabsProvider>
       <TabAutoOpener />
       <SoundNotifier />
+      <ProductTour />
       <div className="flex h-dvh w-full overflow-hidden bg-surface text-foreground">
         <aside
           className={`hidden h-full flex-shrink-0 overflow-hidden transition-[width] duration-300 ease-out lg:block ${
