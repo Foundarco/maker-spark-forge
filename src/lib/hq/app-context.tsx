@@ -57,6 +57,9 @@ export function CurrentAppProvider({ children }: { children: ReactNode }) {
   const hub = apps.find((a) => a.is_hub) ?? null;
   const ready = !loading && !access.loading;
 
+  useEffect(() => { applyAppTheme(app ?? hub); }, [app?.id, hub?.id, app?.accent, app?.layout]);
+
+
   const opts = { isAdmin: access.isAdmin, units: access.units, unitSlugById };
   const permitted = apps.filter((a) => a.enabled && canEnter(a, opts));
   const denied = ready && !!app && (!app.enabled || !canEnter(app, opts));
