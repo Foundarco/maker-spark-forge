@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { X, Mail, Building2, MessageSquare, User as UserIcon, Phone, Video, StickyNote } from "lucide-react";
+import { useSlackSettings, slackLink } from "@/lib/hq/slack";
 import { usePhone } from "@/lib/hq/phone";
 
 type Profile = { id: string; full_name: string | null; email: string | null; department: string | null };
@@ -42,9 +43,11 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
     : { position: "fixed", top: "20%", left: "50%", transform: "translateX(-50%)", zIndex: 60 };
 
   const { startCall, active } = usePhone();
-  const openDM = () => {
+  const slack = useSlackSettings();
+  const openSlack = () => {
+    const url = slackLink(slack);
     onClose();
-    navigate({ to: "/dm", search: { user: userId } as any });
+    if (url) window.open(url, "_blank", "noopener");
   };
   const call = () => {
     if (!profile || active) return;
@@ -77,8 +80,13 @@ export function ProfilePopover({ userId, onClose, anchor }: { userId: string; on
       </div>
 
       <div className="grid grid-cols-2 gap-1.5">
-        <button onClick={openDM} disabled={!profile} className="flex items-center justify-center gap-1 rounded-lg bg-primary px-2 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-50">
-          <MessageSquare className="h-3 w-3" /> Message
+        <button
+          onClick={openSlack}
+          disabled={!slack.workspaceUrl}
+          title={slack.workspaceUrl ? "Message on Slack" : "Slack workspace not configured"}
+          className="flex items-center justify-center gap-1 rounded-lg bg-primary px-2 py-1.5 text-xs font-medium text-primary-foreground disabled:opacity-50"
+        >
+          <MessageSquare className="h-3 w-3" /> Slack
         </button>
         <button onClick={call} disabled={!profile || !!active} className="flex items-center justify-center gap-1 rounded-lg bg-emerald-500 px-2 py-1.5 text-xs font-medium text-white disabled:opacity-50">
           <Phone className="h-3 w-3" /> Call
