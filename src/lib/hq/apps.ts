@@ -48,9 +48,10 @@ export function resolveAppSlug(): string {
 
   const param = new URLSearchParams(search).get("app");
   if (param) {
-    try { localStorage.setItem(APP_OVERRIDE_KEY, param); } catch {}
+    try { sessionStorage.setItem(APP_OVERRIDE_KEY, param); } catch {}
     return param;
   }
+
 
   const neutral = NEUTRAL_HOSTS.some((re) => re.test(hostname));
   if (!neutral) {
