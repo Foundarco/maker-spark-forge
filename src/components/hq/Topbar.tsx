@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { RecordTabs } from "./RecordTabs";
 import { usePhone, formatDuration } from "@/lib/hq/phone";
 import { useHQTheme, resolveTheme } from "@/lib/hq/theme";
+import { useCurrentApp } from "@/lib/hq/app-context";
+import { appUrl } from "@/lib/hq/apps";
 
 type Notification = {
   id: string;
@@ -17,7 +19,6 @@ type Notification = {
 const APPS = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/mail", label: "Email", icon: Mail },
-  { to: "/channels", label: "Channels", icon: MessagesSquare },
   { to: "/phone", label: "Phone", icon: Phone },
   { to: "/calendar", label: "Calendar", icon: CalendarIcon },
   { to: "/drive", label: "Drive", icon: FolderOpen },
@@ -31,6 +32,7 @@ export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const [notifs, setNotifs] = useState<Notification[]>([]);
   const [, tick] = useState(0);
   const { theme, setTheme } = useHQTheme();
+  const { permitted, app: current } = useCurrentApp();
   const { active, endCall, toggleMute, incoming, acceptIncoming, declineIncoming } = usePhone();
 
   useEffect(() => {
