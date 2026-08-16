@@ -4486,6 +4486,7 @@ export type Database = {
           location: string | null
           manager_id: string | null
           notes: string | null
+          org_unit_id: string | null
           phone: string | null
           salary: number | null
           start_date: string | null
@@ -4506,6 +4507,7 @@ export type Database = {
           location?: string | null
           manager_id?: string | null
           notes?: string | null
+          org_unit_id?: string | null
           phone?: string | null
           salary?: number | null
           start_date?: string | null
@@ -4526,6 +4528,7 @@ export type Database = {
           location?: string | null
           manager_id?: string | null
           notes?: string | null
+          org_unit_id?: string | null
           phone?: string | null
           salary?: number | null
           start_date?: string | null
@@ -4540,6 +4543,13 @@ export type Database = {
             columns: ["manager_id"]
             isOneToOne: false
             referencedRelation: "hr_employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hr_employees_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_units"
             referencedColumns: ["id"]
           },
         ]
@@ -5665,6 +5675,147 @@ export type Database = {
         }
         Relationships: []
       }
+      org_role_routes: {
+        Row: {
+          created_at: string
+          id: string
+          role_id: string
+          route: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role_id: string
+          route: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role_id?: string
+          route?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_role_routes_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "org_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_roles: {
+        Row: {
+          color: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_default: boolean
+          kind: string
+          level: string
+          name: string
+          org_unit_id: string | null
+          permissions: Json
+          position: number
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          kind?: string
+          level?: string
+          name: string
+          org_unit_id?: string | null
+          permissions?: Json
+          position?: number
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_default?: boolean
+          kind?: string
+          level?: string
+          name?: string
+          org_unit_id?: string | null
+          permissions?: Json
+          position?: number
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_roles_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      org_units: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          kind: string
+          lead_id: string | null
+          name: string
+          parent_id: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          kind?: string
+          lead_id?: string | null
+          name: string
+          parent_id?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          kind?: string
+          lead_id?: string | null
+          name?: string
+          parent_id?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "org_units_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "org_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           category: string | null
@@ -5729,6 +5880,7 @@ export type Database = {
           id: string
           onboarding_completed_at: string | null
           onboarding_step: number
+          org_unit_id: string | null
           phone: string | null
           title: string | null
           updated_at: string
@@ -5742,6 +5894,7 @@ export type Database = {
           id: string
           onboarding_completed_at?: string | null
           onboarding_step?: number
+          org_unit_id?: string | null
           phone?: string | null
           title?: string | null
           updated_at?: string
@@ -5755,11 +5908,20 @@ export type Database = {
           id?: string
           onboarding_completed_at?: string | null
           onboarding_step?: number
+          org_unit_id?: string | null
           phone?: string | null
           title?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_org_unit_id_fkey"
+            columns: ["org_unit_id"]
+            isOneToOne: false
+            referencedRelation: "org_units"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       project_requests: {
         Row: {
@@ -6236,6 +6398,38 @@ export type Database = {
         }
         Relationships: []
       }
+      user_org_roles: {
+        Row: {
+          assigned_at: string
+          assigned_by: string | null
+          id: string
+          role_id: string
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by?: string | null
+          id?: string
+          role_id: string
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by?: string | null
+          id?: string
+          role_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_org_roles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "org_roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -6253,6 +6447,36 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_route_overrides: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          granted: boolean
+          id: string
+          note: string | null
+          route: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          granted?: boolean
+          id?: string
+          note?: string | null
+          route: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          granted?: boolean
+          id?: string
+          note?: string | null
+          route?: string
           user_id?: string
         }
         Relationships: []
@@ -6363,6 +6587,8 @@ export type Database = {
       }
     }
     Functions: {
+      is_hq_admin: { Args: { _user_id: string }; Returns: boolean }
+      my_access: { Args: never; Returns: Json }
       notify_managers: {
         Args: { _body: string; _link: string; _title: string }
         Returns: undefined
