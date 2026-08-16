@@ -8,8 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 const STORAGE_KEY = "hq.sidebar.collapsed";
 
 const ALWAYS_VISIBLE = new Set<string>([
-  "/dashboard", "/assistant", "/settings", "/profile", "/notifications", "/search",
+  "/dashboard", "/assistant", "/settings", "/profile", "/notifications", "/search", "/teams",
 ]);
+
 
 type Profile = { full_name: string | null; email: string | null; department: string | null };
 
