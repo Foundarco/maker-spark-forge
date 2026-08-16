@@ -5727,6 +5727,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          onboarding_completed_at: string | null
+          onboarding_step: number
           phone: string | null
           title: string | null
           updated_at: string
@@ -5738,6 +5740,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          onboarding_completed_at?: string | null
+          onboarding_step?: number
           phone?: string | null
           title?: string | null
           updated_at?: string
@@ -5749,6 +5753,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          onboarding_completed_at?: string | null
+          onboarding_step?: number
           phone?: string | null
           title?: string | null
           updated_at?: string
@@ -6365,6 +6371,7 @@ export type Database = {
         Args: { _body: string; _link: string; _title: string; _user_id: string }
         Returns: undefined
       }
+      onboarding_invite_check: { Args: { _email: string }; Returns: Json }
     }
     Enums: {
       app_role:

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as TechnologyRouteImport } from './routes/technology'
 import { Route as SystemRouteImport } from './routes/system'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
@@ -114,6 +115,11 @@ import { Route as HqClientsIdRouteImport } from './routes/_hq.clients.$id'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
 import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TechnologyRoute = TechnologyRouteImport.update({
   id: '/technology',
   path: '/technology',
@@ -651,6 +657,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/system': typeof SystemRoute
   '/technology': typeof TechnologyRoute
+  '/welcome': typeof WelcomeRoute
   '/accounting': typeof HqAccountingRoute
   '/analytics': typeof HqAnalyticsRoute
   '/applicants': typeof HqApplicantsRoute
@@ -755,6 +762,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/system': typeof SystemRoute
   '/technology': typeof TechnologyRoute
+  '/welcome': typeof WelcomeRoute
   '/accounting': typeof HqAccountingRoute
   '/analytics': typeof HqAnalyticsRoute
   '/applicants': typeof HqApplicantsRoute
@@ -859,6 +867,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/system': typeof SystemRoute
   '/technology': typeof TechnologyRoute
+  '/welcome': typeof WelcomeRoute
   '/_hq/accounting': typeof HqAccountingRoute
   '/_hq/analytics': typeof HqAnalyticsRoute
   '/_hq/applicants': typeof HqApplicantsRoute
@@ -966,6 +975,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/system'
     | '/technology'
+    | '/welcome'
     | '/accounting'
     | '/analytics'
     | '/applicants'
@@ -1070,6 +1080,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/system'
     | '/technology'
+    | '/welcome'
     | '/accounting'
     | '/analytics'
     | '/applicants'
@@ -1173,6 +1184,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/system'
     | '/technology'
+    | '/welcome'
     | '/_hq/accounting'
     | '/_hq/analytics'
     | '/_hq/applicants'
@@ -1280,6 +1292,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SystemRoute: typeof SystemRoute
   TechnologyRoute: typeof TechnologyRoute
+  WelcomeRoute: typeof WelcomeRoute
   LegalCookiesRoute: typeof LegalCookiesRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
@@ -1289,6 +1302,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/technology': {
       id: '/technology'
       path: '/technology'
@@ -2248,6 +2268,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SystemRoute: SystemRoute,
   TechnologyRoute: TechnologyRoute,
+  WelcomeRoute: WelcomeRoute,
   LegalCookiesRoute: LegalCookiesRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,

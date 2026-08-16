@@ -136,6 +136,10 @@ function HQLogin() {
           >
             {mode === "signin" ? "Have an invite? Create your account →" : "Already have an account? Sign in →"}
           </button>
+
+          <a href="/welcome" className="mt-2 block text-center text-xs font-medium text-primary hover:underline">
+            New hire? Start onboarding →
+          </a>
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">

@@ -67,6 +67,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
 
   return (
     <nav
+      data-tour="sidebar"
       className="flex h-full flex-col text-sidebar-foreground"
       style={{ background: "var(--sidebar-gradient)" }}
     >
@@ -101,7 +102,7 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
 
 
       {/* Search */}
-      <form onSubmit={onSearch} className="px-3 pt-3">
+      <form onSubmit={onSearch} data-tour="search" className="px-3 pt-3">
         <div className="flex items-center gap-2 rounded-xl bg-[color-mix(in_oklab,var(--sidebar-foreground)_6%,transparent)] px-3 py-2 focus-within:bg-[color-mix(in_oklab,var(--sidebar-foreground)_10%,transparent)]">
           <Search className="h-3.5 w-3.5 text-sidebar-muted" />
           <input
