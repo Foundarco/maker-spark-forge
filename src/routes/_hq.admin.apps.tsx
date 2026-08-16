@@ -188,8 +188,41 @@ function AppsAdmin() {
                 />
               </div>
 
+              <div>
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Badge</label>
+                <input
+                  value={app.short_code ?? ""}
+                  onChange={(e) => patch(app.id, { short_code: e.target.value.toUpperCase().slice(0, 3) })}
+                  placeholder="EN"
+                  className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm outline-none focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Signature colour</label>
+                <div className="flex items-center gap-2">
+                  <span className="h-7 w-7 flex-shrink-0 rounded-md border border-border" style={{ background: app.accent ?? "transparent" }} />
+                  <input
+                    value={app.accent ?? ""}
+                    onChange={(e) => patch(app.id, { accent: e.target.value })}
+                    placeholder="oklch(0.6 0.15 220)"
+                    className="w-full rounded-md border border-border bg-background px-2 py-1.5 font-mono text-xs outline-none focus:border-primary"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Layout style</label>
+                <select
+                  value={app.layout}
+                  onChange={(e) => patch(app.id, { layout: e.target.value })}
+                  className="w-full rounded-md border border-border bg-background px-2 py-1.5 text-sm outline-none focus:border-primary"
+                >
+                  {APP_LAYOUTS.map((l) => <option key={l.value} value={l.value}>{l.label} — {l.hint}</option>)}
+                </select>
+              </div>
+
               <div className="md:col-span-3">
                 <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Sidebar sections</label>
+
                 <div className="flex flex-wrap gap-1.5">
                   {groupLabels.map((g) => {
                     const on = app.nav_groups.includes(g);
