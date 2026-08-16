@@ -5677,6 +5677,8 @@ export type Database = {
       }
       org_apps: {
         Row: {
+          accent: string | null
+          accent_dark: string | null
           created_at: string
           enabled: boolean
           icon: string | null
@@ -5684,8 +5686,10 @@ export type Database = {
           is_hub: boolean
           label: string
           landing_route: string
+          layout: string
           nav_groups: string[]
           org_unit_id: string | null
+          short_code: string | null
           slug: string
           sort_order: number
           subdomain: string
@@ -5693,6 +5697,8 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          accent?: string | null
+          accent_dark?: string | null
           created_at?: string
           enabled?: boolean
           icon?: string | null
@@ -5700,8 +5706,10 @@ export type Database = {
           is_hub?: boolean
           label: string
           landing_route?: string
+          layout?: string
           nav_groups?: string[]
           org_unit_id?: string | null
+          short_code?: string | null
           slug: string
           sort_order?: number
           subdomain: string
@@ -5709,6 +5717,8 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          accent?: string | null
+          accent_dark?: string | null
           created_at?: string
           enabled?: boolean
           icon?: string | null
@@ -5716,8 +5726,10 @@ export type Database = {
           is_hub?: boolean
           label?: string
           landing_route?: string
+          layout?: string
           nav_groups?: string[]
           org_unit_id?: string | null
+          short_code?: string | null
           slug?: string
           sort_order?: number
           subdomain?: string
