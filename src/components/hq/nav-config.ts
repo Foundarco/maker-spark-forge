@@ -144,12 +144,15 @@ export const navGroups: NavGroup[] = [
     label: "Operations",
     division: "people",
     items: [
+      { label: "Teams", to: "/teams", icon: Network },
       { label: "Departments", to: "/admin/departments", icon: Building2 },
       { label: "Org Tasks", to: "/company-tasks", icon: CheckSquare },
       { label: "Resource Planning", to: "/resource-planning", icon: Users },
       { label: "Dashboards", to: "/analytics", icon: BarChart3 },
       { label: "Fleet Logistics", to: "/equipment", icon: Truck },
+      { label: "Organization", to: "/admin/org", icon: Network, badge: "Admin" },
       { label: "Org Settings", to: "/admin/company", icon: Settings, badge: "Admin" },
     ],
   },
 ];
+
