@@ -64,10 +64,11 @@ export function resolveAppSlug(): string {
   }
 
   try {
-    return localStorage.getItem(APP_OVERRIDE_KEY) || "hq";
+    return sessionStorage.getItem(APP_OVERRIDE_KEY) || "hq";
   } catch {
     return "hq";
   }
+
 }
 
 /** Root domain used to build cross-app links (clovrlab.com). */
