@@ -106,6 +106,7 @@ import { Route as HqAssistantRouteImport } from './routes/_hq.assistant'
 import { Route as HqApplicantsRouteImport } from './routes/_hq.applicants'
 import { Route as HqAnalyticsRouteImport } from './routes/_hq.analytics'
 import { Route as HqAccountingRouteImport } from './routes/_hq.accounting'
+import { Route as HqTeamsIndexRouteImport } from './routes/_hq.teams.index'
 import { Route as HqQuotesIndexRouteImport } from './routes/_hq.quotes.index'
 import { Route as HqJobsIndexRouteImport } from './routes/_hq.jobs.index'
 import { Route as HqClientsIndexRouteImport } from './routes/_hq.clients.index'
@@ -601,6 +602,11 @@ const HqAccountingRoute = HqAccountingRouteImport.update({
   path: '/accounting',
   getParentRoute: () => HqRoute,
 } as any)
+const HqTeamsIndexRoute = HqTeamsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HqTeamsRoute,
+} as any)
 const HqQuotesIndexRoute = HqQuotesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -734,7 +740,7 @@ export interface FileRoutesByFullPath {
   '/suppliers': typeof HqSuppliersRoute
   '/takeoffs': typeof HqTakeoffsRoute
   '/tasks': typeof HqTasksRoute
-  '/teams': typeof HqTeamsRoute
+  '/teams': typeof HqTeamsRouteWithChildren
   '/tickets': typeof HqTicketsRoute
   '/time-off': typeof HqTimeOffRoute
   '/time-tracking': typeof HqTimeTrackingRoute
@@ -759,6 +765,7 @@ export interface FileRoutesByFullPath {
   '/clients/': typeof HqClientsIndexRoute
   '/jobs/': typeof HqJobsIndexRoute
   '/quotes/': typeof HqQuotesIndexRoute
+  '/teams/': typeof HqTeamsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -838,7 +845,6 @@ export interface FileRoutesByTo {
   '/suppliers': typeof HqSuppliersRoute
   '/takeoffs': typeof HqTakeoffsRoute
   '/tasks': typeof HqTasksRoute
-  '/teams': typeof HqTeamsRoute
   '/tickets': typeof HqTicketsRoute
   '/time-off': typeof HqTimeOffRoute
   '/time-tracking': typeof HqTimeTrackingRoute
@@ -863,6 +869,7 @@ export interface FileRoutesByTo {
   '/clients': typeof HqClientsIndexRoute
   '/jobs': typeof HqJobsIndexRoute
   '/quotes': typeof HqQuotesIndexRoute
+  '/teams': typeof HqTeamsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -948,7 +955,7 @@ export interface FileRoutesById {
   '/_hq/suppliers': typeof HqSuppliersRoute
   '/_hq/takeoffs': typeof HqTakeoffsRoute
   '/_hq/tasks': typeof HqTasksRoute
-  '/_hq/teams': typeof HqTeamsRoute
+  '/_hq/teams': typeof HqTeamsRouteWithChildren
   '/_hq/tickets': typeof HqTicketsRoute
   '/_hq/time-off': typeof HqTimeOffRoute
   '/_hq/time-tracking': typeof HqTimeTrackingRoute
@@ -973,6 +980,7 @@ export interface FileRoutesById {
   '/_hq/clients/': typeof HqClientsIndexRoute
   '/_hq/jobs/': typeof HqJobsIndexRoute
   '/_hq/quotes/': typeof HqQuotesIndexRoute
+  '/_hq/teams/': typeof HqTeamsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1083,6 +1091,7 @@ export interface FileRouteTypes {
     | '/clients/'
     | '/jobs/'
     | '/quotes/'
+    | '/teams/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1162,7 +1171,6 @@ export interface FileRouteTypes {
     | '/suppliers'
     | '/takeoffs'
     | '/tasks'
-    | '/teams'
     | '/tickets'
     | '/time-off'
     | '/time-tracking'
@@ -1187,6 +1195,7 @@ export interface FileRouteTypes {
     | '/clients'
     | '/jobs'
     | '/quotes'
+    | '/teams'
   id:
     | '__root__'
     | '/'
@@ -1296,6 +1305,7 @@ export interface FileRouteTypes {
     | '/_hq/clients/'
     | '/_hq/jobs/'
     | '/_hq/quotes/'
+    | '/_hq/teams/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2005,6 +2015,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqAccountingRouteImport
       parentRoute: typeof HqRoute
     }
+    '/_hq/teams/': {
+      id: '/_hq/teams/'
+      path: '/'
+      fullPath: '/teams/'
+      preLoaderRoute: typeof HqTeamsIndexRouteImport
+      parentRoute: typeof HqTeamsRoute
+    }
     '/_hq/quotes/': {
       id: '/_hq/quotes/'
       path: '/'
@@ -2119,6 +2136,17 @@ const HqQuotesRouteWithChildren = HqQuotesRoute._addFileChildren(
   HqQuotesRouteChildren,
 )
 
+interface HqTeamsRouteChildren {
+  HqTeamsIndexRoute: typeof HqTeamsIndexRoute
+}
+
+const HqTeamsRouteChildren: HqTeamsRouteChildren = {
+  HqTeamsIndexRoute: HqTeamsIndexRoute,
+}
+
+const HqTeamsRouteWithChildren =
+  HqTeamsRoute._addFileChildren(HqTeamsRouteChildren)
+
 interface HqRouteChildren {
   HqAccountingRoute: typeof HqAccountingRoute
   HqAnalyticsRoute: typeof HqAnalyticsRoute
@@ -2184,7 +2212,7 @@ interface HqRouteChildren {
   HqSuppliersRoute: typeof HqSuppliersRoute
   HqTakeoffsRoute: typeof HqTakeoffsRoute
   HqTasksRoute: typeof HqTasksRoute
-  HqTeamsRoute: typeof HqTeamsRoute
+  HqTeamsRoute: typeof HqTeamsRouteWithChildren
   HqTicketsRoute: typeof HqTicketsRoute
   HqTimeOffRoute: typeof HqTimeOffRoute
   HqTimeTrackingRoute: typeof HqTimeTrackingRoute
@@ -2260,7 +2288,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqSuppliersRoute: HqSuppliersRoute,
   HqTakeoffsRoute: HqTakeoffsRoute,
   HqTasksRoute: HqTasksRoute,
-  HqTeamsRoute: HqTeamsRoute,
+  HqTeamsRoute: HqTeamsRouteWithChildren,
   HqTicketsRoute: HqTicketsRoute,
   HqTimeOffRoute: HqTimeOffRoute,
   HqTimeTrackingRoute: HqTimeTrackingRoute,
