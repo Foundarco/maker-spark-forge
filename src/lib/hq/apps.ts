@@ -15,7 +15,22 @@ export type OrgApp = {
   enabled: boolean;
   is_hub: boolean;
   sort_order: number;
+  accent: string | null;
+  accent_dark: string | null;
+  layout: string;
+  short_code: string | null;
 };
+
+export const APP_LAYOUTS = [
+  { value: "classic", label: "Classic", hint: "Balanced HQ shell" },
+  { value: "executive", label: "Executive", hint: "Graphite, wide, calm" },
+  { value: "board", label: "Board", hint: "Airy, rounded, light rail" },
+  { value: "rail", label: "Rail", hint: "Slim sidebar, dense lists" },
+  { value: "industrial", label: "Industrial", hint: "Square, uppercase labels" },
+  { value: "ops", label: "Ops", hint: "Dark chrome, mono, tight" },
+  { value: "console", label: "Console", hint: "Flat terminal styling" },
+];
+
 
 export const APP_OVERRIDE_KEY = "hq.app.override";
 
