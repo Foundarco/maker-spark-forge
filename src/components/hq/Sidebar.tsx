@@ -4,6 +4,7 @@ import { ChevronDown, LogOut, Settings as SettingsIcon, Search, HelpCircle, Pane
 import { navGroups } from "./nav-config";
 import { useRouteAccess } from "@/lib/hq/route-access";
 import { supabase } from "@/integrations/supabase/client";
+import { useCurrentApp } from "@/lib/hq/app-context";
 
 const STORAGE_KEY = "hq.sidebar.collapsed";
 
@@ -21,13 +22,19 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
   const [profile, setProfile] = useState<Profile | null>(null);
   const [query, setQuery] = useState("");
   const access = useRouteAccess();
+  const { app } = useCurrentApp();
 
   const permittedGroups = useMemo(() => {
-    if (access.isAdmin || access.allowed === null) return navGroups;
-    return navGroups
+    // 1. Only the sections this workspace exposes.
+    const inApp = app && app.nav_groups.length > 0
+      ? navGroups.filter((g) => app.nav_groups.includes(g.label))
+      : navGroups;
+    // 2. Then the person's own page permissions.
+    if (access.isAdmin || access.allowed === null) return inApp;
+    return inApp
       .map((g) => ({ ...g, items: g.items.filter((i) => ALWAYS_VISIBLE.has(i.to) || access.allowed!.has(i.to)) }))
       .filter((g) => g.items.length > 0);
-  }, [access]);
+  }, [access, app]);
 
   useEffect(() => {
     try {
@@ -80,9 +87,9 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
               CL
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">Clovr Labs</p>
+              <p className="truncate text-[13px] font-semibold text-sidebar-foreground">{app?.label || "Clovr Labs"}</p>
               <p className="truncate text-[11px] text-sidebar-muted">
-                {profile?.department ? `${profile.department} workspace` : "Internal workspace"}
+                {app?.tagline || (profile?.department ? `${profile.department} workspace` : "Internal workspace")}
               </p>
             </div>
           </div>
