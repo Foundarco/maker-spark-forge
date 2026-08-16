@@ -135,6 +135,96 @@
   --sidebar-gradient: linear-gradient(180deg, #100d0e 0%, #1b1213 45%, #301416 78%, #8f1d1d 150%);
 }
 
+/* ---------------------------------------------------------------
+   Per-app identity — each team workspace is its own product.
+   `--app-accent` is painted by applyAppTheme() from the org_apps row;
+   `data-app-layout` selects the shell personality.
+---------------------------------------------------------------- */
+:root {
+  --sidebar-w: 260px;
+  --app-accent: var(--primary);
+  --app-accent-dark: var(--primary);
+}
+
+html[data-app] {
+  --primary: var(--app-accent);
+  --ring: var(--app-accent);
+  --sidebar-accent: var(--app-accent);
+  --primary-soft: color-mix(in oklab, var(--app-accent) 14%, var(--background));
+  --accent: color-mix(in oklab, var(--app-accent) 10%, var(--background));
+  --accent-foreground: color-mix(in oklab, var(--app-accent) 70%, var(--foreground));
+  --sidebar-gradient: linear-gradient(
+    180deg,
+    #141113 0%,
+    color-mix(in oklab, var(--app-accent) 12%, #191518) 45%,
+    color-mix(in oklab, var(--app-accent) 32%, #191518) 78%,
+    color-mix(in oklab, var(--app-accent) 82%, #191518) 150%
+  );
+}
+
+html.dark[data-app] {
+  --primary: var(--app-accent-dark);
+  --ring: var(--app-accent-dark);
+  --sidebar-accent: var(--app-accent-dark);
+}
+
+/* Executive — calm graphite, no colour wash, generous spacing */
+html[data-app-layout="executive"] {
+  --radius: 1rem;
+  --sidebar-gradient: linear-gradient(180deg, #14161b 0%, #1b1f27 60%, #232935 100%);
+  --surface: color-mix(in oklab, var(--app-accent) 4%, var(--background));
+}
+html[data-app-layout="executive"] main { letter-spacing: 0.01em; }
+
+/* Board — airy, rounded, light rail */
+html[data-app-layout="board"] {
+  --radius: 1.25rem;
+  --sidebar-gradient: linear-gradient(180deg,
+    color-mix(in oklab, var(--app-accent) 88%, #0f1113) 0%,
+    color-mix(in oklab, var(--app-accent) 55%, #0f1113) 100%);
+  --surface: color-mix(in oklab, var(--app-accent) 7%, var(--background));
+}
+
+/* Rail — slim sidebar, dense rows */
+html[data-app-layout="rail"] {
+  --sidebar-w: 212px;
+  --radius: 0.6rem;
+}
+html[data-app-layout="rail"] nav[data-tour="sidebar"] a { padding-top: 0.3rem; padding-bottom: 0.3rem; }
+
+/* Industrial — square edges, uppercase section labels */
+html[data-app-layout="industrial"] {
+  --radius: 0.25rem;
+  --sidebar-gradient: linear-gradient(180deg, #1a1713 0%, #241d14 55%,
+    color-mix(in oklab, var(--app-accent) 60%, #241d14) 100%);
+}
+html[data-app-layout="industrial"] nav[data-tour="sidebar"] a span:first-of-type {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11.5px;
+}
+
+/* Ops — dark chrome, mono numerals, tight */
+html[data-app-layout="ops"] {
+  --radius: 0.4rem;
+  --sidebar-w: 240px;
+  --sidebar-gradient: linear-gradient(180deg, #0d0f12 0%, #14181d 55%,
+    color-mix(in oklab, var(--app-accent) 55%, #14181d) 100%);
+  --surface: oklch(0.20 0.012 250);
+}
+html[data-app-layout="ops"] main { font-variant-numeric: tabular-nums; }
+
+/* Console — flat terminal styling */
+html[data-app-layout="console"] {
+  --radius: 0.3rem;
+  --sidebar-gradient: linear-gradient(180deg, #0c1211 0%, #101917 60%,
+    color-mix(in oklab, var(--app-accent) 45%, #101917) 100%);
+}
+html[data-app-layout="console"] nav[data-tour="sidebar"] { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+html[data-app-layout="console"] main { font-variant-numeric: tabular-nums; }
+
+
+
 
 /* ---------------------------------------------------------------
    Public website theme — Clovr Relief
