@@ -61,11 +61,16 @@ function AppsAdmin() {
       nav_groups: app.nav_groups,
       enabled: app.enabled,
       sort_order: app.sort_order,
+      accent: app.accent,
+      accent_dark: app.accent_dark,
+      layout: app.layout,
+      short_code: app.short_code,
     });
     setBusy(false);
     setSavedAt(Date.now());
     setTimeout(() => setSavedAt(null), 2000);
   };
+
 
   const addApp = async () => {
     const n = apps.length;
