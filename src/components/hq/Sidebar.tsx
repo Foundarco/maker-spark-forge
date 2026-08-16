@@ -83,9 +83,10 @@ export function Sidebar({ onNavigate, onCollapse }: { onNavigate?: () => void; o
       <div className="px-3 pt-4">
         <div className="flex items-center gap-2">
           <div className="flex h-11 min-w-0 flex-1 items-center gap-3 rounded-xl bg-white/[0.06] px-3">
-            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sidebar-accent text-[11px] font-black text-sidebar-accent-foreground">
-              CL
+            <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-sidebar-accent text-[10px] font-black text-sidebar-accent-foreground">
+              {app?.short_code || "CL"}
             </div>
+
             <div className="min-w-0 flex-1">
               <p className="truncate text-[13px] font-semibold text-sidebar-foreground">{app?.label || "Clovr Labs"}</p>
               <p className="truncate text-[11px] text-sidebar-muted">
