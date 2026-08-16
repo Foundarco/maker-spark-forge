@@ -83,6 +83,7 @@ function Directory({ me }: { me: { id: string; isAdmin: boolean } | null }) {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [q, setQ] = useState("");
   const [editing, setEditing] = useState<Employee | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
 
   const reload = async () => {
     const { data } = await supabase.from("hr_employees").select("*").order("full_name");
@@ -119,6 +120,10 @@ function Directory({ me }: { me: { id: string; isAdmin: boolean } | null }) {
         </button>
       </div>
 
+      <p className="mb-3 text-xs text-muted-foreground">
+        Adding someone with an email automatically opens their onboarding — they verify the email with a code, set a password, add a photo and work through their checklist at <span className="font-medium text-foreground">/welcome</span>.
+      </p>
+
       <div className="overflow-hidden rounded-xl border border-border">
         <table className="w-full text-sm">
           <thead className="bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
@@ -141,7 +146,19 @@ function Directory({ me }: { me: { id: string; isAdmin: boolean } | null }) {
                 <td className="px-4 py-2">{e.department ?? "—"}</td>
                 <td className="px-4 py-2"><StatusPill value={e.status} /></td>
                 <td className="px-4 py-2">{e.manager_id ? <UserMention userId={e.manager_id} name={profiles.find((p) => p.id === e.manager_id)?.full_name ?? "—"} /> : <span className="text-muted-foreground">—</span>}</td>
-                <td className="px-4 py-2 text-right"><button onClick={() => setEditing(e)} className="text-xs text-primary hover:underline">Edit</button></td>
+                <td className="px-4 py-2 text-right">
+                  <div className="flex items-center justify-end gap-3">
+                    {!e.user_id && e.email && (
+                      <button
+                        onClick={() => { navigator.clipboard?.writeText(`${window.location.origin}/welcome`); setCopied(e.id); setTimeout(() => setCopied(null), 1800); }}
+                        className="text-xs text-muted-foreground hover:text-primary"
+                      >
+                        {copied === e.id ? "Link copied" : "Copy onboarding link"}
+                      </button>
+                    )}
+                    <button onClick={() => setEditing(e)} className="text-xs text-primary hover:underline">Edit</button>
+                  </div>
+                </td>
               </tr>
             ))}
             {filtered.length === 0 && <tr><td colSpan={6} className="p-8 text-center text-sm text-muted-foreground">No people yet.</td></tr>}
