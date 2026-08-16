@@ -10,6 +10,8 @@ import { applyTheme, getStoredTheme } from "@/lib/hq/theme";
 import { PhoneProvider } from "@/lib/hq/phone";
 import { SoundNotifier } from "./SoundNotifier";
 import { ProductTour } from "./ProductTour";
+import { CurrentAppProvider } from "@/lib/hq/app-context";
+import { AppGate } from "./AppGate";
 
 const HIDE_KEY = "hq.sidebar.hidden";
 
@@ -48,6 +50,8 @@ export function HQShell() {
   };
 
   return (
+    <CurrentAppProvider>
+    <AppGate>
     <PhoneProvider>
     <RecordTabsProvider>
       <TabAutoOpener />
@@ -96,5 +100,7 @@ export function HQShell() {
       </div>
     </RecordTabsProvider>
     </PhoneProvider>
+    </AppGate>
+    </CurrentAppProvider>
   );
 }
