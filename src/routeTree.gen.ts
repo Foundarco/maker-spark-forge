@@ -112,6 +112,7 @@ import { Route as ApiHqAssistantRouteImport } from './routes/api/hq/assistant'
 import { Route as HqQuotesIdRouteImport } from './routes/_hq.quotes.$id'
 import { Route as HqJobsIdRouteImport } from './routes/_hq.jobs.$id'
 import { Route as HqClientsIdRouteImport } from './routes/_hq.clients.$id'
+import { Route as HqAdminOrgRouteImport } from './routes/_hq.admin.org'
 import { Route as HqAdminDepartmentsRouteImport } from './routes/_hq.admin.departments'
 import { Route as HqAdminCompanyRouteImport } from './routes/_hq.admin.company'
 
@@ -629,6 +630,11 @@ const HqClientsIdRoute = HqClientsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => HqClientsRoute,
 } as any)
+const HqAdminOrgRoute = HqAdminOrgRouteImport.update({
+  id: '/admin/org',
+  path: '/admin/org',
+  getParentRoute: () => HqRoute,
+} as any)
 const HqAdminDepartmentsRoute = HqAdminDepartmentsRouteImport.update({
   id: '/admin/departments',
   path: '/admin/departments',
@@ -738,6 +744,7 @@ export interface FileRoutesByFullPath {
   '/portal/': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
+  '/admin/org': typeof HqAdminOrgRoute
   '/clients/$id': typeof HqClientsIdRoute
   '/jobs/$id': typeof HqJobsIdRoute
   '/quotes/$id': typeof HqQuotesIdRoute
@@ -840,6 +847,7 @@ export interface FileRoutesByTo {
   '/portal': typeof PortalIndexRoute
   '/admin/company': typeof HqAdminCompanyRoute
   '/admin/departments': typeof HqAdminDepartmentsRoute
+  '/admin/org': typeof HqAdminOrgRoute
   '/clients/$id': typeof HqClientsIdRoute
   '/jobs/$id': typeof HqJobsIdRoute
   '/quotes/$id': typeof HqQuotesIdRoute
@@ -948,6 +956,7 @@ export interface FileRoutesById {
   '/portal/': typeof PortalIndexRoute
   '/_hq/admin/company': typeof HqAdminCompanyRoute
   '/_hq/admin/departments': typeof HqAdminDepartmentsRoute
+  '/_hq/admin/org': typeof HqAdminOrgRoute
   '/_hq/clients/$id': typeof HqClientsIdRoute
   '/_hq/jobs/$id': typeof HqJobsIdRoute
   '/_hq/quotes/$id': typeof HqQuotesIdRoute
@@ -1056,6 +1065,7 @@ export interface FileRouteTypes {
     | '/portal/'
     | '/admin/company'
     | '/admin/departments'
+    | '/admin/org'
     | '/clients/$id'
     | '/jobs/$id'
     | '/quotes/$id'
@@ -1158,6 +1168,7 @@ export interface FileRouteTypes {
     | '/portal'
     | '/admin/company'
     | '/admin/departments'
+    | '/admin/org'
     | '/clients/$id'
     | '/jobs/$id'
     | '/quotes/$id'
@@ -1265,6 +1276,7 @@ export interface FileRouteTypes {
     | '/portal/'
     | '/_hq/admin/company'
     | '/_hq/admin/departments'
+    | '/_hq/admin/org'
     | '/_hq/clients/$id'
     | '/_hq/jobs/$id'
     | '/_hq/quotes/$id'
@@ -2023,6 +2035,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HqClientsIdRouteImport
       parentRoute: typeof HqClientsRoute
     }
+    '/_hq/admin/org': {
+      id: '/_hq/admin/org'
+      path: '/admin/org'
+      fullPath: '/admin/org'
+      preLoaderRoute: typeof HqAdminOrgRouteImport
+      parentRoute: typeof HqRoute
+    }
     '/_hq/admin/departments': {
       id: '/_hq/admin/departments'
       path: '/admin/departments'
@@ -2153,6 +2172,7 @@ interface HqRouteChildren {
   HqWarrantyClaimsRoute: typeof HqWarrantyClaimsRoute
   HqAdminCompanyRoute: typeof HqAdminCompanyRoute
   HqAdminDepartmentsRoute: typeof HqAdminDepartmentsRoute
+  HqAdminOrgRoute: typeof HqAdminOrgRoute
 }
 
 const HqRouteChildren: HqRouteChildren = {
@@ -2227,6 +2247,7 @@ const HqRouteChildren: HqRouteChildren = {
   HqWarrantyClaimsRoute: HqWarrantyClaimsRoute,
   HqAdminCompanyRoute: HqAdminCompanyRoute,
   HqAdminDepartmentsRoute: HqAdminDepartmentsRoute,
+  HqAdminOrgRoute: HqAdminOrgRoute,
 }
 
 const HqRouteWithChildren = HqRoute._addFileChildren(HqRouteChildren)
